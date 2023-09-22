@@ -15,10 +15,10 @@
 
 ## Team
 
-* Group member 1 name, email
-* Group member 2 name, email
-* Group member 3 name, email
-* Group member 4 name, email
+* Ana Azevedo, up202108654@up.pt
+* Catarina Canelas, up202103628@up.pt
+* Gabriel Ferreira, up202108722@up.pt
+* Luís Du, up202105385@up.pt
 
 ***
-GROUP21gg, DD/MM/2021
+GROUP23143, 22/09/2023
