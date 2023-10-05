@@ -1,6 +1,6 @@
-# Product name (e.g. MediaLibrary)
+# GameOn
 
-> Project vision.
+GameOn is committed to revolutionizing the online gaming landscape by creating a dynamic, unified platform that fosters collaboration, encourages knowledge-sharing, and celebrates gamers' contributions. In a world where information fragmentation and community engagement challenges persist, GameOn aims to be the go-to destination for gamers seeking connection and recognition within the gaming ecosystem.
 
 ## Project Components
 
