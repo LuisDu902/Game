@@ -55,12 +55,12 @@ For the GameOn system, consider the user stories that are presented in the follo
 | US01       | See home page         | High     | As a User, I want to have access to a homepage, so that I can understand what the application is about.|
 | US02       | View posted Q&A's      | High     | As a User, I want to view the questions and answers posted by other members so that I can learn from their experiences and knowledge.|
 | US03       | Exact match search  | High     | As a User, I want an exact match search so that I can quickly find specific posts.|
-| US04       | Full-text search        | High     | As a User, I want a full-text search functionality so that I can find information across all aspects of questions and answers.|
-| US05       | Search filters          | High | As a User, I want to use search filters based on keywords so that I can narrow down my search results and quickly find specific information about games. |
-| US06       | Search by tags          | High | As a User, I want to be able to search questions by tags so that only the games I'm interested in appear. |
-| US07       | View top questions          | High | As a User, I want to be able to view the top questions, so that I can have easy access to the most popular questions. |
-| US08       | View recent questions          | High | As a User, I want to be able to view recently made questions, so that I can easily stay updated on the latest discussions. |
-| US09       | Browse questions          | High | As a User, I want to browse questions easily so that I can discover a variety of topics related to games and expand my knowledge. |
+| US04       | View top questions          | High | As a User, I want to be able to view the top questions, so that I can have easy access to the most popular questions. |
+| US05       | Browse questions          | High | As a User, I want to browse questions easily so that I can discover a variety of topics related to games and expand my knowledge. |
+| US06       | Full-text search        | Medium     | As a User, I want a full-text search functionality so that I can find information across all aspects of questions and answers.|
+| US07       | Search filters          | Medium | As a User, I want to use search filters based on keywords so that I can narrow down my search results and quickly find specific information about games. |
+| US08       | Search by tags          | Mediun | As a User, I want to be able to search questions by tags so that only the games I'm interested in appear. |
+| US09       | View recent questions          | Medium | As a User, I want to be able to view recently made questions, so that I can easily stay updated on the latest discussions. |
 | US10       | Browse questions by tags          | Medium | As a User, I want to browse questions by tags so that I can quickly find topics related to specific games or themes that match my interests. |
 | US11       | See FAQ page         | Medium | As a User, I want to have access to a FAQ page, so that I can see the answers to the most frequently asked questions about the website. |
 | US12       | See contact us page          | Medium | As a User, I want to have access to a contacts page, so that I can contact the team of the website. |
@@ -92,31 +92,32 @@ Table 3: Guest user stories
 | US24       | View my answers     | High     | As a User, I want to be able to view my answers, so that I can easily track my posts contribution. |
 | US25       | Post questions    | High     | As a User, I want to post a question, so that I can seek guidance or information from the gaming community. |
 | US26       | Post answers     | High     | As a User, I want to provide answers to questions asked by others, so that I can share my knowledge and help fellow gamers. |
-| US27       | Vote on post     | High     |As a User, I want to upvote or downvote questions and answers, so that I can show my appreciation or my concerns for content and contribute to its visibility on the platform. |
-| US28       | Comment on post     | High     | As a User, I want to be able to comment on questions and answers, so that I can engage in discussions and seek clarification. |
-| US29       | Edit question     | High     | As a User, I want to be able to edit my questions, so that I can correct mistakes or remove outdated information. |
-| US30       | Edit answer     | High     | As a User, I want to be able to edit my answers so that I can revise and enhance my responses based on new information or feedback. |
-| US31       | Delete question     | High     | As a User, I want to be able to delete questions, so that I can have control over the content I have posted. |
-| US32       | Delete answer     | High | As a user, I want to be able to delete answers, so that I can have control over the content I have contributed. |
-| US33       | Edit comment     | Medium     | As a User, I want to be able to edit my comments so that I can modify my responses for clarity, correctness, or relevance. |
-| US34      | Edit profile     | Medium     | As a User, I want to change profile information, so that I can keep it updated and relevant. |
+| US27       | Edit question     | High     | As a User, I want to be able to edit my questions, so that I can correct mistakes or remove outdated information. |
+| US28       | Edit answer     | High     | As a User, I want to be able to edit my answers so that I can revise and enhance my responses based on new information or feedback. |
+| US29       | Delete question     | High     | As a User, I want to be able to delete questions, so that I can have control over the content I have posted. |
+| US30       | Delete answer     | High | As a user, I want to be able to delete answers, so that I can have control over the content I have contributed. |
+| US31      | Edit profile     | High     | As a User, I want to change profile information, so that I can keep it updated and relevant. |
+| US32       | Vote on post     | Medium     |As a User, I want to upvote or downvote questions and answers, so that I can show my appreciation or my concerns for content and contribute to its visibility on the platform. |
+| US33       | Comment on post     | Medium     | As a User, I want to be able to comment on questions and answers, so that I can engage in discussions and seek clarification. |
+| US34       | Edit comment     | Medium     | As a User, I want to be able to edit my comments so that I can modify my responses for clarity, correctness, or relevance. |
 | US35       | Edit profile picture    | Medium     | As a User, I want to be able to edit a profile picture, so that it can be updated. |
 | US36       | Manage post visibility    | Medium     | As a User, I want to be able to manage a post's visibility, so that I can have control over who can see and interact with that post. |
 | US37       | Mark Answer as Correct    | Medium    | As a User, I want to be able to mark an answer as correct so that other users can easily identify the most helpful and accurate solution. |
 | US38       | Delete comment     | Medium    | As a user, I want to be able to delete comments, so that I can remove any inappropriate or outdated content. |
- US39       | Delete account      | Medium     | As a User, I want to be able to permanently delete my account.|
+| US39       | Delete account      | Medium     | As a User, I want to be able to permanently delete my account.|
 | US40       | Follow question     | Medium     | As a User, I want to be able to follow questions of my interest, and receive notifications when answers are posted.|
 | US41       | Follow tags     | Medium     | As a User, I want to be able to follow specific games tags so that I am aware of the latest news. |
 | US42       | Join game community     | Medium     | As a User, I want to join the community of games I like so that I can connect with like-minded gamers and share experiences. |
 | US43       | Earn badge      | Medium     | As a User, I want to earn badges so that I can showcase my achievements within the community.|
 | US44       | Rank upgrade      | Medium     | As a User, I want to achieve rank upgrades so that I can demonstrate my expertise and dedication.|
 | US45       | Recover password      | Medium     | As a User, I want to recover my password when I forget it.|
-| US46       | Notification of answers/comment     | Low     | As a User, I want to receive notifications when someone answers or comments on my questions, so that I promptly access and benefit from the helpful responses.|
-| US47       | Notification of badge awards     | Low     | As a User, I want to receive notifications of badge awards so that I promptly become aware of my achievements and milestones.|
-| US48       | Notification of rank upgrades     | Low     | As a User, I want to receive notifications of rank upgrades so that I can celebrate my progress.|
-| US49       | Notification of followed questions/tags | Low     | As a User, I want to receive notifications for followed questions and tags so that I can stay updated on discussions that matter to me.|
-| US50       | Edit question tags    | Low     | As a User, I want to be able to edit question tags so that I can ensure questions are appropriately categorized. |
-| US51       | Report inappropriate content      | Low     | As a User, I want to report inappropriate or offensive content, so that I can help maintain a positive and respectful community environment.|
+| US46       | Notification of answers/comment     | Medium     | As a User, I want to receive notifications when someone answers or comments on my questions, so that I promptly access and benefit from the helpful responses.|
+| US47       | Report inappropriate content      | Medium     | As a User, I want to report inappropriate or offensive content, so that I can help maintain a positive and respectful community environment.|
+| US48         | Notification of votes on content | Medium | As a User, I want to receive notification of votes on content so that I can be aware of the reach of my content. |
+| US49       | Edit question tags    | Medium     | As a User, I want to be able to edit question tags so that I can ensure questions are appropriately categorized. |
+| US50       | Notification of badge awards     | Low     | As a User, I want to receive notifications of badge awards so that I promptly become aware of my achievements and milestones.|
+| US51       | Notification of rank upgrades     | Low     | As a User, I want to receive notifications of rank upgrades so that I can celebrate my progress.|
+| US52       | Notification of followed questions/tags | Low     | As a User, I want to receive notifications for followed questions and tags so that I can stay updated on discussions that matter to me.|
 
 Table 4: Authenticated user user stories
 
@@ -124,14 +125,14 @@ Table 4: Authenticated user user stories
 
 | Identifier |          Name          | Priority | Description |
 | ---------- | ---------------------- | -------- | ----------  |
-| US52       |Administrator Account      | High     | As an administrator, I want to have an administrator account, so that I can use the application with privileges.|
 | US53       | Block and unblock user accounts      | Medium     | As an administrator, I want to be able to block user accounts so that I can maintain a safe and respectful community environment .|
 | US54       | Delete content      | Medium     | As an administrator, I want to be able to delete content, so that I can make sure that the application content follows the community guidelines.|
 | US55       | Create game sections     | Medium     | As an administrator, I want to create game sections so that I can organize discussions and content effectively. |
 | US56       | Manage tags     | Medium     | As an administrator, I want to manage tags so that I can ensure consistent categorization and organization of content across the application. |
-| US57 | Remove comments| Low | As an administrator, I want to remove comments, so that offensive comments do not exist in the application. |
-| US58       | Notification of inappropriate content      | Low     | As an administrator, I want to be notified of reported content by users so that I can take appropriate actions.|
-| US59       | User statistics     | Low     | As an administrator, I want to see the user statistics, such as number of posts, questions in the last period of time, so that I can keep track of what interests people have. |
+| US57       | Delete user account | Medium | As an administrator, I want to be able to delete user accounts so that can make sure that the application users all follow the community guidelines. |
+| US58 | Remove comments| Low | As an administrator, I want to remove comments, so that offensive comments do not exist in the application. |
+| US59       | Notification of inappropriate content      | Low     | As an administrator, I want to be notified of reported content by users so that I can take appropriate actions.|
+| US60       | User statistics     | Low     | As an administrator, I want to see the user statistics, such as number of posts, questions in the last period of time, so that I can keep track of what interests people have. |
 
 Table 5: Administrator user stories
 
