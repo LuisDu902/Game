@@ -77,8 +77,10 @@ Table 2: User user stories
 
 | Identifier |          Name          | Priority | Description |
 | ---------- | ---------------------- | -------- | ----------  |
-| US19       | Sign-in        | High     | As a Guest, I want the option to create an account easily, so that I can become an active participant in the future.|
-| US20       | Sign-up      | High     | As a Guest, I want to be able to authenticate into the system, so that I can post my own questions and answers.|
+| US19       | Sign-up        | High     | As a Guest, I want the option to create an account easily, so that I can become an active participant in the future.|
+| US20       | Sign-in      | High     | As a Guest, I want to be able to authenticate into the system, so that I can post my own questions and answers.|
+| US21       | OAuth API Sign-up | Low | As a Guest, I want to create an account linked to my Google account, so that I can use an already existing account without having to create a new one to register myself. |
+| US22       | OAuth API Sign-in | Low | As a Guest, I want to be able to authenticate into the system through my Google account, so that I can post my own questions and answers. |
 
 Table 3: Guest user stories
 
@@ -86,38 +88,38 @@ Table 3: Guest user stories
 
 | Identifier |          Name          | Priority | Description |
 | ---------- | ---------------------- | -------- | ----------  |
-| US21       | Logout      | High     | As a User, I want to be able to sign out of my account. |
-| US22       | View my profile     | High     | As a User, I want to be able to view my user profile so that I can keep it updated. |
-| US23       | View my questions     | High     | As a User, I want to see my questions, so that I can easily track what I have been asking. |
-| US24       | View my answers     | High     | As a User, I want to be able to view my answers, so that I can easily track my posts contribution. |
-| US25       | Post questions    | High     | As a User, I want to post a question, so that I can seek guidance or information from the gaming community. |
-| US26       | Post answers     | High     | As a User, I want to provide answers to questions asked by others, so that I can share my knowledge and help fellow gamers. |
-| US27       | Edit question     | High     | As a User, I want to be able to edit my questions, so that I can correct mistakes or remove outdated information. |
-| US28       | Edit answer     | High     | As a User, I want to be able to edit my answers so that I can revise and enhance my responses based on new information or feedback. |
-| US29       | Delete question     | High     | As a User, I want to be able to delete questions, so that I can have control over the content I have posted. |
-| US30       | Delete answer     | High | As a user, I want to be able to delete answers, so that I can have control over the content I have contributed. |
-| US31      | Edit profile     | High     | As a User, I want to change profile information, so that I can keep it updated and relevant. |
-| US32       | Vote on post     | Medium     |As a User, I want to upvote or downvote questions and answers, so that I can show my appreciation or my concerns for content and contribute to its visibility on the platform. |
-| US33       | Comment on post     | Medium     | As a User, I want to be able to comment on questions and answers, so that I can engage in discussions and seek clarification. |
-| US34       | Edit comment     | Medium     | As a User, I want to be able to edit my comments so that I can modify my responses for clarity, correctness, or relevance. |
-| US35       | Edit profile picture    | Medium     | As a User, I want to be able to edit a profile picture, so that it can be updated. |
-| US36       | Manage post visibility    | Medium     | As a User, I want to be able to manage a post's visibility, so that I can have control over who can see and interact with that post. |
-| US37       | Mark Answer as Correct    | Medium    | As a User, I want to be able to mark an answer as correct so that other users can easily identify the most helpful and accurate solution. |
-| US38       | Delete comment     | Medium    | As a user, I want to be able to delete comments, so that I can remove any inappropriate or outdated content. |
-| US39       | Delete account      | Medium     | As a User, I want to be able to permanently delete my account.|
-| US40       | Follow question     | Medium     | As a User, I want to be able to follow questions of my interest, and receive notifications when answers are posted.|
-| US41       | Follow tags     | Medium     | As a User, I want to be able to follow specific games tags so that I am aware of the latest news. |
-| US42       | Join game community     | Medium     | As a User, I want to join the community of games I like so that I can connect with like-minded gamers and share experiences. |
-| US43       | Earn badge      | Medium     | As a User, I want to earn badges so that I can showcase my achievements within the community.|
-| US44       | Rank upgrade      | Medium     | As a User, I want to achieve rank upgrades so that I can demonstrate my expertise and dedication.|
-| US45       | Recover password      | Medium     | As a User, I want to recover my password when I forget it.|
-| US46       | Notification of answers/comment     | Medium     | As a User, I want to receive notifications when someone answers or comments on my questions, so that I promptly access and benefit from the helpful responses.|
-| US47       | Report inappropriate content      | Medium     | As a User, I want to report inappropriate or offensive content, so that I can help maintain a positive and respectful community environment.|
-| US48         | Notification of votes on content | Medium | As a User, I want to receive notification of votes on content so that I can be aware of the reach of my content. |
-| US49       | Edit question tags    | Medium     | As a User, I want to be able to edit question tags so that I can ensure questions are appropriately categorized. |
-| US50       | Notification of badge awards     | Low     | As a User, I want to receive notifications of badge awards so that I promptly become aware of my achievements and milestones.|
-| US51       | Notification of rank upgrades     | Low     | As a User, I want to receive notifications of rank upgrades so that I can celebrate my progress.|
-| US52       | Notification of followed questions/tags | Low     | As a User, I want to receive notifications for followed questions and tags so that I can stay updated on discussions that matter to me.|
+| US23       | Logout      | High     | As a User, I want to be able to sign out of my account. |
+| US24       | View my profile     | High     | As a User, I want to be able to view my user profile so that I can keep it updated. |
+| US25       | View my questions     | High     | As a User, I want to see my questions, so that I can easily track what I have been asking. |
+| US26       | View my answers     | High     | As a User, I want to be able to view my answers, so that I can easily track my posts contribution. |
+| US27       | Post questions    | High     | As a User, I want to post a question, so that I can seek guidance or information from the gaming community. |
+| US28       | Post answers     | High     | As a User, I want to provide answers to questions asked by others, so that I can share my knowledge and help fellow gamers. |
+| US29       | Edit question     | High     | As a User, I want to be able to edit my questions, so that I can correct mistakes or remove outdated information. |
+| US30       | Edit answer     | High     | As a User, I want to be able to edit my answers so that I can revise and enhance my responses based on new information or feedback. |
+| US31       | Delete question     | High     | As a User, I want to be able to delete questions, so that I can have control over the content I have posted. |
+| US32       | Delete answer     | High | As a user, I want to be able to delete answers, so that I can have control over the content I have contributed. |
+| US33      | Edit profile     | High     | As a User, I want to change profile information, so that I can keep it updated and relevant. |
+| US34       | Vote on post     | Medium     |As a User, I want to upvote or downvote questions and answers, so that I can show my appreciation or my concerns for content and contribute to its visibility on the platform. |
+| US35       | Comment on post     | Medium     | As a User, I want to be able to comment on questions and answers, so that I can engage in discussions and seek clarification. |
+| US36       | Edit comment     | Medium     | As a User, I want to be able to edit my comments so that I can modify my responses for clarity, correctness, or relevance. |
+| US37       | Edit profile picture    | Medium     | As a User, I want to be able to edit a profile picture, so that it can be updated. |
+| US38       | Manage post visibility    | Medium     | As a User, I want to be able to manage a post's visibility, so that I can have control over who can see and interact with that post. |
+| US39       | Mark Answer as Correct    | Medium    | As a User, I want to be able to mark an answer as correct so that other users can easily identify the most helpful and accurate solution. |
+| US40       | Delete comment     | Medium    | As a user, I want to be able to delete comments, so that I can remove any inappropriate or outdated content. |
+| US41       | Delete account      | Medium     | As a User, I want to be able to permanently delete my account.|
+| US42       | Follow question     | Medium     | As a User, I want to be able to follow questions of my interest, and receive notifications when answers are posted.|
+| US43       | Follow tags     | Medium     | As a User, I want to be able to follow specific games tags so that I am aware of the latest news. |
+| US44       | Join game community     | Medium     | As a User, I want to join the community of games I like so that I can connect with like-minded gamers and share experiences. |
+| US45       | Earn badge      | Medium     | As a User, I want to earn badges so that I can showcase my achievements within the community.|
+| US46       | Rank upgrade      | Medium     | As a User, I want to achieve rank upgrades so that I can demonstrate my expertise and dedication.|
+| US47       | Recover password      | Medium     | As a User, I want to recover my password when I forget it.|
+| US48       | Notification of answers/comment     | Medium     | As a User, I want to receive notifications when someone answers or comments on my questions, so that I promptly access and benefit from the helpful responses.|
+| US49       | Report inappropriate content      | Medium     | As a User, I want to report inappropriate or offensive content, so that I can help maintain a positive and respectful community environment.|
+| US50         | Notification of votes on content | Medium | As a User, I want to receive notification of votes on content so that I can be aware of the reach of my content. |
+| US51       | Edit question tags    | Medium     | As a User, I want to be able to edit question tags so that I can ensure questions are appropriately categorized. |
+| US52       | Notification of badge awards     | Low     | As a User, I want to receive notifications of badge awards so that I promptly become aware of my achievements and milestones.|
+| US53       | Notification of rank upgrades     | Low     | As a User, I want to receive notifications of rank upgrades so that I can celebrate my progress.|
+| US54       | Notification of followed questions/tags | Low     | As a User, I want to receive notifications for followed questions and tags so that I can stay updated on discussions that matter to me.|
 
 Table 4: Authenticated user user stories
 
