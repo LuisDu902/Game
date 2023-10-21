@@ -1,5 +1,5 @@
-CREATE SCHEMA IF NOT EXISTS gameon;
-
+CREATE SCHEMA IF NOT EXISTS lbaw23143;
+SET search_path TO lbaw23143;
 SET DateStyle TO European;
 
 -----------
@@ -204,6 +204,10 @@ CREATE TABLE question_tag (
     PRIMARY KEY (question_id, tag_id)
 );
 
+-- #######################################################################################################
+-- ############################################# TRIGGERS ################################################
+-- #######################################################################################################
+
 
 --Trigger 1
 
@@ -258,7 +262,7 @@ EXECUTE FUNCTION prevent_self_upvote_trigger_function();
 
 
 
----Trigger 3
+---Trigger 3  (Ainda não funciona bem)
 
 CREATE OR REPLACE FUNCTION delete_question_cascade_votes_trigger_function()
 RETURNS TRIGGER AS $$
@@ -290,25 +294,142 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER update_question_privacy_trigger
+CREATE TRIGGER update_question_privacy_trigger_function
 AFTER INSERT ON banned
 FOR EACH ROW
 EXECUTE FUNCTION update_question_privacy_trigger_function();
 
----POPULATE
+---Trigger 5
+CREATE OR REPLACE FUNCTION award_badges() RETURNS TRIGGER AS $$
+DECLARE
+    user_question_count INTEGER;
+    user_correct_answer_count INTEGER;
+BEGIN
+    SELECT COUNT(*) INTO user_question_count
+    FROM question
+    WHERE user_id = NEW.user_id;
+
+    SELECT COUNT(*) INTO user_correct_answer_count
+    FROM answer
+    WHERE user_id = NEW.user_id AND top_answer = TRUE;
+
+    IF user_question_count >= 50 THEN
+        INSERT INTO user_badge (user_id, badge_id)
+        VALUES (NEW.user_id, (SELECT id FROM badge WHERE type = 'badge1'));
+    END IF;
+
+    IF user_correct_answer_count >= 20 THEN
+        INSERT INTO user_badge (user_id, badge_id)
+        VALUES (NEW.user_id, (SELECT id FROM badge WHERE type = 'badge2'));
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER award_badges_on_question_insert
+AFTER INSERT ON question
+FOR EACH ROW
+EXECUTE FUNCTION award_badges();
+
+--Trigger 6
+CREATE OR REPLACE FUNCTION update_user_rank() RETURNS TRIGGER AS $$
+DECLARE
+    user_likes INTEGER;
+    user_dislikes INTEGER;
+    user_reputation INTEGER;
+BEGIN
+    SELECT COALESCE(SUM(CASE WHEN feedback = TRUE THEN 1 ELSE -1 END), 0) INTO user_reputation
+    FROM vote
+    WHERE question_id = (SELECT id FROM question WHERE user_id = NEW.user_id) AND vote_type = 'question_vote';
+
+    IF user_reputation >= 0 AND user_reputation <= 30 THEN
+        UPDATE "user"
+        SET rank = 'bronze'
+        WHERE id = NEW.user_id;
+    ELSIF user_reputation >= 31 AND user_reputation <= 60 THEN
+        UPDATE "user"
+        SET rank = 'gold'
+        WHERE id = NEW.user_id;
+    ELSIF user_reputation >= 61 THEN
+        UPDATE "user"
+        SET rank = 'master'
+        WHERE id = NEW.user_id;
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER update_user_rank_trigger
+AFTER UPDATE ON question
+FOR EACH ROW
+EXECUTE FUNCTION update_user_rank();
 
 
 
+--Trigger 7
+CREATE OR REPLACE FUNCTION enforce_answer_date_constraint() RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.date < (SELECT create_date FROM question WHERE id = NEW.question_id) THEN
+        RAISE EXCEPTION 'The date of the answer cannot be after the date of the corresponding question.';
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
 
-INSERT INTO "user" (id, name, username, email, password, description, rank)
-VALUES
-  (1,
-   'John Doe',               
-   'johndoe',                
-   'johndoe@example.com',    
-   'hashed_password',       
-   'Some description',       
-   'bronze');                
+CREATE TRIGGER enforce_answer_date_constraint_trigger
+BEFORE INSERT OR UPDATE ON answer
+FOR EACH ROW
+EXECUTE FUNCTION enforce_answer_date_constraint();
+
+
+--Trigger 8
+
+CREATE OR REPLACE FUNCTION send_answer_notification()
+RETURNS TRIGGER AS $$
+BEGIN
+    INSERT INTO notification (date, viewed, user_id, notification_type, question_id, answer_id, comment_id, vote_id,report_id)
+    VALUES (NOW(), FALSE, (SELECT user_id FROM question WHERE id = NEW.question_id), 'answer_notification', NULL, NEW.id,  NULL, NULL, NULL);
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER answer_notification_trigger
+AFTER INSERT ON answer
+FOR EACH ROW
+EXECUTE FUNCTION send_answer_notification();
+
+
+-- #######################################################################################################
+-- ############################################# DADOS ##################################################
+-- #######################################################################################################
+
+
+DO $$ 
+DECLARE
+    i INTEGER;
+BEGIN
+    FOR i IN 1..99 LOOP
+        INSERT INTO "user" (name, username, email, password, description, rank)
+        VALUES (
+            'User ' || i,
+            'user' || i,
+            'user' || i || '@example.com',
+            'password' || i,
+            'Description for User ' || i,
+            'bronze'
+        );
+    END LOOP;
+END $$;
+
+
+INSERT INTO "badge" (type)
+VALUES ('badge1');                
+
+INSERT INTO question (user_id, create_date, title, is_solved, is_public, nr_views, nr_votes)
+VALUES (1, NOW(),'Sample Question',TRUE,TRUE,100,0);
 
 
 
@@ -317,38 +438,16 @@ INSERT INTO "banned" (user_id)
 VALUES (1);                
 
 
-
-INSERT INTO question (user_id, create_date, title, is_solved, is_public, nr_views, nr_votes)
-VALUES (
-    1,                   
-    NOW(),               
-    'Sample Question',   
-    TRUE,               
-    TRUE,                
-    100,                 
-    0                   
-);
+INSERT INTO answer (user_id, question_id, date, is_public, top_answer, nr_votes)
+VALUES (3, 1, '2024-01-01', true, false, 0);
 
 
-
-INSERT INTO vote (user_id, date, feedback, vote_type, answer_id, question_id)
-SELECT
-    
-    1,
-    
-    '2023-10-19 14:30:00',
-  
-    TRUE,
-   
-    'question_vote',
-    
-    NULL,
-   
-    1
-FROM generate_series(1, 100); 
-
-
-
-
-
-
+DO $$ 
+DECLARE
+    i INTEGER;
+BEGIN
+    FOR i IN 2..40 LOOP
+        INSERT INTO "vote" (user_id, date, feedback, vote_type, answer_id, question_id)
+        VALUES (i, NOW(), TRUE, 'question_vote', NULL, 1);
+    END LOOP;
+END $$;
