@@ -93,7 +93,7 @@ Table 3: Guest user stories
 | US25       | Post questions    | High     | As a User, I want to post a question, so that I can seek guidance or information from the gaming community. |
 | US26       | Post answers     | High     | As a User, I want to provide answers to questions asked by others, so that I can share my knowledge and help fellow gamers. |
 | US27       | Edit question     | High     | As a User, I want to be able to edit my questions, so that I can correct mistakes or remove outdated information. |
-| US28       | Edit answer     | High     | As a User, I want to be able to edit my answers so that I can revise and enhance my responses based on new information or feedback. |
+| US28       | Edit answer     | High     | As a User, I want to be able to edit my answers so that I can revise and enhance my responses based on new information or reaction. |
 | US29       | Delete question     | High     | As a User, I want to be able to delete questions, so that I can have control over the content I have posted. |
 | US30       | Delete answer     | High | As a user, I want to be able to delete answers, so that I can have control over the content I have contributed. |
 | US31      | Edit profile     | High     | As a User, I want to change profile information, so that I can keep it updated and relevant. |
