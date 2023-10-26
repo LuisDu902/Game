@@ -600,7 +600,7 @@ Table 36: search_user index
   </tr>
   <tr>
     <td><b>Description</b></td>
-    <td>___________________</td>
+    <td>Trigger that updates the vote number when there is a new vote</td>
   </tr>
   <tr>
     <td><b>SQL code</b></td>
@@ -640,7 +640,7 @@ Table 37: update_question_vote_count trigger
   </tr>
   <tr>
     <td><b>Description</b></td>
-    <td>__________________________</td>
+    <td> Trigger that raises error when a user try's to vote in their own question</td>
   </tr>
   <tr>
     <td><b>SQL code</b></td>
@@ -683,7 +683,7 @@ Table 38: prevent_self_upvote trigger
   </tr>
   <tr>
     <td><b>Description</b></td>
-    <td>---------------------</td>
+    <td>When a question is deleted, all its commends are deleted also</td>
   </tr>
   <tr>
     <td><b>SQL code</b></td>
@@ -716,7 +716,7 @@ Table 39: delete_question_cascade_votes trigger
   </tr>
   <tr>
     <td><b>Description</b></td>
-    <td>----------------------</td>
+    <td> When a user is banned, all it's questions turn to private </td>
   </tr>
   <tr>
     <td><b>SQL code</b></td>
@@ -752,7 +752,7 @@ Table 40: update_question_privacy trigger
   </tr>
   <tr>
     <td><b>Description</b></td>
-    <td>------------------------</td>
+    <td> Trigger that assigns badges when users meet certain requirements. </td>
   </tr>
   <tr>
     <td><b>SQL code</b></td>
@@ -799,7 +799,7 @@ Table 41: award_badges_on_question_insert  trigger
   </tr>
   <tr>
     <td><b>Description</b></td>
-    <td>--------------------------</td>
+    <td> Assigns ranks to users when they meet certain requirements </td>
   </tr>
   <tr>
     <td><b>SQL code</b></td>
@@ -849,7 +849,7 @@ Table 42: update_user_rank trigger
   </tr>
   <tr>
     <td><b>Description</b></td>
-    <td>------------------------</td>
+    <td> When a user answers some question, a notification is sent to the question owner. </td>
   </tr>
   <tr>
     <td><b>SQL code</b></td>
@@ -883,7 +883,7 @@ Table 43: answer_notification trigger
   </tr>
   <tr>
     <td><b>Description</b></td>
-    <td>---------------------------</td>
+    <td> Raises error if a user votes on a private question.</td>
   </tr>
   <tr>
     <td><b>SQL code</b></td>
@@ -920,7 +920,7 @@ Table 44: prevent_vote_on_private_question trigger
   </tr>
   <tr>
     <td><b>Description</b></td>
-    <td>-----------------------</td>
+    <td>  Raises error when there is a answer on a private quesiton </td>
   </tr>
   <tr>
     <td><b>SQL code</b></td>
@@ -958,7 +958,7 @@ Table 45: prevent_answer_on_private_question trigger
   </tr>
   <tr>
     <td><b>Description</b></td>
-    <td>----------------------</td>
+    <td>  Raises error when a banned user tries to vote in a question. </td>
   </tr>
   <tr>
     <td><b>SQL code</b></td>
@@ -1003,7 +1003,7 @@ Table 46: prevent_banned_user_vote_answer_comment trigger
   </tr>
   <tr>
     <td><b>Description</b></td>
-    <td>---------------------------</td>
+    <td> Raises error when a user report's himself.</td>
   </tr>
   <tr>
     <td><b>SQL code</b></td>
