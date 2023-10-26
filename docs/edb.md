@@ -1038,15 +1038,15 @@ Table 47: prevent_self_reporting trigger
 <table>
   <tr>
     <th>SQL Reference</th>
-    <th>Transaction Name</th>
+    <th>TRAN01</th>
   </tr>
   <tr>
-    <td>Justification</td>
-    <td>---------------------------</td>
+    <td>Description</td>
+    <td>Insert the content for the question only if the question exists</td>
   </tr>
   <tr>
-    <td>Justification</td>
-    <td>---------------------------</td>
+    <td>Isolation Level</td>
+    <td>SERIALIZABLE READ ONLY</td>
   </tr>
   <tr>
     <td>Complete SQL Code</td>
@@ -1077,15 +1077,15 @@ Table 48: AddQuestionContentVersion transaction
 <table>
   <tr>
     <th>SQL Reference</th>
-    <th>Transaction Name</th>
+    <th>TRAN02</th>
   </tr>
   <tr>
-    <td>Justification</td>
-    <td>---------------------------</td>
+    <td>Description</td>
+    <td>Insert the content for an answer only if the question for that answer and the actual answer exists</td>
   </tr>
   <tr>
-    <td>Justification</td>
-    <td>---------------------------</td>
+    <td>Isolation Level</td>
+    <td>SERIALIZABLE READ ONLY</td>
   </tr>
   <tr>
     <td>Complete SQL Code</td>
@@ -1116,15 +1116,15 @@ Table 49: AddAnswerContentVersion transaction
 <table>
   <tr>
     <th>SQL Reference</th>
-    <th>Transaction Name</th>
+    <th>TRAN03</th>
   </tr>
   <tr>
-    <td>Justification</td>
-    <td>---------------------------</td>
+    <td>Description</td>
+    <td>Insert the content for a comment only if the question for that comment and the actual comment exists</td>
   </tr>
   <tr>
-    <td>Justification</td>
-    <td>---------------------------</td>
+    <td>Isolation Level</td>
+    <td>SERIALIZABLE READ ONLY</td>
   </tr>
   <tr>
     <td>Complete SQL Code</td>
