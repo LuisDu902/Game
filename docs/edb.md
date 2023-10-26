@@ -356,7 +356,6 @@ To improve text search time, we created Full-Text Search (FTS) indexes on the ta
 -- Add column to question to store computed ts_vectors.
 ALTER TABLE question
 ADD COLUMN tsvectors TSVECTOR;
-
 -- Create a function to automatically update ts_vectors.
 CREATE FUNCTION question_search_update() RETURNS TRIGGER AS $$ 
 BEGIN
@@ -370,13 +369,11 @@ BEGIN
   END IF;
   RETURN NEW;
 END $$ LANGUAGE plpgsql;
-
 -- Create a trigger before insert or update on question.
 CREATE TRIGGER question_search_update 
 BEFORE INSERT OR UPDATE ON question 
 FOR EACH ROW 
 EXECUTE PROCEDURE question_search_update();
-
 -- Finally, create a GIN index for ts_vectors.
 CREATE INDEX search_question ON question USING GIN (tsvectors);
       </pre>
@@ -419,7 +416,6 @@ Table 33: search_question index
 -- Add column to content to store computed ts_vectors.
 ALTER TABLE content
 ADD COLUMN tsvectors TSVECTOR;
-
 -- Create a function to automatically update ts_vectors.
 CREATE FUNCTION content_search_update() RETURNS TRIGGER AS $$ 
 BEGIN
@@ -433,13 +429,11 @@ BEGIN
   END IF;
   RETURN NEW;
 END $$ LANGUAGE plpgsql;
-
 -- Create a trigger before insert or update on content.
 CREATE TRIGGER content_search_update 
 BEFORE INSERT OR UPDATE ON content 
 FOR EACH ROW 
 EXECUTE PROCEDURE content_search_update();
-
 -- Finally, create a GIN index for ts_vectors.
 CREATE INDEX search_content ON content USING GIN (tsvectors);
       </pre>
@@ -478,40 +472,30 @@ Table 34: search_content index
     <td><b>SQL code</b></td>
     <td>
       <pre>
-
 -- Add column to game to store computed ts_vectors.
 ALTER TABLE game
 ADD COLUMN tsvectors TSVECTOR;
-
 -- Create a function to automatically update ts_vectors.
 CREATE FUNCTION game_search_update() RETURNS TRIGGER AS $$ BEGIN IF TG_OP = 'INSERT' THEN NEW.tsvectors = (
     setweight(to_tsvector('english', NEW.name), 'A') || setweight(to_tsvector('english', NEW.description), 'B')
 );
-
 END IF;
-
 IF TG_OP = 'UPDATE' THEN IF (
     NEW.name <> OLD.name
     OR NEW.description <> OLD.description
 ) THEN NEW.tsvectors = (
     setweight(to_tsvector('english', NEW.name), 'A') || setweight(to_tsvector('english', NEW.description), 'B')
 );
-
 END IF;
-
 END IF;
-
 RETURN NEW;
-
 END $$ LANGUAGE plpgsql;
-
 -- Create a trigger before insert or update on game.
 CREATE TRIGGER game_search_update BEFORE
 INSERT
     OR
 UPDATE
     ON game FOR EACH ROW EXECUTE PROCEDURE game_search_update();
-
 -- Finally, create a GIN index for ts_vectors.
 CREATE INDEX search_game ON game USING GIN (tsvectors);
       </pre>
@@ -554,31 +538,22 @@ Table 35: search_game index
 -- Add column to "user" to store computed ts_vectors.
 ALTER TABLE "user"
 ADD COLUMN tsvectors TSVECTOR;
-
 -- Create a function to automatically update ts_vectors.
 CREATE FUNCTION user_search_update() RETURNS TRIGGER AS $$ BEGIN IF TG_OP = 'INSERT' THEN NEW.tsvectors = setweight(to_tsvector('english', NEW.description), 'A');
-
 END IF;
-
 IF TG_OP = 'UPDATE' THEN IF (
     NEW.description <> OLD.description
 ) THEN NEW.tsvectors = setweight(to_tsvector('english', NEW.description), 'A');
-
 END IF;
-
 END IF;
-
 RETURN NEW;
-
 END $$ LANGUAGE plpgsql;
-
 -- Create a trigger before insert or update on "user".
 CREATE TRIGGER user_search_update BEFORE
 INSERT
     OR
 UPDATE
     ON "user" FOR EACH ROW EXECUTE PROCEDURE user_search_update();
-
 -- Finally, create a GIN index for ts_vectors.
 CREATE INDEX search_user ON "user" USING GIN (tsvectors);
       </pre>
@@ -621,7 +596,6 @@ BEGIN
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
-
 CREATE TRIGGER update_question_vote_count_trigger
 AFTER INSERT ON vote
 FOR EACH ROW
@@ -654,17 +628,14 @@ BEGIN
       RAISE EXCEPTION 'You cannot upvote your own question.';
     END IF;
   END IF;
-  
   IF NEW.vote_type = 'Answer_vote' THEN
     IF NEW.answer_id IS NOT NULL AND NEW.user_id = (SELECT user_id FROM answer WHERE id = NEW.answer_id) THEN
       RAISE EXCEPTION 'You cannot upvote your own answer.';
     END IF;
   END IF;
-
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
-
 CREATE TRIGGER prevent_self_upvote_trigger
 BEFORE INSERT ON vote
 FOR EACH ROW
@@ -693,11 +664,9 @@ CREATE OR REPLACE FUNCTION delete_question_cascade_votes_trigger_function()
 RETURNS TRIGGER AS $$
 BEGIN
   DELETE FROM vote WHERE question_id = OLD.id;
-
   RETURN OLD;
 END;
 $$ LANGUAGE plpgsql;
-
 CREATE TRIGGER delete_question_cascade_votes_trigger
 AFTER DELETE ON question
 FOR EACH ROW
@@ -733,7 +702,6 @@ BEGIN
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
-
 CREATE TRIGGER update_question_privacy_trigger_function
 AFTER INSERT ON banned
 FOR EACH ROW
@@ -780,7 +748,6 @@ BEGIN
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
-
 CREATE TRIGGER award_badges_on_question_insert
 AFTER INSERT ON question
 FOR EACH ROW
@@ -830,7 +797,6 @@ BEGIN
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
-
 CREATE TRIGGER update_user_rank_trigger
 AFTER UPDATE ON question
 FOR EACH ROW
@@ -863,7 +829,6 @@ BEGIN
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
-
 CREATE TRIGGER answer_notification_trigger
 AFTER INSERT ON answer
 FOR EACH ROW
@@ -900,7 +865,6 @@ BEGIN
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
-
 CREATE TRIGGER prevent_vote_on_private_question_trigger
 BEFORE INSERT ON vote
 FOR EACH ROW
@@ -938,7 +902,6 @@ BEGIN
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
-
 CREATE TRIGGER prevent_answer_on_private_question_trigger
 BEFORE INSERT ON answer
 FOR EACH ROW
@@ -973,17 +936,14 @@ BEGIN
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
-
 CREATE TRIGGER prevent_banned_user_vote_answer_comment_trigger
 BEFORE INSERT ON vote
 FOR EACH ROW
 EXECUTE FUNCTION prevent_banned_user_vote_answer_comment_trigger_function();
-
 CREATE TRIGGER prevent_banned_user_vote_answer_comment_trigger
 BEFORE INSERT ON answer
 FOR EACH ROW
 EXECUTE FUNCTION prevent_banned_user_vote_answer_comment_trigger_function();
-
 CREATE TRIGGER prevent_banned_user_vote_answer_comment_trigger
 BEFORE INSERT ON comment
 FOR EACH ROW
@@ -1018,7 +978,6 @@ BEGIN
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
-
 CREATE TRIGGER prevent_self_reporting_trigger
 BEFORE INSERT ON report
 FOR EACH ROW
