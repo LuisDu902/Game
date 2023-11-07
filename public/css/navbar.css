@@ -1,6 +1,6 @@
 body > header {
     height: 90px;
-    background-color: #7C5BF0;
+    background-color: var(--purple);
 }
 
 .navbar {
