@@ -1,39 +1,49 @@
 @extends('layouts.app')
 
-@section('content')
-<form method="POST" action="{{ route('register') }}">
-    {{ csrf_field() }}
+@section('authentication')
 
-    <label for="name">Name</label>
-    <input id="name" type="text" name="name" value="{{ old('name') }}" required autofocus>
-    @if ($errors->has('name'))
-      <span class="error">
-          {{ $errors->first('name') }}
-      </span>
-    @endif
+<div class="limiter"> 
+    <div class="auth-container"> 
+        <form method="POST" action="{{ route('register') }}" class="auth-form">
+  
+            {{ csrf_field() }}
+            <h1>User Register</h1>
 
-    <label for="email">E-Mail Address</label>
-    <input id="email" type="email" name="email" value="{{ old('email') }}" required>
-    @if ($errors->has('email'))
-      <span class="error">
-          {{ $errors->first('email') }}
-      </span>
-    @endif
+            <label for="name">Name</label>
+            <div class="input-wrapper field"> 
+                <ion-icon class="icon" name="person"></ion-icon> 
+                <input class="input" type="text" name="name" placeholder="Full name" value="{{ old('name') }}" required> 
+            </div> 
+            
+            <label for="email">Email</label>
+            <div class="input-wrapper field">
+                <ion-icon class="icon" name="mail"></ion-icon> 
+                <input class="input" type="email" name="email" placeholder="Email" value="{{ old('email') }}" required>
+            </div>
 
-    <label for="password">Password</label>
-    <input id="password" type="password" name="password" required>
-    @if ($errors->has('password'))
-      <span class="error">
-          {{ $errors->first('password') }}
-      </span>
-    @endif
+            <label for="password">Password</label>
+            <div class="input-wrapper field"> 
+                <ion-icon class="icon" name="lock-closed"></ion-icon>
+                <input class="input" type="password" name="password" placeholder="Password" required> 
+            </div>
 
-    <label for="password-confirm">Confirm Password</label>
-    <input id="password-confirm" type="password" name="password_confirmation" required>
+            <label for="password-confirm">Confirm Password</label>
+            <div class="input-wrapper field"> 
+                <ion-icon class="icon" name="lock-closed"></ion-icon> 
+                <input class="input" type="password" name="password-confirm" placeholder="Confirm password" required>
+            </div> 
+            
+            <div class="btn-wrapper">
+                <button class="register-btn"> Register </button>
+            </div>
 
-    <button type="submit">
-      Register
-    </button>
-    <a class="button button-outline" href="{{ route('login') }}">Login</a>
-</form>
+            <div class="toggle-register">
+                <span> Already registered?
+                    <a href="{{ route('login') }}" class="toggle-register"> Login </a>
+                </span>
+            </div> 
+        </form>
+    </div> 
+</div>
+
 @endsection
