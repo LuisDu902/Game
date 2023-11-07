@@ -9,10 +9,14 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>{{ config('app.name', 'Laravel') }}</title>
-
+        <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
         <!-- Styles -->
         <link href="{{ url('css/app.css') }}" rel="stylesheet">
         <link href="{{ url('css/navbar.css') }}" rel="stylesheet">
+        <link href="{{ url('css/auth.css') }}" rel="stylesheet">
+        <link href="{{ url('css/footer.css') }}" rel="stylesheet">
+
+
         <script type="text/javascript">
             // Fix for Firefox autofocus CSS bug
             // See: http://stackoverflow.com/questions/18943276/html-5-autofocus-messes-up-css-loading/18945951#18945951
@@ -24,15 +28,21 @@
         </script>
     </head>
     <body>
-        <header>
-            @include('partials._nav')
-        </header>
-        <main>
-           
-            <section id="content">
-                @yield('content')
-            </section>
-        </main>
+        @if(in_array(request()->route()->getName(), ['login', 'register']))
+            @yield('authentication')
+        
+        @else
+        
+            @include('partials._header')
+            <main>
+                <section id="content">
+                    @yield('content')
+                </section>
+            </main>
+            @include('partials._footer')
+        
+        @endif
+        
         <script type="module"
             src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
         <script nomodule
