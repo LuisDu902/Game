@@ -15,14 +15,15 @@
         <link href="{{ url('css/navbar.css') }}" rel="stylesheet">
         <link href="{{ url('css/auth.css') }}" rel="stylesheet">
         <link href="{{ url('css/footer.css') }}" rel="stylesheet">
-
+        <link href="{{ url('css/sidebar.css') }}" rel="stylesheet">
+        <link href="{{ url('css/breadcrumb.css') }}" rel="stylesheet">
 
         <script type="text/javascript">
             // Fix for Firefox autofocus CSS bug
             // See: http://stackoverflow.com/questions/18943276/html-5-autofocus-messes-up-css-loading/18945951#18945951
         </script>
         <script type="text/javascript" src={{ url('js/app.js') }} defer>
-         <script nomodule
+        <script nomodule
             src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
             defer></script>
         </script>
@@ -30,17 +31,27 @@
     <body>
         @if(in_array(request()->route()->getName(), ['login', 'register']))
             @yield('authentication')
-        
         @else
-        
             @include('partials._header')
             <main>
+                <x-sidebar></x-sidebar>
+                <div class="headers">
+                    <button class="open-sidebar">
+                        <ion-icon name="menu"></ion-icon>
+                    </button>
+
+                    <ul class="breadcrumb">
+                        <li> <a href="home.html">Home</a></li>
+                        <li> <a href="#">Game Categories</a></li>
+                        <li> <a href="#" >Adventure</a></li>
+                        <li> Roblox</li>
+                    </ul>
+                </div>
                 <section id="content">
                     @yield('content')
                 </section>
             </main>
             @include('partials._footer')
-        
         @endif
         
         <script type="module"
