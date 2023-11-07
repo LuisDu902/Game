@@ -69,3 +69,7 @@ ul {
 .white {
     color: white !important;
 }
+
+.purple {
+  color: var(--dark-purple);
+}
