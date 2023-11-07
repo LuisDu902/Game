@@ -1,0 +1,163 @@
+body > header {
+    height: 90px;
+    background-color: #7C5BF0;
+}
+
+.navbar {
+    margin: 0 3rem;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 90vw;
+}
+
+.logo {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    max-width: fit-content;
+}
+
+.logo strong {
+    color: white;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.logo img {
+    height: 3em;
+}
+
+.nav-links::before {
+    content: "";
+    border-right: 2px solid white;
+    height: 2em;
+}
+
+.nav-links {
+    margin-left: 1.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.nav-links li {
+    display: inline-block;
+    padding: 0 1.5rem;
+}
+
+.nav-links li a {
+    font-size: 18px;
+    transition: all 200ms ease;
+    text-decoration: none;
+    color: white;
+}
+
+.search-box {
+    flex: 2;
+    margin: 0 auto;
+    max-width: 500px;
+    display: flex;
+    border-radius: 8px;
+    border: 2px solid var(--dark-purple);
+}
+
+#search-input {
+    flex: 12;
+    padding: 5px 5px 5px 15px;
+    border: none;
+    border-radius: 8px 0 0 8px;
+    font-size: 16px;
+    background-color: #D2CFFF;
+}
+
+#search-button {
+    flex: 1;
+    background-color: #ab9bf8;
+    border: none;
+    border-radius: 0 8px 8px 0;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#search-button ion-icon, .sign-up-btn, .sign-in-btn {
+    font-size: 18px;
+    color: white;
+}
+
+.navbar .buttons {
+    display: flex;
+    margin-left: auto;
+}
+
+.sign-up-btn, .sign-in-btn {
+    font-size: 18px;
+    font-weight: 500;
+    color: white;
+    background-color: var(--dark-purple);
+    margin: 0 10px;
+    border-radius: 8px;
+    padding: 5px 15px;
+    
+}
+
+.sign-in-btn:hover, .sign-up-btn:hover {
+    transform: scale(0.95);
+}
+
+.dropdown {
+    margin-left: auto;
+}
+
+.dropdown .user {
+    display: flex;
+    align-items: center;
+}
+
+.dropdown img{
+    height: 2em;
+    border-radius: 50%;
+    border: 2px solid var(--dark-purple);
+}
+
+.dropdown .username {
+    font-weight: 600;
+    font-size: 20px;
+    padding: 0 10px;
+}
+
+.dropbtn {
+    font-weight: 700;
+    font-size: 18px;
+}
+
+.dropbtn ion-icon {
+    vertical-align: middle;
+}
+
+.dropdown-content {
+    position: absolute;
+    right: 3rem;
+    min-width: 150px;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--light-purple);
+    margin-top: 10px;
+    border-radius: 5px;
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding-bottom: 10px;
+    margin-top: 10px;
+    width: 90%;
+    text-align: center;  
+}
+
+.dropdown-content a:not(:last-child){
+    border-bottom: 2px solid var(--purple);
+}
