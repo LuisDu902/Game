@@ -34,22 +34,7 @@
         @else
             @include('partials._header')
             <main>
-                <x-sidebar></x-sidebar>
-                <div class="headers">
-                    <button class="open-sidebar">
-                        <ion-icon name="menu"></ion-icon>
-                    </button>
-
-                    <ul class="breadcrumb">
-                        <li> <a href="home.html">Home</a></li>
-                        <li> <a href="#">Game Categories</a></li>
-                        <li> <a href="#" >Adventure</a></li>
-                        <li> Roblox</li>
-                    </ul>
-                </div>
-                <section id="content">
-                    @yield('content')
-                </section>
+                @yield('content')
             </main>
             @include('partials._footer')
         @endif

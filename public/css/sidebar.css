@@ -53,6 +53,7 @@
 }
 
 .open-sidebar {
+    color: var(--dark-purple);
     font-size: 35px;
     padding-left: 5px;
 }
