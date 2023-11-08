@@ -1,6 +1,6 @@
 <header>
     <nav class="navbar">
-        <a class="logo" href="home.html">
+        <a class="logo" href="{{ route('home') }}">
             <img src="{{ asset('images/white_logo.png') }}" alt="logo">
             <strong>GameOn</strong>
         </a>
@@ -29,7 +29,7 @@
                     </button>
                 </div>
                 <div class="dropdown-content">
-                    <a href="#">Profile</a>
+                    <a href="{{ route('profile') }}">Profile</a>
                     <a href="#">My posts</a>
                     <a href="{{ url('/logout') }}">Sign out</a>
                 </div>
