@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\LoginController;
@@ -35,3 +36,8 @@ Route::get('/home', function () {
     return view('pages.home');
 })->name('home');
 
+
+Route::controller(UserController::class)->group(function () {
+    Route::get('/profile', 'showUserProfile')->name('profile');
+    Route::post('/profile', 'edit');
+});
