@@ -36,9 +36,9 @@
             </div>
         @else
             <div class="buttons">
-                <a href="register.html">
+                <a href="{{ route('register') }}">
                     <button class="sign-up-btn">Sign Up</button></a>
-                <a href="login.html">
+                <a href="{{ route('login') }}">
                     <button class="sign-in-btn">Sign In</button></a>
             </div>
         @endif

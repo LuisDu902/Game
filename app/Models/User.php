@@ -27,10 +27,7 @@ class User extends Authenticatable
         'name',
         'username',
         'email',
-        'password',
-        'description',
-        'rank',
-        'badges',
+        'password'
     ];
 
     /**
@@ -51,14 +48,6 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
-        'badges' => 'array',
     ];
 
-    /**
-     * Get the cards for a user.
-     */
-    public function cards(): HasMany
-    {
-        return $this->hasMany(Card::class);
-    }
 }
