@@ -23,7 +23,7 @@
             <div class="dropdown">
                 <div class="user">
                     <img src="{{ asset('images/user.png') }}" alt="user-profile">
-                    <strong class="username white"> Gengar </strong>
+                    <strong class="username white"> {{ Auth::user()->username }} </strong>
                     <button class="dropbtn white">
                         <ion-icon name="chevron-down"></ion-icon>
                     </button>

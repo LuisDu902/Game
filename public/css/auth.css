@@ -34,6 +34,15 @@
     overflow: hidden;
 }
 
+.auth-form .error {
+    position: relative;
+    z-index: 1;
+    display: inline;
+    font-size: 14px;
+    color: #C65353; 
+    padding-left: 20px;
+}
+
 .extra {
     display: flex;
     justify-content: space-between;
@@ -75,7 +84,7 @@
 }
 
 .field {
-    margin-bottom: 30px;
+    margin-top: 30px;
 }
 
 .input {
@@ -211,6 +220,10 @@
 
 .toggle-register {
     margin-top: 20px;
+}
+
+.reg-btn {
+    margin-top: 30px;
 }
 
 @media (max-width: 576px) {
