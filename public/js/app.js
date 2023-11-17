@@ -13,6 +13,7 @@ function addEventListeners() {
     [].forEach.call(itemDeleters, function(deleter) {
       deleter.addEventListener('click', sendDeleteItemRequest);
     });
+<<<<<<< Updated upstream
   
     let cardDeleters = document.querySelectorAll('article.card header a.delete');
     [].forEach.call(cardDeleters, function(deleter) {
@@ -179,3 +180,45 @@ function addEventListeners() {
   
   addEventListeners();
   
+=======
+
+}
+
+
+const questions_btns = document.querySelectorAll('.questions-sort button');
+
+
+if (questions_btns) {
+    questions_btns.forEach(button => {
+        button.addEventListener('click', function () {
+            questions_btns.forEach(btn => btn.classList.remove('selected'));
+            this.classList.add('selected');
+        });
+    });
+}
+
+
+const selectElements = document.querySelectorAll('.status');
+
+if (selectElements) {
+    selectElements.forEach(function(selectElement) {
+        selectElement.addEventListener('change', function() {
+            const selectedValue = this.value;
+            
+            if (selectedValue === 'banned') {
+                this.classList.remove('active');
+                this.classList.add('banned');
+            } else {
+                this.classList.remove('banned');
+                this.classList.add('active');
+            }
+        });
+    });
+}
+
+
+
+
+
+
+>>>>>>> Stashed changes

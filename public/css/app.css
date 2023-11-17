@@ -84,6 +84,7 @@ body {
   }
   #content > form {
     margin: 0 auto;
+<<<<<<< Updated upstream
     padding: 1em;
     max-width: 20em;
     border: 1px solid #d2afe7;
@@ -160,3 +161,62 @@ body {
     border-color: #9b4dca;
   }
   
+=======
+}
+
+main {
+    padding: 2rem 3rem;
+    min-height: 150vh;
+}
+
+a:focus {
+    outline: none !important;
+}
+
+a:hover {
+    text-decoration: none;
+    color: var(--dark-purple);
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+input {
+    outline: none;
+    border: none;
+}
+
+button {
+    outline: none !important;
+    border: none;
+    background: transparent;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+ul {
+    list-style: none;
+}
+
+.purple-section {
+    position: absolute;
+    top: 90px;
+    background-color: var(--purple);
+    height: 250px;
+    width: 100%;
+    z-index: -1;
+}
+
+.white {
+    color: white !important;
+}
+
+.purple {
+  color: var(--dark-purple);
+}
+
+>>>>>>> Stashed changes

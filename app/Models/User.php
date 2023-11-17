@@ -56,4 +56,15 @@ class User extends Authenticatable
     {
         return $this->hasMany(Card::class);
     }
+<<<<<<< Updated upstream
+=======
+
+    public function isAdmin() : bool {
+        return $this->isAdmin;
+    }
+
+    public function games() : HasMany {
+        return $this->hasMany(Game::class);
+    }
+>>>>>>> Stashed changes
 }
