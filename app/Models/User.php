@@ -25,6 +25,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'username',
         'email',
         'password',
     ];
@@ -47,17 +48,13 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'badges' => 'array',
     ];
 
-    /**
-     * Get the cards for a user.
-     */
-    public function cards(): HasMany
-    {
-        return $this->hasMany(Card::class);
+
+    public function questions() : HasMany {
+        return $this->hasMany(Question::class);
     }
-<<<<<<< Updated upstream
-=======
 
     public function isAdmin() : bool {
         return $this->isAdmin;
@@ -66,5 +63,4 @@ class User extends Authenticatable
     public function games() : HasMany {
         return $this->hasMany(Game::class);
     }
->>>>>>> Stashed changes
 }
