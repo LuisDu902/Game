@@ -13,6 +13,18 @@
         <!-- Styles -->
         <link href="{{ url('css/milligram.min.css') }}" rel="stylesheet">
         <link href="{{ url('css/app.css') }}" rel="stylesheet">
+<<<<<<< Updated upstream
+=======
+        <link href="{{ url('css/navbar.css') }}" rel="stylesheet">
+        <link href="{{ url('css/auth.css') }}" rel="stylesheet">
+        <link href="{{ url('css/footer.css') }}" rel="stylesheet">
+        <link href="{{ url('css/sidebar.css') }}" rel="stylesheet">
+        <link href="{{ url('css/breadcrumb.css') }}" rel="stylesheet">
+        <link href="{{ url('css/profile.css') }}" rel="stylesheet">
+        <link href="{{ url('css/questions.css') }}" rel="stylesheet">
+        <link href="{{ url('css/pagination.css') }}" rel="stylesheet">
+
+>>>>>>> Stashed changes
         <script type="text/javascript">
             // Fix for Firefox autofocus CSS bug
             // See: http://stackoverflow.com/questions/18943276/html-5-autofocus-messes-up-css-loading/18945951#18945951

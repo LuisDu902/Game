@@ -53,3 +53,22 @@ Route::controller(RegisterController::class)->group(function () {
     Route::get('/register', 'showRegistrationForm')->name('register');
     Route::post('/register', 'register');
 });
+<<<<<<< Updated upstream
+=======
+
+Route::get('/home', function () {
+    return view('pages.home');
+})->name('home');
+
+// User
+Route::controller(UserController::class)->group(function () {
+    Route::get('/profile', 'showUserProfile')->name('profile');
+    Route::post('/profile', 'edit');
+});
+
+// Question
+Route::controller(QuestionController::class)->group(function () {
+    Route::get('/questions', 'index')->name('questions');
+   
+});
+>>>>>>> Stashed changes
