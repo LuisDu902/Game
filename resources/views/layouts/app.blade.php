@@ -18,6 +18,11 @@
         <link href="{{ url('css/sidebar.css') }}" rel="stylesheet">
         <link href="{{ url('css/breadcrumb.css') }}" rel="stylesheet">
         <link href="{{ url('css/profile.css') }}" rel="stylesheet">
+        <link href="{{ url('css/questions.css') }}" rel="stylesheet">
+        <link href="{{ url('css/pagination.css') }}" rel="stylesheet">
+        <link href="{{ url('css/admin.css') }}" rel="stylesheet">
+        <link href="{{ url('css/category.css') }}" rel="stylesheet">
+        <link href="{{ url('css/game.css') }}" rel="stylesheet">
 
         <script type="text/javascript">
             // Fix for Firefox autofocus CSS bug
@@ -34,6 +39,9 @@
             @yield('authentication')
         @else
             @include('partials._header')
+            @if(in_array(request()->route()->getName(), ['category', 'game']))
+            <div class="purple-section"></div>
+            @endif
             <main>
                 @yield('content')
             </main>
