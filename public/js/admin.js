@@ -100,35 +100,40 @@ const order_user = document.querySelector('#order-user');
 const search_user = document.querySelector('#search-user');
 const filter_user = document.querySelector('#filter-user');
 
-if (order_user) {
+if (document.querySelector('.user-manage-section')) {
     order_user.addEventListener('change', function() {
         sendAjaxRequest('get', '/api/users?' + encodeForAjax({search: search_user.value, filter: filter_user.value, order: order_user.value}), {}, listHandler);
     });
-}
-
-if (search_user) {
     search_user.addEventListener('input', function() {
         sendAjaxRequest('get', '/api/users?' + encodeForAjax({search: search_user.value, filter: filter_user.value, order: order_user.value}), {}, listHandler);
     });
-}
-
-if (filter_user) {
     filter_user.addEventListener('change', function() {
         sendAjaxRequest('get', '/api/users?' + encodeForAjax({search: search_user.value, filter: filter_user.value, order: order_user.value}), {}, listHandler);
     });
+
+    document.addEventListener("DOMContentLoaded", function() {
+        search_user.value = '';
+        order_user.value = 'username';
+        filter_user.value = '';
+    });
 }
+
+
 
 function listHandler() {
     if (this.status === 200) {
         const response = JSON.parse(this.responseText);
         const users = response.data;
+        
         const table = document.querySelector('.users-table tbody');
         table.innerHTML = '';
-        for (const user of users){
+        for (const user of users) {
             user_row = createUserRow(user);
             table.appendChild(user_row);
         }
-        
+        if (users.length == 0) {
+            table.innerHTML = '<tr><td></td><td></td><td></td><td id="no-records">No matching users</td><td></td><td></td></tr>';
+        }
         createPaginationBar(response);
         
     } else {
@@ -229,7 +234,6 @@ function createPaginationBar(response) {
                 });
             }
             pagination.appendChild(page);
-            
         }
     }
    
