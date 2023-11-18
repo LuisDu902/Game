@@ -37,31 +37,36 @@ function statusUpdatedHandler() {
 if (selectElements) {
     selectElements.forEach(function(selectElement) {
         selectElement.addEventListener('change', function() {
-            const selectedValue = this.value;
-            const id = this.getAttribute('data-user');
-            if (selectedValue == 'banned') {
-                this.classList.remove('active');
-                this.classList.add('banned');
-            } else {
-                this.classList.remove('banned');
-                this.classList.add('active');
-            }
-            const existingIndex = changedSelects.findIndex(item => item.id === id);
-            if (existingIndex === -1) {
-                changedSelects.push({id, selectedValue});
-            } else {
-                changedSelects.splice(existingIndex, 1);
-            }
+            handleSelectChange(this);
         });
     });
 }
 
+function handleSelectChange(selectElement) {
+    const selectedValue = selectElement.value;
+    const id = selectElement.getAttribute('data-user');
+    
+    if (selectedValue === 'banned') {
+        selectElement.classList.remove('active');
+        selectElement.classList.add('banned');
+    } else {
+        selectElement.classList.remove('banned');
+        selectElement.classList.add('active');
+    }
+
+    const existingIndex = changedSelects.findIndex(item => item.id === id);
+    if (existingIndex === -1) {
+        changedSelects.push({ id, selectedValue });
+    } else {
+        changedSelects.splice(existingIndex, 1);
+    }
+}
+
 const edit_status_btn = document.querySelector('#edit-status-btn');
 
-if (edit_status_btn){
-    const selects = document.querySelectorAll('.users-table select');
-    
+if (edit_status_btn){ 
     edit_status_btn.addEventListener('click', function() {
+        const selects = document.querySelectorAll('.users-table select');
         if (edit_status_btn.textContent == 'Edit') { 
             selects.forEach(select => {
                 select.removeAttribute('disabled');
@@ -180,6 +185,9 @@ function createUserRow(user) {
     select.appendChild(option1); select.appendChild(option2);
     td6.appendChild(select);
 
+    select.addEventListener('change', function() {
+        handleSelectChange(select);
+    });
     tr.appendChild(td1); tr.appendChild(td2);
     tr.appendChild(td3); tr.appendChild(td4);
     tr.appendChild(td5); tr.appendChild(td6);
