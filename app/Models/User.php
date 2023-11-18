@@ -57,4 +57,16 @@ class User extends Authenticatable
         'badges' => 'array',
     ];
 
+
+    public function questions() : HasMany {
+        return $this->hasMany(Question::class);
+    }
+
+    public function isAdmin() : bool {
+        return $this->isAdmin;
+    }
+
+    public function games() : HasMany {
+        return $this->hasMany(Game::class);
+    }
 }

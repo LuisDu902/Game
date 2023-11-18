@@ -5,6 +5,8 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\URL;
 
+use Illuminate\Pagination\Paginator;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -20,6 +22,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        
         if(env('FORCE_HTTPS',false)) {
             error_log('configuring https');
 
@@ -28,5 +31,6 @@ class AppServiceProvider extends ServiceProvider
             $schema = explode(':', $app_url)[0];
             URL::forceScheme($schema);
         }
+        Paginator::useBootstrapFive();
     }
 }

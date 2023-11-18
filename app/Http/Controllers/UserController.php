@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 
 use Illuminate\View\View;
+use App\Models\User;
 
 use App\Models\User;
 
@@ -25,6 +26,11 @@ class UserController extends Controller
     public function showUserProfile()
     {
         return view('pages.profile');
+    }
+
+    public function index(){
+        $users = User::paginate(10);
+        return view('pages.users', ['users' => $users]);
     }
 
     public function edit(Request $request)
@@ -45,7 +51,5 @@ class UserController extends Controller
       $user->save();
       return redirect()->route('profile');
     }
-
-    
    
 }

@@ -1,0 +1,33 @@
+.pagination {
+    display: flex;
+    padding-top: 30px;
+    list-style: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.pagination .current, .pagination .page-item:hover a  {
+    color: #7C5BF0;
+    font-weight: 500;
+}
+
+.pagination .page-item {
+    border: 1px solid #e6e7f3;
+    border-radius: 5px;
+    padding: 10px 15px;
+    margin: 0 10px;
+    transition: all 400ms ease;
+}
+
+.pagination .page-item:hover {
+    border: 1px solid #7C5BF0;
+}
+
+.pagination .arrow:first-child {
+    margin-right: 20px;
+}
+
+.pagination .arrow:last-child {
+    margin-left: 20px;
+}
+
