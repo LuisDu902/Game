@@ -122,12 +122,14 @@ function listHandler() {
     if (this.status === 200) {
         const response = JSON.parse(this.responseText);
         const users = response.data;
+        console.log(response);
         const table = document.querySelector('.users-table tbody');
         table.innerHTML = '';
         for (const user of users){
             user_row = createUserRow(user);
             table.appendChild(user_row);
         }
+       
         
     } else {
         console.error('Status update failed:', this.status);

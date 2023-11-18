@@ -28,21 +28,21 @@ class UserController extends Controller
     }
 
     public function list(Request $request){
-        if ($request->filter == 'rank'){
-            $users = User::whereRaw("LOWER(rank::text) LIKE ?", ['%' . strtolower($request->search) . '%'])
-                ->when($request->filter === 'rank', function ($query) use ($request) {
-                    $query->orderBy($request->order);
-                })
-                ->paginate(10);
-        } else if ($request->filter == 'status'){
-            $users = User::whereRaw('rank', ['%' . strtolower($request->search) . '%'])
-                ->orderBy($request->order)
-                ->paginate(10);
-        } else {
-            $users = User::whereRaw('LOWER(' . $request->filter . ') LIKE ?', ['%' . strtolower($request->search) . '%'])
-                ->orderBy($request->order)
-                ->paginate(10);
-        }
+        $order = $request->order;
+        $filter = $request->filter;
+        $search = $request->search;
+
+        $query = User::where(function ($query) use ($search) {
+            $query->where('username', 'ilike', "%$search%")
+                  ->orWhere('name', 'ilike', "%$search%");
+        });
+
+
+        if (in_array($filter, ['Bronze', 'Gold', 'Master']))  $query->where('rank', $filter);
+        elseif ($filter === 'Active') $query->where('is_banned', false);
+        elseif ($filter === 'Banned') $query->where('is_banned', true);
+
+        $users = $query->orderBy($order)->paginate(10);
         return response()->json($users);
     }
 

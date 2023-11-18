@@ -21,10 +21,16 @@
                 <ion-icon name="funnel-outline" class="purple"></ion-icon>
                 <label> Filter by </label>
                 <select name="" class="filter-select" id="filter-user">
-                    <option value="username"> username </option>
-                    <option value="name"> name </option>
-                    <option value="rank"> rank </option>
-                    <option value="status"> status </option>
+                    <option value="">None</option>
+                    <optgroup label="Rank">
+                        <option value="Bronze">Bronze</option>
+                        <option value="Gold">Gold</option>
+                        <option value="Master">Master</option>
+                    </optgroup>
+                    <optgroup label="Status">
+                        <option value="Active">Active</option>
+                        <option value="Banned">Banned</option>
+                    </optgroup>
                 </select>
             </div>
             <div class="user-search">
@@ -60,6 +66,6 @@
                 @endforeach
             </tbody>
         </table>
-        {{ $users->links() }}
+        <div class="pagin"> {{ $users->links() }} </div>
     </section>
 @endsection
