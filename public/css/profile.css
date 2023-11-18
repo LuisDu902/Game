@@ -76,3 +76,48 @@
 .profile-input textarea {
     height: 100%;
 }
+
+.edit-profile-button {
+    display:block;
+    margin-top: 20px;
+    text-align: center; /* Center the button horizontally */
+}
+
+
+.edit-button {
+    background-color: var(--dark-purple);
+    color: white;
+    padding: 10px 20px;
+    font-size: 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: auto 0 auto auto;
+}
+
+.edit-profile-buttons {
+    display: none;
+    margin-top: 20px;
+    text-align: center; /* Center the button horizontally */
+}
+
+.save-button{
+    background-color: var(--dark-purple);
+    color: white;
+    padding: 10px 20px;
+    font-size: 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+.cancel-button {
+    background-color: transparent;
+    color: var(--dark-purple);
+    padding: 10px 20px;
+    font-size: 20px;
+    border: 2px solid var(--dark-purple);
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+}

@@ -33,6 +33,7 @@
             src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
             defer></script>
         </script>
+        <script type="text/javascript" src="{{ url('js/editprofile.js') }}"></script>
     </head>
     <body>
         @if(in_array(request()->route()->getName(), ['login', 'register']))
