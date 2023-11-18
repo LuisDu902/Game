@@ -129,7 +129,8 @@ function listHandler() {
             user_row = createUserRow(user);
             table.appendChild(user_row);
         }
-       
+        
+        createPaginationBar(response);
         
     } else {
         console.error('Status update failed:', this.status);
@@ -195,4 +196,64 @@ function createUserRow(user) {
     tr.appendChild(td5); tr.appendChild(td6);
 
     return tr;
+}
+
+
+function createPaginationBar(response) {
+    const pagination = document.querySelector('.pagination');
+    let paginationHTML = '';
+    const links = response.links;
+    // Previous page link
+    if (response.prev_page_url) {
+        paginationHTML += `<li class="page-item"><a class="page-link" href="#" data-ref="${links.prev_page_url}">&lsaquo;</a></li>`;
+    }
+
+    links.shift();
+    links.pop();
+    // Page numbers
+    links.forEach(link => {
+        
+        if (link.url) {
+            paginationHTML += `<li class="page-item"><a class="page-link" href="#" data-ref="${link.url}">${link.label}</a></li>`;
+        } else {
+            paginationHTML += `<li class="page-item current"><span class="page-link">${link.label}</span></li>`;
+        }
+    });
+
+    // Next page link
+    if (response.next_page_url) {
+        paginationHTML += `<li class="page-item"><a class="page-link" href="#" id="nextPage" data-ref="${links.next_page_url}">&rsaquo;</a></li>`;
+    }
+
+        
+
+    // Attach click event handlers to pagination links
+    if (links.prev_page_url) {
+        document.getElementById('prevPage').addEventListener('click', function (e) {
+            e.preventDefault();
+            const url = this.querySelector('a').getAttribute('data-ref');
+            sendAjaxRequest('get', url, {}, listHandler);
+        });
+    }
+
+    if (links.next_page_url) {
+        document.getElementById('nextPage').addEventListener('click', function (e) {
+            e.preventDefault();
+            console.log('IM REALLY HERE\N');
+            const url = this.querySelector('a').getAttribute('data-ref');
+            sendAjaxRequest('get', url, {}, listHandler);
+        });
+    }
+
+    // For page numbers
+    document.querySelectorAll('.page-item a').forEach(link => {
+        link.addEventListener('click', function (e) {
+            e.preventDefault();
+            const url = this.getAttribute('data-rref');
+            sendAjaxRequest('get', url, {}, listHandler);
+        });
+    });
+
+    // Update the pagination bar in the DOM
+    pagination.innerHTML = paginationHTML;
 }

@@ -1,11 +1,13 @@
 ul.breadcrumb {
     display: flex;
     padding-top: 5px;
+    vertical-align: middle;
 }
 
 ul.breadcrumb li {
-    display: inline;
+    display: flex;
     font-size: 16px;
+    align-items: center;
 }
 
 ul.breadcrumb li+li:before {
@@ -22,8 +24,15 @@ ul.breadcrumb li.white+li:before {
 
 ul.breadcrumb a{
     color: black;
+    vertical-align: middle;
 }
 
 ul.breadcrumb a:hover {
     color: var(--dark-purple);
+}
+
+.breadcrumb ion-icon {
+    vertical-align: middle;
+    font-size: 16px;
+    padding-right: 10px;
 }

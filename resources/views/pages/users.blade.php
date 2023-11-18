@@ -1,21 +1,15 @@
 @extends('layouts.app')
 
 @section('content')
-    <x-sidebar></x-sidebar>
-
-    <div class="headers">
-        <button class="open-sidebar">
-            <ion-icon name="menu"></ion-icon>
-        </button>
-
-        <ul class="breadcrumb">
-            <li><a href="{{ route('home') }}">Home</a></li>
-            <li>User Management</li>
-        </ul>
-    </div>
+    <ul class="breadcrumb">
+        <li><a href="{{ route('home') }}">
+            <ion-icon name="home-outline"></ion-icon> Home</a>
+        </li>
+        <li>Users</li>
+    </ul>
 
     <section class="user-manage-section">
-        <h1>User Management</h1>
+        <h1>Users</h1>
         <nav class="search-bar">
             <div class="filter-condition">
                 <ion-icon name="funnel-outline" class="purple"></ion-icon>
@@ -47,7 +41,7 @@
                     <option value="rank"> rank </option>
                 </select>
             </div>
-            @if (Auth::user()->is_admin && !Auth::user()->is_banned) 
+            @if (Auth::check() && Auth::user()->is_admin && !Auth::user()->is_banned) 
                 <button id="edit-status-btn">Edit</button>
             @endif
         </nav>
@@ -66,6 +60,6 @@
                 @endforeach
             </tbody>
         </table>
-        <div class="pagin"> {{ $users->links() }} </div>
+        {{ $users->links() }}
     </section>
 @endsection

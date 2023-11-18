@@ -15,7 +15,6 @@
         <link href="{{ url('css/navbar.css') }}" rel="stylesheet">
         <link href="{{ url('css/auth.css') }}" rel="stylesheet">
         <link href="{{ url('css/footer.css') }}" rel="stylesheet">
-        <link href="{{ url('css/sidebar.css') }}" rel="stylesheet">
         <link href="{{ url('css/breadcrumb.css') }}" rel="stylesheet">
         <link href="{{ url('css/profile.css') }}" rel="stylesheet">
         <link href="{{ url('css/questions.css') }}" rel="stylesheet">

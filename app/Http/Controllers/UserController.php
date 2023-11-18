@@ -28,9 +28,9 @@ class UserController extends Controller
     }
 
     public function list(Request $request){
-        $order = $request->order;
-        $filter = $request->filter;
-        $search = $request->search;
+        $order = $request->input('order', 'username');
+        $filter = $request->input('filter', '');
+        $search = $request->input('search', '');
 
         $query = User::where(function ($query) use ($search) {
             $query->where('username', 'ilike', "%$search%")
@@ -42,7 +42,15 @@ class UserController extends Controller
         elseif ($filter === 'Active') $query->where('is_banned', false);
         elseif ($filter === 'Banned') $query->where('is_banned', true);
 
+        
         $users = $query->orderBy($order)->paginate(10);
+
+        $users->appends([
+            'order' => $order,
+            'filter' => $filter,
+            'search' => $search,
+        ]);
+
         return response()->json($users);
     }
 
