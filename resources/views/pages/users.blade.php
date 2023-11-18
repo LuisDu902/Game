@@ -39,15 +39,12 @@
                     <option value="username"> username </option>
                     <option value="name"> name </option>
                     <option value="rank"> rank </option>
-                    <option value="status"> status </option>
                 </select>
             </div>
             @if (Auth::user()->is_admin && !Auth::user()->is_banned) 
                 <button id="edit-status-btn">Edit</button>
             @endif
         </nav>
-      
-    
         
         <table class="users-table">
             <thead>
@@ -62,19 +59,7 @@
             </thead>
             <tbody>
                 @foreach($users as $user)
-                <tr class="user-info">
-                    <td><img src="../images/user.png" alt="User Image"></td>
-                    <td><a href="#">{{ $user->username }}</a></td>
-                    <td>{{ $user->name }}</td>
-                    <td>{{ $user->email }}</td>
-                    <td class="{{ $user->rank }}">{{ $user->rank }}</td>
-                    <td>
-                    <select name="" class="status hidden {{ $user->is_banned ? 'banned' : 'active' }}" id="user-status" disabled data-user={{ $user->id }}>
-                        <option value="active" {{ $user->is_banned ? '' : 'selected' }}>Active</option>
-                        <option value="banned" {{ $user->is_banned ? 'selected' : '' }}>Banned</option>
-                    </select>
-                    </td>
-                </tr>
+                    <x-userinfo :user="$user"/>               
                 @endforeach
             </tbody>
         </table>

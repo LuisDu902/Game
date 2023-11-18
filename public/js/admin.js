@@ -15,13 +15,14 @@ function sendAjaxRequest(method, url, data, handler) {
 }
 
 const selectElements = document.querySelectorAll('.status');
-const changedSelects = [];
+let changedSelects = [];
 
 function sendUpdateStatusRequest() {
     changedSelects.forEach(item => {
         const { id, selectedValue } = item;
-        sendAjaxRequest('post', '/api/user/' + id, { status: selectedValue }, statusUpdatedHandler);
+        sendAjaxRequest('post', '/api/users/' + id, { status: selectedValue }, statusUpdatedHandler);
     });
+    changedSelects = [];
 }
 
 function statusUpdatedHandler() {
@@ -38,7 +39,7 @@ if (selectElements) {
         selectElement.addEventListener('change', function() {
             const selectedValue = this.value;
             const id = this.getAttribute('data-user');
-            if (selectedValue === 'banned') {
+            if (selectedValue == 'banned') {
                 this.classList.remove('active');
                 this.classList.add('banned');
             } else {
@@ -54,7 +55,6 @@ if (selectElements) {
         });
     });
 }
-
 
 const edit_status_btn = document.querySelector('#edit-status-btn');
 
@@ -76,7 +76,6 @@ if (edit_status_btn){
             edit_status_btn.textContent = 'Edit';
 
             if (changedSelects.length > 0) {
-                console.log('Changed selects:', changedSelects);
                 sendUpdateStatusRequest();
             }
         }
@@ -85,7 +84,98 @@ if (edit_status_btn){
 
 
 
+function sendUserListRequest() {
+    changedSelects.forEach(item => {
+        const { id, selectedValue } = item;
+        sendAjaxRequest('post', '/api/users/' + id, { status: selectedValue }, statusUpdatedHandler);
+    });
+    changedSelects = [];
+}
 
 
+const order_user = document.querySelector('#order-user');
 
+if (order_user) {
+    order_user.addEventListener('change', function() {
+        value = order_user.value;
+        sendAjaxRequest('get', '/api/users?order=' + value, {}, listHandler);
+    });
+}
+
+function listHandler() {
+    if (this.status === 200) {
+        const response = JSON.parse(this.responseText);
+        const users = response.data;
+        const table = document.querySelector('.users-table tbody');
+        table.innerHTML = '';
+        for (const user of users){
+            user_row = createUserRow(user);
+            table.appendChild(user_row);
+        }
+        
+    } else {
+        console.error('Status update failed:', this.status);
+    }
+}
   
+function createUserRow(user) {
+    const tr = document.createElement('tr');
+    tr.classList.add('user-info');
+
+    const td1 = document.createElement('td');
+    const img = document.createElement('img');
+    img.src = '../images/user.png';
+    img.alt = 'User Image';
+    td1.appendChild(img);
+
+    const td2 = document.createElement('td');
+    const link = document.createElement('a');
+    link.href = '#';
+    link.textContent = user.username;
+    td2.appendChild(link);
+
+    const td3 = document.createElement('td');
+    td3.textContent = user.name;
+
+    const td4 = document.createElement('td');
+    td4.textContent = user.email;
+
+    const td5 = document.createElement('td');
+    td5.classList.add(user.rank);
+    td5.textContent = user.rank;
+
+    const td6 = document.createElement('td');
+    const select = document.createElement('select');
+    select.name = '';
+    select.classList.add('status', 'hidden', user.is_banned ? 'banned' : 'active');
+    select.id = 'user-status';
+    select.disabled = true;
+    select.dataset.user = user.id;
+
+    const option1 = document.createElement('option');
+    option1.value = 'active';
+    option1.textContent = 'Active';
+    if (!user.is_banned) {
+        option1.selected = true;
+    }
+
+    const option2 = document.createElement('option');
+    option2.value = 'banned';
+    option2.textContent = 'Banned';
+    if (user.is_banned) {
+        option2.selected = true;
+    }
+
+    select.appendChild(option1);
+    select.appendChild(option2);
+    td6.appendChild(select);
+
+    tr.appendChild(td1);
+    tr.appendChild(td2);
+    tr.appendChild(td3);
+    tr.appendChild(td4);
+    tr.appendChild(td5);
+    tr.appendChild(td6);
+
+    return tr;
+}

@@ -23,8 +23,14 @@ class UserController extends Controller
     }
 
     public function index(){
-        $users = User::paginate(10);
+        $users = User::orderBy('username')->paginate(10);
         return view('pages.users', ['users' => $users]);
+    }
+
+    public function list(Request $request){
+        $order = $request->query('order', 'username');
+        $users = User::orderBy($order)->paginate(10);
+        return response()->json($users);
     }
 
     public function updateStatus(Request $request, $id) {

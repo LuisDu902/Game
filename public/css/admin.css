@@ -56,6 +56,7 @@
     font-size: 18px;
     border-radius: 15px;
     background-color: #7C5BF0;
+    column-gap: 20px;
 }
 
 .users-table th {
