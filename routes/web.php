@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 
+use App\Models\User;
+use Illuminate\Http\Request;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -39,5 +42,5 @@ Route::get('/home', function () {
 
 Route::controller(UserController::class)->group(function () {
     Route::get('/profile', 'showUserProfile')->name('profile');
-    Route::post('/profile', 'edit');
+    Route::post('/edit_profile/{id}', 'edit')->name('edit_profile');
 });
