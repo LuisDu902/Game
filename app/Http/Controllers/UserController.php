@@ -28,12 +28,21 @@ class UserController extends Controller
     }
 
     public function list(Request $request){
-        $filter = $request->input('filter', 'username'); 
-        $search = $request->input('search', ''); 
-        $order = $request->input('order', 'username'); 
-        $users = User::where($filter, 'LIKE', "%$search%")
-            ->orderBy($order)
-            ->paginate(10);
+        if ($request->filter == 'rank'){
+            $users = User::whereRaw("LOWER(rank::text) LIKE ?", ['%' . strtolower($request->search) . '%'])
+                ->when($request->filter === 'rank', function ($query) use ($request) {
+                    $query->orderBy($request->order);
+                })
+                ->paginate(10);
+        } else if ($request->filter == 'status'){
+            $users = User::whereRaw('rank', ['%' . strtolower($request->search) . '%'])
+                ->orderBy($request->order)
+                ->paginate(10);
+        } else {
+            $users = User::whereRaw('LOWER(' . $request->filter . ') LIKE ?', ['%' . strtolower($request->search) . '%'])
+                ->orderBy($request->order)
+                ->paginate(10);
+        }
         return response()->json($users);
     }
 
