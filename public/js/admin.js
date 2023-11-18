@@ -122,7 +122,6 @@ function listHandler() {
     if (this.status === 200) {
         const response = JSON.parse(this.responseText);
         const users = response.data;
-        console.log(response);
         const table = document.querySelector('.users-table tbody');
         table.innerHTML = '';
         for (const user of users){
@@ -201,59 +200,48 @@ function createUserRow(user) {
 
 function createPaginationBar(response) {
     const pagination = document.querySelector('.pagination');
-    let paginationHTML = '';
-    const links = response.links;
-    // Previous page link
+    pagination.innerHTML = '';
+    
     if (response.prev_page_url) {
-        paginationHTML += `<li class="page-item"><a class="page-link" href="#" data-ref="${links.prev_page_url}">&lsaquo;</a></li>`;
+        const prevArrow = document.createElement('li');
+        prevArrow.classList.add('arrow');
+        prevArrow.id = 'prevPage';
+        prevArrow.setAttribute('data-url', `${response.prev_page_url}`);
+        prevArrow.innerHTML = '<span>&lsaquo;</span>';
+        pagination.appendChild(prevArrow);
+        prevArrow.addEventListener('click', function(){
+            sendAjaxRequest('get', response.prev_page_url, {}, listHandler);
+        });
     }
 
-    links.shift();
-    links.pop();
-    // Page numbers
-    links.forEach(link => {
-        
-        if (link.url) {
-            paginationHTML += `<li class="page-item"><a class="page-link" href="#" data-ref="${link.url}">${link.label}</a></li>`;
-        } else {
-            paginationHTML += `<li class="page-item current"><span class="page-link">${link.label}</span></li>`;
+    const links = response.links;
+    links.shift(); links.pop();
+    
+    if (links.length > 1) {
+        for (const link of links) {
+            const page = document.createElement('li');
+            page.classList.add('page-item');
+            page.innerHTML = `<span class="page-link"> ${link.label}</span>`;
+            if (link.active) page.classList.add('current');
+            else {
+                page.addEventListener('click', function(){
+                    sendAjaxRequest('get', link.url, {}, listHandler);
+                });
+            }
+            pagination.appendChild(page);
+            
         }
-    });
-
-    // Next page link
+    }
+   
     if (response.next_page_url) {
-        paginationHTML += `<li class="page-item"><a class="page-link" href="#" id="nextPage" data-ref="${links.next_page_url}">&rsaquo;</a></li>`;
-    }
-
-        
-
-    // Attach click event handlers to pagination links
-    if (links.prev_page_url) {
-        document.getElementById('prevPage').addEventListener('click', function (e) {
-            e.preventDefault();
-            const url = this.querySelector('a').getAttribute('data-ref');
-            sendAjaxRequest('get', url, {}, listHandler);
+        const nextArrow = document.createElement('li');
+        nextArrow.classList.add('arrow');
+        nextArrow.id = 'nextPage';
+        nextArrow.innerHTML = '<span>&rsaquo;</span>';
+        pagination.appendChild(nextArrow);
+        nextArrow.addEventListener('click', function(){
+            sendAjaxRequest('get', response.next_page_url, {}, listHandler);
         });
     }
 
-    if (links.next_page_url) {
-        document.getElementById('nextPage').addEventListener('click', function (e) {
-            e.preventDefault();
-            console.log('IM REALLY HERE\N');
-            const url = this.querySelector('a').getAttribute('data-ref');
-            sendAjaxRequest('get', url, {}, listHandler);
-        });
-    }
-
-    // For page numbers
-    document.querySelectorAll('.page-item a').forEach(link => {
-        link.addEventListener('click', function (e) {
-            e.preventDefault();
-            const url = this.getAttribute('data-rref');
-            sendAjaxRequest('get', url, {}, listHandler);
-        });
-    });
-
-    // Update the pagination bar in the DOM
-    pagination.innerHTML = paginationHTML;
 }
