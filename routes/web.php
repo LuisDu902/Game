@@ -65,3 +65,9 @@ Route::controller(GameCategoryController::class)->group(function () {
 Route::controller(GameController::class)->group(function () {
     Route::get('/game/{id}', 'show')->name('game');
 });
+
+
+Route::controller(UserController::class)->group(function () {
+    Route::post('/api/users/{id}', 'updateStatus');
+    Route::get('/api/users/', 'list');
+});

@@ -1,21 +1,3 @@
-const openSidebarButton = document.querySelector('.open-sidebar');
-
-
-if (openSidebarButton) {
-    const overlay = document.querySelector('.overlay');
-    const sidebar = document.querySelector('.sidebar');
-    
-    openSidebarButton.addEventListener('click', () => {
-        sidebar.style.left = '0';
-        overlay.style.display = 'block';
-    });
-
-    overlay.addEventListener('click', () => {
-        sidebar.style.left = '-400px';
-        overlay.style.display = 'none';
-    });
-}
-
 const dropDownButton = document.querySelector('.dropbtn');
 
 if (dropDownButton) {
@@ -36,9 +18,7 @@ if (dropDownButton) {
 
 }
 
-
 const questions_btns = document.querySelectorAll('.questions-sort button');
-
 
 if (questions_btns) {
     questions_btns.forEach(button => {
@@ -48,28 +28,5 @@ if (questions_btns) {
         });
     });
 }
-
-
-const selectElements = document.querySelectorAll('.status');
-
-if (selectElements) {
-    selectElements.forEach(function(selectElement) {
-        selectElement.addEventListener('change', function() {
-            const selectedValue = this.value;
-            
-            if (selectedValue === 'banned') {
-                this.classList.remove('active');
-                this.classList.add('banned');
-            } else {
-                this.classList.remove('banned');
-                this.classList.add('active');
-            }
-        });
-    });
-}
-
-
-
-
 
 

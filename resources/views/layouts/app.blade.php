@@ -15,7 +15,6 @@
         <link href="{{ url('css/navbar.css') }}" rel="stylesheet">
         <link href="{{ url('css/auth.css') }}" rel="stylesheet">
         <link href="{{ url('css/footer.css') }}" rel="stylesheet">
-        <link href="{{ url('css/sidebar.css') }}" rel="stylesheet">
         <link href="{{ url('css/breadcrumb.css') }}" rel="stylesheet">
         <link href="{{ url('css/profile.css') }}" rel="stylesheet">
         <link href="{{ url('css/questions.css') }}" rel="stylesheet">
@@ -28,7 +27,8 @@
             // Fix for Firefox autofocus CSS bug
             // See: http://stackoverflow.com/questions/18943276/html-5-autofocus-messes-up-css-loading/18945951#18945951
         </script>
-        <script type="text/javascript" src={{ url('js/app.js') }} defer>
+        <script type="text/javascript" src="{{ url('js/app.js') }}" defer></script>
+        <script type="text/javascript" src="{{ url('js/admin.js') }}" defer></script>
         <script nomodule
             src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
             defer></script>

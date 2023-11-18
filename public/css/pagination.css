@@ -6,6 +6,10 @@
     align-items: center;
 }
 
+.pagination span:hover, .pagination li:hover {
+    cursor: pointer;
+}
+
 .pagination .current, .pagination .page-item:hover a  {
     color: #7C5BF0;
     font-weight: 500;

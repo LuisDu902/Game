@@ -1,20 +1,16 @@
 @extends('layouts.app')
 
 @section('content')
-   <x-sidebar></x-sidebar>
-   
-   <div class="headers">
-      <button class="open-sidebar white">
-            <ion-icon name="menu"></ion-icon>
-      </button>
-
-      <ul class="breadcrumb">
-            <li class="white"><a href="{{ route('home') }}" class="white">Home</a></li>
-            <li class="white"><a href="{{ route('categories') }}" class="white">Game Categories</a></li>
-            <li class="white"><a href="{{ route('category', ['id' => $game->category->id]) }}" class="white">{{ $game->category->name }}</a></li>
-            <li class="white"> {{ $game->name }}</li>
-        </ul>
-   </div>
+    <ul class="breadcrumb">
+        <li class="white">
+            <a href="{{ route('home') }}" class="white"> 
+                <ion-icon name="home-outline" class="white"></ion-icon> Home
+            </a>
+        </li>
+        <li class="white"><a href="{{ route('categories') }}" class="white">Game Categories</a></li>
+        <li class="white"><a href="{{ route('category', ['id' => $game->category->id]) }}" class="white">{{ $game->category->name }}</a></li>
+        <li class="white"> {{ $game->name }}</li>
+    </ul>
 
    <article class="game">
         <img src="../images/roblox.jpg" alt="game image" class="game-img">
