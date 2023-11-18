@@ -82,8 +82,6 @@ if (edit_status_btn){
     });
 }
 
-
-
 function sendUserListRequest() {
     changedSelects.forEach(item => {
         const { id, selectedValue } = item;
@@ -94,11 +92,24 @@ function sendUserListRequest() {
 
 
 const order_user = document.querySelector('#order-user');
+const search_user = document.querySelector('#search-user');
+const filter_user = document.querySelector('#filter-user');
 
 if (order_user) {
     order_user.addEventListener('change', function() {
-        value = order_user.value;
-        sendAjaxRequest('get', '/api/users?order=' + value, {}, listHandler);
+        sendAjaxRequest('get', '/api/users?' + encodeForAjax({search: search_user.value, filter: filter_user.value, order: order_user.value}), {}, listHandler);
+    });
+}
+
+if (search_user) {
+    search_user.addEventListener('input', function() {
+        sendAjaxRequest('get', '/api/users?' + encodeForAjax({search: search_user.value, filter: filter_user.value, order: order_user.value}), {}, listHandler);
+    });
+}
+
+if (filter_user) {
+    filter_user.addEventListener('change', function() {
+        sendAjaxRequest('get', '/api/users?' + encodeForAjax({search: search_user.value, filter: filter_user.value, order: order_user.value}), {}, listHandler);
     });
 }
 
@@ -166,16 +177,12 @@ function createUserRow(user) {
         option2.selected = true;
     }
 
-    select.appendChild(option1);
-    select.appendChild(option2);
+    select.appendChild(option1); select.appendChild(option2);
     td6.appendChild(select);
 
-    tr.appendChild(td1);
-    tr.appendChild(td2);
-    tr.appendChild(td3);
-    tr.appendChild(td4);
-    tr.appendChild(td5);
-    tr.appendChild(td6);
+    tr.appendChild(td1); tr.appendChild(td2);
+    tr.appendChild(td3); tr.appendChild(td4);
+    tr.appendChild(td5); tr.appendChild(td6);
 
     return tr;
 }

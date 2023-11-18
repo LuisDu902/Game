@@ -49,12 +49,9 @@
         <table class="users-table">
             <thead>
                 <tr>
-                    <th></th>
-                    <th>Username</th>
-                    <th>Name</th>
-                    <th>Email Address</th>
-                    <th>Rank</th>
-                    <th>Status</th>
+                    <th></th> <th>Username</th>
+                    <th>Name</th> <th>Email Address</th>
+                    <th>Rank</th> <th>Status</th>
                 </tr>
             </thead>
             <tbody>

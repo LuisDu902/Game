@@ -28,8 +28,12 @@ class UserController extends Controller
     }
 
     public function list(Request $request){
-        $order = $request->query('order', 'username');
-        $users = User::orderBy($order)->paginate(10);
+        $filter = $request->input('filter', 'username'); 
+        $search = $request->input('search', ''); 
+        $order = $request->input('order', 'username'); 
+        $users = User::where($filter, 'LIKE', "%$search%")
+            ->orderBy($order)
+            ->paginate(10);
         return response()->json($users);
     }
 
