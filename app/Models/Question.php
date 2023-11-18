@@ -5,28 +5,27 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+
 // Added to define Eloquent relationships.
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
 
-class Answer extends Model
+class Question extends Model
 {
     use HasFactory;
 
     public $timestamps  = false;
 
-    protected $table = 'answer';
+    protected $table = 'question';
+
+    protected $fillable = [
+        'user_id',
+        'create_date',
+        'title',
+    ];
 
     /**
-     * Get the question.
-     */
-    public function question(): BelongsTo
-    {
-        return $this->belongsTo(Question::class, 'question_id');
-    }
-
-      /**
      * Get the user that created the question.
      */
     public function creator(): BelongsTo
@@ -35,13 +34,21 @@ class Answer extends Model
     }
 
     /**
-     * Get the latest answer content.
+     * Get the asnwers to the question.
+     */
+    public function answers()
+    {
+        return $this->hasMany(Answer::class);
+    }
+
+    /**
+     * Get the latest question content.
      */
     public function latest_content()
     {
         return DB::table('version_content')
         ->select('content')
-        ->where('answer_id', $this->id)
+        ->where('question_id', $this->id)
         ->orderByDesc('date') 
         ->limit(1)
         ->value('content');

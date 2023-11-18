@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\GameCategoryController;
+use App\Http\Controllers\GameController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\QuestionController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\LoginController;
@@ -36,8 +39,31 @@ Route::get('/home', function () {
     return view('pages.home');
 })->name('home');
 
-
+// User
 Route::controller(UserController::class)->group(function () {
     Route::get('/profile', 'showUserProfile')->name('profile');
     Route::post('/profile', 'edit');
+    Route::get('/users', 'index')->name('users');
+});
+
+// Question
+Route::controller(QuestionController::class)->group(function () {
+    Route::get('/questions', 'index')->name('questions');
+   
+});
+
+
+// Question
+Route::controller(GameCategoryController::class)->group(function () {
+    Route::get('/categories', 'index')->name('categories');
+    Route::get('/categories/{id}', 'show')->name('category');
+});
+
+Route::controller(GameController::class)->group(function () {
+    Route::get('/game/{id}', 'show')->name('game');
+});
+
+
+Route::controller(UserController::class)->group(function () {
+    Route::post('/api/user/{id}', 'updateStatus');
 });

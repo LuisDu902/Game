@@ -5,9 +5,9 @@
             <strong>GameOn</strong>
         </a>
         <ul class="nav-links">
-            <li class="about-us"><a href="common/faq.html">Questions</a></li>
-            <li class="FAQ"><a href="common/faq.html">Users</a></li>
-            <li class="contact"><a href="common/contact.html">Game
+            <li><a href="{{ route('questions') }}">Questions</a></li>
+            <li><a href="{{ route('users') }}">Users</a></li>
+            <li><a href="{{ route('categories') }}">Game
                     Categories</a></li>
         </ul>
 

@@ -37,10 +37,16 @@ if (dropDownButton) {
 }
 
 
+const questions_btns = document.querySelectorAll('.questions-sort button');
 
 
-
-
-
+if (questions_btns) {
+    questions_btns.forEach(button => {
+        button.addEventListener('click', function () {
+            questions_btns.forEach(btn => btn.classList.remove('selected'));
+            this.classList.add('selected');
+        });
+    });
+}
 
 

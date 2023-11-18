@@ -18,12 +18,18 @@
         <link href="{{ url('css/sidebar.css') }}" rel="stylesheet">
         <link href="{{ url('css/breadcrumb.css') }}" rel="stylesheet">
         <link href="{{ url('css/profile.css') }}" rel="stylesheet">
+        <link href="{{ url('css/questions.css') }}" rel="stylesheet">
+        <link href="{{ url('css/pagination.css') }}" rel="stylesheet">
+        <link href="{{ url('css/admin.css') }}" rel="stylesheet">
+        <link href="{{ url('css/category.css') }}" rel="stylesheet">
+        <link href="{{ url('css/game.css') }}" rel="stylesheet">
 
         <script type="text/javascript">
             // Fix for Firefox autofocus CSS bug
             // See: http://stackoverflow.com/questions/18943276/html-5-autofocus-messes-up-css-loading/18945951#18945951
         </script>
-        <script type="text/javascript" src={{ url('js/app.js') }} defer>
+        <script type="text/javascript" src="{{ url('js/app.js') }}" defer></script>
+        <script type="text/javascript" src="{{ url('js/admin.js') }}" defer></script>
         <script nomodule
             src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
             defer></script>
@@ -34,6 +40,9 @@
             @yield('authentication')
         @else
             @include('partials._header')
+            @if(in_array(request()->route()->getName(), ['category', 'game']))
+            <div class="purple-section"></div>
+            @endif
             <main>
                 @yield('content')
             </main>
