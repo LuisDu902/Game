@@ -31,18 +31,19 @@
 
         </div>
 
-        <form id="profileForm" class="profile-right">
+        <form id="profileForm" class="profile-right" method="POST" action="{{ route('edit_profile', ['id' => Auth::user()->id]) }}" enctype="multipart/form-data">
+            {{ csrf_field() }}
             <div class="profile-input">
                 <label class="field-label" for="name"> Name <span
                         class="purple">*</span> </label>
-                <input type="text" name="name" value="{{ Auth::user()->name }}" placeholder="{{ Auth::user()->name }}"
+                <input type="text" name="name" value="{{ Auth::user()->name }}" placeholder="your name"
                     required disabled>
             </div>
 
             <div class="profile-input">
                 <label class="field-label" for="username"> Username
                     <span class="purple">*</span> </label>
-                <input type="text" name="username" value="{{ Auth::user()->username }}" placeholder="{{ Auth::user()->username }}"
+                <input type="text" name="username" value="{{ Auth::user()->username }}" placeholder="your username"
                     required disabled>
             </div>
 
@@ -50,15 +51,13 @@
                 <label class="field-label" for="email"> Email Address
                     <span class="purple">*</span> </label>
                 <input type="email" name="email" value="{{ Auth::user()->email }}"
-                    placeholder="{{ Auth::user()->email }}" required disabled>
+                    placeholder="email@example.com" required disabled>
             </div>
             <div class="profile-input description">
                 <label class="field-label" for="description">
                     Description </label>
-                <textarea name="description" value="{{ Auth::user()->description }}"
-                    placeholder="{{ Auth::user()->description }}"
-                    required disabled></textarea>
-            </div>
+                    <textarea name="description" placeholder="Your description" disabled>{{ Auth::user()->description }}</textarea>
+                </div>
         </form>
 
     </article>
@@ -68,7 +67,7 @@
     </div>
 
     <div class="edit-profile-buttons d-none mx-auto">
-        <button class="save-button" onclick="saveChanges()">Save</button>
+        <button class="save-button" type="submit" id="edit_profile" onclick="saveChanges()">Save</button>
         <button class="cancel-button" onclick="cancelChanges()">Cancel</button>
     </div>
 @endsection
