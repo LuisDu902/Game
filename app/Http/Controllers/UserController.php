@@ -22,9 +22,15 @@ class UserController extends Controller
     /**
      * Display a login form.
      */
-    public function showUserProfile()
-    {
-        return view('pages.profile');
+    public function showUserProfile($id) {
+
+        $user = User::find($id);
+
+        if (!$user) {
+          abort(404, 'User not found');
+      }
+
+      return view('pages.profile', ['user' => $user]);
     }
 
     public function index(){
@@ -82,7 +88,7 @@ class UserController extends Controller
 
 
       $user->save();
-      return redirect()->route('profile');
+      return redirect()->route('profile', ['id' => $user->id]);
     }
    
 }
