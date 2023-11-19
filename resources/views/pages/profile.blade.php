@@ -7,7 +7,7 @@
             <ion-icon name="home-outline"></ion-icon> Home</a>
         </li>
         <li><a href="#">User Profile</a></li>
-        <li> {{ Auth::user()->username }} </li>
+        <li> {{ $user->username }} </li>
     </ul>
 
     <article class="profile-wrapper">
