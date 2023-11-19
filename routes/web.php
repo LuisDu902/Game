@@ -44,7 +44,7 @@ Route::get('/home', function () {
 
 // User
 Route::controller(UserController::class)->group(function () {
-    Route::get('/profile/{id}', 'showUserProfile')->name('profile');
+    Route::get('/users/{id}', 'showUserProfile')->name('profile');
     Route::post('/edit_profile/{id}', 'edit')->name('edit_profile');
     Route::get('/users', 'index')->name('users');
 });
