@@ -29,7 +29,7 @@
                     </button>
                 </div>
                 <div class="dropdown-content">
-                    <a href="{{ route('profile') }}">Profile</a>
+                    <a href="{{ route('profile', ['id' => Auth::user()->id]) }}">Profile</a>
                     <a href="#">My posts</a>
                     <a href="{{ url('/logout') }}">Sign out</a>
                 </div>
