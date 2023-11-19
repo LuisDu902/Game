@@ -6,7 +6,7 @@
         <li><a href="{{ route('home') }}">
             <ion-icon name="home-outline"></ion-icon> Home</a>
         </li>
-        <li><a href="#">User Profile</a></li>
+        <li><a href="{{ route('profile', ['id' => $user->id]) }}">User Profile</a></li>
         <li> {{ $user->username }} </li>
     </ul>
 
