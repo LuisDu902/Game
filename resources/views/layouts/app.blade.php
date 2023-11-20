@@ -19,7 +19,7 @@
         <link href="{{ url('css/profile.css') }}" rel="stylesheet">
         <link href="{{ url('css/questions.css') }}" rel="stylesheet">
         <link href="{{ url('css/pagination.css') }}" rel="stylesheet">
-        <link href="{{ url('css/admin.css') }}" rel="stylesheet">
+        <link href="{{ url('css/user.css') }}" rel="stylesheet">
         <link href="{{ url('css/category.css') }}" rel="stylesheet">
         <link href="{{ url('css/game.css') }}" rel="stylesheet">
 
@@ -42,6 +42,7 @@
             @yield('authentication')
         @else
             @include('layouts.header')
+            <div class="notification-box"></div>
             @if(in_array(request()->route()->getName(), ['category', 'game']))
             <div class="purple-section"></div>
             @endif

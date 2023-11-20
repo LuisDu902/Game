@@ -17,39 +17,39 @@
 
             <div class="stats-grid">
                 <div class="stats-text">Rank:</div>
-                <div class="user-rank">{{ Auth::user()->rank }}</div>
+                <div class="user-rank">{{ $user->rank }}</div>
                 <div class="stats-text">Badges:</div>
-                <div class="user-badges">{{ Auth::user()->badges }}</div>
+                <div class="user-badges">{{ $user->badges }}</div>
             </div>
 
         </div>
 
-        <form id="profileForm" class="profile-right" method="POST" action="{{ route('edit_profile', ['id' => Auth::user()->id]) }}" enctype="multipart/form-data">
+        <form id="profileForm" class="profile-right" method="POST" enctype="multipart/form-data" data-id="{{ $user->id }}">
             {{ csrf_field() }}
             <div class="profile-input">
                 <label class="field-label" for="name"> Name <span
                         class="purple">*</span> </label>
-                <input type="text" name="name" value="{{ $user->name }}" placeholder="your name"
+                <input id="profile-name" type="text" name="name" value="{{ $user->name }}" placeholder="your name"
                     required disabled>
             </div>
 
             <div class="profile-input">
                 <label class="field-label" for="username"> Username
                     <span class="purple">*</span> </label>
-                <input type="text" name="username" value="{{ $user->username }}" placeholder="your username"
+                <input id="profile-username" type="text" name="username" value="{{ $user->username }}" placeholder="your username"
                     required disabled>
             </div>
 
             <div class="profile-input email">
                 <label class="field-label" for="email"> Email Address
                     <span class="purple">*</span> </label>
-                <input type="email" name="email" value="{{ $user->email }}"
+                <input id="profile-email" type="email" name="email" value="{{ $user->email }}"
                     placeholder="email@example.com" required disabled>
             </div>
             <div class="profile-input description">
                 <label class="field-label" for="description">
                     Description </label>
-                    <textarea name="description" placeholder="Your description" disabled>{{ $user->description }}</textarea>
+                    <textarea id="profile-description" name="description" placeholder="Your description" disabled>{{ $user->description }}</textarea>
                 </div>
         </form>
 
