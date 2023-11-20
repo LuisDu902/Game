@@ -9,7 +9,6 @@ function toggleEdit() {
 
     textarea.disabled = !textarea.disabled;
 
-
     var profileButtons = document.querySelector('.edit-profile-buttons');
     var profileButton = document.querySelector('.edit-profile-button');
     

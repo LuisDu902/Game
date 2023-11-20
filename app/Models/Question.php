@@ -54,4 +54,10 @@ class Question extends Model
         ->value('content');
     }
 
+    public function timeDifference() {
+        $now = now();
+        $createdAt = $this->create_date;
+        return $now->diffForHumans($createdAt, true);
+    }
+
 }

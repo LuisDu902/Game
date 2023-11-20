@@ -55,19 +55,24 @@ Route::controller(QuestionController::class)->group(function () {
    
 });
 
-
-// Question
+// Game Category
 Route::controller(GameCategoryController::class)->group(function () {
     Route::get('/categories', 'index')->name('categories');
     Route::get('/categories/{id}', 'show')->name('category');
 });
 
+// Game
 Route::controller(GameController::class)->group(function () {
     Route::get('/game/{id}', 'show')->name('game');
 });
 
-
+// User API
 Route::controller(UserController::class)->group(function () {
     Route::post('/api/users/{id}', 'updateStatus');
-    Route::get('/api/users/', 'list');
+    Route::get('/api/users', 'list');
+});
+
+// Question API
+Route::controller(QuestionController::class)->group(function () {
+    Route::get('/api/questions', 'list'); 
 });
