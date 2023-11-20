@@ -18,15 +18,36 @@ if (dropDownButton) {
 
 }
 
-const questions_btns = document.querySelectorAll('.questions-sort button');
+const questionsBtns = document.querySelectorAll('.questions-sort button');
 
-if (questions_btns) {
-    questions_btns.forEach(button => {
+if (questionsBtns) {
+    questionsBtns.forEach(button => {
         button.addEventListener('click', function () {
-            questions_btns.forEach(btn => btn.classList.remove('selected'));
+            questionsBtns.forEach(btn => btn.classList.remove('selected'));
             this.classList.add('selected');
         });
     });
+}
+
+
+function createNotificationBox(text) {
+    const notificationBox = document.querySelector('.notification-box');
+    notificationBox.style.display = 'flex';
+
+    const span = document.createElement('span');
+    span.textContent = text;
+    
+    const close = document.createElement('ion-icon');
+    close.setAttribute('name', 'close');
+
+    close.addEventListener('click', function(){
+        notificationBox.style.display = 'none';
+        notificationBox.innerHTML = '';
+    })
+
+    notificationBox.appendChild(span);
+    notificationBox.appendChild(close);
+
 }
 
 function encodeForAjax(data) {
