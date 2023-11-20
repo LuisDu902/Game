@@ -1,19 +1,3 @@
-function encodeForAjax(data) {
-    if (data == null) return null;
-    return Object.keys(data).map(function(k){
-      return encodeURIComponent(k) + '=' + encodeURIComponent(data[k])
-    }).join('&');
-  }
-  
-function sendAjaxRequest(method, url, data, handler) {
-    let request = new XMLHttpRequest();
-    request.open(method, url, true);
-    request.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').content);
-    request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    request.addEventListener('load', handler);
-    request.send(encodeForAjax(data));
-}
-
 const selectElements = document.querySelectorAll('.status');
 let changedSelects = [];
 
@@ -102,13 +86,13 @@ const filter_user = document.querySelector('#filter-user');
 
 if (document.querySelector('.user-manage-section')) {
     order_user.addEventListener('change', function() {
-        sendAjaxRequest('get', '/api/users?' + encodeForAjax({search: search_user.value, filter: filter_user.value, order: order_user.value}), {}, listHandler);
+        sendAjaxRequest('get', '/api/users?' + encodeForAjax({search: search_user.value, filter: filter_user.value, order: order_user.value}), {}, userListHandler);
     });
     search_user.addEventListener('input', function() {
-        sendAjaxRequest('get', '/api/users?' + encodeForAjax({search: search_user.value, filter: filter_user.value, order: order_user.value}), {}, listHandler);
+        sendAjaxRequest('get', '/api/users?' + encodeForAjax({search: search_user.value, filter: filter_user.value, order: order_user.value}), {}, userListHandler);
     });
     filter_user.addEventListener('change', function() {
-        sendAjaxRequest('get', '/api/users?' + encodeForAjax({search: search_user.value, filter: filter_user.value, order: order_user.value}), {}, listHandler);
+        sendAjaxRequest('get', '/api/users?' + encodeForAjax({search: search_user.value, filter: filter_user.value, order: order_user.value}), {}, userListHandler);
     });
 
     document.addEventListener("DOMContentLoaded", function() {
@@ -120,132 +104,28 @@ if (document.querySelector('.user-manage-section')) {
 
 
 
-function listHandler() {
+function userListHandler() {
     if (this.status === 200) {
-        const response = JSON.parse(this.responseText);
-        const users = response.data;
-        
-        const table = document.querySelector('.users-table tbody');
-        table.innerHTML = '';
-        for (const user of users) {
-            user_row = createUserRow(user);
-            table.appendChild(user_row);
+        const table = document.querySelector('.users');
+        table.innerHTML = this.response;
+        console.log(this);
+        const links = document.querySelectorAll('.pagination a');
+        for (const link of links){
+            link.addEventListener('click', function(){
+                event.preventDefault();
+                sendAjaxRequest('get', link.href, {}, questionListHandler);
+            });
         }
-        if (users.length == 0) {
-            table.innerHTML = '<tr><td></td><td></td><td></td><td id="no-records">No matching users</td><td></td><td></td></tr>';
-        }
-        createPaginationBar(response);
+        const selects = document.querySelectorAll('.status');
+        selects.forEach(function(selectElement) {
+            selectElement.addEventListener('change', function() {
+                handleSelectChange(this);
+            });
+        });
         
     } else {
-        console.error('Status update failed:', this.status);
+        console.error('User list failed:', this.statusText);
     }
 }
-  
-function createUserRow(user) {
-    const tr = document.createElement('tr');
-    tr.classList.add('user-info');
+ 
 
-    const td1 = document.createElement('td');
-    const img = document.createElement('img');
-    img.src = '../images/user.png';
-    img.alt = 'User Image';
-    td1.appendChild(img);
-
-    const td2 = document.createElement('td');
-    const link = document.createElement('a');
-    link.href = '#';
-    link.textContent = user.username;
-    td2.appendChild(link);
-
-    const td3 = document.createElement('td');
-    td3.textContent = user.name;
-
-    const td4 = document.createElement('td');
-    td4.textContent = user.email;
-
-    const td5 = document.createElement('td');
-    td5.classList.add(user.rank);
-    td5.textContent = user.rank;
-
-    const td6 = document.createElement('td');
-    const select = document.createElement('select');
-    select.name = '';
-    select.classList.add('status', 'hidden', user.is_banned ? 'banned' : 'active');
-    select.id = 'user-status';
-    select.disabled = true;
-    select.dataset.user = user.id;
-
-    const option1 = document.createElement('option');
-    option1.value = 'active';
-    option1.textContent = 'Active';
-    if (!user.is_banned) {
-        option1.selected = true;
-    }
-
-    const option2 = document.createElement('option');
-    option2.value = 'banned';
-    option2.textContent = 'Banned';
-    if (user.is_banned) {
-        option2.selected = true;
-    }
-
-    select.appendChild(option1); select.appendChild(option2);
-    td6.appendChild(select);
-
-    select.addEventListener('change', function() {
-        handleSelectChange(select);
-    });
-    tr.appendChild(td1); tr.appendChild(td2);
-    tr.appendChild(td3); tr.appendChild(td4);
-    tr.appendChild(td5); tr.appendChild(td6);
-
-    return tr;
-}
-
-
-function createPaginationBar(response) {
-    const pagination = document.querySelector('.pagination');
-    pagination.innerHTML = '';
-    
-    if (response.prev_page_url) {
-        const prevArrow = document.createElement('li');
-        prevArrow.classList.add('arrow');
-        prevArrow.id = 'prevPage';
-        prevArrow.setAttribute('data-url', `${response.prev_page_url}`);
-        prevArrow.innerHTML = '<span>&lsaquo;</span>';
-        pagination.appendChild(prevArrow);
-        prevArrow.addEventListener('click', function(){
-            sendAjaxRequest('get', response.prev_page_url, {}, listHandler);
-        });
-    }
-
-    const links = response.links;
-    links.shift(); links.pop();
-    
-    if (links.length > 1) {
-        for (const link of links) {
-            const page = document.createElement('li');
-            page.classList.add('page-item');
-            page.innerHTML = `<span class="page-link"> ${link.label}</span>`;
-            if (link.active) page.classList.add('current');
-            else {
-                page.addEventListener('click', function(){
-                    sendAjaxRequest('get', link.url, {}, listHandler);
-                });
-            }
-            pagination.appendChild(page);
-        }
-    }
-   
-    if (response.next_page_url) {
-        const nextArrow = document.createElement('li');
-        nextArrow.classList.add('arrow');
-        nextArrow.id = 'nextPage';
-        nextArrow.innerHTML = '<span>&rsaquo;</span>';
-        pagination.appendChild(nextArrow);
-        nextArrow.addEventListener('click', function(){
-            sendAjaxRequest('get', response.next_page_url, {}, listHandler);
-        });
-    }
-
-}

@@ -12,8 +12,45 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        $questions = Question::paginate(10);
+        $questions = Question::where('is_public', true)
+            ->orderBy('create_date', 'desc')
+            ->paginate(10);
         return view('pages.questions', ['questions' => $questions]);
+    }
+
+    public function list(Request $request) 
+    {
+        $criteria = $request->input('criteria', '');
+        $query = Question::where('is_public', true);
+    
+        switch ($criteria) {
+            case 'popular':
+                $query->orderBy('votes', 'desc');
+                break;
+            case 'unanswered':
+                $query->where('is_solved', false)
+                    ->orderBy('create_date', 'desc');
+                break;
+            default:
+                $query->orderBy('create_date', 'desc');
+                break;
+        }
+        
+        $questions = $query->paginate(10);
+        
+        $questions->getCollection()->transform(function ($question) {
+            $question['time'] = $question->timeDifference();
+            $question['answers'] = $question->answers; 
+            $question['content'] = $question->latest_content(); 
+            $question['creator'] = $question->creator; 
+            return $question;
+        });
+
+        $questions->appends([
+           'criteria' => $criteria
+        ]);
+
+        return view('partials._questions', compact('questions'))->render();
     }
 
     /**

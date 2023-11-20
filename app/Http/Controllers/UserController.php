@@ -56,7 +56,7 @@ class UserController extends Controller
             'search' => $search,
         ]);
 
-        return response()->json($users);
+        return view('partials._users', compact('users'))->render();
     }
 
     public function updateStatus(Request $request, $id) {
