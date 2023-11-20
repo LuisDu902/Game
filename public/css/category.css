@@ -99,9 +99,29 @@
     scale: 0.96;
 }
 
-
 .category-section .category-games {
     border-top: 1px solid #e6e7f3;
     margin-top: 30px;
     padding-top: 30px;
 }
+
+
+@media (max-width: 1200px) {
+    .category-card, .game-card {
+        width: calc(50% - 20px);
+    }
+    .category-section {
+        margin: 0 auto;
+    }
+}
+
+@media (max-width: 750px) {
+    .category-card  {
+        width: calc(100% - 20px);
+    }
+    .game-card {
+        width: 100%;
+    }
+}
+
+

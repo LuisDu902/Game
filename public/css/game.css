@@ -62,3 +62,10 @@
 .game .q {
     font-weight: 500;
 }
+
+@media (max-width: 1200px) {
+    .game {
+        margin: 20px auto;
+    }
+}
+

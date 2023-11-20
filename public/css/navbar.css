@@ -180,7 +180,7 @@ body > header {
 }
 
 @media (max-width: 620px) {
-    .navbar .buttons {
+    .navbar .buttons, .navbar .dropdown {
         display: none;
     }
 }
