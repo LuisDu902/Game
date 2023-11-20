@@ -1,7 +1,7 @@
 function toggleEdit() {
-    var form = document.getElementById('profileForm');
-    var inputs = form.getElementsByTagName('input');
-    var textarea = form.querySelector('textarea');
+    const form = document.getElementById('profileForm');
+    const inputs = form.getElementsByTagName('input');
+    const textarea = form.querySelector('textarea');
 
     for (var i = 0; i < inputs.length; i++) {
         inputs[i].disabled = !inputs[i].disabled;
@@ -9,11 +9,11 @@ function toggleEdit() {
 
     textarea.disabled = !textarea.disabled;
 
-    var profileButtons = document.querySelector('.edit-profile-buttons');
-    var profileButton = document.querySelector('.edit-profile-button');
+    const profileButtons = document.querySelector('.edit-profile-buttons');
+    const profileButton = document.querySelector('.edit-profile-button');
     
-    var profileButtonsDisplay = window.getComputedStyle(profileButtons).getPropertyValue('display');
-    var profileButtonDisplay = window.getComputedStyle(profileButton).getPropertyValue('display');
+    const profileButtonsDisplay = window.getComputedStyle(profileButtons).getPropertyValue('display');
+    const profileButtonDisplay = window.getComputedStyle(profileButton).getPropertyValue('display');
     
     profileButtons.style.display = profileButtonsDisplay === 'block' ? 'none' : 'block';
     profileButton.style.display = profileButtonDisplay === 'block' ? 'none' : 'block';
@@ -21,17 +21,23 @@ function toggleEdit() {
 
 function saveChanges() {
 
-    var form = document.getElementById('profileForm');
-    var inputs = form.getElementsByTagName('input');
-    var textarea = form.querySelector('textarea');
+    const form = document.getElementById('profileForm');
+    const inputs = form.getElementsByTagName('input');
+    const textarea = form.querySelector('textarea');
+
+    const name = document.getElementById('name').value;
+    const username = document.getElementById('username').value;
+    const email = document.getElementById('email').value;
+    const description = document.querySelector('textarea[name="description"]');
+    const id = form.getAttribute('data-id');
 
     for (var i = 0; i < inputs.length; i++) {
         inputs[i].removeAttribute('disabled');
     }
 
     textarea.removeAttribute('disabled');
+    sendAjaxRequest('post', '/api/users/' + id + '/edit', { name: name, username: username, email: email, description: description }, profileEditdHandler);
 
-    form.submit();
 
     console.log('Changes saved');
 
@@ -39,11 +45,11 @@ function saveChanges() {
 }
 
 function cancelChanges() {
-    var form = document.getElementById('profileForm');
-    var inputs = form.getElementsByTagName('input');
-    var textarea = form.querySelector('textarea');
+    const form = document.getElementById('profileForm');
+    const inputs = form.getElementsByTagName('input');
+    const textarea = form.querySelector('textarea');
 
-    for (var i = 0; i < inputs.length; i++) {
+    for (let i = 0; i < inputs.length; i++) {
         inputs[i].value = inputs[i].defaultValue;
     }
 
@@ -52,4 +58,9 @@ function cancelChanges() {
     console.log('Changes canceled');
 
     toggleEdit();
+}
+
+
+function profileEditdHandler(){
+    console.log(this);
 }

@@ -45,7 +45,6 @@ Route::get('/home', function () {
 // User
 Route::controller(UserController::class)->group(function () {
     Route::get('/profile', 'showUserProfile')->name('profile');
-    Route::post('/edit_profile/{id}', 'edit')->name('edit_profile');
     Route::get('/users', 'index')->name('users');
 });
 
@@ -68,8 +67,9 @@ Route::controller(GameController::class)->group(function () {
 
 // User API
 Route::controller(UserController::class)->group(function () {
-    Route::post('/api/users/{id}', 'updateStatus');
     Route::get('/api/users', 'search');
+    Route::post('/api/users/{id}', 'updateStatus');
+    Route::post('/api/users/{id}/edit', 'edit');
 });
 
 // Question API

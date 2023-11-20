@@ -82,7 +82,7 @@ class UserController extends Controller
       $user->description = $request->input('description');
 
       $user->save();
-      return redirect()->route('profile');
+      return response()->json(['profile update'=> 'success']);
     }
    
 }

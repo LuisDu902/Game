@@ -24,7 +24,7 @@
 
         </div>
 
-        <form id="profileForm" class="profile-right" method="POST" action="{{ route('edit_profile', ['id' => Auth::user()->id]) }}" enctype="multipart/form-data">
+        <form id="profileForm" class="profile-right" method="POST" enctype="multipart/form-data" data-id="{{ Auth::user()->id }}">
             {{ csrf_field() }}
             <div class="profile-input">
                 <label class="field-label" for="name"> Name <span
