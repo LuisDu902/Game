@@ -11,25 +11,42 @@
     </ul>
 
     <div class="user-questions">
-        <div class="title-user-questions">
-            <h1>My Questions </h1>
-        </div>
+        @if(Auth::check() and (Auth::id() == $user->id))
+            <div class="title-user-questions-auth">
+                <h1>My Questions </h1>
+            </div>
+        @else
+            <div class="title-user-questions">
+                <h1> {{ $user->username }}'s Questions</h1>
+            </div>
+        @endif
 
         <div class="questions">
-            @foreach($questions as $question)
-            <li class="question-card">
-                <div class="q-stats">
-                    <span>{{ $question->votes }} votes</span>
-                    <span>{{ $question->answers->count() }} answers</span>
-                    <span>{{ $question->nr_views }} views</span>
+            @if($questions->count() > 0)
+                @foreach($questions as $question)
+                <li class="question-card">
+                    <div class="q-stats">
+                        <span>{{ $question->votes }} votes</span>
+                        <span>{{ $question->answers->count() }} answers</span>
+                        <span>{{ $question->nr_views }} views</span>
+                    </div>
+                    <div class="q-content">
+                        <h2>{{ $question->title }}</h2>
+                        <p>{{ $question->latest_content() }}</p>
+                        <span><a href="#" class="purple">{{ $question->creator->username }}</a> asked 10 minutes ago</span>
+                    </div>
+                </li>
+                @endforeach
+            @else
+                <div class="no-questions">
+                    <img class="no-questions-image" src="{{ asset('images/pikachuConfused.png') }}" alt="Psyduck Image">
+                    @if(Auth::check() and (Auth::id() == $user->id))
+                        <p>You haven't asked any questions yet.</p>
+                    @else
+                        <p>{{ $user->username }} haven't asked any questions yet.</p>
+                    @endif
                 </div>
-                <div class="q-content">
-                    <h2>{{ $question->title }}</h2>
-                    <p>{{ $question->latest_content() }}</p>
-                    <span><a href="#" class="purple">{{ $question->creator->username }}</a> asked 10 minutes ago</span>
-                </div>
-            </li>
-        @endforeach
+            @endif
         </div>
     </div>
 
