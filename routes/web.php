@@ -69,7 +69,7 @@ Route::controller(GameController::class)->group(function () {
 // User API
 Route::controller(UserController::class)->group(function () {
     Route::post('/api/users/{id}', 'updateStatus');
-    Route::get('/api/users', 'list');
+    Route::get('/api/users', 'search');
 });
 
 // Question API
