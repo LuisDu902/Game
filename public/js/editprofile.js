@@ -25,10 +25,10 @@ function saveChanges() {
     const inputs = form.getElementsByTagName('input');
     const textarea = form.querySelector('textarea');
 
-    const name = document.getElementById('name').value;
-    const username = document.getElementById('username').value;
-    const email = document.getElementById('email').value;
-    const description = document.querySelector('textarea[name="description"]');
+    const name = document.getElementById('profile-name').value;
+    const username = document.getElementById('profile-username').value;
+    const email = document.getElementById('profile-email').value;
+    const description = document.getElementById('profile-description').value;
     const id = form.getAttribute('data-id');
 
     for (var i = 0; i < inputs.length; i++) {
@@ -62,5 +62,11 @@ function cancelChanges() {
 
 
 function profileEditdHandler(){
-    console.log(this);
+    if (this.status === 200) {
+        let item = JSON.parse(this.responseText);
+        console.log('Profile updated:', item);
+        createNotificationBox('Profile successfully updated!')
+    } else {
+        console.error('Profile update failed:', this.statusText);
+    }
 }
