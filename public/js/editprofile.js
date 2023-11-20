@@ -1,3 +1,18 @@
+const form = document.getElementById('profileForm')
+
+if (form) {
+    document.addEventListener('DOMContentLoaded', function(){
+        const inputs = form.getElementsByTagName('input');
+        const textarea = form.querySelector('textarea');
+    
+        for (var i = 0; i < inputs.length; i++) {
+            inputs[i].disabled = true;
+        }
+    
+        textarea.disabled = true;
+    })
+}
+
 function toggleEdit() {
     const form = document.getElementById('profileForm');
     const inputs = form.getElementsByTagName('input');
