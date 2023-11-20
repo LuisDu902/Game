@@ -14,8 +14,6 @@
     position: relative;
 }  
 
-
-
 .search-bar button {
     background-color: #7C5BF0;
     color: white;
@@ -175,3 +173,74 @@
     width: 400px;
 }
 
+@media (max-width: 1020px) {
+    .search-bar .user-search {
+        width: 300px;
+    }
+}
+
+@media (max-width: 1000px) {
+    .users-table th:nth-child(6){
+        padding-right: 50px;
+    }
+}
+
+@media (max-width: 940px) {
+    .users-table th:nth-child(4), .user-info td:nth-child(4)  {
+        display: none;
+    }
+    .search-bar .user-search {
+        width: 200px;
+    }
+    .search-bar .user-search input {
+        width: 150px;
+    }
+}
+
+
+@media (max-width: 830px) {
+    .search-bar {
+        width: 100%;
+    }
+    .search-bar .user-search {
+        width: 170px;
+    }
+    .search-bar .user-search input {
+        width: 80%;
+    }
+}
+
+@media (max-width: 680px) {
+    .users-table th:nth-child(5), .user-info td:nth-child(5)  {
+        display: none;
+    }
+}
+
+@media (max-width: 550px) {
+    .search-bar {
+        flex-direction: column;
+    }
+    .search-bar .user-search{
+        width: 100%;
+    }
+
+    .users-table th:nth-child(1), .user-info td:nth-child(1)  {
+        display: none;
+    }
+    .users-table th:nth-child(2), .user-info td:nth-child(2)  {
+        padding-left: 20px;
+    }
+}
+
+@media (max-width: 450px) {
+    .search-bar {
+        flex-direction: column;
+    }
+    .search-bar .user-search{
+        width: 100%;
+    }
+
+    .users-table th:nth-child(1), .user-info td:nth-child(1)  {
+        display: none;
+    }
+}
