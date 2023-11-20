@@ -90,5 +90,18 @@ class UserController extends Controller
       $user->save();
       return response()->json(['profile update'=> 'success']);
     }
+
+    public function showUserQuestions($id) {
+
+        $user = User::find($id);
+        
+        if (!$user) {
+            abort(404);
+        }
+
+        $questions = $user->questions; 
+
+        return view('pages.userQuestions', ['user' => $user, 'questions' => $questions]);
+    }
    
 }
