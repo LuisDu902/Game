@@ -1,10 +1,16 @@
 <?php
 
+use App\Http\Controllers\GameCategoryController;
+use App\Http\Controllers\GameController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\QuestionController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+
+use App\Models\User;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,8 +42,40 @@ Route::get('/home', function () {
     return view('pages.home');
 })->name('home');
 
-
+// User
 Route::controller(UserController::class)->group(function () {
-    Route::get('/profile', 'showUserProfile')->name('profile');
-    Route::post('/profile', 'edit');
+    Route::get('/users/{id}', 'showUserProfile')->name('profile');
+    Route::get('/users', 'index')->name('users');
+});
+
+// Question
+Route::controller(QuestionController::class)->group(function () {
+    Route::get('/questions', 'index')->name('questions');
+    Route::get('/questions/new-question', [QuestionController::class, 'create'])->name('questions.create');
+    Route::post('/questions/new-question', [QuestionController::class, 'store'])->name('questions.store');
+    Route::get('/questions/new-question', [GameController::class, 'index'])->name('questions.create');
+   
+});
+
+// Game Category
+Route::controller(GameCategoryController::class)->group(function () {
+    Route::get('/categories', 'index')->name('categories');
+    Route::get('/categories/{id}', 'show')->name('category');
+});
+
+// Game
+Route::controller(GameController::class)->group(function () {
+    Route::get('/game/{id}', 'show')->name('game');
+});
+
+// User API
+Route::controller(UserController::class)->group(function () {
+    Route::get('/api/users', 'search');
+    Route::post('/api/users/{id}', 'updateStatus');
+    Route::post('/api/users/{id}/edit', 'edit');
+});
+
+// Question API
+Route::controller(QuestionController::class)->group(function () {
+    Route::get('/api/questions', 'list'); 
 });

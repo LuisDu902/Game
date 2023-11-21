@@ -60,6 +60,7 @@ body > header {
     display: flex;
     border-radius: 8px;
     border: 2px solid var(--dark-purple);
+    margin-right: 10px;
 }
 
 #search-input {
@@ -161,3 +162,34 @@ body > header {
 .dropdown-content a:not(:last-child){
     border-bottom: 2px solid var(--purple);
 }
+
+@media (max-width: 1180px) {
+    .logo strong {
+        display: none;
+    }
+
+    .search-box {
+        flex: 1;
+    }
+}
+
+@media (max-width: 1080px) {
+    .nav-links {
+        display: none;
+    }
+}
+
+@media (max-width: 620px) {
+    .navbar .buttons, .navbar .dropdown {
+        display: none;
+    }
+}
+
+@media (max-width: 400px) {
+    .logo {
+        display: none;
+    }
+}
+
+
+

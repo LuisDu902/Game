@@ -57,12 +57,6 @@
 }
 
 
-.forget-pass a {
-    color: var(--gray);
-    margin: 0px;
-    transition: all 0.4s;
-    text-decoration: underline;
-}
 
 .auth-form h1{
     display: block;
@@ -154,36 +148,6 @@
     right: 0;
 }
 
-.google-btn {
-    display: flex;
-    justify-content: space-between;
-    width: 48%;
-    padding: 0px;
-    border-radius: 10px;
-    position: relative;
-    margin: 0 auto;
-    background-color: none;
-    border: 1px solid #C65353;
-    transition: transform 0.3s, background-color 0.3s;
-}
-
-.google {
-    color: #C65353;
-}
-
-.google-btn .opt-icon.google,
-.google-btn .option.google {
-    transition: color 0.3s ease-in-out;
-}
-
-.google-btn:hover {
-    background-color: #C65353;
-}
-
-.google-btn:hover .opt-icon.google,
-.google-btn:hover .option.google {
-    color: white;
-}
 
 .option {
     font-size: 16px;

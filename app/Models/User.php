@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use Auth;
+
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\DB;
 
 // Added to define Eloquent relationships.
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -54,4 +57,11 @@ class User extends Authenticatable
         'badges' => 'array',
     ];
 
+
+    public function questions() : HasMany {
+        return $this->hasMany(Question::class);
+    }
+    public function games() : HasMany {
+        return $this->hasMany(Game::class);
+    }
 }

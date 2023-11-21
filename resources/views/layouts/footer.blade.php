@@ -36,8 +36,6 @@
                 <a href="common/faq.html">Users</a> </li>
             <li> <ion-icon name="chevron-forward-outline"></ion-icon>
                 <a href="common/contact.html">Game Categories</a> </li>
-            <li> <ion-icon name="chevron-forward-outline"></ion-icon>
-                <a href="#">About us</a> </li>
         </ul>
     </div>
     <div class="footer-col follow">
