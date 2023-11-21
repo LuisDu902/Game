@@ -178,3 +178,38 @@
 
 }
 
+.user-questions-answers-profile {
+    margin-top: 3rem;
+    font-weight: 500;
+    width: fit-content;
+    font-size: larger;
+}
+
+.user-questions-answers-profile a:hover {
+    color: deeppink;
+}
+
+.vl {
+  border-left: 2px solid var(--dark-purple);
+  height: auto;
+}
+
+
+.user-badges ul {
+    list-style: none; /* Remove default list styles */
+    padding: 0; /* Remove default padding */
+}
+
+.user-badges li{
+    border: 1px solid deeppink;
+    background-color:rgba(218, 112, 214, 0.563) ;
+    color:deeppink;
+    border-radius: 20px;
+    text-align: center;
+    width: fit-content;
+    display: inline-block; /* Display badges in a row */
+    margin-right: 10px; /* Add margin to create space between badges */
+    margin-bottom: 10px; /* Add margin to create space between rows */
+    padding: 0.2rem 1rem;
+    font-weight: 500;
+}
