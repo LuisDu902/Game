@@ -102,6 +102,24 @@
     border-bottom: 1px solid #e6e7f3;
 }
 
+.user-questions{
+    padding: 2rem 4rem;
+}
+
+.user-questions h1{
+    font-weight:500;
+}
+
+.no-questions p{
+    padding: 3rem;
+    text-align: center;
+    font-size:larger;
+}
+
+.no-questions-image {
+    padding: 2rem 29rem;
+}
+
 .new-question-form{
     margin: 30px auto;
     width: 1200px;
