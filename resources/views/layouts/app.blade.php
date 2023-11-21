@@ -22,6 +22,7 @@
         <link href="{{ url('css/user.css') }}" rel="stylesheet">
         <link href="{{ url('css/category.css') }}" rel="stylesheet">
         <link href="{{ url('css/game.css') }}" rel="stylesheet">
+        <link href="{{ url('css/home.css') }}" rel="stylesheet">
 
         <script type="text/javascript">
             // Fix for Firefox autofocus CSS bug
