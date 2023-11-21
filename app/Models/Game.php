@@ -40,6 +40,4 @@ class Game extends Model
     {
         return $this->belongsTo(GameCategory::class, 'game_category_id');
     }
-
-
 }
