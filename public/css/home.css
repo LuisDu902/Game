@@ -3,8 +3,8 @@
     top: 90px;
     background-color: var(--purple);
     height: 500px;
-    width: 120%;
-    left: -3rem;
+    width: 100%;
+    left: -0.01rem;
     z-index: -1;
 }
 
@@ -151,4 +151,79 @@
 .feature-list p {
     width: 60%;
     text-align: center;
+}
+
+@media screen and (max-width: 871px){
+    .home-games h2, .features h2 {
+        font-size: 30px;
+    }
+    .home-intro{
+        margin-bottom: 90px;
+    }
+}
+
+@media screen and (max-width: 766px){
+    .home-bg {
+        height: 550px;
+    }
+}
+
+@media screen and (max-width: 700px){
+    .home-bg {
+        height: 770px;
+    }
+    .home-intro {
+        display:unset;
+    }
+    .app-description{
+        width:100%
+    }
+    .home-intro img{
+        margin: 0px auto;
+        display: block;
+        margin-bottom: 50px;
+    }
+
+    .feature-list {
+        display:unset;
+    }
+    .game img{
+        width: 190px;
+    }
+}
+
+@media screen and (max-width: 556px){
+    .home-bg {
+        height: 830px;
+    }
+}
+
+@media screen and (max-width: 470px){
+    .home-intro img{
+        width:300px;
+    }
+
+    .home-bg {
+        height: 780px;
+    }
+}
+
+@media screen and (max-width: 365px){
+    .home-intro img{
+        width:250px;
+    }
+
+    .home-bg {
+        height: 800px;
+    }
+}
+
+@media screen and (max-width: 347px){
+    .home-intro img{
+        width:250px;
+    }
+
+    .home-bg {
+        height: 860px;
+    }
 }
