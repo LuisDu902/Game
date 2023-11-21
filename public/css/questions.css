@@ -2,12 +2,29 @@
     margin: 20px;
 }
 
-.questions-sec .questions-sort {
+.questions-sec .questions-actions {
+    display: flex;
+    justify-content: space-between;
+}
+
+.questions-sec .questions-actions .questions-sort {
     display: flex;
     gap: 30px;
 }
 
-.questions-sec .questions-sort button {
+.questions-sec .questions-actions #newQuestion {
+    font-size: 18px;
+    text-align: center;
+    background-color: #D2CFFF;
+    width: 300px;
+    padding: 5px 0;
+    color: #7C5BF0;
+    border-radius: 5px;
+    transition: all 400ms ease;
+    left: 4rem;
+}
+
+.questions-sec .questions-actions .questions-sort button {
     font-size: 18px;
     background-color: #D2CFFF;
     width: 130px;
@@ -17,7 +34,7 @@
     transition: all 400ms ease;
 }
 
-.questions-sec .questions-sort .selected, .questions-sec .questions-sort button:hover{
+.questions-sec .questions-actions .questions-sort .selected, .questions-sec .questions-sort button:hover{
     background-color: #7C5BF0;
     color: white;
 }
