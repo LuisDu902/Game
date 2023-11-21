@@ -204,3 +204,9 @@
 .new-question-form label span {
     color: #7C5BF0;
 }
+
+@media screen and (max-width: 1296px){
+    .new-question-form{
+        width: 100%;
+    }
+}
