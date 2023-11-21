@@ -17,17 +17,20 @@
 
         <div class="flex">
             <h1>{{ $game->name }}</h1>
-            <button class="join-btn">Join game</button>
         </div>
         <p class="g-desc">{{ $game->description }}</p>
         <ul class="g-stats">
-            <li> 1 062 219 Members </li>
-            <li> 180 869 Question </li>
-            <li> 1 062 219 Answers </li>
-            <li> 10 062 219 Votes </li>
+            <li> {{ $game->members->count() }} Members </li>
+            <li> {{ $game->questions->count() }} Question </li>
+            <li> {{ $game->answers->first()->total_answers ?? 0 }} Answers </li>
+            <li> {{ $game->votes->first()->total_votes ?? 0 }} Votes </li>
         </ul>
-
-        
+       
+        <h2 class="q">Questions</h2>
+        </div>
+        <div class="questions-list">
+            @include('partials._questions', ['questions' => $questions])
+        <div>
     </article>
    
 @endsection

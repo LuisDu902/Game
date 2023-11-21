@@ -26,14 +26,14 @@
 
         <form id="profileForm" class="profile-right" method="POST" enctype="multipart/form-data" data-id="{{ $user->id }}">
             {{ csrf_field() }}
-            <div class="profile-input">
+            <div class="profile-input name">
                 <label class="field-label" for="name"> Name <span
                         class="purple">*</span> </label>
                 <input id="profile-name" type="text" name="name" value="{{ $user->name }}" placeholder="your name"
                     required disabled>
             </div>
 
-            <div class="profile-input">
+            <div class="profile-input username">
                 <label class="field-label" for="username"> Username
                     <span class="purple">*</span> </label>
                 <input id="profile-username" type="text" name="username" value="{{ $user->username }}" placeholder="your username"

@@ -100,3 +100,22 @@ footer .rights {
     font-size: 14px;
     font-weight: 100;
 }
+
+
+@media (max-width: 900px) {
+    .footer-col:first-child {
+        display: none;
+    }
+}
+
+@media (max-width: 720px) {
+    .footer-col:last-child {
+        display: none;
+    }
+}
+
+@media (max-width: 500px) {
+    .footer-col:nth-child(3) {
+        display: none;
+    }
+}

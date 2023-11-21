@@ -41,6 +41,10 @@ class Question extends Model
         return $this->hasMany(Answer::class);
     }
 
+    public function game(): BelongsTo
+    {
+        return $this->belongsTo(Game::class, 'game_id');
+    }
     /**
      * Get the latest question content.
      */
