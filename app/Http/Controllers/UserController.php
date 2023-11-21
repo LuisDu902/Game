@@ -44,7 +44,7 @@ class UserController extends Controller
         return view('pages.users', ['users' => $users]);
     }
 
-    public function list(Request $request){
+    public function search(Request $request){
         $order = $request->input('order', 'username');
         $filter = $request->input('filter', '');
         $search = $request->input('search', '');
@@ -68,10 +68,11 @@ class UserController extends Controller
             'search' => $search,
         ]);
 
-        return response()->json($users);
+        return view('partials._users', compact('users'))->render();
     }
 
     public function updateStatus(Request $request, $id) {
+        $this->authorize('updateStatus', [Auth::user()]);
         $user = User::find($id);
         $user->is_banned = ($request->status == "banned"); 
         $user->save();
@@ -92,9 +93,8 @@ class UserController extends Controller
 
       $user->description = $request->input('description');
 
-
       $user->save();
-      return redirect()->route('profile', ['id' => $user->id]);
+      return response()->json(['profile update'=> 'success']);
     }
 
     public function showUserQuestions($id) {

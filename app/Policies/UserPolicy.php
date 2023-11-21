@@ -14,4 +14,9 @@ class UserPolicy {
         return $user->id === $targetUser->id;
     }
 
+    public function updateStatus(User $user)
+    {
+        return $user->is_admin && !$user->is_banned;
+    }
+
 }

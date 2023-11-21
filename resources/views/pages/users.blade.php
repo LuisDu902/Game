@@ -45,21 +45,8 @@
                 <button id="edit-status-btn">Edit</button>
             @endif
         </nav>
-        
-        <table class="users-table">
-            <thead>
-                <tr>
-                    <th></th> <th>Username</th>
-                    <th>Name</th> <th>Email Address</th>
-                    <th>Rank</th> <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($users as $user)
-                    <x-userinfo :user="$user"/>               
-                @endforeach
-            </tbody>
-        </table>
-        {{ $users->links() }}
+        <div class="users">
+            @include('partials._users')
+        </div>
     </section>
 @endsection

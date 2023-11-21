@@ -41,6 +41,10 @@ class Question extends Model
         return $this->hasMany(Answer::class);
     }
 
+    public function game(): BelongsTo
+    {
+        return $this->belongsTo(Game::class, 'game_id');
+    }
     /**
      * Get the latest question content.
      */
@@ -52,6 +56,12 @@ class Question extends Model
         ->orderByDesc('date') 
         ->limit(1)
         ->value('content');
+    }
+
+    public function timeDifference() {
+        $now = now();
+        $createdAt = $this->create_date;
+        return $now->diffForHumans($createdAt, true);
     }
 
 }

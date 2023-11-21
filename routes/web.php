@@ -45,7 +45,6 @@ Route::get('/home', function () {
 // User
 Route::controller(UserController::class)->group(function () {
     Route::get('/users/{id}', 'showUserProfile')->name('profile');
-    Route::post('/edit_profile/{id}', 'edit')->name('edit_profile');
     Route::get('/users', 'index')->name('users');
     Route::get('/users/questions/{id}', 'showUserQuestions')->name('users_questions');
 });
@@ -56,19 +55,25 @@ Route::controller(QuestionController::class)->group(function () {
    
 });
 
-
-// Question
+// Game Category
 Route::controller(GameCategoryController::class)->group(function () {
     Route::get('/categories', 'index')->name('categories');
     Route::get('/categories/{id}', 'show')->name('category');
 });
 
+// Game
 Route::controller(GameController::class)->group(function () {
     Route::get('/game/{id}', 'show')->name('game');
 });
 
-
+// User API
 Route::controller(UserController::class)->group(function () {
+    Route::get('/api/users', 'search');
     Route::post('/api/users/{id}', 'updateStatus');
-    Route::get('/api/users/', 'list');
+    Route::post('/api/users/{id}/edit', 'edit');
+});
+
+// Question API
+Route::controller(QuestionController::class)->group(function () {
+    Route::get('/api/questions', 'list'); 
 });

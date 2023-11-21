@@ -15,17 +15,25 @@ class Game extends Model
 
     public function members()
     {
-        return $this->hasMany(User::class);
+        return $this->belongsToMany(User::class, 'game_member', 'game_id', 'user_id');
     }
 
     public function answers()
     {
-        return;
+        return $this->hasManyThrough(Answer::class, Question::class)
+            ->selectRaw('game_id, COUNT(answer.id) as total_answers')
+            ->groupBy('game_id');
     }
 
     public function questions()
     {
-        return;
+        return $this->hasMany(Question::class);
+    }
+
+    public function votes(){
+        return $this->hasMany(Question::class)
+            ->selectRaw('game_id, SUM(votes) as total_votes')
+            ->groupBy('game_id');
     }
 
     public function category()

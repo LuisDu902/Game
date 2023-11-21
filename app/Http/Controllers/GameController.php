@@ -30,7 +30,8 @@ class GameController extends Controller
     public function show($id)
     {
         $game = Game::findOrFail($id);
-        return view('pages.game', ['game' => $game]);
+        $questions = $game->questions()->paginate(5);
+        return view('pages.game', ['game' => $game, 'questions' => $questions]);
     }
 
     /**

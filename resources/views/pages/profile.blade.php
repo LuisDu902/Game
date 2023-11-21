@@ -34,32 +34,32 @@
 
         </div>
 
-        <form id="profileForm" class="profile-right" method="POST" action="{{ route('edit_profile', ['id' => $user->id]) }}" enctype="multipart/form-data">
+        <form id="profileForm" class="profile-right" method="POST" enctype="multipart/form-data" data-id="{{ $user->id }}">
             {{ csrf_field() }}
-            <div class="profile-input">
+            <div class="profile-input name">
                 <label class="field-label" for="name"> Name <span
                         class="purple">*</span> </label>
-                <input type="text" name="name" value="{{ $user->name }}" placeholder="your name"
+                <input id="profile-name" type="text" name="name" value="{{ $user->name }}" placeholder="your name"
                     required disabled>
             </div>
 
-            <div class="profile-input">
+            <div class="profile-input username">
                 <label class="field-label" for="username"> Username
                     <span class="purple">*</span> </label>
-                <input type="text" name="username" value="{{ $user->username }}" placeholder="your username"
+                <input id="profile-username" type="text" name="username" value="{{ $user->username }}" placeholder="your username"
                     required disabled>
             </div>
 
             <div class="profile-input email">
                 <label class="field-label" for="email"> Email Address
                     <span class="purple">*</span> </label>
-                <input type="email" name="email" value="{{ $user->email }}"
+                <input id="profile-email" type="email" name="email" value="{{ $user->email }}"
                     placeholder="email@example.com" required disabled>
             </div>
             <div class="profile-input description">
                 <label class="field-label" for="description">
                     Description </label>
-                    <textarea name="description" placeholder="Your description" disabled>{{ $user->description }}</textarea>
+                    <textarea id="profile-description" name="description" placeholder="Your description" disabled>{{ $user->description }}</textarea>
                 </div>
         </form>
 

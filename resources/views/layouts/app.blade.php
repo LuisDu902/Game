@@ -20,7 +20,7 @@
         <link href="{{ url('css/profile.css') }}" rel="stylesheet">
         <link href="{{ url('css/questions.css') }}" rel="stylesheet">
         <link href="{{ url('css/pagination.css') }}" rel="stylesheet">
-        <link href="{{ url('css/admin.css') }}" rel="stylesheet">
+        <link href="{{ url('css/user.css') }}" rel="stylesheet">
         <link href="{{ url('css/category.css') }}" rel="stylesheet">
         <link href="{{ url('css/game.css') }}" rel="stylesheet">
         
@@ -31,24 +31,27 @@
         </script>
         <script type="text/javascript" src="{{ url('js/app.js') }}" defer></script>
         <script type="text/javascript" src="{{ url('js/admin.js') }}" defer></script>
+        <script type="text/javascript" src="{{ url('js/editprofile.js') }}" defer></script>
+        <script type="text/javascript" src="{{ url('js/question.js') }}" defer></script>
         <script nomodule
             src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
             defer></script>
         </script>
-        <script type="text/javascript" src="{{ url('js/editprofile.js') }}"></script>
+       
     </head>
     <body>
         @if(in_array(request()->route()->getName(), ['login', 'register']))
             @yield('authentication')
         @else
-            @include('partials._header')
+            @include('layouts.header')
+            <div class="notification-box"></div>
             @if(in_array(request()->route()->getName(), ['category', 'game']))
             <div class="purple-section"></div>
             @endif
             <main>
                 @yield('content')
             </main>
-            @include('partials._footer')
+            @include('layouts.footer')
         @endif
         
         <script type="module"
