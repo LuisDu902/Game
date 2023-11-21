@@ -101,3 +101,88 @@
 .question-card:last-child {
     border-bottom: 1px solid #e6e7f3;
 }
+
+.new-question-form{
+    margin: 30px auto;
+    width: 1200px;
+    height: 680px;
+    border: 1px solid #ddd; 
+    border-radius: 8px;
+    padding: 50px;
+}
+
+.new-question-form button {
+    font-size: 18px;
+    background-color: #D2CFFF;
+    width: 190px;
+    padding: 5px 0;
+    color: #7C5BF0;
+    border-radius: 5px;
+    transition: all 400ms ease;
+    margin: 0px auto;
+    align-self: center;
+    display: block;
+}
+
+.new-question-form button:hover {
+    background-color: #7C5BF0;
+    color: white;
+}
+
+.new-question-form .form-group {
+    margin-bottom: 15px;
+}
+
+.new-question-form label {
+    display: block; 
+    font-weight: 500;
+    font-size: 1.2rem;
+}
+
+.new-question-form textarea{
+    margin-bottom: 20px;
+    font-size: 18px;
+    padding: 5px 0;
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    background: #FAFAFA; 
+    margin-top: 10px;
+    resize: none; 
+    outline:none;
+    padding: 20px;
+}
+
+.new-question-form select{
+    margin-bottom: 20px;
+    font-size: 18px;
+    padding: 5px 0;
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    background: #FAFAFA; 
+    margin-top: 10px;
+    resize: none; 
+    outline:none;
+    padding: 20px;
+}
+
+.new-question-form #placeholder{
+    color:#7C5BF0
+}
+
+.new-question-form textarea:focus {
+    border: 1px solid #7C5BF0; 
+}
+
+.new-question-form #content{
+    height: 200px;
+}
+
+.new-question-form #title{
+    height: auto;
+}
+
+.new-question-form label span {
+    color: #7C5BF0;
+}
