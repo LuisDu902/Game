@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Question;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class QuestionController extends Controller
 {
@@ -70,7 +71,7 @@ class QuestionController extends Controller
      */
     public function create()
     {
-        //
+        return view('pages.newQuestion');
     }
 
     /**
@@ -78,7 +79,18 @@ class QuestionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'title' => 'required|max:256',
+            'content' => 'required',
+        ]);
+
+        $question = Question::createQuestionWithContent(
+            $request->input('title'),
+            $request->input('content'),
+            $request->input('game_id')
+        );
+    
+        return redirect()->route('questions');
     }
 
     /**
