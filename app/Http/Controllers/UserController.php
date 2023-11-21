@@ -28,9 +28,15 @@ class UserController extends Controller
 
         if (!$user) {
           abort(404, 'User not found');
-      }
+        }
 
-      return view('pages.profile', ['user' => $user]);
+        $badges = DB::table('badge')
+            ->join('user_badge', 'badge.id', '=', 'user_badge.badge_id')
+            ->select('badge.*')
+            ->where('user_badge.user_id', '=', $id)
+            ->get();
+
+        return view('pages.profile', ['user' => $user, 'badges' => $badges]);
     }
 
     public function index(){
