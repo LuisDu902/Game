@@ -209,10 +209,9 @@ CREATE TABLE question_tag (
   PRIMARY KEY (question_id, tag_id)
 );
 
-
--- #######################################################################################################
--- ############################################# TRIGGERS ################################################
--- #######################################################################################################
+-----------
+-- Create triggers
+-----------
 
 --Trigger 1
 
@@ -265,9 +264,7 @@ FOR EACH ROW
 EXECUTE FUNCTION prevent_self_upvote_trigger_function();
 
 
-
-
----Trigger 3  (Ainda não funciona bem)
+---Trigger 3  
 
 CREATE OR REPLACE FUNCTION delete_question_cascade_votes_trigger_function()
 RETURNS TRIGGER AS $$
@@ -283,10 +280,8 @@ AFTER DELETE ON question
 FOR EACH ROW
 EXECUTE FUNCTION delete_question_cascade_votes_trigger_function();
 
-
-
-
 ---Trigger 5
+
 CREATE OR REPLACE FUNCTION award_badges() RETURNS TRIGGER AS $$
 DECLARE
     user_question_count INTEGER;
@@ -319,7 +314,9 @@ AFTER INSERT ON question
 FOR EACH ROW
 EXECUTE FUNCTION award_badges();
 
+
 --Trigger 6
+
 CREATE OR REPLACE FUNCTION update_user_rank() RETURNS TRIGGER AS $$
 DECLARE
     user_likes INTEGER;
@@ -371,7 +368,6 @@ FOR EACH ROW
 EXECUTE FUNCTION send_answer_notification();
 
 
-
 --Trigger 9
 
 --A user cannot vote, answer nor comment on posts that are not public.
@@ -395,7 +391,6 @@ EXECUTE FUNCTION prevent_vote_on_private_question_trigger_function();
 
 
 --Trigger 10
-
 
 CREATE OR REPLACE FUNCTION prevent_answer_on_private_question_trigger_function()
 RETURNS TRIGGER AS $$
@@ -435,10 +430,9 @@ BEFORE INSERT ON report
 FOR EACH ROW
 EXECUTE FUNCTION prevent_self_reporting_trigger_function();
 
--- #######################################################################################################
--- ############################################ Transactions #############################################
--- #######################################################################################################
-
+-----------
+-- Create transactions
+-----------
 
 -- Insert the content for the question only if the question exists
 CREATE OR REPLACE FUNCTION AddQuestionContentVersion(question_id INT, content_id INT) RETURNS VOID AS $$
@@ -493,10 +487,35 @@ $$ LANGUAGE plpgsql;
 
 
 
+CREATE OR REPLACE FUNCTION update_question_on_insert()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.content_type = 'Answer_content' THEN
+        UPDATE question
+        SET title = (SELECT title FROM question WHERE id = (SELECT question_id FROM answer WHERE id = NEW.answer_id))
+        WHERE id = (SELECT question_id FROM answer WHERE id = NEW.answer_id);
+    END IF;
+    IF NEW.content_type = 'Question_content' THEN
+        UPDATE question
+        SET title = (SELECT title FROM question WHERE id = NEW.question_id)
+        WHERE id = NEW.question_id;
+    END IF;
+     IF NEW.content_type = 'Comment_content' THEN
+        UPDATE question
+        SET title = (SELECT title FROM question WHERE id = (SELECT question_id FROM answer JOIN comment ON answer.id = comment.answer_id WHERE comment.id = NEW.comment_id))
+        WHERE id = (SELECT question_id FROM answer JOIN comment ON answer.id = comment.answer_id WHERE comment.id = NEW.comment_id);
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
 
--- #######################################################################################################
--- ############################################# INDEXES ################################################
--- #######################################################################################################
+CREATE TRIGGER update_question_trigger
+AFTER INSERT ON version_content
+FOR EACH ROW
+EXECUTE FUNCTION update_question_on_insert();
+
+
+
 
 
 -----------
@@ -520,12 +539,41 @@ ADD COLUMN tsvectors TSVECTOR;
 CREATE FUNCTION question_search_update() RETURNS TRIGGER AS $$ 
 BEGIN 
   IF TG_OP = 'INSERT' THEN 
-    NEW.tsvectors = setweight(to_tsvector('english', NEW.title), 'A');
+    NEW.tsvectors = (
+        setweight(to_tsvector('english', COALESCE(NEW.title, '')), 'A') || 
+        setweight(to_tsvector('english', COALESCE(
+          (SELECT content FROM version_content WHERE question_id = NEW.id ORDER BY date DESC LIMIT 1), '')), 'B')  
+      );
   END IF;
   IF TG_OP = 'UPDATE' THEN 
-    IF (NEW.title <> OLD.title) THEN 
-      NEW.tsvectors = setweight(to_tsvector('english', NEW.title), 'A');
-    END IF;
+    NEW.tsvectors = (
+      setweight(to_tsvector('english', NEW.title), 'A') || 
+      setweight(to_tsvector('english', COALESCE((SELECT content FROM version_content WHERE question_id = NEW.id ORDER BY date DESC LIMIT 1), '')), 'B') || 
+       setweight(to_tsvector('english', COALESCE(
+          (SELECT STRING_AGG(latest_content.content, ' ')
+          FROM answer
+          JOIN (
+              SELECT answer_id, MAX(date) AS max_date
+              FROM version_content
+              WHERE content_type = 'Answer_content'
+              GROUP BY answer_id
+          ) AS latest_date ON answer.id = latest_date.answer_id
+          JOIN version_content AS latest_content ON latest_date.answer_id = latest_content.answer_id
+              AND latest_date.max_date = latest_content.date WHERE answer.question_id = NEW.id), '')), 'C') ||
+         setweight(to_tsvector('english', COALESCE(
+            (SELECT STRING_AGG(latest_content.content, ' ')
+            FROM comment
+            JOIN (
+                SELECT comment_id, MAX(date) AS max_date
+                FROM version_content
+                WHERE content_type = 'Comment_content'
+                GROUP BY comment_id
+            ) AS latest_date ON comment.id = latest_date.comment_id
+            JOIN version_content AS latest_content ON latest_date.comment_id = latest_content.comment_id
+                AND latest_date.max_date = latest_content.date 
+                WHERE comment.answer_id IN 
+                (SELECT id FROM answer WHERE question_id = NEW.id)), '')), 'D')
+    );
   END IF;
   RETURN NEW;
 END $$ 
@@ -540,33 +588,7 @@ CREATE TRIGGER question_search_update
 -- Finally, create a GIN index for ts_vectors.
 CREATE INDEX search_question ON question USING GIN (tsvectors);
 
--- Index 5
-ALTER TABLE version_content
-ADD COLUMN tsvectors TSVECTOR;
 
--- Create a function to automatically update ts_vectors.
-CREATE FUNCTION content_search_update() RETURNS TRIGGER AS $$ 
-BEGIN 
-  IF TG_OP = 'INSERT' THEN 
-    NEW.tsvectors = setweight(to_tsvector('english', NEW.content), 'A');
-  END IF;
-  IF TG_OP = 'UPDATE' THEN 
-    IF (NEW.title <> OLD.title) THEN 
-      NEW.tsvectors = setweight(to_tsvector('english', NEW.content), 'A');
-    END IF;
-  END IF;
-  RETURN NEW;
-END $$ 
-LANGUAGE plpgsql;
-
--- Create a trigger before insert or update on content.
-CREATE TRIGGER content_search_update 
-  BEFORE INSERT OR UPDATE ON version_content 
-  FOR EACH ROW 
-  EXECUTE PROCEDURE content_search_update();
-
--- Finally, create a GIN index for ts_vectors.
-CREATE INDEX search_content ON version_content USING GIN (tsvectors);
 
 -- Index 6
 ALTER TABLE game
@@ -941,7 +963,7 @@ INSERT INTO question(user_id, create_date, title, is_solved, is_public, nr_views
 
 INSERT INTO answer(user_id, question_id, is_public, top_answer, votes) VALUES
 (1, 1, TRUE, FALSE, 2),
-(2, 2, TRUE, FALSE, 2),
+(2, 1, TRUE, FALSE, 2),
 (3, 3, TRUE, FALSE, 2),
 (4, 4, TRUE, FALSE, 2),
 (5, 5, TRUE, FALSE, 2),

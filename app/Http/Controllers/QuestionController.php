@@ -13,7 +13,7 @@ class QuestionController extends Controller
     public function index()
     {
         $questions = Question::where('is_public', true)
-            ->orderBy('create_date', 'desc')
+            ->orderBy('id', 'asc')
             ->paginate(10);
         return view('pages.questions', ['questions' => $questions]);
     }
@@ -52,6 +52,18 @@ class QuestionController extends Controller
 
         return view('partials._questions', compact('questions'))->render();
     }
+
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
+      
+        $questions = Question::whereRaw('tsvectors @@ plainto_tsquery(?)', [$query])
+            ->orderByRaw('ts_rank(tsvectors, plainto_tsquery(?)) DESC', [$query])
+            ->paginate(10);
+      
+        return view('pages.questions', ['questions' => $questions]);
+    }
+
 
     /**
      * Show the form for creating a new resource.

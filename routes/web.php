@@ -51,7 +51,7 @@ Route::controller(UserController::class)->group(function () {
 // Question
 Route::controller(QuestionController::class)->group(function () {
     Route::get('/questions', 'index')->name('questions');
-   
+    Route::post('/questions', 'search');
 });
 
 // Game Category
