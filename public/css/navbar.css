@@ -39,6 +39,7 @@ body > header {
     margin-left: 1.5rem;
     display: flex;
     align-items: center;
+    margin-bottom: 0px;
 }
 
 .nav-links li {
