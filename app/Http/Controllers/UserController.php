@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
+use App\Models\Question;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,6 +15,8 @@ use Illuminate\View\View;
 use App\Models\User;
 
 use App\Policies\UserPolicy;
+
+use HasFactory, Notifiable;
 
 class UserController extends Controller
 {
@@ -90,5 +92,14 @@ class UserController extends Controller
       $user->save();
       return response()->json(['profile update'=> 'success']);
     }
-   
+
+    public function votes()
+    {
+        return $this->hasMany(Vote::class);
+    }
+
+
+ 
+    
+ 
 }

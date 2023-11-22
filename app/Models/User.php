@@ -64,4 +64,36 @@ class User extends Authenticatable
     public function games() : HasMany {
         return $this->hasMany(Game::class);
     }
+  
+    /**
+     * Check if the user has voted for a specific question.
+     *
+     * @param int $questionId
+     * @param int $userId
+     * @return bool
+     */
+
+     public function hasVoted($questionId)
+    {
+        return DB::table('vote')
+            ->where('vote_type', 'Question_vote')
+            ->where('question_id', $questionId)
+            ->where('user_id', $this->id)
+            
+            ->exists();   
+    }
+
+    public function voteType($questionId)
+    {
+        $vote = DB::table('vote')
+            ->where('vote_type', 'Question_vote')
+            ->where('question_id', $questionId)
+            ->where('user_id', $this->id)
+            ->first();
+    
+    
+        return $vote ? $vote->reaction : null;
+    }
+    
+    
 }

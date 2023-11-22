@@ -51,8 +51,11 @@ Route::controller(UserController::class)->group(function () {
 // Question
 Route::controller(QuestionController::class)->group(function () {
     Route::get('/questions', 'index')->name('questions');
-   
+    Route::get('/questions/{question}', [QuestionController::class, 'show']);
+
 });
+
+
 
 // Game Category
 Route::controller(GameCategoryController::class)->group(function () {
@@ -75,4 +78,6 @@ Route::controller(UserController::class)->group(function () {
 // Question API
 Route::controller(QuestionController::class)->group(function () {
     Route::get('/api/questions', 'list'); 
+    Route::post('/api/questions/{id}/vote', 'vote');
+    Route::post('/api/questions/{id}/unvote', 'unvote'); 
 });
