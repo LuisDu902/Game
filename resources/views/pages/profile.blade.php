@@ -69,7 +69,7 @@
         <div class="edit-profile-button">
             <button class="edit-button" onclick="toggleEdit()">Edit my Profile</button>
         </div>
-
+        
         <div class="edit-profile-buttons">
             <button class="save-button" type="submit" id="edit_profile" onclick="saveChanges()">Save</button>
             <button class="cancel-button" onclick="cancelChanges()">Cancel</button>
@@ -82,5 +82,4 @@
             <a href="{{ route('users_questions', ['id' => $user->id]) }}" class="purple"> {{ $user->username }} answers </a>
         </div>
     @endif
-
 @endsection
