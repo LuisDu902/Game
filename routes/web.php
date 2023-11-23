@@ -4,6 +4,7 @@ use App\Http\Controllers\GameCategoryController;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\AnswerController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\LoginController;
@@ -89,7 +90,6 @@ Route::controller(QuestionController::class)->group(function () {
 });
 
 // Answers
-Route::controller(QuestionController::class)->group(function () {
-
-    Route::post('/api/questions/{id}/answer', 'store_answer');
+Route::controller(AnswerController::class)->group(function () {
+    Route::post('/api/answers', 'store');
 });

@@ -90,22 +90,28 @@ if (questionContainer) {
                 no_answers.remove();
             }
             questionContainer.innerHTML += ` <div id="answerFormContainer" class="answerFormContainer" >
-                 <form method="POST">
+                 <form >
                     <div class="form-group">
                         <label for="content">Answer <span>*</span></label>
                         <input type="hidden" name="userId" id="userId" value="${userId}">
                         <input type="hidden" name="questionId" id="questionId" value="${questionId}">
                         <textarea name="content" id="content" class="form-control" placeholder="Enter your answer here..." required></textarea>
                     </div>
-                    <button type="submit" class="btn btn-primary">Post Answer</button>
+                    <button class="btn btn-primary">Post Answer</button>
                 </form>
             </div>`;
+            const post_answer = document.querySelector('#answerFormContainer button');
+            post_answer.addEventListener('click', function(){
+                event.preventDefault();
+                const textareaContent = document.querySelector('#content').value;
+                sendAjaxRequest('post', '/api/answers', { content: textareaContent, userId: userId, questionId: questionId }, answerHandler);
+            });
             const newAnswerFormContainer = document.querySelector('#answerFormContainer');
             newAnswerFormContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
     })
 
-    const post_answer = document.querySelector('#answerFormContainer');
+  
 
 
 }
@@ -146,4 +152,52 @@ function downVoteHandler(){
         }
     }
 }
+
+
+function answerHandler() {
+    if (this.status == 200){
+        const newAnswerFormContainer = document.querySelector('#answerFormContainer');
+
+        const textareaContent = document.querySelector('#content').value;
+        newAnswerFormContainer.remove();
+        const user = questionContainer.getAttribute('data-username');
+        const answerContainer = document.querySelector('.other-answers');
+        if(answerContainer){
+            console.log('here')
+        }
+        answerContainer.innerHTML += `<div class="answer-details">
+        <div class="vote-btns">
+        
+        </div>
+        <div class="answer-content"> 
+            <div>
+                <img src="../images/user.png" alt="user">
+                <p>
+                    ${textareaContent}
+                </p>
+            </div>
+            <ul>
+                <li> <a href="#" class="purple"> ${user} </a> answered 0 seconds ago</li>
+                <li> Modified 0 seconds ago </li>
+                <li> 0 comments </li>
+            </ul>
+            <div class="answer-comments">
+                <ul id="answer-comment-list">
+                    <li>
+                        <div class="comment-input">
+                            <img src="../images/user.png" alt="user">
+                            <input type="text" placeholder="Add new comment">
+                            <button>
+                                <ion-icon name="arrow-forward-circle-outline"></ion-icon>
+                            </button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>`
+    }
+
+}
+
 

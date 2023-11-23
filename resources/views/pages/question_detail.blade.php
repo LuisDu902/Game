@@ -9,7 +9,7 @@
         <li>id</li>
     </ul>
 
-    <section class="question-detail-section" data-id="{{$question->id}}" data-user="{{ Auth::id() }}">
+    <section class="question-detail-section" data-id="{{$question->id}}" data-user="{{ Auth::id() }}" data-username= "{{Auth::user()->username}}">
         <div class="question-detail">
             <div class="question-title">
                 <img src="../images/user.png" alt="user">
@@ -17,13 +17,8 @@
                 <button class="answer">Answer</button>
             </div>
 
+            @php $user = Auth::user(); @endphp
 
-            @php
-            $user = Auth::user();
-
-            @endphp
-
-            
             <div class="question-t">
                 <div class="vote-btns">
                     <button class="up-vote">
@@ -44,9 +39,6 @@
                     {{ $question->latest_content() }}
                     </p>
                 </div>
-
-                
-                
             </div>
         </div>
       
@@ -100,49 +92,8 @@
             @if ($question->answers->count() > 1)
                 <div class="other-answers">
                     <h2>Other answers</h2>
-                    @foreach ($question->answers->where('id', '!=', $topAnswer->id) as $otherAnswer)
-                        <div class="answer-details">
-                            <div class="vote-btns">
-                            
-                            </div>
-                            <div class="answer-content"> 
-                                <div>
-                                    <img src="../images/user.png" alt="user">
-                                    <p>
-                                        {{ $otherAnswer->latest_content() }}
-                                    </p>
-                                </div>
-                                <ul>
-                                    <li> <a href="#" class="purple">{{ $otherAnswer->creator->name }}</a> answered {{ calculateTimePassed($otherAnswer->created_at) }}</li>
-                                    <li> Modified {{ calculateTimePassed($otherAnswer->created_at) }}</li>
-                                    <li> Viewed {{ $otherAnswer->nr_views }} times </li>
-                                </ul>
-                                <div class="answer-comments">
-                                    <ul id="answer-comment-list">
-                                        @foreach ($otherAnswer->comments as $comment)
-                                            <li>
-                                                <div>
-                                                    <img src="../images/user.png" alt="user">
-                                                    <a href="" class="purple">{{ $comment->user->name }}</a>
-                                                </div>
-                                                <p>
-                                                    {{ $comment->latest_content() }}
-                                                </p>
-                                            </li>
-                                        @endforeach
-                                        <li>
-                                            <div class="comment-input">
-                                                <img src="../images/user.png" alt="user">
-                                                <input type="text" placeholder="Add new comment">
-                                                <button>
-                                                    <ion-icon name="arrow-forward-circle-outline"></ion-icon>
-                                                </button>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
+                    @foreach ($question->answers->where('id', '!=', $topAnswer->id) as $answer)
+                        @include('partials._answer', ['answer' => $answer])
                     @endforeach
                 </div>
             @else

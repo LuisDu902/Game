@@ -155,7 +155,7 @@ class QuestionController extends Controller
             ->where('question_id', $question_id)
             ->delete();
     
-        return response()->json(['action'=> 'unvote']);
+        return response()->json(['action' => 'unvote']);
     }
     
 

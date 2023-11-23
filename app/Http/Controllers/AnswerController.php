@@ -39,8 +39,8 @@ class AnswerController extends Controller
             $request->input('questionId'),
             $request->input('userId'),
         );
-    
-        return response()->json(['action' => 'answer']);
+      
+        return response()->json();
     }
 
     /**
