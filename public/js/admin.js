@@ -110,7 +110,7 @@ function userListHandler() {
         const table = document.querySelector('.users');
         table.innerHTML = this.response;
         console.log(this);
-        const links = document.querySelectorAll('.pagination a');
+        const links = document.querySelectorAll('.custom-pagination a');
         for (const link of links){
             link.addEventListener('click', function(){
                 event.preventDefault();

@@ -164,28 +164,19 @@ body > header {
 }
 
 @media (max-width: 1180px) {
-    .logo strong {
-        display: none;
-    }
-
     .search-box {
-        flex: 1;
-    }
-}
-
-@media (max-width: 1080px) {
-    .nav-links {
         display: none;
     }
 }
 
-@media (max-width: 620px) {
+
+@media (max-width: 920px) {
     .navbar .buttons, .navbar .dropdown {
         display: none;
     }
 }
 
-@media (max-width: 400px) {
+@media (max-width: 705px) {
     .logo {
         display: none;
     }

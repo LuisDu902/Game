@@ -1,6 +1,6 @@
 @if ($paginator->hasPages())
     
-<ul class="pagination">
+<ul class="custom-pagination">
     @if (!$paginator->onFirstPage())  
         <a class="arrow" href="{{ $paginator->previousPageUrl() }}" rel="prev" aria-label="@lang('pagination.previous')">&lsaquo;</a>
     @endif
