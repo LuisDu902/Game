@@ -9,12 +9,12 @@
         <li>id</li>
     </ul>
 
-    <section class="question-detail-section" data-id="{{$question->id}}">
+    <section class="question-detail-section" data-id="{{$question->id}}" data-user="{{ Auth::id() }}">
         <div class="question-detail">
             <div class="question-title">
                 <img src="../images/user.png" alt="user">
                 <h1> {{ $question->title }} </h1>
-                <button class="answer" onclick="toggleAnswerForm()">Answer</button>
+                <button class="answer">Answer</button>
             </div>
 
 
@@ -49,21 +49,7 @@
                 
             </div>
         </div>
-        <div id="answerFormContainer" class="answerFormContainer" style="display: none;">
-            <form action="{{ route('store_answer') }}" method="POST">
-                @csrf
-                <div class="form-group">
-                    <label for="content">Answer <span>*</span></label>
-                    <input type="hidden" name="userId" id="userId" value="{{ $user->id }}">
-                    <input type="hidden" name="questionId" id="questionId" value="{{ $question->id }}">
-                    <textarea name="content" id="content" class="form-control" required></textarea>
-                </div>
-
-                
-
-                <button type="submit" class="btn btn-primary">Post Answer</button>
-            </form>
-        </div>
+      
         @if ($question->answers->isNotEmpty())
             <div class="top-answer">
                 <h2>Top answer</h2>
@@ -170,13 +156,6 @@
         </div>
     @endif
     </section>
-
-    <script>
-        function toggleAnswerForm() {
-            var answerFormContainer = document.getElementById('answerFormContainer');
-            answerFormContainer.style.display = (answerFormContainer.style.display === 'none' || answerFormContainer.style.display === '') ? 'block' : 'none';
-        }
-    </script>
 @endsection
 
 

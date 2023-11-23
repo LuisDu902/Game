@@ -91,5 +91,5 @@ Route::controller(QuestionController::class)->group(function () {
 // Answers
 Route::controller(QuestionController::class)->group(function () {
 
-    Route::post('/questions/answer', [QuestionController::class, 'store_answer'])->name('store_answer');
+    Route::post('/api/questions/{id}/answer', 'store_answer');
 });
