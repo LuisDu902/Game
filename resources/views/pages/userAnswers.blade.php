@@ -29,7 +29,7 @@
     <div class="answers">
         @if($answers->count() > 0)
             @foreach($answers as $answer)
-            <li class="answer-card">
+            <li class="answer-card" id={{ $answer->id }}>
                 <a href="" > <span> <strong class="purple">Question</strong>: <span>{{ $answer->question->title }}</span> </span></a>
                 <p>{{ $answer->latest_content() }}</p>
                 <ul class="answer-stats">
@@ -38,6 +38,11 @@
                     <li> {{ $answer->comments->count() }} Comments </li>
                     <li> {{ $answer->votes }} votes </li>
                 </ul>
+                @if(Auth::check() and (Auth::id() == $user->id) and Auth::user()->is_admin)
+                    <div class="a-delete">
+                        <button class="delete-button" onclick="deleteAnswer({{ $answer->id }})">Delete</button>
+                    </div>
+                @endif
             </li>
             @endforeach
         @else
