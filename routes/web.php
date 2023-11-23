@@ -90,3 +90,9 @@ Route::controller(QuestionController::class)->group(function () {
     Route::post('/api/questions/{id}/vote', 'vote');
     Route::post('/api/questions/{id}/unvote', 'unvote'); 
 });
+
+// Answers
+Route::controller(QuestionController::class)->group(function () {
+
+    Route::post('/questions/answer', [QuestionController::class, 'store_answer'])->name('store_answer');
+});

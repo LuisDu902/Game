@@ -54,12 +54,17 @@
             </div>
         </div>
         <div id="answerFormContainer" class="answerFormContainer" style="display: none;">
-            <form action="" method="POST">
+            <form action="{{ route('store_answer') }}" method="POST">
                 @csrf
                 <div class="form-group">
                     <label for="content">Answer <span>*</span></label>
+                    <input type="hidden" name="userId" id="userId" value="{{ $user->id }}">
+                    <input type="hidden" name="questionId" id="questionId" value="{{ $question->id }}">
                     <textarea name="content" id="content" class="form-control" required></textarea>
                 </div>
+
+                
+
                 <button type="submit" class="btn btn-primary">Post Answer</button>
             </form>
         </div>

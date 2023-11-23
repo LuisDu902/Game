@@ -47,4 +47,41 @@ class Answer extends Model
         ->value('content');
     }
 
+    public static function createAnswerWithContent($content, $questionId, $userId){
+        $answer = new static;
+
+        $answer->user_id = $userId;
+        $answer->question_id = $questionId;
+        $answer->top_answer = false;
+        $answer->is_public = true; 
+        $answer->votes = 0;
+
+        $answer->save();
+
+        $answerId = $answer->id;
+    
+
+
+        DB::table('answer')->insert([
+            'user_id' => $userId,
+            'question_id' => $questionId,
+            'is_public' => true,
+            'top_answer' => false,
+            'votes' => 0,
+        ]);
+
+        DB::table('version_content')->insert([
+            'date' => now(),
+            'content' => $content,
+            'content_type' => 'Answer_content',
+            'question_id' => null,
+            'answer_id' => $answerId,
+            'comment_id' => null,
+        ]);
+
+
+        return $answer;
+    }
+
 }
+

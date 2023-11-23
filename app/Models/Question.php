@@ -86,7 +86,9 @@ class Question extends Model
             'date' => now(),
             'content_type' => 'Question_content',
         ]);
-
+        
         return $question;
     }
+
+
 }

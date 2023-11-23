@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use App\Models\Question;
+use App\Models\Answer;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -145,11 +146,6 @@ class QuestionController extends Controller
         return response()->json(['vote' => 'success', 'action' => 'unvote']);
     }
     
-    
-    // ...
-    
-
-    
 
     public function hasVoted($questionId, $userId) {
 
@@ -161,6 +157,25 @@ class QuestionController extends Controller
 
         return response()->json(['hasVoted' => $hasVoted]);
     }
+
+    public function store_answer(Request $request)
+    {
+
+        $request->validate([
+            'content' => 'required|string',
+            'questionId' => 'required',
+            'userId' => 'required',
+        ]);
+
+        $answer = Answer::createAnswerWithContent(
+            $request->input('content'),
+            $request->input('questionId'),
+            $request->input('userId'),
+        );
+    
+        return redirect()->route('questions');
+    }
+
 
 
 }
