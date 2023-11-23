@@ -30,7 +30,8 @@
                 </div>
                 <div class="dropdown-content">
                     <a href="{{ route('profile', ['id' => Auth::user()->id]) }}">Profile</a>
-                    <a href="{{ route('users_questions', ['id' => Auth::user()->id]) }}">My posts</a>
+                    <a href="{{ route('users_questions', ['id' => Auth::user()->id]) }}">My Questions</a>
+                    <a href="{{ route('users_answers', ['id' => Auth::user()->id]) }}">My Answers</a>
                     <a href="{{ url('/logout') }}">Sign out</a>
                 </div>
             </div>

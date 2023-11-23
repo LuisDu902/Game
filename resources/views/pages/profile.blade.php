@@ -79,7 +79,7 @@
         <div class="user-questions-answers-profile d-flex flex-row gap-4 mx-auto">
             <a href="{{ route('users_questions', ['id' => $user->id]) }}" class="purple"> {{ $user->username }} questions </a>
             <div class="vl"></div>
-            <a href="{{ route('users_questions', ['id' => $user->id]) }}" class="purple"> {{ $user->username }} answers </a>
+            <a href="{{ route('users_answers', ['id' => $user->id]) }}" class="purple"> {{ $user->username }} answers </a>
         </div>
     @endif
 @endsection
