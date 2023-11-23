@@ -45,6 +45,14 @@
     cursor: pointer;
 }
 
+.question-description {
+    width: 100%;
+}
+
+.question-description ul {
+    margin-bottom: 0;
+}
+
 .question-detail ul, .answer-content>ul {
     font-size: 16px;
     display: flex;
