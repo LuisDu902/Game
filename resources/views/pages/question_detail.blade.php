@@ -35,8 +35,8 @@
                 </div>
                 <div class="question-description"> 
                     <ul>
-                        <li> {{ $question->creator->name }} asked {{ calculateTimePassed($question->create_date) }}</li>
-                        <li> Modified {{ calculateTimePassed($question->create_date) }}</li>
+                        <li> {{ $question->creator->name }} asked {{ $question->timeDifference() }} ago</li>
+                        <li id="q-modi"> Modified {{ $question->last_modification() }}</li>
                         <li> Viewed {{ $question->nr_views }} times </li>
                     </ul>
                     <p>
@@ -77,14 +77,3 @@
         @endif
     </section>
 @endsection
-
-
-@php
-    function calculateTimePassed($inputDate)
-    {
-        $inputDate = \Carbon\Carbon::parse($inputDate);
-        $diff = $inputDate->diffForHumans();
-
-        return $diff;
-    }
-@endphp

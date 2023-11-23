@@ -14,7 +14,7 @@
         </div>
         <ul>
             <li> <a href="{{ route('profile', ['id' => $answer->creator->id ]) }}" class="purple">{{ $answer->creator->name }}</a> answered {{ $answer->time_difference() }} ago</li>
-            <li> Modified {{ $answer->last_modification() }} ago </li>
+            <li class="a-modi"> Modified {{ $answer->last_modification() }} ago </li>
             <li> {{ $answer->comments->count() }} comments </li>
         </ul>
         <div class="answer-comments">

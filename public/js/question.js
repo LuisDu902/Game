@@ -143,10 +143,13 @@ if (questionContainer) {
                     edit_button.textContent = 'Save'
                 } else {
                     const new_content = event.target.closest('div').querySelector('p input').value;
+                    const time = event.target.closest('.answer-content').querySelector('.a-modi');
                     const answerId = edit_button.getAttribute('data-id');
+                    
                     if (new_content != '') {
                         sendAjaxRequest('put', '/api/answers/' + answerId + '/edit', {content: new_content}, editAnswerHandler);
                         content.innerHTML = `${new_content}`;
+                        time.textContent = 'Modified 0 seconds ago'
                     }
                     edit_button.textContent = 'Edit'
                 }
@@ -283,6 +286,8 @@ function editQuestionHandler() {
         const content = document.querySelector('.question-description p')
         content.innerHTML =  `${new_content}`
         createNotificationBox('Question successfully edit!')
+        const modi = document.querySelector('#q-modi')
+        modi.textContent = 'Modified 0 seconds ago'
     }
 }
 

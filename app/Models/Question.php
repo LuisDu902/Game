@@ -102,4 +102,19 @@ class Question extends Model
         return $question;
     }
 
+    public function last_date()
+    {
+        return DB::table('version_content')
+        ->select('date')
+        ->where('question_id', $this->id)
+        ->orderByDesc('date') 
+        ->limit(1)
+        ->value('date');
+    }
+
+    public function last_modification() {
+        $now = now();
+        $modifiedAt = $this->last_date();
+        return $now->diffForHumans($modifiedAt, true);
+    }
 }
