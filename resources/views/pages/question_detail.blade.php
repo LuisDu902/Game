@@ -42,70 +42,35 @@
             </div>
         </div>
       
-        @if ($question->answers->isNotEmpty())
-            <div class="top-answer">
-                <h2>Top answer</h2>
-                @php
-                    $topAnswer = $question->answers->sortByDesc('votes')->first();
-                @endphp
 
-                <div class="answer-details">
-                    <div class="vote-btns">
-                    </div>
-                    <div class="answer-content"> 
-                        <div>
-                            <img src="../images/user.png" alt="user">
-                            <p>
-                            {{ $topAnswer->latest_content() }}
-                            </p>
-                        </div>
-                        <ul>
-                            <li> Viewed {{ $topAnswer->nr_views }} times </li>
-                        </ul>
-                        <div class="answer-comments">
-                            <ul id="answer-comment-list">
-                                @foreach ($topAnswer->comments as $comment)
-                                    <li>
-                                        <div>
-                                            <img src="../images/user.png" alt="user">
-                                            <a href="" class="purple">{{ $comment->user->name }}</a>
-                                        </div>
-                                        <p>
-                                            {{ $comment->latest_content() }}
-                                        </p>
-                                    </li>
-                                @endforeach
-                                <li>
-                                    <div class="comment-input">
-                                        <img src="../images/user.png" alt="user">
-                                        <input type="text" placeholder="Add new comment">
-                                        <button>
-                                            <ion-icon name="arrow-forward-circle-outline"></ion-icon>
-                                        </button>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            @if ($question->answers->count() > 1)
-                <div class="other-answers">
-                    <h2>Other answers</h2>
-                    @foreach ($question->answers->where('id', '!=', $topAnswer->id) as $answer)
-                        @include('partials._answer', ['answer' => $answer])
-                    @endforeach
-                </div>
-            @else
-                <div class="no-answers">
-                    <h2>No more answers for this question yet.</h2>
+        @if ($question->answers->isNotEmpty())
+
+            @if ($question->hasTopAnswer())
+                <div class="top-answer">
+                    <h2>Top answer</h2>
+                    @include('partials._answer', ['answer' => $question->topAnswer()])
                 </div>
             @endif
-    @else
-        <div class="no-answers">
-            <h2>No answers for this question yet.</h2>
-        </div>
-    @endif
+                <div class="other-answers">
+                    <h2>{{ $question->hasTopAnswer() ? 'Other answers' : 'Answers'}}</h2>
+                    @if ($question->otherAnswers->isNotEmpty())
+                        @foreach ($question->otherAnswers as $answer)
+                            @include('partials._answer', ['answer' => $answer])
+                        @endforeach
+                    @else
+                        <div class="no-answers">
+                            <h2>No more answers for this question yet.</h2>
+                        </div>
+                    @endif
+                </div>
+        @else
+            <div class="no-answers">
+                <h2>No answers for this question yet.</h2>
+            </div>
+            <div class="other-answers">
+
+            </div>
+        @endif
     </section>
 @endsection
 

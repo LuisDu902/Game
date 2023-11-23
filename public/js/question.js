@@ -156,6 +156,8 @@ function downVoteHandler(){
 
 function answerHandler() {
     if (this.status == 200){
+        const questionId = questionContainer.dataset.id;
+        const userId = questionContainer.getAttribute('data-user');
         const newAnswerFormContainer = document.querySelector('#answerFormContainer');
 
         const textareaContent = document.querySelector('#content').value;
@@ -196,8 +198,39 @@ function answerHandler() {
             </div>
         </div>
     </div>`
-    }
+    
+    const answer_btn = document.querySelector('.answer')
 
+    answer_btn.addEventListener('click', function(){
+        const answer = document.querySelector('#answerFormContainer')
+        if (!answer) {
+            const no_answers = document.querySelector('.no-answers');
+            if (no_answers) {
+                no_answers.remove();
+            }
+            questionContainer.innerHTML += ` <div id="answerFormContainer" class="answerFormContainer" >
+                 <form >
+                    <div class="form-group">
+                        <label for="content">Answer <span>*</span></label>
+                        <input type="hidden" name="userId" id="userId" value="${userId}">
+                        <input type="hidden" name="questionId" id="questionId" value="${questionId}">
+                        <textarea name="content" id="content" class="form-control" placeholder="Enter your answer here..." required></textarea>
+                    </div>
+                    <button class="btn btn-primary">Post Answer</button>
+                </form>
+            </div>`;
+            const post_answer = document.querySelector('#answerFormContainer button');
+            post_answer.addEventListener('click', function(){
+                event.preventDefault();
+                const textareaContent = document.querySelector('#content').value;
+                sendAjaxRequest('post', '/api/answers', { content: textareaContent, userId: userId, questionId: questionId }, answerHandler);
+            });
+            const newAnswerFormContainer = document.querySelector('#answerFormContainer');
+            newAnswerFormContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+    )}
 }
+
 
 

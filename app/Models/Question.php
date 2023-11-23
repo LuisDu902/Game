@@ -59,6 +59,18 @@ class Question extends Model
         ->value('content');
     }
 
+    public function hasTopAnswer(){
+        return $this->answers()->where('top_answer', true)->count() > 0;
+    }
+
+    public function topAnswer(){
+        return $this->answers()->where('top_answer', true)->first();
+    }
+
+    public function otherAnswers(){
+        return $this->answers()->where('top_answer', false);
+    }
+
     public function timeDifference() {
         $now = now();
         $createdAt = $this->create_date;
