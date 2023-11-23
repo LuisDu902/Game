@@ -107,9 +107,28 @@ class QuestionController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Question $question)
+    public function edit(Request $request, $id)
     {
-        //
+        $question = Question::findOrFail($id);
+        $request->validate([
+            'content' => 'required|string',
+            'title' => 'required|string',
+        ]);
+
+        $question->title = $request->input('title');
+
+        $question->save();
+
+        DB::table('version_content')->insert([
+            'date' => now(),
+            'content' => $request->input('content'),
+            'content_type' => 'Question_content',
+            'question_id' => $id,
+            'answer_id' => null,
+            'comment_id' => null,
+        ]);
+
+        return response()->json(['message' => 'Question updated successfully']);
     }
 
     /**

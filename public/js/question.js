@@ -81,7 +81,7 @@ if (questionContainer) {
 
 
     const answer_btn = document.querySelector('.answer')
-
+    if (answer_btn){
     answer_btn.addEventListener('click', function(){
         const answer = document.querySelector('#answerFormContainer')
         if (!answer) {
@@ -110,8 +110,28 @@ if (questionContainer) {
             newAnswerFormContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
     })
+}
+    const edit_btn = document.querySelector('.edit-question')
 
-  
+    if (edit_btn){
+        edit_btn.addEventListener('click', function(){
+            if (edit_btn.textContent == 'Edit') {
+                const title = document.querySelector('.question-title h1')
+                title.innerHTML = `<input type="text" value="${title.textContent}" class="question-input" required>`
+                const content = document.querySelector('.question-description p')
+                content.innerHTML = `<textarea class="question-c" placeholder="Question details..." value="${content.textContent}">${content.textContent}</textarea>`
+                edit_btn.textContent = 'Save'
+            } else {
+                const new_title = document.querySelector('.question-input').value;
+                const new_content = document.querySelector('.question-c').value;
+                if (new_title != '' && new_content != ''){
+                    sendAjaxRequest('put', '/api/questions/' + questionId + '/edit', {title: new_title, content: new_content}, editQuestionHandler);
+                    edit_btn.textContent = 'Edit'
+                }
+            }
+        })
+     
+    }
 
 
 }
@@ -230,6 +250,20 @@ function answerHandler() {
         }
     }
     )}
+}
+
+
+
+function editQuestionHandler() {
+    if (this.status == 200) {
+        const new_title = document.querySelector('.question-input').value;
+        const new_content = document.querySelector('.question-c').value;
+        const title = document.querySelector('.question-title h1')
+        title.innerHTML = `${new_title}`
+        const content = document.querySelector('.question-description p')
+        content.innerHTML =  `${new_content}`
+        createNotificationBox('Question successfully updated!')
+    }
 }
 
 

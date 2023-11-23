@@ -339,3 +339,16 @@
     background-color:white ;
     color: #6D49EB;
 }
+
+.question-input, .question-c {
+    border: 1px solid #e6e7f3;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.question-c {
+    width: 100%;
+    text-align: left;
+    height: 120px;
+   
+}
