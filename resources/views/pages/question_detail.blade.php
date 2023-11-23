@@ -110,13 +110,19 @@
                                     </li>
                                 @endforeach
                                 <li>
-                                    <div class="comment-input">
-                                        <img src="../images/user.png" alt="user">
-                                        <input type="text" placeholder="Add new comment">
-                                        <button>
-                                            <ion-icon name="arrow-forward-circle-outline"></ion-icon>
-                                        </button>
-                                    </div>
+                                <form action="{{ route('store_comment') }}" method="post">
+                                            @csrf
+                                            <div class="comment-input">
+                                                <img src="../images/user.png" alt="user">
+                                                <input type="hidden" name="userId" id="userId" value="{{ $user->id }}">
+                                                <input type="hidden" name="questionId" id="questionId" value="{{ $question->id }}">
+                                                <input type="hidden" name="answerId" id="answerId" value="{{ $topAnswer->id }}">
+                                                <input type="text" id="commentario" name="commentario" placeholder="Add new comment">
+                                                <button type="submit">
+                                                    <ion-icon name="arrow-forward-circle-outline"></ion-icon>
+                                                </button>
+                                            </div>
+                                        </form>
                                 </li>
                             </ul>
                         </div>
