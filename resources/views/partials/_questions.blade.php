@@ -1,7 +1,7 @@
 @if ($questions->count() > 0)
     <ul class="questions">
         @foreach($questions as $question)
-            <li class="question-card">
+            <li class="question-card"  id={{ $question->id }}>
                 <div class="q-stats">
                     <span>{{ $question->votes }} votes</span>
                     <span>{{ $question->answers->count() }} answers</span>
@@ -19,6 +19,11 @@
                     @endif
                     <span><a href="{{ route('profile', ['id' => $question->creator->id ]) }}" class="purple">{{ $question->creator->username }}</a> asked {{ $question->timeDifference() }} ago</span>
                 </div>
+                @if(Auth::check() and (Auth::id() == $question->creator->id) and Auth::user()->is_admin)
+                    <div class="q-delete">
+                        <button class="delete-button" onclick="deleteQuestion({{ $question->id }})">Delete</button>
+                    </div>
+                @endif
             </li>
         @endforeach
     </ul>
