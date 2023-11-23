@@ -207,9 +207,11 @@ function answerHandler() {
         newAnswerFormContainer.remove();
         const user = questionContainer.getAttribute('data-username');
         const answerContainer = document.querySelector('.other-answers');
-        if(answerContainer){
-            console.log('here')
+        const h2 = document.querySelector('.other-answers h2');
+        if (!h2){
+            answerContainer.innerHTML += `<h2>Answers</h2>`
         }
+
         answerContainer.innerHTML += `<div class="answer-details">
         <div class="vote-btns">
         
