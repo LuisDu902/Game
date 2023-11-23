@@ -8,6 +8,9 @@
             <p>
                 {{ $answer->latest_content() }}
             </p>
+            @if(Auth::check() and (Auth::id() == $answer->user_id))
+                    <button class="edit-answer" data-id="{{ $answer->id }}">Edit</button>
+            @endif
         </div>
         <ul>
             <li> <a href="{{ route('profile', ['id' => $answer->creator->id ]) }}" class="purple">{{ $answer->creator->name }}</a> answered {{ $answer->time_difference() }} ago</li>

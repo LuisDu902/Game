@@ -92,4 +92,5 @@ Route::controller(QuestionController::class)->group(function () {
 // Answers
 Route::controller(AnswerController::class)->group(function () {
     Route::post('/api/answers', 'store');
+    Route::put('/api/answers/{id}/edit', 'edit');
 });

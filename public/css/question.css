@@ -340,7 +340,7 @@
     color: #6D49EB;
 }
 
-.question-input, .question-c {
+.question-input, .question-c, .answer-input {
     border: 1px solid #e6e7f3;
     border-radius: 10px;
     padding: 10px;
@@ -351,4 +351,11 @@
     text-align: left;
     height: 120px;
    
+}
+
+.edit-answer {
+    border-radius: 10px;
+    background-color: #7C5BF0;
+    padding: 5px 10px;
+    color: white;
 }

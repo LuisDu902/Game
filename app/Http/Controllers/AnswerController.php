@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
 use App\Models\Answer;
 use Illuminate\Http\Request;
 
@@ -54,9 +55,22 @@ class AnswerController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Answer $answer)
+    public function edit(Request $request, $id)
     {
-        //
+        $request->validate([
+            'content' => 'required|string'
+        ]);
+
+        DB::table('version_content')->insert([
+            'date' => now(),
+            'content' => $request->input('content'),
+            'content_type' => 'Answer_content',
+            'question_id' => null,
+            'answer_id' => $id,
+            'comment_id' => null,
+        ]);
+
+        return response()->json(['message' => 'Question updated successfully']);
     }
 
     /**

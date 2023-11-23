@@ -130,10 +130,30 @@ if (questionContainer) {
                 }
             }
         })
-     
     }
 
+    const answer_btns = document.querySelectorAll(".edit-answer")
 
+    if (answer_btns) {
+        for (let edit_button of answer_btns) {
+            edit_button.addEventListener('click', function(){
+                const content = event.target.closest('div').querySelector('p');
+                if (edit_button.textContent == 'Edit') {
+                    content.innerHTML = `<input type="text" value="${content.textContent}" class="answer-input" required>`
+                    edit_button.textContent = 'Save'
+                } else {
+                    const new_content = event.target.closest('div').querySelector('p input').value;
+                    const answerId = edit_button.getAttribute('data-id');
+                    if (new_content != '') {
+                        sendAjaxRequest('put', '/api/answers/' + answerId + '/edit', {content: new_content}, editAnswerHandler);
+                        content.innerHTML = `${new_content}`;
+                    }
+                    edit_button.textContent = 'Edit'
+                }
+            })
+        }
+    }
+    
 }
 
 
@@ -262,9 +282,14 @@ function editQuestionHandler() {
         title.innerHTML = `${new_title}`
         const content = document.querySelector('.question-description p')
         content.innerHTML =  `${new_content}`
-        createNotificationBox('Question successfully updated!')
+        createNotificationBox('Question successfully edit!')
     }
 }
 
 
 
+function editAnswerHandler() {
+    if (this.status == 200) {
+        createNotificationBox('Answer successfully edit!')
+    }
+}
