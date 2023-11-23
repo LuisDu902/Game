@@ -20,7 +20,7 @@ function questionListHandler() {
     if (this.status === 200) {
         const table = document.querySelector('.questions-list');
         table.innerHTML = this.response;
-        const links = document.querySelectorAll('.pagination a');
+        const links = document.querySelectorAll('.custom-pagination a');
         for (const link of links){
             link.addEventListener('click', function(){
                 event.preventDefault();
