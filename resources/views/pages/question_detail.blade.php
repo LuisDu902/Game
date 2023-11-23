@@ -33,6 +33,7 @@
                         <ion-icon id="down" class= "{{ (($user->hasVoted($question->id)) && !$user->voteType($question->id) ) ? 'hasvoted' : 'notvoted' }} {{$user->voteType($question->id) ? 'cima' : ($user->voteType($question->id) === false ? 'baixo' : 'nulo') }} " name="caret-down"></ion-icon>
                     </button>
                 </div>
+
                 <div class="question-description"> 
                     <ul>
                         <li> {{ $question->creator->name }} asked {{ $question->timeDifference() }} ago</li>
@@ -40,7 +41,7 @@
                         <li> Viewed {{ $question->nr_views }} times </li>
                     </ul>
                     <p>
-                    {{ $question->latest_content() }}
+                        {{ $question->latest_content() }}
                     </p>
                 </div>
             </div>

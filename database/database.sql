@@ -388,39 +388,6 @@ EXECUTE FUNCTION update_question_privacy_on_ban();
 
 --Trigger 6
 
-CREATE OR REPLACE FUNCTION update_user_rank() RETURNS TRIGGER AS $$
-DECLARE
-    user_likes INTEGER;
-    user_dislikes INTEGER;
-    user_reputation INTEGER;
-BEGIN
-    SELECT COALESCE(SUM(CASE WHEN reaction = TRUE THEN 1 ELSE -1 END), 0) INTO user_reputation
-    FROM vote
-    WHERE question_id = (SELECT id FROM question WHERE user_id = NEW.user_id) AND vote_type = 'Question_vote';
-
-    IF user_reputation >= 0 AND user_reputation <= 30 THEN
-        UPDATE users
-        SET rank = 'Bronze'
-        WHERE id = NEW.user_id;
-    ELSIF user_reputation >= 31 AND user_reputation <= 60 THEN
-        UPDATE users
-        SET rank = 'Gold'
-        WHERE id = NEW.user_id;
-    ELSIF user_reputation >= 61 THEN
-        UPDATE users
-        SET rank = 'Master'
-        WHERE id = NEW.user_id;
-    END IF;
-
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER update_user_rank_trigger
-AFTER UPDATE ON question
-FOR EACH ROW
-EXECUTE FUNCTION update_user_rank();
-
 
 --Trigger 8
 

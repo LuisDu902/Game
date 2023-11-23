@@ -215,7 +215,7 @@
 }
 
 .comment-input input {
-    width: 95%;
+    width: 90%;
     background-color: transparent;
     font-size: 18px;
     padding: 10px 0;
@@ -331,7 +331,7 @@
 
 .hasvoted{
    
-    background-color:#6D49EB ;
+    background-color:#6542e6 ;
     color: white;
 }
 
