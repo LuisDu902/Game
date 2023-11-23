@@ -14,7 +14,11 @@
             <div class="question-title">
                 <img src="../images/user.png" alt="user">
                 <h1> {{ $question->title }} </h1>
-                <button class="answer" onclick="toggleAnswerForm()">Answer</button>
+                @auth
+                    <button class="answer" onclick="toggleAnswerForm()">Answer</button>
+                @else
+                    <button class="answer" onclick="showLoginModal()">Answer</button>
+                @endauth
             </div>
 
 
@@ -25,18 +29,26 @@
 
             
             <div class="question-t">
-                <?php if ( $question->user_id !=  $user->id ) { ?> 
-                    <div class="vote-btns">
+                <div class="vote-btns">
+                    @auth
                         <button class="up-vote">
-                            <ion-icon id="up" class="{{ $user->hasVoted($question->id) && ($user->voteType($question->id)) ? 'hasvoted' : 'notvoted' }}  {{$user->voteType($question->id) === true ? 'cima' : ($user->voteType($question->id) === false ? 'baixo' : 'nulo'); }}" name="caret-up"></ion-icon>
+                            <ion-icon id="up" class="{{ $user->hasVoted($question->id) && ($user->voteType($question->id)) ? 'hasvoted' : 'notvoted' }}  {{ $user->voteType($question->id) === true ? 'cima' : ($user->voteType($question->id) === false ? 'baixo' : 'nulo') }}" name="caret-up"></ion-icon>
                         </button>
                         <span>{{ $question->votes }} </span>
                         <button class="down-vote">
-                            <ion-icon id="down" class="{{ (($user->hasVoted($question->id)) && !$user->voteType($question->id) ) ? 'hasvoted' : 'notvoted' }} {{$user->voteType($question->id) === true ? 'cima' : ($user->voteType($question->id) === false ? 'baixo' : 'nulo'); }}" name="caret-down"></ion-icon>
+                            <ion-icon id="down" class="{{ ($user->hasVoted($question->id) && !$user->voteType($question->id)) ? 'hasvoted' : 'notvoted' }} {{ $user->voteType($question->id) === true ? 'cima' : ($user->voteType($question->id) === false ? 'baixo' : 'nulo') }}" name="caret-down"></ion-icon>
                         </button>
-                    </div>
-                <?php } ?>
-        
+                    @else
+                        <button class="" onclick="showLoginModal()">
+                            <ion-icon id="" class="notvoted" name="caret-up"></ion-icon>
+                        </button>
+                        <span>{{ $question->votes }} </span>
+                        <button class="" onclick="showLoginModal()">
+                            <ion-icon id="" class="notvoted" name="caret-down"></ion-icon>
+                        </button>
+                    @endauth
+                </div>
+
                 <div class="question-description"> 
                     <ul>
                         <li> {{ $question->creator->name }} asked {{ calculateTimePassed($question->create_date) }}</li>
@@ -44,28 +56,25 @@
                         <li> Viewed {{ $question->nr_views }} times </li>
                     </ul>
                     <p>
-                    {{ $question->latest_content() }}
+                        {{ $question->latest_content() }}
                     </p>
                 </div>
-
-                
-                
             </div>
         </div>
         <div id="answerFormContainer" class="answerFormContainer" style="display: none;">
-            <form action="{{ route('store_answer') }}" method="POST">
-                @csrf
-                <div class="form-group">
-                    <label for="content">Answer <span>*</span></label>
-                    <input type="hidden" name="userId" id="userId" value="{{ $user->id }}">
-                    <input type="hidden" name="questionId" id="questionId" value="{{ $question->id }}">
-                    <textarea name="content" id="content" class="form-control" required></textarea>
-                </div>
-
-                
-
-                <button type="submit" class="btn btn-primary">Post Answer</button>
-            </form>
+            @auth
+                <form action="{{ route('store_answer') }}" method="POST">
+                    @csrf
+                    <div class="form-group">
+                        <label for="content">Answer <span>*</span></label>
+                        <input type="hidden" name="userId" id="userId" value="{{ $user->id }}">
+                        <input type="hidden" name="questionId" id="questionId" value="{{ $question->id }}">
+                        <textarea name="content" id="content" class="form-control" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Post Answer</button>
+                </form>
+            @else
+            @endauth
         </div>
         @if ($question->answers->isNotEmpty())
             <div class="top-answer">
@@ -76,13 +85,6 @@
 
                 <div class="answer-details">
                     <div class="vote-btns">
-                        <!-- <button class="up-vote">
-                            <ion-icon name="caret-up"></ion-icon>
-                        </button>
-                        <span>{{ $topAnswer->votes }}</span>
-                        <button class="down-vote">
-                            <ion-icon name="caret-down"></ion-icon>
-                        </button> -->
                     </div>
                     <div class="answer-content"> 
                         <div>
@@ -127,13 +129,6 @@
                     @foreach ($question->answers->where('id', '!=', $topAnswer->id) as $otherAnswer)
                         <div class="answer-details">
                             <div class="vote-btns">
-                                <!-- <button class="up-vote">
-                                    <ion-icon name="caret-up"></ion-icon>
-                                </button>
-                                <span>{{ $otherAnswer->votes }}</span>
-                                <button class="down-vote">
-                                    <ion-icon name="caret-down"></ion-icon>
-                                </button>-->
                             </div>
                             <div class="answer-content"> 
                                 <div>
@@ -191,6 +186,21 @@
             <h2>No answers for this question yet.</h2>
         </div>
     @endif
+
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Authentication required</h2>
+            <p>Please log in to ask a question.</p>
+            <div class="loginModalButtons">
+                <a href="{{ route('register') }}">
+                    <button class="sign-up-btn-modal">Sign Up</button></a>
+                <a href="{{ route('login') }}">
+                    <button class="sign-in-btn-modal">Sign In</button></a>
+            </div>
+        </div>
+    </div>
+    
     </section>
 
     <script>
@@ -198,7 +208,19 @@
             var answerFormContainer = document.getElementById('answerFormContainer');
             answerFormContainer.style.display = (answerFormContainer.style.display === 'none' || answerFormContainer.style.display === '') ? 'block' : 'none';
         }
+
+        function showLoginModal() {
+            document.getElementById('loginModal').style.display = 'block';
+
+            document.querySelectorAll('.close').forEach(function (closeButton) {
+                closeButton.addEventListener('click', function () {
+                    document.getElementById('loginModal').style.display = 'none';
+                });
+            });
+        }
     </script>
+
+
 @endsection
 
 
