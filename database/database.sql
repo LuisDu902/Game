@@ -101,24 +101,24 @@ CREATE TABLE question (
   title VARCHAR(256) NOT NULL,
   is_solved BOOLEAN NOT NULL DEFAULT False,
   is_public BOOLEAN NOT NULL DEFAULT True,
-  nr_views INTEGER NOT NULL CHECK (nr_views >= 0),
-  votes INTEGER NOT NULL,
+  nr_views INTEGER NOT NULL CHECK (nr_views >= 0) DEFAULT 0,
+  votes INTEGER NOT NULL DEFAULT 0,
   game_id INTEGER REFERENCES game(id)
 );
 
 CREATE TABLE answer (
   id SERIAL PRIMARY KEY,
   user_id INTEGER NOT NULL REFERENCES users(id),
-  question_id INTEGER NOT NULL REFERENCES question(id),
+  question_id INTEGER NOT NULL REFERENCES question(id) ON DELETE CASCADE,
   is_public BOOLEAN NOT NULL DEFAULT True,
   top_answer BOOLEAN NOT NULL DEFAULT False,
-  votes INTEGER NOT NULL
+  votes INTEGER NOT NULL DEFAULT 0
 );
 
 CREATE TABLE comment (
   id SERIAL PRIMARY KEY,
   user_id INTEGER NOT NULL REFERENCES users(id),
-  answer_id INTEGER NOT NULL REFERENCES answer(id),
+  answer_id INTEGER NOT NULL REFERENCES answer(id) ON DELETE CASCADE,
   is_public BOOLEAN NOT NULL DEFAULT True
 );
 
@@ -128,8 +128,8 @@ CREATE TABLE vote (
   date TIMESTAMP NOT NULL CHECK (date <= now()),
   reaction BOOLEAN NOT NULL,
   vote_type Vote_type NOT NULL,
-  answer_id INTEGER REFERENCES answer(id),
-  question_id INTEGER REFERENCES question(id),
+  answer_id INTEGER REFERENCES answer(id) ON DELETE CASCADE,
+  question_id INTEGER REFERENCES question(id) ON DELETE CASCADE,
   CHECK ((vote_type = 'Question_vote' AND question_id IS NOT NULL AND answer_id IS NULL)
   OR (vote_type = 'Answer_vote' AND answer_id IS NOT NULL AND question_id IS NULL))
 );
@@ -209,10 +209,9 @@ CREATE TABLE question_tag (
   PRIMARY KEY (question_id, tag_id)
 );
 
-
--- #######################################################################################################
--- ############################################# TRIGGERS ################################################
--- #######################################################################################################
+-----------
+-- Create triggers
+-----------
 
 --Trigger 1
 
@@ -235,7 +234,31 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER update_question_vote_count_trigger
 AFTER INSERT ON vote
 FOR EACH ROW
+WHEN (NEW.vote_type = 'Question_vote' AND NEW.question_id IS NOT NULL)
 EXECUTE FUNCTION update_question_vote_count_trigger_function();
+
+
+CREATE OR REPLACE FUNCTION update_answer_vote_count_trigger_function()
+RETURNS TRIGGER AS $$
+BEGIN
+  IF NEW.reaction = TRUE THEN
+    UPDATE answer
+    SET votes = votes + 1
+    WHERE id = NEW.answer_id;
+  ELSE
+    UPDATE answer
+    SET votes = votes - 1
+    WHERE id = NEW.answer_id;
+  END IF;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER update_answer_vote_count_trigger
+AFTER INSERT ON vote
+FOR EACH ROW
+WHEN (NEW.vote_type = 'Answer_vote' AND NEW.answer_id IS NOT NULL)
+EXECUTE FUNCTION update_answer_vote_count_trigger_function();
 
 
 --Trigger 2
@@ -265,9 +288,7 @@ FOR EACH ROW
 EXECUTE FUNCTION prevent_self_upvote_trigger_function();
 
 
-
-
----Trigger 3  (Ainda não funciona bem)
+---Trigger 3  
 
 CREATE OR REPLACE FUNCTION delete_question_cascade_votes_trigger_function()
 RETURNS TRIGGER AS $$
@@ -283,10 +304,8 @@ AFTER DELETE ON question
 FOR EACH ROW
 EXECUTE FUNCTION delete_question_cascade_votes_trigger_function();
 
-
-
-
 ---Trigger 5
+
 CREATE OR REPLACE FUNCTION award_badges() RETURNS TRIGGER AS $$
 DECLARE
     user_question_count INTEGER;
@@ -319,7 +338,28 @@ AFTER INSERT ON question
 FOR EACH ROW
 EXECUTE FUNCTION award_badges();
 
+
+CREATE OR REPLACE FUNCTION update_question_privacy_on_ban()
+RETURNS TRIGGER AS $$
+BEGIN
+  IF NEW.is_banned = TRUE THEN
+    UPDATE question
+    SET is_public = FALSE
+    WHERE user_id = NEW.id;
+  END IF;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_update_question_privacy_on_ban
+AFTER UPDATE OF is_banned ON users
+FOR EACH ROW
+EXECUTE FUNCTION update_question_privacy_on_ban();
+
+      
+
 --Trigger 6
+
 CREATE OR REPLACE FUNCTION update_user_rank() RETURNS TRIGGER AS $$
 DECLARE
     user_likes INTEGER;
@@ -371,7 +411,6 @@ FOR EACH ROW
 EXECUTE FUNCTION send_answer_notification();
 
 
-
 --Trigger 9
 
 --A user cannot vote, answer nor comment on posts that are not public.
@@ -395,7 +434,6 @@ EXECUTE FUNCTION prevent_vote_on_private_question_trigger_function();
 
 
 --Trigger 10
-
 
 CREATE OR REPLACE FUNCTION prevent_answer_on_private_question_trigger_function()
 RETURNS TRIGGER AS $$
@@ -435,10 +473,9 @@ BEFORE INSERT ON report
 FOR EACH ROW
 EXECUTE FUNCTION prevent_self_reporting_trigger_function();
 
--- #######################################################################################################
--- ############################################ Transactions #############################################
--- #######################################################################################################
-
+-----------
+-- Create transactions
+-----------
 
 -- Insert the content for the question only if the question exists
 CREATE OR REPLACE FUNCTION AddQuestionContentVersion(question_id INT, content_id INT) RETURNS VOID AS $$
@@ -493,10 +530,35 @@ $$ LANGUAGE plpgsql;
 
 
 
+CREATE OR REPLACE FUNCTION update_question_on_insert()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.content_type = 'Answer_content' THEN
+        UPDATE question
+        SET title = (SELECT title FROM question WHERE id = (SELECT question_id FROM answer WHERE id = NEW.answer_id))
+        WHERE id = (SELECT question_id FROM answer WHERE id = NEW.answer_id);
+    END IF;
+    IF NEW.content_type = 'Question_content' THEN
+        UPDATE question
+        SET title = (SELECT title FROM question WHERE id = NEW.question_id)
+        WHERE id = NEW.question_id;
+    END IF;
+     IF NEW.content_type = 'Comment_content' THEN
+        UPDATE question
+        SET title = (SELECT title FROM question WHERE id = (SELECT question_id FROM answer JOIN comment ON answer.id = comment.answer_id WHERE comment.id = NEW.comment_id))
+        WHERE id = (SELECT question_id FROM answer JOIN comment ON answer.id = comment.answer_id WHERE comment.id = NEW.comment_id);
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
 
--- #######################################################################################################
--- ############################################# INDEXES ################################################
--- #######################################################################################################
+CREATE TRIGGER update_question_trigger
+AFTER INSERT ON version_content
+FOR EACH ROW
+EXECUTE FUNCTION update_question_on_insert();
+
+
+
 
 
 -----------
@@ -520,12 +582,41 @@ ADD COLUMN tsvectors TSVECTOR;
 CREATE FUNCTION question_search_update() RETURNS TRIGGER AS $$ 
 BEGIN 
   IF TG_OP = 'INSERT' THEN 
-    NEW.tsvectors = setweight(to_tsvector('english', NEW.title), 'A');
+    NEW.tsvectors = (
+        setweight(to_tsvector('english', COALESCE(NEW.title, '')), 'A') || 
+        setweight(to_tsvector('english', COALESCE(
+          (SELECT content FROM version_content WHERE question_id = NEW.id ORDER BY date DESC LIMIT 1), '')), 'B')  
+      );
   END IF;
   IF TG_OP = 'UPDATE' THEN 
-    IF (NEW.title <> OLD.title) THEN 
-      NEW.tsvectors = setweight(to_tsvector('english', NEW.title), 'A');
-    END IF;
+    NEW.tsvectors = (
+      setweight(to_tsvector('english', NEW.title), 'A') || 
+      setweight(to_tsvector('english', COALESCE((SELECT content FROM version_content WHERE question_id = NEW.id ORDER BY date DESC LIMIT 1), '')), 'B') || 
+       setweight(to_tsvector('english', COALESCE(
+          (SELECT STRING_AGG(latest_content.content, ' ')
+          FROM answer
+          JOIN (
+              SELECT answer_id, MAX(date) AS max_date
+              FROM version_content
+              WHERE content_type = 'Answer_content'
+              GROUP BY answer_id
+          ) AS latest_date ON answer.id = latest_date.answer_id
+          JOIN version_content AS latest_content ON latest_date.answer_id = latest_content.answer_id
+              AND latest_date.max_date = latest_content.date WHERE answer.question_id = NEW.id), '')), 'C') ||
+         setweight(to_tsvector('english', COALESCE(
+            (SELECT STRING_AGG(latest_content.content, ' ')
+            FROM comment
+            JOIN (
+                SELECT comment_id, MAX(date) AS max_date
+                FROM version_content
+                WHERE content_type = 'Comment_content'
+                GROUP BY comment_id
+            ) AS latest_date ON comment.id = latest_date.comment_id
+            JOIN version_content AS latest_content ON latest_date.comment_id = latest_content.comment_id
+                AND latest_date.max_date = latest_content.date 
+                WHERE comment.answer_id IN 
+                (SELECT id FROM answer WHERE question_id = NEW.id)), '')), 'D')
+    );
   END IF;
   RETURN NEW;
 END $$ 
@@ -540,33 +631,7 @@ CREATE TRIGGER question_search_update
 -- Finally, create a GIN index for ts_vectors.
 CREATE INDEX search_question ON question USING GIN (tsvectors);
 
--- Index 5
-ALTER TABLE version_content
-ADD COLUMN tsvectors TSVECTOR;
 
--- Create a function to automatically update ts_vectors.
-CREATE FUNCTION content_search_update() RETURNS TRIGGER AS $$ 
-BEGIN 
-  IF TG_OP = 'INSERT' THEN 
-    NEW.tsvectors = setweight(to_tsvector('english', NEW.content), 'A');
-  END IF;
-  IF TG_OP = 'UPDATE' THEN 
-    IF (NEW.title <> OLD.title) THEN 
-      NEW.tsvectors = setweight(to_tsvector('english', NEW.content), 'A');
-    END IF;
-  END IF;
-  RETURN NEW;
-END $$ 
-LANGUAGE plpgsql;
-
--- Create a trigger before insert or update on content.
-CREATE TRIGGER content_search_update 
-  BEFORE INSERT OR UPDATE ON version_content 
-  FOR EACH ROW 
-  EXECUTE PROCEDURE content_search_update();
-
--- Finally, create a GIN index for ts_vectors.
-CREATE INDEX search_content ON version_content USING GIN (tsvectors);
 
 -- Index 6
 ALTER TABLE game
@@ -857,109 +922,109 @@ INSERT INTO game(name, description, nr_members, game_category_id) VALUES
 ('Destiny', 'Developed by Bungie, Destiny is a hybrid MMO and first-person shooter set in a sci-fi universe. Players can participate in cooperative and competitive gameplay, explore various planets, complete raids, and engage in intense PvP battles. The game offers a mix of PvE and PvP experiences.', 0, 10),
 ('The Division 2', 'Developed by Ubisoft Massive, Tom Clancys The Division 2 is an online action RPG set in a post-apocalyptic Washington D.C. Players can team up with others to explore the open world, complete missions, engage in PvP combat, and participate in endgame content, including raids and strongholds.', 0, 10);
 
-INSERT INTO question(user_id, create_date, title, is_solved, is_public, nr_views, votes, game_id) VALUES
-(99, '2022-10-01 14:30:00', 'Pokemon GO connection issue', TRUE, TRUE, 100, 0, 1),
-(98, '2022-10-02 14:30:00', 'Game client not launching', TRUE, TRUE, 120, 5, 1),
-(97, '2022-10-03 14:30:00', 'CS:GO frame rate drop', TRUE, TRUE, 90, 15, 1),
-(96, '2022-10-04 14:30:00', 'Connection issues', FALSE, TRUE, 60, 8, 1),
-(95, '2022-10-05 14:30:00', 'Fortnite multiplayer problem', TRUE, TRUE, 110, 12, 1),
-(94, '2022-10-06 14:30:00', 'Super Mario not loading', FALSE, TRUE, 80, 6, 1),
-(93, '2022-10-07 14:30:00', 'Overwatch lagging', TRUE, TRUE, 95, 18, 1),
-(92, '2022-10-08 14:30:00', 'Crash when starting game', FALSE, TRUE, 70, 14, 1),
-(91, '2022-10-09 14:30:00', 'Overwatch server down', TRUE, TRUE, 85, 9, 1),
-(90, '2022-10-10 14:30:00', 'Super Mario Bros. level bug', TRUE, TRUE, 105, 16, 1),
-(89, '2022-10-11 14:30:00', 'Need help with game controls', FALSE, TRUE, 65, 11, 2),
-(88, '2022-10-12 14:30:00', 'Overwatch character balance issue', TRUE, TRUE, 88, 13, 2),
-(87, '2022-10-13 14:30:00', 'Unable to complete a quest', FALSE, TRUE, 72, 7, 2),
-(86, '2022-10-14 14:30:00', 'Pokemon Go gym bug', TRUE, TRUE, 93, 20, 2),
-(85, '2022-10-15 14:30:00', 'CS:GO matchmaking issue', FALSE, TRUE, 78, 11, 2),
-(84, '2022-10-16 14:30:00', 'Super Smash Bros. bug', TRUE, TRUE, 115, 15, 2),
-(83, '2022-10-17 14:30:00', 'Need help with a gameplay strategy', FALSE, TRUE, 82, 9, 2),
-(82, '2022-10-18 14:30:00', 'League of Legends champion bug', TRUE, TRUE, 97, 16, 2),
-(81, '2022-10-19 14:30:00', 'Game of Thrones quest not working', TRUE, TRUE, 68, 12, 2),
-(80, '2022-10-20 14:30:00', 'League of Legends login issue', FALSE, TRUE, 89, 14, 2),
-(79, '2022-10-20 14:30:00', 'Error purchasing in-game currency', TRUE, TRUE, 100, 0, 3),
-(78, '2022-10-20 14:30:00', 'Billing issue', TRUE, TRUE, 120, 5, 3),
-(77, '2022-10-21 14:30:00', 'Gamer tag change', TRUE, TRUE, 90, 15, 3),
-(76, '2022-10-22 14:30:00', 'Payment not going through', FALSE, TRUE, 60, 8, 3),
-(75, '2022-10-23 14:30:00', 'In-game item missing', TRUE, TRUE, 110, 12, 3),
-(74, '2022-10-24 14:30:00', 'Subscription renewal error', FALSE, TRUE, 80, 6, 3),
-(73, '2022-10-25 14:30:00', 'Cannot link payment method to account', TRUE, TRUE, 95, 18, 3),
-(72, '2022-10-26 14:30:00', 'Refund request for accidental purchase', FALSE, TRUE, 70, 14, 3),
-(71, '2022-10-27 14:30:00', 'Account suspension or ban', TRUE, TRUE, 85, 9, 3),
-(70, '2022-10-28 14:30:00', 'Missing rewards from game event', TRUE, TRUE, 105, 16, 3),
-(69, '2022-10-30 14:30:00', 'Request to remove inappropriate player username', FALSE, TRUE, 65, 11, 4),
-(68, '2022-10-30 14:30:00', 'Toxic player in chat', TRUE, TRUE, 88, 13, 4),
-(67, '2022-10-31 14:30:00', 'Community event suggestion', FALSE, TRUE, 72, 7, 4),
-(66, '2022-11-01 14:30:00', 'Reporting inappropriate forum post', TRUE, TRUE, 93, 20, 4),
-(65, '2022-11-02 14:30:00', 'Abusive in-game chat behavior', FALSE, TRUE, 78, 11, 4),
-(64, '2022-11-03 14:30:00', 'Reporting a player for cheating', TRUE, TRUE, 115, 15, 4),
-(63, '2022-11-03 14:30:00', 'Community event feedback', FALSE, TRUE, 82, 9, 4),
-(62, '2022-11-04 14:30:00', 'Inappropriate forum post', TRUE, TRUE, 97, 16, 4),
-(61, '2022-11-05 14:30:00', 'Incorrect information on website', TRUE, TRUE, 68, 12, 4),
-(60, '2022-11-06 14:30:00', 'Esports tournament registration issue', FALSE, TRUE, 89, 14, 4),
-(59, '2022-11-07 14:30:00', 'Setting up team for tournament', FALSE, TRUE, 89, 14, 5),
-(58, '2022-11-08 14:30:00', 'Unable to register for upcoming tournament', FALSE, TRUE, 89, 14, 5),
-(57, '2022-11-09 14:30:00', 'Tournament scheduling conflict', FALSE, TRUE, 89, 14, 5),
-(56, '2022-11-10 14:30:00', 'Rule clarification for tournament', FALSE, TRUE, 89, 14, 5),
-(55, '2022-11-11 14:30:00', 'Discrepancy in tournament results', FALSE, TRUE, 89, 14, 5),
-(54, '2022-11-12 14:30:00', 'Server issues during tournament', FALSE, TRUE, 89, 14, 5),
-(53, '2022-11-13 14:30:00', 'Issue with prize distribution', FALSE, TRUE, 89, 14, 5),
-(52, '2022-11-14 14:30:00', 'Team disqualification from tournament', FALSE, TRUE, 89, 14, 5),
-(51, '2022-11-15 14:30:00', 'Streaming issues during tournamen', FALSE, TRUE, 89, 14, 5),
-(50, '2022-11-16 14:30:00', 'Game crashes every time I try to load it', TRUE, TRUE, 89, 14, 5),
-(49, '2022-11-17 14:30:00', 'Game freezes during gameplay', FALSE, TRUE, 89, 14, 6),
-(48, '2022-11-18 14:30:00', 'Game lags frequently', FALSE, TRUE, 89, 14, 6),
-(47, '2022-11-19 14:30:00', 'Audio issue in game', FALSE, TRUE, 89, 14, 6),
-(46, '2022-11-19 14:30:00', 'Graphic bug in game', FALSE, TRUE, 89, 14, 6),
-(45, '2022-11-19 14:30:00', 'Request for new game feature', FALSE, TRUE, 89, 14, 6),
-(44, '2022-12-01 14:30:00', 'Game balance issue', FALSE, TRUE, 89, 14, 6),
-(43, '2022-12-02 14:30:00', 'Request for game optimization', FALSE, TRUE, 89, 14, 6),
-(42, '2022-12-03 14:30:00', 'Texture issue in game', FALSE, TRUE, 89, 14, 6),
-(41, '2022-12-04 14:30:00', 'Bug in game AI', FALSE, TRUE, 89, 14, 6),
-(40, '2022-12-05 14:30:00', 'Request for a new game mode', FALSE, TRUE, 89, 14, 6),
-(39, '2022-12-06 14:30:00', 'Suggestions for game improvement', FALSE, TRUE, 89, 14, 7),
-(38, '2022-12-07 14:30:00', 'In-game reward system is not motivating enough', FALSE, TRUE, 89, 14, 7),
-(37, '2022-12-08 14:30:00', 'Level progression too slow', FALSE, TRUE, 89, 14, 7),
-(36, '2022-12-09 14:30:00', 'Certain weapons or abilities are overpowered', FALSE, TRUE, 89, 14, 7),
-(35, '2022-12-10 14:30:00', 'Need more diverse character designs', FALSE, TRUE, 89, 14, 7),
-(34, '2022-12-11 14:30:00', 'Tutorial is confusing and unclear', FALSE, TRUE, 89, 14, 7),
-(33, '2022-12-12 14:30:00', 'Map design is too simple', FALSE, TRUE, 89, 14, 7),
-(32, '2022-12-13 14:30:00', 'Game character balance issue', TRUE, TRUE, 89, 14, 7),
-(31, '2022-12-14 14:30:00', 'Request for a new item', FALSE, TRUE, 89, 14, 7),
-(30, '2022-12-15 14:30:00', 'Promotion not applying at checkout', FALSE, TRUE, 89, 14, 7),
-(29, '2022-12-17 14:30:00', 'Event page not loading', FALSE, TRUE, 89, 14, 8),
-(28, '2022-12-18 14:30:00', 'Incorrect description on promotional email', FALSE, TRUE, 89, 14, 8),
-(27, '2022-12-19 14:30:00', 'Missed out on limited-time offer', FALSE, TRUE, 89, 14, 8),
-(26, '2022-12-21 14:30:00', 'Need help promoting my Twitch channel', FALSE, TRUE, 89, 14, 8),
-(25, '2022-12-13 14:30:00', 'Promotional video not playing', FALSE, TRUE, 89, 14, 8),
-(24, '2022-12-23 14:30:00', 'Suggestions for promoting the game on social media', FALSE, TRUE, 89, 14, 8),
-(23, '2022-12-14 14:30:00', 'Promotional code not working', FALSE, TRUE, 89, 14, 8),
-(22, '2022-12-25 14:30:00', 'Request for a new game trailer', FALSE, TRUE, 89, 14, 8),
-(21, '2022-12-29 14:30:00', 'Complaint about misleading advertisement', FALSE, TRUE, 89, 14, 8);
+INSERT INTO question(user_id, create_date, title, is_solved, is_public, nr_views, game_id) VALUES
+(99, '2022-10-01 14:30:00', 'Pokemon GO connection issue', TRUE, TRUE, 100, 1),
+(98, '2022-10-02 14:30:00', 'Game client not launching', TRUE, TRUE, 120, 1),
+(97, '2022-10-03 14:30:00', 'CS:GO frame rate drop', TRUE, TRUE, 90, 1),
+(96, '2022-10-04 14:30:00', 'Connection issues', FALSE, TRUE, 60, 1),
+(95, '2022-10-05 14:30:00', 'Fortnite multiplayer problem', TRUE, TRUE, 110, 1),
+(94, '2022-10-06 14:30:00', 'Super Mario not loading', FALSE, TRUE, 80, 1),
+(93, '2022-10-07 14:30:00', 'Overwatch lagging', TRUE, TRUE, 95, 1),
+(92, '2022-10-08 14:30:00', 'Crash when starting game', FALSE, TRUE, 70, 1),
+(91, '2022-10-09 14:30:00', 'Overwatch server down', TRUE, TRUE, 85, 1),
+(90, '2022-10-10 14:30:00', 'Super Mario Bros. level bug', TRUE, TRUE, 105, 1),
+(89, '2022-10-11 14:30:00', 'Need help with game controls', FALSE, TRUE, 65, 2),
+(88, '2022-10-12 14:30:00', 'Overwatch character balance issue', TRUE, TRUE, 88, 2),
+(87, '2022-10-13 14:30:00', 'Unable to complete a quest', FALSE, TRUE, 72, 2),
+(86, '2022-10-14 14:30:00', 'Pokemon Go gym bug', TRUE, TRUE, 93, 2),
+(85, '2022-10-15 14:30:00', 'CS:GO matchmaking issue', FALSE, TRUE, 78, 2),
+(84, '2022-10-16 14:30:00', 'Super Smash Bros. bug', TRUE, TRUE, 115, 2),
+(83, '2022-10-17 14:30:00', 'Need help with a gameplay strategy', FALSE, TRUE, 82, 2),
+(82, '2022-10-18 14:30:00', 'League of Legends champion bug', TRUE, TRUE, 97, 2),
+(81, '2022-10-19 14:30:00', 'Game of Thrones quest not working', TRUE, TRUE, 68, 2),
+(80, '2022-10-20 14:30:00', 'League of Legends login issue', FALSE, TRUE, 89, 2),
+(79, '2022-10-20 14:30:00', 'Error purchasing in-game currency', TRUE, TRUE, 100, 3),
+(78, '2022-10-20 14:30:00', 'Billing issue', TRUE, TRUE, 120, 3),
+(77, '2022-10-21 14:30:00', 'Gamer tag change', TRUE, TRUE, 90, 3),
+(76, '2022-10-22 14:30:00', 'Payment not going through', FALSE, TRUE, 60, 3),
+(75, '2022-10-23 14:30:00', 'In-game item missing', TRUE, TRUE, 110, 3),
+(74, '2022-10-24 14:30:00', 'Subscription renewal error', FALSE, TRUE, 80, 3),
+(73, '2022-10-25 14:30:00', 'Cannot link payment method to account', TRUE, TRUE, 95, 3),
+(72, '2022-10-26 14:30:00', 'Refund request for accidental purchase', FALSE, TRUE, 70, 3),
+(71, '2022-10-27 14:30:00', 'Account suspension or ban', TRUE, TRUE, 85, 3),
+(70, '2022-10-28 14:30:00', 'Missing rewards from game event', TRUE, TRUE, 105, 3),
+(69, '2022-10-30 14:30:00', 'Request to remove inappropriate player username', FALSE, TRUE, 65, 4),
+(68, '2022-10-30 14:30:00', 'Toxic player in chat', TRUE, TRUE, 88, 4),
+(67, '2022-10-31 14:30:00', 'Community event suggestion', FALSE, TRUE, 72, 4),
+(66, '2022-11-01 14:30:00', 'Reporting inappropriate forum post', TRUE, TRUE, 93, 4),
+(65, '2022-11-02 14:30:00', 'Abusive in-game chat behavior', FALSE, TRUE, 78, 4),
+(64, '2022-11-03 14:30:00', 'Reporting a player for cheating', TRUE, TRUE, 115, 4),
+(63, '2022-11-03 14:30:00', 'Community event feedback', FALSE, TRUE, 82, 4),
+(62, '2022-11-04 14:30:00', 'Inappropriate forum post', TRUE, TRUE, 97, 4),
+(61, '2022-11-05 14:30:00', 'Incorrect information on website', TRUE, TRUE, 68, 4),
+(60, '2022-11-06 14:30:00', 'Esports tournament registration issue', FALSE, TRUE, 89, 4),
+(59, '2022-11-07 14:30:00', 'Setting up team for tournament', FALSE, TRUE, 89, 5),
+(58, '2022-11-08 14:30:00', 'Unable to register for upcoming tournament', FALSE, TRUE, 89, 5),
+(57, '2022-11-09 14:30:00', 'Tournament scheduling conflict', FALSE, TRUE, 89, 5),
+(56, '2022-11-10 14:30:00', 'Rule clarification for tournament', FALSE, TRUE, 89, 5),
+(55, '2022-11-11 14:30:00', 'Discrepancy in tournament results', FALSE, TRUE, 89, 5),
+(54, '2022-11-12 14:30:00', 'Server issues during tournament', FALSE, TRUE, 89, 5),
+(53, '2022-11-13 14:30:00', 'Issue with prize distribution', FALSE, TRUE, 89, 5),
+(52, '2022-11-14 14:30:00', 'Team disqualification from tournament', FALSE, TRUE, 89, 5),
+(51, '2022-11-15 14:30:00', 'Streaming issues during tournamen', FALSE, TRUE, 89, 5),
+(50, '2022-11-16 14:30:00', 'Game crashes every time I try to load it', TRUE, TRUE, 89, 5),
+(49, '2022-11-17 14:30:00', 'Game freezes during gameplay', FALSE, TRUE, 89, 6),
+(48, '2022-11-18 14:30:00', 'Game lags frequently', FALSE, TRUE, 89, 6),
+(47, '2022-11-19 14:30:00', 'Audio issue in game', FALSE, TRUE, 89, 6),
+(46, '2022-11-19 14:30:00', 'Graphic bug in game', FALSE, TRUE, 89, 6),
+(45, '2022-11-19 14:30:00', 'Request for new game feature', FALSE, TRUE, 89, 6),
+(44, '2022-12-01 14:30:00', 'Game balance issue', FALSE, TRUE, 89, 6),
+(43, '2022-12-02 14:30:00', 'Request for game optimization', FALSE, TRUE, 89, 6),
+(42, '2022-12-03 14:30:00', 'Texture issue in game', FALSE, TRUE, 89, 6),
+(41, '2022-12-04 14:30:00', 'Bug in game AI', FALSE, TRUE, 89, 6),
+(40, '2022-12-05 14:30:00', 'Request for a new game mode', FALSE, TRUE, 89, 6),
+(39, '2022-12-06 14:30:00', 'Suggestions for game improvement', FALSE, TRUE, 89, 7),
+(38, '2022-12-07 14:30:00', 'In-game reward system is not motivating enough', FALSE, TRUE, 89, 7),
+(37, '2022-12-08 14:30:00', 'Level progression too slow', FALSE, TRUE, 89, 7),
+(36, '2022-12-09 14:30:00', 'Certain weapons or abilities are overpowered', FALSE, TRUE, 89, 7),
+(35, '2022-12-10 14:30:00', 'Need more diverse character designs', FALSE, TRUE, 89, 7),
+(34, '2022-12-11 14:30:00', 'Tutorial is confusing and unclear', FALSE, TRUE, 89, 7),
+(33, '2022-12-12 14:30:00', 'Map design is too simple', FALSE, TRUE, 89, 7),
+(32, '2022-12-13 14:30:00', 'Game character balance issue', TRUE, TRUE, 89, 7),
+(31, '2022-12-14 14:30:00', 'Request for a new item', FALSE, TRUE, 89, 7),
+(30, '2022-12-15 14:30:00', 'Promotion not applying at checkout', FALSE, TRUE, 89, 7),
+(29, '2022-12-17 14:30:00', 'Event page not loading', FALSE, TRUE, 89,  8),
+(28, '2022-12-18 14:30:00', 'Incorrect description on promotional email', FALSE, TRUE, 89,  8),
+(27, '2022-12-19 14:30:00', 'Missed out on limited-time offer', FALSE, TRUE, 89,  8),
+(26, '2022-12-21 14:30:00', 'Need help promoting my Twitch channel', FALSE, TRUE, 89,  8),
+(25, '2022-12-13 14:30:00', 'Promotional video not playing', FALSE, TRUE, 89,  8),
+(24, '2022-12-23 14:30:00', 'Suggestions for promoting the game on social media', FALSE, TRUE, 89,  8),
+(23, '2022-12-14 14:30:00', 'Promotional code not working', FALSE, TRUE, 89,  8),
+(22, '2022-12-25 14:30:00', 'Request for a new game trailer', FALSE, TRUE, 89,  8),
+(21, '2022-12-29 14:30:00', 'Complaint about misleading advertisement', FALSE, TRUE, 89, 8);
 
 
-INSERT INTO answer(user_id, question_id, is_public, top_answer, votes) VALUES
-(1, 1, TRUE, FALSE, 2),
-(2, 2, TRUE, FALSE, 2),
-(3, 3, TRUE, FALSE, 2),
-(4, 4, TRUE, FALSE, 2),
-(5, 5, TRUE, FALSE, 2),
-(6, 6, TRUE, FALSE, 2),
-(7, 7, TRUE, FALSE, 2),
-(8, 8, TRUE, FALSE, 2),
-(9, 9, TRUE, FALSE, 2),
-(10, 10, TRUE, FALSE, 2),
-(11, 11, TRUE, FALSE, 2),
-(12, 12, TRUE, FALSE, 2),
-(13, 13, TRUE, FALSE, 2),
-(14, 14, TRUE, FALSE, 2),
-(15, 15, TRUE, FALSE, 2),
-(16, 16, TRUE, FALSE, 2),
-(17, 17, TRUE, FALSE, 2),
-(18, 18, TRUE, FALSE, 2),
-(19, 19, TRUE, FALSE, 2),
-(20, 20, TRUE, FALSE, 2);
+INSERT INTO answer(user_id, question_id, is_public, top_answer) VALUES
+(1, 1, TRUE, FALSE),
+(2, 1, TRUE, FALSE),
+(3, 3, TRUE, FALSE),
+(4, 4, TRUE, FALSE),
+(5, 5, TRUE, FALSE),
+(6, 6, TRUE, FALSE),
+(7, 7, TRUE, FALSE),
+(8, 8, TRUE, FALSE),
+(9, 9, TRUE, FALSE),
+(10, 10, TRUE, FALSE),
+(11, 11, TRUE, FALSE),
+(12, 12, TRUE, FALSE),
+(13, 13, TRUE, FALSE),
+(14, 14, TRUE, FALSE),
+(15, 15, TRUE, FALSE),
+(16, 16, TRUE, FALSE),
+(17, 17, TRUE, FALSE),
+(18, 18, TRUE, FALSE),
+(19, 19, TRUE, FALSE),
+(20, 20, TRUE, FALSE);
 
 INSERT INTO comment(user_id, answer_id, is_public) VALUES
 (99, 1, TRUE),

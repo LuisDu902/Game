@@ -11,10 +11,11 @@
                     Categories</a></li>
         </ul>
 
-        <form class="search-box">
+        <form class="search-box" method="POST" action="{{ route('questions') }}">
+            @csrf
             <input type="text" id="search-input" name="query"
                 placeholder="Search for posts...">
-            <button type="submit" id="search-button">
+            <button type="submit" id="search-button" >
                 <ion-icon name="search"></ion-icon>
             </button>
         </form>
