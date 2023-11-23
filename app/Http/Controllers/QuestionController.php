@@ -127,6 +127,13 @@ class QuestionController extends Controller
         $question = Question::find($id);
         $this->authorize('delete', $question);
 
+        $answers = $question->answers;
+
+
+        for($i=0; $i<count($answers); $i++){
+            $answers[$i]->delete();
+        }
+
         $question->delete();
 
         return response()->json(["success" => true], 200);
