@@ -34,11 +34,12 @@ class Answer extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function comments(): HasMany
+
+    public function comments()
     {
-        return $this->hasMany(Comment::class);
+        return $this->hasMany(Comment::class, 'answer_id');
     }
-    
+
 
     /**
      * Get the latest answer content.
@@ -52,6 +53,7 @@ class Answer extends Model
         ->limit(1)
         ->value('content');
     }
+
 
     public function create_date()
     {
@@ -84,4 +86,35 @@ class Answer extends Model
         $modifiedAt = $this->last_date();
         return $now->diffForHumans($modifiedAt, true);
     }
+
+    public static function createAnswerWithContent($content, $questionId, $userId){
+        $answer = new static;
+
+        $answer->user_id = $userId;
+        $answer->question_id = $questionId;
+        $answer->top_answer = false;
+        $answer->is_public = true; 
+        $answer->votes = 0;
+
+        $answer->save();
+
+        $answerId = $answer->id;
+    
+
+
+        DB::table('version_content')->insert([
+            'date' => now(),
+            'content' => $content,
+            'content_type' => 'Answer_content',
+            'question_id' => null,
+            'answer_id' => $answerId,
+            'comment_id' => null,
+        ]);
+
+
+        return $answer;
+    }
+
+
 }
+

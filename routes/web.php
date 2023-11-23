@@ -57,7 +57,8 @@ Route::controller(QuestionController::class)->group(function () {
     Route::get('/questions/new-question', [QuestionController::class, 'create'])->name('questions.create');
     Route::post('/questions/new-question', [QuestionController::class, 'store'])->name('questions.store');
     Route::get('/questions/new-question', [GameController::class, 'index'])->name('questions.create');
-   
+    Route::get('/questions/{question}', [QuestionController::class, 'show']);
+    Route::get('/questions/{id}', 'show')->name('question');    
 });
 
 // Game Category
@@ -78,7 +79,16 @@ Route::controller(UserController::class)->group(function () {
     Route::post('/api/users/{id}/edit', 'edit');
 });
 
+
 // Question API
 Route::controller(QuestionController::class)->group(function () {
     Route::get('/api/questions', 'list'); 
+    Route::post('/api/questions/{id}/vote', 'vote');
+    Route::post('/api/questions/{id}/unvote', 'unvote'); 
+});
+
+// Answers
+Route::controller(QuestionController::class)->group(function () {
+
+    Route::post('/questions/answer', [QuestionController::class, 'store_answer'])->name('store_answer');
 });

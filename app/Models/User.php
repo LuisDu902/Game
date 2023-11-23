@@ -68,4 +68,28 @@ class User extends Authenticatable
     public function answers() : HasMany {
         return $this->hasMany(Answer::class);
     }
+
+
+     public function hasVoted($questionId)
+    {
+        return DB::table('vote')
+            ->where('vote_type', 'Question_vote')
+            ->where('question_id', $questionId)
+            ->where('user_id', $this->id)
+            
+            ->exists();   
+    }
+
+    public function voteType($questionId)
+    {
+        $vote = DB::table('vote')
+            ->where('vote_type', 'Question_vote')
+            ->where('question_id', $questionId)
+            ->where('user_id', $this->id)
+            ->first();
+    
+    
+        return $vote ? $vote->reaction : null;
+    }
+    
 }

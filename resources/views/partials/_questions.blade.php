@@ -7,7 +7,9 @@
                 <span>{{ $question->nr_views }} views</span>
             </div>
             <div class="q-content">
-                <h2>{{ $question->title }}</h2>
+                <a href="{{ route('question', ['id' => $question->id]) }}">
+                    <h2>{{ $question->title }}</h2>
+                </a>
                 @if (strlen($question->latest_content()) >= 300)
                     <p>{{ substr($question->latest_content(), 0, 300) }}...</p>
                 @else
