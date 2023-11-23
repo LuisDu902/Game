@@ -21,7 +21,6 @@ class AnswerController extends Controller
             'questionId' => 'required',
             'userId' => 'required',
         ]);
-
         $answer = Answer::createAnswerWithContent(
             $request->input('content'),
             $request->input('questionId'),

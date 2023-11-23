@@ -9,7 +9,8 @@
         <li>id</li>
     </ul>
 
-    <section class="question-detail-section" data-id="{{$question->id}}" {{ Auth::check() ? 'data-user="Auth::id()" data-username= "Auth::user()->username"' : ''}}>
+    <section class="question-detail-section" data-id="{{$question->id}}" {{ Auth::check() ? 'data-user=' . Auth::id() . ' data-username=' . Auth::user()->username . '' : '' }}
+        >
         <div class="question-detail">
             <div class="question-title">
                 <img src="../images/user.png" alt="user">

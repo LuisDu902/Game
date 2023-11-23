@@ -96,7 +96,7 @@ class Answer extends Model
     public static function createAnswerWithContent($content, $questionId, $userId){
         $answer = new static;
 
-        $answer->user_id = $userId;
+        $answer->user_id = (int)$userId;
         $answer->question_id = $questionId;
         $answer->top_answer = false;
         $answer->is_public = true; 
@@ -122,4 +122,3 @@ class Answer extends Model
 
 
 }
-
