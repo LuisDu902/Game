@@ -62,14 +62,6 @@ class Answer extends Model
     
 
 
-        DB::table('answer')->insert([
-            'user_id' => $userId,
-            'question_id' => $questionId,
-            'is_public' => true,
-            'top_answer' => false,
-            'votes' => 0,
-        ]);
-
         DB::table('version_content')->insert([
             'date' => now(),
             'content' => $content,
@@ -81,6 +73,14 @@ class Answer extends Model
 
 
         return $answer;
+    }
+
+    /**
+     * Get the comments for the answer.
+     */
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, 'answer_id');
     }
 
 }

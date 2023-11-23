@@ -142,7 +142,6 @@
 .answer-content>div {
     display: flex;
     gap: 20px;
-    justify-content: center;
     align-items: center;
 }
 
@@ -231,6 +230,14 @@
     font-weight: 600;
 }
 
+.no-answers h2 {
+    margin-top: 60px;
+    margin-left: 80px;
+    font-size: 40px;
+    font-weight: 600;
+    color: #b5a5ee;
+}
+
 .vote-btns .ionicon, svg{
     color:#7C5BF0 !important;
 }
@@ -313,22 +320,3 @@
     padding: 20px;
     height: 300px;
 }
-
-
-
-.hasvoted{
-    color:white;
-    background-color: #7C5BF0;
-    
-
-}
-.notvoted{
-
-    color: #7C5BF0;
-    background-color: white;
-}
-
-
-
-
-
