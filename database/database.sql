@@ -29,7 +29,11 @@ DROP TABLE IF EXISTS users;
 DROP FUNCTION IF EXISTS content_search_update;
 DROP FUNCTION IF EXISTS game_search_update;
 DROP FUNCTION IF EXISTS question_search_update;
-DROP FUNCTION IF EXISTS user_search_update;
+DROP TRIGGER IF EXISTS user_search_update ON users;
+
+DROP FUNCTION IF EXISTS user_search_update() CASCADE;
+
+DROP INDEX IF EXISTS search_user;
 
 
 -----------
@@ -41,7 +45,7 @@ DROP TYPE IF EXISTS Content_type;
 DROP TYPE IF EXISTS Badge_type;
 DROP TYPE IF EXISTS Notification_type;
 DROP TYPE IF EXISTS Report_type;
-DROP TYPE IF EXISTS Rank;
+DROP TYPE IF EXISTS Rank CASCADE;
 
 -----------
 -- Create types
