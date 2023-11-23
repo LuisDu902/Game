@@ -45,6 +45,14 @@
     cursor: pointer;
 }
 
+.question-description {
+    width: 100%;
+}
+
+.question-description ul {
+    margin-bottom: 0;
+}
+
 .question-detail ul, .answer-content>ul {
     font-size: 16px;
     display: flex;
@@ -329,5 +337,25 @@
 
 .notvoted{
     background-color:white ;
-    color: #6542e6;
+    color: #6D49EB;
+}
+
+.question-input, .question-c, .answer-input {
+    border: 1px solid #e6e7f3;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.question-c {
+    width: 100%;
+    text-align: left;
+    height: 120px;
+   
+}
+
+.edit-answer {
+    border-radius: 10px;
+    background-color: #7C5BF0;
+    padding: 5px 10px;
+    color: white;
 }

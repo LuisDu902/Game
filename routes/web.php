@@ -4,6 +4,7 @@ use App\Http\Controllers\GameCategoryController;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\AnswerController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\LoginController;
@@ -85,17 +86,11 @@ Route::controller(QuestionController::class)->group(function () {
     Route::get('/api/questions', 'list'); 
     Route::post('/api/questions/{id}/vote', 'vote');
     Route::post('/api/questions/{id}/unvote', 'unvote'); 
+    Route::put('/api/questions/{id}/edit', 'edit');
 });
 
 // Answers
-Route::controller(QuestionController::class)->group(function () {
-
-    Route::post('/questions/answer', [QuestionController::class, 'store_answer'])->name('store_answer');
+Route::controller(AnswerController::class)->group(function () {
+    Route::post('/api/answers', 'store');
+    Route::put('/api/answers/{id}/edit', 'edit');
 });
-
-Route::controller(QuestionController::class)->group(function () {
-
-    Route::post('/comments/store', [QuestionController::class, 'store_comment'])->name('store_comment');
-
-});
-

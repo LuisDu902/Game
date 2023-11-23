@@ -59,6 +59,18 @@ class Question extends Model
         ->value('content');
     }
 
+    public function hasTopAnswer(){
+        return $this->answers()->where('top_answer', true)->count() > 0;
+    }
+
+    public function topAnswer(){
+        return $this->answers()->where('top_answer', true)->first();
+    }
+
+    public function otherAnswers(){
+        return $this->answers()->where('top_answer', false);
+    }
+
     public function timeDifference() {
         $now = now();
         $createdAt = $this->create_date;
@@ -90,4 +102,19 @@ class Question extends Model
         return $question;
     }
 
+    public function last_date()
+    {
+        return DB::table('version_content')
+        ->select('date')
+        ->where('question_id', $this->id)
+        ->orderByDesc('date') 
+        ->limit(1)
+        ->value('date');
+    }
+
+    public function last_modification() {
+        $now = now();
+        $modifiedAt = $this->last_date();
+        return $now->diffForHumans($modifiedAt, true);
+    }
 }

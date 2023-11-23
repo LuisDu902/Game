@@ -108,9 +108,30 @@ class QuestionController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Question $question)
+    public function edit(Request $request, $id)
     {
-        //
+        $question = Question::findOrFail($id);
+        $this->authorize('updateStatus', [Auth::user(), $question]);
+        
+        $request->validate([
+            'content' => 'required|string',
+            'title' => 'required|string',
+        ]);
+        
+        $question->title = $request->input('title');
+
+        $question->save();
+
+        DB::table('version_content')->insert([
+            'date' => now(),
+            'content' => $request->input('content'),
+            'content_type' => 'Question_content',
+            'question_id' => $id,
+            'answer_id' => null,
+            'comment_id' => null,
+        ]);
+
+        return response()->json(['message' => 'Question updated successfully']);
     }
 
     /**
@@ -132,7 +153,9 @@ class QuestionController extends Controller
     
     public function vote(Request $request, $question_id)
     {
- 
+        $question = Question::findOrFail($question_id);
+        $this->authorize('updateStatus', [Auth::user(), $question]);
+        
         $reaction = $request->input('reaction');
 
         DB::table('vote')->insert([
@@ -143,7 +166,7 @@ class QuestionController extends Controller
             'user_id' =>  Auth::user()->id,
         ]);
 
-        return response()->json(['vote'=> 'success', 'reaction' => $reaction]);
+        return response()->json(['action'=> 'vote']);
     }
 
 
@@ -151,13 +174,12 @@ class QuestionController extends Controller
     {
         $user_id = Auth::user()->id;
     
-        // Assuming there's a unique constraint on (user_id, question_id) to prevent duplicate votes
         DB::table('vote')
             ->where('user_id', $user_id)
             ->where('question_id', $question_id)
             ->delete();
     
-        return response()->json(['vote' => 'success', 'action' => 'unvote']);
+        return response()->json(['action' => 'unvote']);
     }
     
 
