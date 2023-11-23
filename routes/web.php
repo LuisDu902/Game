@@ -95,4 +95,5 @@ Route::controller(QuestionController::class)->group(function () {
 Route::controller(AnswerController::class)->group(function () {
     Route::post('/api/answers', 'store');
     Route::put('/api/answers/{id}/edit', 'edit');
+    Route::delete('/api/answers/{id}/delete', 'delete')->name('answers_delete');
 });
