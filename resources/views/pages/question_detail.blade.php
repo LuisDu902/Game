@@ -166,6 +166,7 @@
                                             <div class="comment-input">
                                                 <img src="../images/user.png" alt="user">
                                                 <input type="hidden" name="userId" id="userId" value="{{ $user->id }}">
+                                                <input type="hidden" name="questionId" id="questionId" value="{{ $question->id }}">
                                                 <input type="hidden" name="answerId" id="answerId" value="{{ $otherAnswer->id }}">
                                                 <input type="text" id="commentario" name="commentario" placeholder="Add new comment">
                                                 <button type="submit">

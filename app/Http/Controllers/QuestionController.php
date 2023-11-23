@@ -205,7 +205,7 @@ class QuestionController extends Controller
             $request->input('userId'),
         );
     
-        return redirect()->route('questions');
+        return redirect()->route('question', ['id' => $request->input('questionId')]);
     }
 
 
