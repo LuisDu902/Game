@@ -13,7 +13,7 @@
                 @else
                     <p>{{ $question->latest_content() }}</p>
                 @endif
-                <span><a href="#" class="purple">{{ $question->creator->username }}</a> asked {{ $question->timeDifference() }} ago</span>
+                <span><a href="{{ route('profile', ['id' => $user->id]) }}" class="purple">{{ $question->creator->username }}</a> asked {{ $question->timeDifference() }} ago</span>
             </div>
         </li>
     @endforeach
