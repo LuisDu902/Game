@@ -27,13 +27,11 @@
             <div class="question-t">
                 <div class="vote-btns">
                     <button class="up-vote">
-                        <ion-icon id="up" class= "{{ $user->hasVoted($question->id) && ($user->voteType($question->id)) ? 'hasvoted' : 'notvoted' }}  {{$user->voteType($question->id) === true ? 'cima' : ($user->voteType($question->id) === false ? 'baixo' : 'nulo');
- }}" name="caret-up"></ion-icon>
+                        <ion-icon id="up" class= "{{ $user->hasVoted($question->id) && ($user->voteType($question->id)) ? 'hasvoted' : 'notvoted' }}  {{$user->voteType($question->id) ? 'cima' : ($user->voteType($question->id) === false ? 'baixo' : 'nulo') }}" name="caret-up"></ion-icon>
                     </button>
                     <span>{{ $question->votes }} </span>
                     <button class="down-vote">
-                        <ion-icon id="down" class= "{{ (($user->hasVoted($question->id)) && !$user->voteType($question->id) ) ? 'hasvoted' : 'notvoted' }} {{$user->voteType($question->id) === true ? 'cima' : ($user->voteType($question->id) === false ? 'baixo' : 'nulo');
- }} " name="caret-down"></ion-icon>
+                        <ion-icon id="down" class= "{{ (($user->hasVoted($question->id)) && !$user->voteType($question->id) ) ? 'hasvoted' : 'notvoted' }} {{$user->voteType($question->id) ? 'cima' : ($user->voteType($question->id) === false ? 'baixo' : 'nulo') }} " name="caret-down"></ion-icon>
                     </button>
                 </div>
                 <div class="question-description"> 
@@ -75,13 +73,6 @@
 
                 <div class="answer-details">
                     <div class="vote-btns">
-                        <!-- <button class="up-vote">
-                            <ion-icon name="caret-up"></ion-icon>
-                        </button>
-                        <span>{{ $topAnswer->votes }}</span>
-                        <button class="down-vote">
-                            <ion-icon name="caret-down"></ion-icon>
-                        </button> -->
                     </div>
                     <div class="answer-content"> 
                         <div>
@@ -91,7 +82,6 @@
                             </p>
                         </div>
                         <ul>
-
                             <li> Viewed {{ $topAnswer->nr_views }} times </li>
                         </ul>
                         <div class="answer-comments">
@@ -127,13 +117,7 @@
                     @foreach ($question->answers->where('id', '!=', $topAnswer->id) as $otherAnswer)
                         <div class="answer-details">
                             <div class="vote-btns">
-                                <!-- <button class="up-vote">
-                                    <ion-icon name="caret-up"></ion-icon>
-                                </button>
-                                <span>{{ $otherAnswer->votes }}</span>
-                                <button class="down-vote">
-                                    <ion-icon name="caret-down"></ion-icon>
-                                </button>-->
+                            
                             </div>
                             <div class="answer-content"> 
                                 <div>

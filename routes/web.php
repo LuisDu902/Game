@@ -85,6 +85,7 @@ Route::controller(QuestionController::class)->group(function () {
     Route::get('/api/questions', 'list'); 
     Route::post('/api/questions/{id}/vote', 'vote');
     Route::post('/api/questions/{id}/unvote', 'unvote'); 
+    Route::put('/api/questions/{id}/edit', 'edit');
 });
 
 // Answers

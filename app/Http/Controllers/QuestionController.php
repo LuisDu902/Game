@@ -142,7 +142,7 @@ class QuestionController extends Controller
             'user_id' =>  Auth::user()->id,
         ]);
 
-        return response()->json(['vote'=> 'success', 'reaction' => $reaction]);
+        return response()->json(['action'=> 'vote']);
     }
 
 
@@ -150,13 +150,12 @@ class QuestionController extends Controller
     {
         $user_id = Auth::user()->id;
     
-        // Assuming there's a unique constraint on (user_id, question_id) to prevent duplicate votes
         DB::table('vote')
             ->where('user_id', $user_id)
             ->where('question_id', $question_id)
             ->delete();
     
-        return response()->json(['vote' => 'success', 'action' => 'unvote']);
+        return response()->json(['action'=> 'unvote']);
     }
     
 

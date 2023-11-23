@@ -46,74 +46,75 @@ function questionListHandler() {
 
 
 
-document.addEventListener('DOMContentLoaded', function () {
+/* Question detail page */
+
+const questionContainer = document.querySelector('.question-detail-section');
+
+
+if (questionContainer) {
     const upVote = document.getElementById('up');
     const downVote =  document.getElementById('down');
-    const questionContainer = document.querySelector('.question-detail-section');
     const questionId = questionContainer.dataset.id;
 
-    
-
     upVote.addEventListener('click', function(){
-        
-        console.log("batata2");
-        if(upVote.classList.contains('hasvoted') && !upVote.classList.contains('baixo')  ){
-            console.log("batataranho");
-            sendAjaxRequest('post', '/api/questions/' + questionId + "/unvote", {reaction: true}, voteHandler);
-            upVote.classList.remove('hasvoted');
-            upVote.classList.add('notvoted');
-            setTimeout(function() {
-                location.reload();
-            }, 10);
-
-            
-            
+        if(upVote.classList.contains('hasvoted')){
+            sendAjaxRequest('post', '/api/questions/' + questionId + "/unvote", {}, upVoteHandler);
+        } else {
+            if (downVote.classList.contains('hasvoted')) {
+                sendAjaxRequest('post', '/api/questions/' + questionId + "/unvote", {}, downVoteHandler);
+            }
+            sendAjaxRequest('post', '/api/questions/' + questionId + "/vote", {reaction: true}, upVoteHandler);
         }
-        else if(  !upVote.classList.contains('baixo') && !upVote.classList.contains('cima')){
-            console.log("ergr");
-            sendAjaxRequest('post', '/api/questions/' + questionId + "/vote", {reaction: true}, voteHandler);
-        
-            upVote.classList.remove('notvoted');
-            upVote.classList.add('hasvoted');
-            setTimeout(function() {
-                location.reload();
-            }, 10);
-            
-        }
-
-    })
+    });
 
     downVote.addEventListener('click', function(){
-        console.log("batata2");
-        if(downVote.classList.contains('hasvoted')  && !upVote.classList.contains('cima')){
-            sendAjaxRequest('post', '/api/questions/' + questionId + "/unvote", {reaction: false}, voteHandler);
-            downVote.classList.remove('hasvoted');
-            downVote.classList.add('notvoted');
-            setTimeout(function() {
-                location.reload();
-            }, 10);
-            
-           
+        if(downVote.classList.contains('hasvoted')){
+            sendAjaxRequest('post', '/api/questions/' + questionId + "/unvote", {}, downVoteHandler);
+        } else {
+            if (upVote.classList.contains('hasvoted')) {
+                sendAjaxRequest('post', '/api/questions/' + questionId + "/unvote", {}, upVoteHandler);
+            }
+            sendAjaxRequest('post', '/api/questions/' + questionId + "/vote", {reaction: false}, downVoteHandler);
         }
-        else if(!downVote.classList.contains('baixo') && !downVote.classList.contains('cima')) {
-            sendAjaxRequest('post', '/api/questions/' + questionId + "/vote", {reaction: false}, voteHandler);
-        
-            downVote.classList.remove('notvoted');
-            downVote.classList.add('hasvoted');
-            setTimeout(function() {
-                location.reload();
-            }, 10);
-            
+    });
 
-
-        }
-    })
-});
-
-
-
-function voteHandler(){
 
 }
 
+
+function upVoteHandler(){
+    console.log(this)
+    const upVote = document.getElementById('up');
+   
+    const nr = document.querySelector('.vote-btns span');
+    if (this.status == 200){
+        if (this.responseText == '{"action":"vote"}'){
+            upVote.classList.add('hasvoted');
+            upVote.classList.remove('notvoted');
+            nr.textContent = parseInt(nr.textContent, 10) +1;
+        }
+        else if (this.responseText == '{"action":"unvote"}') {
+            upVote.classList.add('notvoted');
+            upVote.classList.remove('hasvoted');
+            nr.textContent = parseInt(nr.textContent, 10) - 1;
+        }
+    }
+}
+
+function downVoteHandler(){
+    const downVote =  document.getElementById('down');
+    const nr = document.querySelector('.vote-btns span');
+    if (this.status == 200){
+        if (this.responseText == '{"action":"vote"}'){
+            downVote.classList.add('hasvoted');
+            downVote.classList.remove('notvoted');
+            nr.textContent = parseInt(nr.textContent, 10) - 1;
+        }
+        else if (this.responseText == '{"action":"unvote"}') {
+            downVote.classList.add('notvoted');
+            downVote.classList.remove('hasvoted');
+            nr.textContent = parseInt(nr.textContent, 10) + 1;
+        }
+    }
+}
 
