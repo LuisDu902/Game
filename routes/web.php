@@ -60,6 +60,7 @@ Route::controller(QuestionController::class)->group(function () {
     Route::get('/questions/new-question', [GameController::class, 'index'])->name('questions.create');
     Route::get('/questions/{question}', [QuestionController::class, 'show']);
     Route::get('/questions/{id}', 'show')->name('question');    
+    Route::post('/comments/store', [QuestionController::class, 'store_comment'])->name('store_comment');
 });
 
 // Game Category
@@ -72,6 +73,7 @@ Route::controller(GameCategoryController::class)->group(function () {
 Route::controller(GameController::class)->group(function () {
     Route::get('/game/{id}', 'show')->name('game');
 });
+
 
 // User API
 Route::controller(UserController::class)->group(function () {
@@ -97,3 +99,5 @@ Route::controller(AnswerController::class)->group(function () {
     Route::put('/api/answers/{id}/edit', 'edit');
     Route::delete('/api/answers/{id}/delete', 'delete')->name('answers_delete');
 });
+
+

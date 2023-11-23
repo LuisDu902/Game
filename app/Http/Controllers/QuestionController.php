@@ -134,13 +134,6 @@ class QuestionController extends Controller
         return response()->json(['message' => 'Question updated successfully']);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Question $question)
-    {
-        //
-    }
 
     /**
      * Remove the specified resource from storage.

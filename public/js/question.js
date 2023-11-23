@@ -45,8 +45,6 @@ function questionListHandler() {
 
 function deleteQuestion(questionId){
     if (confirm('Are you sure you want to delete this question?')) {
-
-        // Use the sendAjaxRequest function to send a DELETE request
         sendAjaxRequest('DELETE', '/api/questions/' + questionId + '/delete', null, function () {
             questionDeletedHandler(questionId).apply(this);
         });
@@ -83,6 +81,7 @@ if (questionContainer) {
     const questionId = questionContainer.dataset.id;
     const userId = questionContainer.getAttribute('data-user');
 
+    if (upVote){
     upVote.addEventListener('click', function(){
         if(upVote.classList.contains('hasvoted')){
             sendAjaxRequest('post', '/api/questions/' + questionId + "/unvote", {}, upVoteHandler);
@@ -92,8 +91,9 @@ if (questionContainer) {
             }
             sendAjaxRequest('post', '/api/questions/' + questionId + "/vote", {reaction: true}, upVoteHandler);
         }
-    });
+    });}
 
+    if (downVote){
     downVote.addEventListener('click', function(){
         if(downVote.classList.contains('hasvoted')){
             sendAjaxRequest('post', '/api/questions/' + questionId + "/unvote", {}, downVoteHandler);
@@ -103,7 +103,7 @@ if (questionContainer) {
             }
             sendAjaxRequest('post', '/api/questions/' + questionId + "/vote", {reaction: false}, downVoteHandler);
         }
-    });
+    });}
 
 
     const answer_btn = document.querySelector('.answer')
@@ -325,4 +325,15 @@ function editAnswerHandler() {
     if (this.status == 200) {
         createNotificationBox('Answer successfully edit!')
     }
+}
+
+
+function showLoginModal() {
+    document.getElementById('loginModal').style.display = 'block';
+
+    document.querySelectorAll('.close').forEach(function (closeButton) {
+        closeButton.addEventListener('click', function () {
+            document.getElementById('loginModal').style.display = 'none';
+        });
+    });
 }

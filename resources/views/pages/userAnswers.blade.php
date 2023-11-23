@@ -29,8 +29,8 @@
     <div class="answers">
         @if($answers->count() > 0)
             @foreach($answers as $answer)
-            <li class="answer-card" id={{ $answer->id }}>
-                <a href="" > <span> <strong class="purple">Question</strong>: <span>{{ $answer->question->title }}</span> </span></a>
+            <li class="answer-card" id="{{ $answer->id }}">
+                <a href="{{ route('question', ['id' => $answer->question_id]) }}" > <span> <strong class="purple">Question</strong>: <span>{{ $answer->question->title }}</span> </span></a>
                 <p>{{ $answer->latest_content() }}</p>
                 <ul class="answer-stats">
                     <li> Answered {{ $answer->time_difference() }} ago </li>

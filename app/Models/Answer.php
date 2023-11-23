@@ -105,7 +105,6 @@ class Answer extends Model
         $answer->save();
 
         $answerId = $answer->id;
-    
 
 
         DB::table('version_content')->insert([

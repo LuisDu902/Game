@@ -16,12 +16,12 @@
             <div class="carousel-view">
                <ion-icon name="chevron-back" id="prev-game"></ion-icon>
                <div class="games-list">
-                  <a href="" class="game"><img src="../images/roblox.jpg" alt="game"></a>
-                  <a href="" class="game"><img src="../images/roblox.jpg" alt="game"></a>
-                  <a href="" class="game"><img src="../images/roblox.jpg" alt="game"></a>
-                  <a href="" class="game"><img src="../images/roblox.jpg" alt="game"></a>
-                  <a href="" class="game"><img src="../images/roblox.jpg" alt="game"></a>
-                  <a href="" class="game"><img src="../images/roblox.jpg" alt="game"></a>
+                  <a href="{{ route('game', ['id' => 1]) }}" class="game"><img src="../images/roblox.jpg" alt="game"></a>
+                  <a href="{{ route('game', ['id' => 1]) }}" class="game"><img src="../images/roblox.jpg" alt="game"></a>
+                  <a href="{{ route('game', ['id' => 1]) }}" class="game"><img src="../images/roblox.jpg" alt="game"></a>
+                  <a href="{{ route('game', ['id' => 1]) }}" class="game"><img src="../images/roblox.jpg" alt="game"></a>
+                  <a href="{{ route('game', ['id' => 1]) }}" class="game"><img src="../images/roblox.jpg" alt="game"></a>
+                  <a href="{{ route('game', ['id' => 1]) }}" class="game"><img src="../images/roblox.jpg" alt="game"></a>
                </div>
                <ion-icon name="chevron-forward" id="next-game"></ion-icon>
             </div>
@@ -48,3 +48,4 @@
       </div>
       </div>
 @endsection
+

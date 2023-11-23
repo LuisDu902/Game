@@ -1,22 +1,5 @@
-
-
-document.addEventListener('DOMContentLoaded', function () {
-
-
-        
-
-
-
-
-
-
-});
-
-
 function deleteAnswer(answerId){
     if (confirm('Are you sure you want to delete this question?')) {
-
-        // Use the sendAjaxRequest function to send a DELETE request
         sendAjaxRequest('DELETE', '/api/answers/' + answerId + '/delete', null, function () {
             answerDeletedHandler(answerId).apply(this);
         });

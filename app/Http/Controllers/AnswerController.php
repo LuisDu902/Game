@@ -10,22 +10,7 @@ use Illuminate\Support\Facades\Auth;
 
 class AnswerController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
+    
     /**
      * Store a newly created resource in storage.
      */
@@ -46,13 +31,7 @@ class AnswerController extends Controller
         return response()->json();
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Answer $answer)
-    {
-        //
-    }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -75,14 +54,6 @@ class AnswerController extends Controller
         ]);
 
         return response()->json(['message' => 'Question updated successfully']);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Answer $answer)
-    {
-        //
     }
 
     /**

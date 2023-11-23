@@ -2,7 +2,6 @@
 
 @section('content')
    
-   
    <div class="headers">
         <ul class="breadcrumb">
             <li><a href="{{ route('home') }}">
