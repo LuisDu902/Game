@@ -110,11 +110,13 @@ class QuestionController extends Controller
     public function edit(Request $request, $id)
     {
         $question = Question::findOrFail($id);
+        $this->authorize('updateStatus', [Auth::user(), $question]);
+        
         $request->validate([
             'content' => 'required|string',
             'title' => 'required|string',
         ]);
-
+        
         $question->title = $request->input('title');
 
         $question->save();
@@ -150,7 +152,9 @@ class QuestionController extends Controller
     
     public function vote(Request $request, $question_id)
     {
- 
+        $question = Question::findOrFail($question_id);
+        $this->authorize('updateStatus', [Auth::user(), $question]);
+        
         $reaction = $request->input('reaction');
 
         DB::table('vote')->insert([

@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Answer;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Auth;
+
 class AnswerController extends Controller
 {
     /**
@@ -57,6 +59,8 @@ class AnswerController extends Controller
      */
     public function edit(Request $request, $id)
     {
+        $answer = Answer::findOrFail($id);
+        $this->authorize('updateStatus', [Auth::user(), $answer]);
         $request->validate([
             'content' => 'required|string'
         ]);
