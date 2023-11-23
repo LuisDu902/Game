@@ -43,6 +43,32 @@ function questionListHandler() {
     }
 }
 
+function deleteQuestion(questionId){
+    if (confirm('Are you sure you want to delete this question?')) {
+
+        // Use the sendAjaxRequest function to send a DELETE request
+        sendAjaxRequest('DELETE', '/api/questions/' + questionId + '/delete', null, function () {
+            questionDeletedHandler(questionId).apply(this);
+        });
+    }
+}
+
+function questionDeletedHandler(questionId){
+    return function () {
+        console.log('Response:', this.responseText);
+
+        if (this.status === 200) {
+            console.log('Question deleted successfully');
+            createNotificationBox('Question deleted successfully!');
+            const questionElement = document.getElementById(questionId);
+            if (questionElement) {
+                questionElement.remove();
+            }
+        } else {
+            console.error('Question delete failed:', this.statusText);
+        }
+    };
+}
 
 
 

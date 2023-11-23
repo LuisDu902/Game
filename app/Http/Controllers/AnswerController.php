@@ -88,8 +88,21 @@ class AnswerController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Answer $answer)
+    public function delete(Request $request, $id)
     {
-        //
+
+        $answer = Answer::find($id);
+        $this->authorize('delete', $answer);
+
+        $comments = $answer->comments;
+
+
+        for($i=0; $i<count($comments); $i++){
+            $comments[$i]->delete();
+        }
+
+        $answer->delete();
+
+        return response()->json(["success" => true], 200);
     }
 }

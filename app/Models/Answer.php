@@ -18,6 +18,12 @@ class Answer extends Model
 
     protected $table = 'answer';
 
+    protected $fillable = [
+        'user_id',
+        'question_id',
+        'is_public',
+    ];
+
     /**
      * Get the question.
      */

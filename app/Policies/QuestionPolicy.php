@@ -10,6 +10,14 @@ use Illuminate\Support\Facades\Auth;
 
 class QuestionPolicy {
 
+    use HandlesAuthorization;
+
+    public function delete(User $user, Question $question)
+    {
+      if($user->is_admin) return true;
+      return $user->id == $question->user_id;
+    }
+
     public function edit(User $user, Question $targetQuestion)
     {
         return $user->id === $targetQuestion->user_id;

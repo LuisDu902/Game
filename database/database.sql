@@ -95,24 +95,24 @@ CREATE TABLE game (
   name VARCHAR(256) UNIQUE NOT NULL,
   description TEXT NOT NULL,
   nr_members INTEGER NOT NULL CHECK (nr_members >= 0),
-  game_category_id INTEGER REFERENCES game_category(id)
+  game_category_id INTEGER REFERENCES game_category(id) ON DELETE CASCADE
 );
 
 CREATE TABLE question (
   id SERIAL PRIMARY KEY,
-  user_id INTEGER NOT NULL REFERENCES users(id),
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   create_date TIMESTAMP NOT NULL CHECK (create_date <= now()),
   title VARCHAR(256) NOT NULL,
   is_solved BOOLEAN NOT NULL DEFAULT False,
   is_public BOOLEAN NOT NULL DEFAULT True,
   nr_views INTEGER NOT NULL CHECK (nr_views >= 0) DEFAULT 0,
   votes INTEGER NOT NULL DEFAULT 0,
-  game_id INTEGER REFERENCES game(id)
+  game_id INTEGER REFERENCES game(id) ON DELETE CASCADE
 );
 
 CREATE TABLE answer (
   id SERIAL PRIMARY KEY,
-  user_id INTEGER NOT NULL REFERENCES users(id),
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   question_id INTEGER NOT NULL REFERENCES question(id) ON DELETE CASCADE,
   is_public BOOLEAN NOT NULL DEFAULT True,
   top_answer BOOLEAN NOT NULL DEFAULT False,
@@ -121,14 +121,14 @@ CREATE TABLE answer (
 
 CREATE TABLE comment (
   id SERIAL PRIMARY KEY,
-  user_id INTEGER NOT NULL REFERENCES users(id),
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   answer_id INTEGER NOT NULL REFERENCES answer(id) ON DELETE CASCADE,
   is_public BOOLEAN NOT NULL DEFAULT True
 );
 
 CREATE TABLE vote (
   id SERIAL PRIMARY KEY,
-  user_id INTEGER NOT NULL REFERENCES users(id),
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   date TIMESTAMP NOT NULL CHECK (date <= now()),
   reaction BOOLEAN NOT NULL,
   vote_type Vote_type NOT NULL,
@@ -148,9 +148,9 @@ CREATE TABLE version_content (
   date TIMESTAMP NOT NULL CHECK (date <= now()),
   content TEXT NOT NULL,
   content_type Content_type NOT NULL,
-  question_id INTEGER REFERENCES question(id),
-  answer_id INTEGER REFERENCES answer(id),
-  comment_id INTEGER REFERENCES comment(id),
+  question_id INTEGER REFERENCES question(id) ON DELETE CASCADE,
+  answer_id INTEGER REFERENCES answer(id) ON DELETE CASCADE,
+  comment_id INTEGER REFERENCES comment(id) ON DELETE CASCADE,
   CHECK ((content_type = 'Question_content' AND question_id IS NOT NULL AND answer_id IS NULL AND comment_id IS NULL)
   OR (content_type = 'Answer_content' AND answer_id IS NOT NULL AND question_id IS NULL AND comment_id IS NULL)
   OR (content_type = 'Comment_content' AND comment_id IS NOT NULL AND question_id IS NULL AND answer_id IS NULL))
@@ -161,12 +161,12 @@ CREATE TABLE report (
   date TIMESTAMP NOT NULL CHECK (date <= now()),
   reason TEXT NOT NULL,
   is_solved BOOLEAN NOT NULL DEFAULT False,
-  reporter_id INTEGER NOT NULL REFERENCES users(id),
-  reported_id INTEGER NOT NULL REFERENCES users(id),
+  reporter_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  reported_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   report_type Report_type NOT NULL,
-  question_id INTEGER REFERENCES question(id),
-  answer_id INTEGER REFERENCES answer(id),
-  comment_id INTEGER REFERENCES comment(id),
+  question_id INTEGER REFERENCES question(id) ON DELETE CASCADE,
+  answer_id INTEGER REFERENCES answer(id) ON DELETE CASCADE,
+  comment_id INTEGER REFERENCES comment(id) ON DELETE CASCADE,
   CHECK ((report_type = 'Question_report' AND question_id IS NOT NULL AND answer_id IS NULL AND comment_id IS NULL)
   OR (report_type = 'Answer_report' AND answer_id IS NOT NULL AND question_id IS NULL AND comment_id IS NULL)
   OR (report_type = 'Comment_report' AND comment_id IS NOT NULL AND question_id IS NULL AND answer_id IS NULL))
@@ -176,15 +176,15 @@ CREATE TABLE notification (
   id SERIAL PRIMARY KEY,
   date TIMESTAMP NOT NULL CHECK (date <= now()),
   viewed BOOLEAN NOT NULL DEFAULT False,
-  user_id INTEGER NOT NULL REFERENCES users(id),
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   notification_type Notification_type NOT NULL,
-  question_id INTEGER REFERENCES question(id),
-  answer_id INTEGER REFERENCES answer(id),
-  comment_id INTEGER REFERENCES comment(id),
-  vote_id INTEGER REFERENCES vote(id),
-  report_id INTEGER REFERENCES report(id),
-  badge_id INTEGER REFERENCES badge(id),
-  game_id INTEGER REFERENCES game(id),
+  question_id INTEGER REFERENCES question(id) ON DELETE CASCADE,
+  answer_id INTEGER REFERENCES answer(id) ON DELETE CASCADE,
+  comment_id INTEGER REFERENCES comment(id) ON DELETE CASCADE,
+  vote_id INTEGER REFERENCES vote(id) ON DELETE CASCADE,
+  report_id INTEGER REFERENCES report(id) ON DELETE CASCADE,
+  badge_id INTEGER REFERENCES badge(id) ON DELETE CASCADE,
+  game_id INTEGER REFERENCES game(id) ON DELETE CASCADE,
   CHECK ((notification_type = 'Report_notification' AND report_id IS NOT NULL AND question_id IS NULL AND answer_id IS NULL AND comment_id IS NULL AND vote_id IS NULL AND badge_id IS NULL AND game_id IS NULL)
   OR (notification_type = 'Question_notification' AND question_id IS NOT NULL AND report_id IS NULL AND answer_id IS NULL AND comment_id IS NULL AND vote_id IS NULL AND badge_id IS NULL AND game_id IS NULL)
   OR (notification_type = 'Answer_notification' AND answer_id IS NOT NULL AND report_id IS NULL AND question_id IS NULL AND comment_id IS NULL AND vote_id IS NULL AND badge_id IS NULL AND game_id IS NULL)
@@ -196,20 +196,20 @@ CREATE TABLE notification (
 );
 
 CREATE TABLE user_badge (
-  user_id INTEGER REFERENCES users(id),
-  badge_id INTEGER REFERENCES badge(id),
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  badge_id INTEGER REFERENCES badge(id) ON DELETE CASCADE,
   PRIMARY KEY (user_id, badge_id)
 );
 
 CREATE TABLE game_member (
-  user_id INTEGER REFERENCES users(id),
-  game_id INTEGER REFERENCES game(id),
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  game_id INTEGER REFERENCES game(id) ON DELETE CASCADE,
   PRIMARY KEY (user_id, game_id)
 );
 
 CREATE TABLE question_tag (
-  question_id INTEGER REFERENCES question(id),
-  tag_id INTEGER REFERENCES tag(id),
+  question_id INTEGER REFERENCES question(id) ON DELETE CASCADE,
+  tag_id INTEGER REFERENCES tag(id) ON DELETE CASCADE,
   PRIMARY KEY (question_id, tag_id)
 );
 
