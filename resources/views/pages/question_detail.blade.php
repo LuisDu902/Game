@@ -14,10 +14,12 @@
             <div class="question-title">
                 <img src="../images/user.png" alt="user">
                 <h1> {{ $question->title }} </h1>
-                @if(Auth::check() and (Auth::id() == $question->user_id))
-                    <button class="edit-question">Edit</button>
-                @elif (Auth::check())
-                    <button class="answer">Answer</button>
+                @if (Auth::check())
+                    @if(Auth::check() and (Auth::id() == $question->user_id))
+                        <button class="edit-question">Edit</button>
+                    @else
+                        <button class="answer">Answer</button>
+                    @endif
                 @endif
             </div> 
 
