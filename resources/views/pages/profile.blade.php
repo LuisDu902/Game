@@ -19,9 +19,6 @@
                 <div class="stats-text">Rank:</div>
                 <div class="user-rank">{{ $user->rank }}</div>
                 <div class="stats-text">Badges:</div>
-<<<<<<< HEAD
-                <div class="user-badges">{{ $user->badges }}</div>
-=======
                 <div class="user-badges">
                     @if($badges && count($badges) > 0)
                         <ul>
@@ -33,16 +30,11 @@
                         <p>No badges</p>
                     @endif
                 </div>
->>>>>>> 45b9368 (profile page frontend changes)
             </div>
 
         </div>
 
-<<<<<<< HEAD
         <form id="profileForm" class="profile-right" method="POST" enctype="multipart/form-data" data-id="{{ $user->id }}">
-=======
-        <form id="profileForm" class="profile-right" method="POST" action="{{ route('edit_profile', ['id' => $user->id]) }}" enctype="multipart/form-data">
->>>>>>> 45b9368 (profile page frontend changes)
             {{ csrf_field() }}
             <div class="profile-input name">
                 <label class="field-label" for="name"> Name <span
