@@ -124,7 +124,7 @@ class UserController extends Controller
             abort(404);
         }
 
-        $questions = $user->questions; 
+        $questions = $user->questions()->paginate(10);
 
         return view('pages.userQuestions', ['user' => $user, 'questions' => $questions]);
     }
