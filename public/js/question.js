@@ -1,3 +1,14 @@
+const questionsBtns = document.querySelectorAll('.questions-sort button');
+
+if (questionsBtns) {
+    questionsBtns.forEach(button => {
+        button.addEventListener('click', function () {
+            questionsBtns.forEach(btn => btn.classList.remove('selected'));
+            this.classList.add('selected');
+        });
+    });
+}
+
 const questions_section = document.querySelector('.questions-sec');
 
 if (questions_section) {
