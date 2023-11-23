@@ -110,7 +110,8 @@
                                     </li>
                                 @endforeach
                                 <li>
-                                <form action="{{ route('store_comment') }}" method="post">
+                                    @auth
+                                        <form action="{{ route('store_comment') }}" method="post">
                                             @csrf
                                             <div class="comment-input">
                                                 <img src="../images/user.png" alt="user">
@@ -123,6 +124,8 @@
                                                 </button>
                                             </div>
                                         </form>
+                                    @else
+                                    @endauth
                                 </li>
                             </ul>
                         </div>
@@ -162,19 +165,22 @@
                                             </li>
                                         @endforeach
                                         <li>
-                                        <form action="{{ route('store_comment') }}" method="post">
-                                            @csrf
-                                            <div class="comment-input">
-                                                <img src="../images/user.png" alt="user">
-                                                <input type="hidden" name="userId" id="userId" value="{{ $user->id }}">
-                                                <input type="hidden" name="questionId" id="questionId" value="{{ $question->id }}">
-                                                <input type="hidden" name="answerId" id="answerId" value="{{ $otherAnswer->id }}">
-                                                <input type="text" id="commentario" name="commentario" placeholder="Add new comment">
-                                                <button type="submit">
-                                                    <ion-icon name="arrow-forward-circle-outline"></ion-icon>
-                                                </button>
-                                            </div>
-                                        </form>
+                                        @auth
+                                            <form action="{{ route('store_comment') }}" method="post">
+                                                @csrf
+                                                <div class="comment-input">
+                                                    <img src="../images/user.png" alt="user">
+                                                    <input type="hidden" name="userId" id="userId" value="{{ $user->id }}">
+                                                    <input type="hidden" name="questionId" id="questionId" value="{{ $question->id }}">
+                                                    <input type="hidden" name="answerId" id="answerId" value="{{ $otherAnswer->id }}">
+                                                    <input type="text" id="commentario" name="commentario" placeholder="Add new comment">
+                                                    <button type="submit">
+                                                        <ion-icon name="arrow-forward-circle-outline"></ion-icon>
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        @else
+                                        @endauth
                                         </li>
                                     </ul>
                                 </div>
