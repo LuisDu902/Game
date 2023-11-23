@@ -34,6 +34,12 @@ class Answer extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class);
+    }
+    
+
     /**
      * Get the latest answer content.
      */
@@ -47,4 +53,35 @@ class Answer extends Model
         ->value('content');
     }
 
+    public function create_date()
+    {
+        return DB::table('version_content')
+        ->select('date')
+        ->where('answer_id', $this->id)
+        ->orderBy('date') 
+        ->limit(1)
+        ->value('date');
+    }
+
+    public function last_date()
+    {
+        return DB::table('version_content')
+        ->select('date')
+        ->where('answer_id', $this->id)
+        ->orderByDesc('date') 
+        ->limit(1)
+        ->value('date');
+    }
+
+    public function time_difference() {
+        $now = now();
+        $createdAt = $this->create_date();
+        return $now->diffForHumans($createdAt, true);
+    }
+
+    public function last_modification() {
+        $now = now();
+        $modifiedAt = $this->last_date();
+        return $now->diffForHumans($modifiedAt, true);
+    }
 }
