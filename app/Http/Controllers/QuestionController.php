@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use App\Models\Question;
 use App\Models\Answer;
+use App\Models\Comment;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -187,6 +188,24 @@ class QuestionController extends Controller
         );
     
         return redirect()->route('question', ['id' => $request->input('questionId')]);
+    }
+
+    public function store_comment(Request $request)
+    {
+
+        $request->validate([
+            'commentario' => 'required|string',
+            'answerId' => 'required',
+            'userId' => 'required',
+        ]);
+
+        $comment = Comment::createCommentWithContent(
+            $request->input('commentario'),
+            $request->input('answerId'),
+            $request->input('userId'),
+        );
+    
+        return redirect()->route('questions');
     }
 
 

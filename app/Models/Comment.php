@@ -32,15 +32,49 @@ class Comment extends Model
     {
         return DB::table('version_content')
         ->select('content')
-        ->where('question_id', $this->id)
+        ->where('comment_id', $this->id)
         ->orderByDesc('date') 
         ->limit(1)
         ->value('content');
     }
     
+
+
+
+
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+
+    public static function createCommentWithContent($content, $answerId, $userId){
+        
+        $comment = new static;
+
+        $comment->user_id = $userId;
+        $comment->answer_id = $answerId;
+        $comment->is_public = true; 
+        $comment->save();
+
+        $commentId = $comment->id;
+    
+
+
+   
+        DB::table('version_content')->insert([
+            'date' => now(),
+            'content' => $content,
+            'content_type' => 'Comment_content',
+            'question_id' => null,
+            'answer_id' => null,
+            'comment_id' => $commentId,
+        ]);
+
+
+        return $comment;
+    }
+
 
 }

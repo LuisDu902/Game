@@ -25,17 +25,18 @@
 
             
             <div class="question-t">
-                <div class="vote-btns">
-                    <button class="up-vote">
-                        <ion-icon id="up" class= "{{ $user->hasVoted($question->id) && ($user->voteType($question->id)) ? 'hasvoted' : 'notvoted' }}  {{$user->voteType($question->id) === true ? 'cima' : ($user->voteType($question->id) === false ? 'baixo' : 'nulo');
- }}" name="caret-up"></ion-icon>
-                    </button>
-                    <span>{{ $question->votes }} </span>
-                    <button class="down-vote">
-                        <ion-icon id="down" class= "{{ (($user->hasVoted($question->id)) && !$user->voteType($question->id) ) ? 'hasvoted' : 'notvoted' }} {{$user->voteType($question->id) === true ? 'cima' : ($user->voteType($question->id) === false ? 'baixo' : 'nulo');
- }} " name="caret-down"></ion-icon>
-                    </button>
-                </div>
+                <?php if ( $question->user_id !=  $user->id ) { ?> 
+                    <div class="vote-btns">
+                        <button class="up-vote">
+                            <ion-icon id="up" class="{{ $user->hasVoted($question->id) && ($user->voteType($question->id)) ? 'hasvoted' : 'notvoted' }}  {{$user->voteType($question->id) === true ? 'cima' : ($user->voteType($question->id) === false ? 'baixo' : 'nulo'); }}" name="caret-up"></ion-icon>
+                        </button>
+                        <span>{{ $question->votes }} </span>
+                        <button class="down-vote">
+                            <ion-icon id="down" class="{{ (($user->hasVoted($question->id)) && !$user->voteType($question->id) ) ? 'hasvoted' : 'notvoted' }} {{$user->voteType($question->id) === true ? 'cima' : ($user->voteType($question->id) === false ? 'baixo' : 'nulo'); }}" name="caret-down"></ion-icon>
+                        </button>
+                    </div>
+                <?php } ?>
+        
                 <div class="question-description"> 
                     <ul>
                         <li> {{ $question->creator->name }} asked {{ calculateTimePassed($question->create_date) }}</li>
@@ -91,7 +92,6 @@
                             </p>
                         </div>
                         <ul>
-
                             <li> Viewed {{ $topAnswer->nr_views }} times </li>
                         </ul>
                         <div class="answer-comments">
@@ -161,13 +161,18 @@
                                             </li>
                                         @endforeach
                                         <li>
+                                        <form action="{{ route('store_comment') }}" method="post">
+                                            @csrf
                                             <div class="comment-input">
                                                 <img src="../images/user.png" alt="user">
-                                                <input type="text" placeholder="Add new comment">
-                                                <button>
+                                                <input type="hidden" name="userId" id="userId" value="{{ $user->id }}">
+                                                <input type="hidden" name="answerId" id="answerId" value="{{ $otherAnswer->id }}">
+                                                <input type="text" id="commentario" name="commentario" placeholder="Add new comment">
+                                                <button type="submit">
                                                     <ion-icon name="arrow-forward-circle-outline"></ion-icon>
                                                 </button>
                                             </div>
+                                        </form>
                                         </li>
                                     </ul>
                                 </div>

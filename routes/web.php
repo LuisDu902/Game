@@ -92,3 +92,10 @@ Route::controller(QuestionController::class)->group(function () {
 
     Route::post('/questions/answer', [QuestionController::class, 'store_answer'])->name('store_answer');
 });
+
+Route::controller(QuestionController::class)->group(function () {
+
+    Route::post('/comments/store', [QuestionController::class, 'store_comment'])->name('store_comment');
+
+});
+
