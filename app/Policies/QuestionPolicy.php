@@ -14,9 +14,8 @@ class QuestionPolicy {
 
     public function delete(User $user, Question $question)
     {
-      // Only a news owner or admin can delete it
       if($user->is_admin) return true;
-      return $user->id == $news->user_id;
+      return $user->id == $question->user_id;
     }
 
 }
