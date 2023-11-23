@@ -58,11 +58,13 @@
     color: white;
 }
 
+
 .loginModalButtons{
     display: flex;
     justify-content: center;
     gap:20px   
 }
+
 
 .questions, .answers {
     display: flex;
@@ -134,6 +136,16 @@
 .question-card:last-child {
     border-bottom: 1px solid #e6e7f3;
 }
+.new-question-form{
+    margin: 30px auto;
+    width: 1200px;
+    height: 680px;
+    border: 1px solid #ddd; 
+    border-radius: 8px;
+    padding: 50px;
+}
+
+
 
 .user-questions, .user-answers{
     padding: 2rem 4rem;

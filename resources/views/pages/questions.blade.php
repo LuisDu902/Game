@@ -23,10 +23,8 @@
 
     <div id="loginModal" class="modal">
         <div class="modal-content">
-            <div class="title-section">
-                <span class="close">&times;</span>
-                <h2>Authentication required</h2>
-            </div>
+            <span class="close">&times;</span>
+            <h2>Authentication required</h2>
             <p>Please log in to ask a question.</p>
             <div class="loginModalButtons">
                 <a href="{{ route('register') }}">
@@ -37,14 +35,12 @@
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script>
-        $(document).ready(function() {
-            $('#newQuestion').click(function(event) {
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('newQuestion').addEventListener('click', function(event) {
                 if (!userIsLoggedIn()) {
                     event.preventDefault();
-                    
-                    $('#loginModal').css('display', 'block');
+                    document.getElementById('loginModal').style.display = 'block';
                 }
             });
 
@@ -52,15 +48,18 @@
                 return {{ Auth::check() ? 'true' : 'false' }};
             }
 
-            $('.close').click(function() {
-                $('#loginModal').css('display', 'none');
+            document.querySelectorAll('.close').forEach(function(closeButton) {
+                closeButton.addEventListener('click', function() {
+                    document.getElementById('loginModal').style.display = 'none';
+                });
             });
 
-            $(window).click(function(event) {
-                if (event.target == $('#loginModal')[0]) {
-                    $('#loginModal').css('display', 'none');
+            window.addEventListener('click', function(event) {
+                if (event.target === document.getElementById('loginModal')) {
+                    document.getElementById('loginModal').style.display = 'none';
                 }
             });
         });
     </script>
+
 @endsection

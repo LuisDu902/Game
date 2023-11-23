@@ -1,9 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\DB;
 use App\Models\Question;
+use App\Models\Answer;
+use App\Models\Comment;
 use Illuminate\Http\Request;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class QuestionController extends Controller
@@ -99,15 +102,36 @@ class QuestionController extends Controller
      */
     public function show(Question $question)
     {
-        //
+        return view('pages.question_detail', ['question' => $question]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Question $question)
+    public function edit(Request $request, $id)
     {
-        //
+        $question = Question::findOrFail($id);
+        $this->authorize('updateStatus', [Auth::user(), $question]);
+        
+        $request->validate([
+            'content' => 'required|string',
+            'title' => 'required|string',
+        ]);
+        
+        $question->title = $request->input('title');
+
+        $question->save();
+
+        DB::table('version_content')->insert([
+            'date' => now(),
+            'content' => $request->input('content'),
+            'content_type' => 'Question_content',
+            'question_id' => $id,
+            'answer_id' => null,
+            'comment_id' => null,
+        ]);
+
+        return response()->json(['message' => 'Question updated successfully']);
     }
 
     /**
@@ -138,4 +162,87 @@ class QuestionController extends Controller
 
         return response()->json(["success" => true], 200);
     }
+
+    
+    public function vote(Request $request, $question_id)
+    {
+        $question = Question::findOrFail($question_id);
+        $this->authorize('updateStatus', [Auth::user(), $question]);
+        
+        $reaction = $request->input('reaction');
+
+        DB::table('vote')->insert([
+            'date' => now(),
+            'vote_type' => 'Question_vote',
+            'reaction' => $reaction,
+            'question_id' => $question_id,
+            'user_id' =>  Auth::user()->id,
+        ]);
+
+        return response()->json(['action'=> 'vote']);
+    }
+
+
+    public function unvote(Request $request, $question_id)
+    {
+        $user_id = Auth::user()->id;
+    
+        DB::table('vote')
+            ->where('user_id', $user_id)
+            ->where('question_id', $question_id)
+            ->delete();
+    
+        return response()->json(['action' => 'unvote']);
+    }
+    
+
+    public function hasVoted($questionId, $userId) {
+
+        $hasVoted = DB::table('vote')
+            ->where('vote_type', 'Question_vote')
+            ->where('question_id', $questionId)
+            ->where('user_id', $userId)
+            ->exists();
+
+        return response()->json(['hasVoted' => $hasVoted]);
+    }
+
+    public function store_answer(Request $request)
+    {
+
+        $request->validate([
+            'content' => 'required|string',
+            'questionId' => 'required',
+            'userId' => 'required',
+        ]);
+
+        $answer = Answer::createAnswerWithContent(
+            $request->input('content'),
+            $request->input('questionId'),
+            $request->input('userId'),
+        );
+    
+        return redirect()->route('question', ['id' => $request->input('questionId')]);
+    }
+
+    public function store_comment(Request $request)
+    {
+
+        $request->validate([
+            'commentario' => 'required|string',
+            'answerId' => 'required',
+            'userId' => 'required',
+        ]);
+
+        $comment = Comment::createCommentWithContent(
+            $request->input('commentario'),
+            $request->input('answerId'),
+            $request->input('userId'),
+        );
+    
+        return redirect()->route('question', ['id' => $request->input('questionId')]);
+    }
+
+
+
 }
