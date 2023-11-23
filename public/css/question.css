@@ -323,11 +323,11 @@
 
 .hasvoted{
    
-    background-color:#6D49EB ;
+    background-color:#6542e6 ;
     color: white;
 }
 
 .notvoted{
     background-color:white ;
-    color: #6D49EB;
+    color: #6542e6;
 }
