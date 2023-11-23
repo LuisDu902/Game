@@ -64,15 +64,23 @@
     gap:20px   
 }
 
-.questions {
+.questions, .answers {
     display: flex;
     flex-direction: column;
     margin: 40px 0;
 }
 
-.questions .question-card {
+.questions .question-card, .answer-card {
     display: flex;
     gap: 20px;
+    padding: 40px 0;
+    border-top: 1px solid #e6e7f3;
+}
+
+.answer-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
     padding: 40px 0;
     border-top: 1px solid #e6e7f3;
 }
@@ -127,7 +135,7 @@
     border-bottom: 1px solid #e6e7f3;
 }
 
-.user-questions{
+.user-questions, .user-answers{
     padding: 2rem 4rem;
 }
 
@@ -282,6 +290,50 @@
     text-decoration: none;
     cursor: pointer;
 }
+
+
+.answer-card:last-child {
+    border-bottom: 1px solid #e6e7f3;
+}
+
+.answer-card p {
+    font-size: 25px;
+    margin: 0;
+    margin-bottom: 20px;
+}
+.answer-card a {
+    margin-bottom: 5px;
+    margin-left: 20px;
+}
+
+.answer-card a > span{
+    position: relative;
+    top: -5px; /* Adjust the value according to your needs */
+}
+
+.answer-card a strong {
+    font-weight: 500;
+}
+
+.answer-card a span span{
+    color: #888;
+}
+
+.answer-card a span span:hover {
+    color: #7C5BF0;
+}
+
+.answer-card a::before {
+    content: '';
+    display: inline-block;
+    width: 40px;
+    height: 20px; 
+    border-top: 2px solid #525252; 
+    border-left: 2px solid #525252; 
+    margin-right: 5px;
+    margin-bottom: -8px; 
+}
+
 
 @media screen and (max-width: 1296px){
     .new-question-form{

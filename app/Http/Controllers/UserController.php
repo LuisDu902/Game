@@ -109,5 +109,17 @@ class UserController extends Controller
 
         return view('pages.userQuestions', ['user' => $user, 'questions' => $questions]);
     }
+
+    public function showUserAnswers($id) {
+
+        $user = User::find($id);
+        
+        if (!$user) {
+            abort(404);
+        }
+
+        $answers = $user->answers; 
+        return view('pages.userAnswers', ['user' => $user, 'answers' => $answers]);
+    }
    
 }

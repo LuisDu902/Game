@@ -37,12 +37,22 @@
     border-bottom: 2px solid var(--light-purple);
 }
 
+.answer-stats {
+    display: flex;
+    gap: 80px;
+    padding-left: 0;
+}
+
 .game .g-stats li {
     font-size: 18px;
     font-weight: 500;
 }
 
-.g-stats li::before {
+.answer-stats li {
+    font-weight: 400;
+}
+
+.g-stats li::before, .answer-stats li::before {
     content: ''; 
     display: inline-block; 
     width: 10px; 
@@ -51,11 +61,11 @@
     margin-right: 8px; 
     vertical-align: middle;
 }
-.g-stats li:nth-child(odd)::before {
+.g-stats li:nth-child(odd)::before, .answer-stats li:nth-child(odd)::before {
     background-color: var(--purple);
 }
 
-.g-stats li:nth-child(even)::before {
+.g-stats li:nth-child(even)::before, .answer-stats li:nth-child(even)::before {
     background-color: #D2CFFF;
 }
 

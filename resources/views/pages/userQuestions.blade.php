@@ -36,7 +36,7 @@
                         <span>{{ $question->nr_views }} views</span>
                     </div>
                     <div class="q-content">
-                        <h2>{{ $question->title }}</h2>
+                        <a href=""> <h2>{{ $question->title }}</h2> </a>
                         <p>{{ $question->latest_content() }}</p>
                         <span><a href="{{ route('profile', ['id' => $user->id]) }}" class="purple">{{ $question->creator->username }}</a> asked 10 minutes ago</span>
                     </div>

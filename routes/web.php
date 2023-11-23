@@ -47,6 +47,7 @@ Route::controller(UserController::class)->group(function () {
     Route::get('/users/{id}', 'showUserProfile')->name('profile');
     Route::get('/users', 'index')->name('users');
     Route::get('/users/questions/{id}', 'showUserQuestions')->name('users_questions');
+    Route::get('/users/answers/{id}', 'showUserAnswers')->name('users_answers');
 });
 
 // Question
