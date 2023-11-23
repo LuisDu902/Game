@@ -40,9 +40,11 @@
                         <p>{{ $question->latest_content() }}</p>
                         <span><a href="{{ route('profile', ['id' => $user->id]) }}" class="purple">{{ $question->creator->username }}</a> asked 10 minutes ago</span>
                     </div>
-                    <div class="q-delete">
-                        <button class="delete-button" onclick="deleteQuestion({{ $question->id }})">Delete</button>
-                    </div>
+                    @if(Auth::check() and (Auth::id() == $user->id) and Auth::user()->is_admin)
+                        <div class="q-delete">
+                            <button class="delete-button" onclick="deleteQuestion({{ $question->id }})">Delete</button>
+                        </div>
+                    @endif
                 </li>
                 @endforeach
             @else
