@@ -80,5 +80,6 @@ Route::controller(UserController::class)->group(function () {
 
 // Question API
 Route::controller(QuestionController::class)->group(function () {
-    Route::get('/api/questions', 'list'); 
+    Route::get('/api/questions', 'list');
+    Route::delete('/api/questions/{id}/delete', 'delete')->name('questions_delete');
 });
