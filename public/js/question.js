@@ -35,11 +35,10 @@ function questionListHandler() {
 
 
 
-
 document.addEventListener('DOMContentLoaded', function () {
     const upVote = document.getElementById('up');
     const downVote =  document.getElementById('down');
-    const questionContainer = document.querySelector('.container');
+    const questionContainer = document.querySelector('.question-detail-section');
     const questionId = questionContainer.dataset.id;
 
     
@@ -105,7 +104,5 @@ document.addEventListener('DOMContentLoaded', function () {
 function voteHandler(){
 
 }
-
-
 
 

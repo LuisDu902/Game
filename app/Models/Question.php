@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 
 // Added to define Eloquent relationships.
@@ -64,4 +65,28 @@ class Question extends Model
         return $now->diffForHumans($createdAt, true);
     }
 
+    public static function createQuestionWithContent($title, $content, $game_id)
+    {
+        $question = new static;
+
+        $question->user_id = Auth::id();
+        $question->create_date = now();
+        $question->title = $title;
+        $question->game_id = $game_id;
+        $question->is_solved = false;
+        $question->is_public = true; 
+        $question->nr_views = 0;
+        $question->votes = 0;
+
+        $question->save();
+
+        DB::table('version_content')->insert([
+            'question_id' => $question->id,
+            'content' => $content,
+            'date' => now(),
+            'content_type' => 'Question_content',
+        ]);
+
+        return $question;
+    }
 }

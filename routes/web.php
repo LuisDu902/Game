@@ -51,8 +51,16 @@ Route::controller(UserController::class)->group(function () {
 // Question
 Route::controller(QuestionController::class)->group(function () {
     Route::get('/questions', 'index')->name('questions');
-    Route::get('/questions/{question}', [QuestionController::class, 'show']);
+    Route::get('/questions/new-question', [QuestionController::class, 'create'])->name('questions.create');
+    Route::post('/questions/new-question', [QuestionController::class, 'store'])->name('questions.store');
+    Route::get('/questions/new-question', [GameController::class, 'index'])->name('questions.create');
+    
+});
 
+// Question
+Route::controller(QuestionController::class)->group(function () {
+    Route::get('/questions/{question}', [QuestionController::class, 'show']);
+    Route::get('/questions/{id}', 'show')->name('question');    
 });
 
 
@@ -74,6 +82,7 @@ Route::controller(UserController::class)->group(function () {
     Route::post('/api/users/{id}', 'updateStatus');
     Route::post('/api/users/{id}/edit', 'edit');
 });
+
 
 // Question API
 Route::controller(QuestionController::class)->group(function () {

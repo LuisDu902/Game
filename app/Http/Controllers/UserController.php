@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Question;
+
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 
@@ -99,7 +100,14 @@ class UserController extends Controller
     }
 
 
- 
+    public function hasVoted($questionId, $userId)
+    {
+        return $this->votes()
+            ->where('vote_type', 'Question_vote')
+            ->where('question_id', $questionId)
+            ->where('user_id', $userId)
+            ->exists();
+    }
     
- 
+   
 }

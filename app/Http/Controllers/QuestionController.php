@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Question;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+
 class QuestionController extends Controller
 {
     /**
@@ -59,10 +60,61 @@ class QuestionController extends Controller
      */
     public function create()
     {
+        return view('pages.newQuestion');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'title' => 'required|max:256',
+            'content' => 'required',
+        ]);
+
+        $question = Question::createQuestionWithContent(
+            $request->input('title'),
+            $request->input('content'),
+            $request->input('game_id')
+        );
+    
+        return redirect()->route('questions');
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(Question $question)
+    {
+        return view('pages.question_detail', ['question' => $question]);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Question $question)
+    {
         //
     }
 
-   
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, Question $question)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Question $question)
+    {
+        //
+    }
+
+    
     public function vote(Request $request, $question_id)
     {
  
@@ -93,42 +145,22 @@ class QuestionController extends Controller
         return response()->json(['vote' => 'success', 'action' => 'unvote']);
     }
     
-
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Question $question)
-    {
-        return view('pages.question_detail', ['question' => $question]);
-    }
+    
+    // ...
     
 
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Question $question)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Question $question)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Question $question)
-    {
-        //
-    }
-
     
+
+    public function hasVoted($questionId, $userId) {
+
+        $hasVoted = DB::table('vote')
+            ->where('vote_type', 'Question_vote')
+            ->where('question_id', $questionId)
+            ->where('user_id', $userId)
+            ->exists();
+
+        return response()->json(['hasVoted' => $hasVoted]);
+    }
+
+
 }
-

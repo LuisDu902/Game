@@ -65,13 +65,7 @@ class User extends Authenticatable
         return $this->hasMany(Game::class);
     }
   
-    /**
-     * Check if the user has voted for a specific question.
-     *
-     * @param int $questionId
-     * @param int $userId
-     * @return bool
-     */
+ 
 
      public function hasVoted($questionId)
     {
@@ -95,5 +89,5 @@ class User extends Authenticatable
         return $vote ? $vote->reaction : null;
     }
     
-    
+
 }

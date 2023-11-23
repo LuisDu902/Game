@@ -22,6 +22,7 @@
         <link href="{{ url('css/user.css') }}" rel="stylesheet">
         <link href="{{ url('css/category.css') }}" rel="stylesheet">
         <link href="{{ url('css/game.css') }}" rel="stylesheet">
+        <link href="{{ url('css/home.css') }}" rel="stylesheet">
         <link href="{{ url('css/question.css') }}" rel="stylesheet">
 
         <script type="text/javascript">
@@ -32,6 +33,8 @@
         <script type="text/javascript" src="{{ url('js/admin.js') }}" defer></script>
         <script type="text/javascript" src="{{ url('js/editprofile.js') }}" defer></script>
         <script type="text/javascript" src="{{ url('js/question.js') }}" defer></script>
+        <script type="text/javascript" src="{{ url('js/carousel.js') }}" defer></script>
+        <script type="text/javascript" src="{{ url('js/dropdown.js') }}" defer></script>
         <script nomodule
             src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
             defer></script>

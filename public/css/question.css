@@ -1,141 +1,334 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300&family=Poppins&display=swap');
-
-body{
-    overflow:hidden;
+.question-detail-section {
+    width: 90%;
+    margin: 0 auto;
 }
 
-.question_info {
-    left: 100px;
-    color: #000;
-    font-family: Poppins;
-    font-size: 24px;
-    font-weight: 600;
-    margin-bottom: 10px;
+.question-detail {
+    margin-top: 50px;
 }
 
-#user_name {
-    color: #6D49EB;
-    font-family: Poppins;
-    font-size: 14px;
-    padding-top: 5px;
-
-    margin-right: 5px;
-    font-weight: 800;
+.question-detail .question-title {
+    display: flex;
+    gap: 30px;
+    align-items: center;
 }
 
-.content {
-    color: #000;
-    font-family: Poppins;
+.question-detail .question-title img{
+    height: 50px;
+    width: 50px;
+    border: 1px solid #7C5BF0;
+    border-radius: 50%;
 }
 
-.answer {
-    margin-left: 500px;
+.question-detail .question-title h1{
+    flex: 9;
+    font-size: 50px;
+}
+
+.create-answer {
+    margin-left: auto;
+    font-weight: 500;
+    background-color: #7C5BF0;
     color: white;
-    font-weight: 400;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    width: 145px;
-    
-    border-radius: 10px;
-    background: #7C5BF0;
+    padding: 7px 30px;
+    font-size: 18px;
+    border-radius: 7px;
+    transition: all 300ms ease;
 }
 
-.profile-container {
+.answer-content {
+    padding-bottom: 40px;
+    border-bottom: 1px solid #e6e7f3;
+}
+
+.create-answer:hover {
+    cursor: pointer;
+}
+
+.question-detail ul, .answer-content>ul {
+    font-size: 16px;
     display: flex;
+    gap: 70px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e6e7f3;
+}
+
+.question-detail ul li::before, .answer-content>ul li::before{
+    content: ''; 
+    display: inline-block; 
+    width: 7px; 
+    height: 7px; 
+    border-radius: 50%; 
+    margin-right: 8px; 
+    vertical-align: middle;
+}
+
+.question-detail ul li:nth-child(odd)::before, .answer-content>ul li:nth-child(odd)::before {
+    background-color: var(--purple);
+}
+
+.question-detail ul li:nth-child(even)::before, .answer-content>ul li:nth-child(even)::before {
+    background-color: #D2CFFF;
+}
+
+.question-detail p {
+    font-size: 20px;
+    color: #525252;
+    padding: 40px 0 ;
+    border-bottom: 1px solid #e6e7f3;
+    text-align: justify;
+}
+
+.question-t {
+    display: flex;
+    margin-top: 20px;
+    gap: 30px;
+}
+
+.vote-btns {
+    display: flex;
+    flex-direction: column;
     align-items: center;
+    justify-content: center;
+    width: 50px;
 }
 
-#profile_pic {
-    width: 68px;
-    height: 70px;
-    margin-right: 10px;
+.vote-btns ion-icon {  
+    padding: 10px;
+    font-size: 20px;
+    border: 1px solid #7C5BF0;
+    margin: 10px;
+    border-radius: 20px;
 }
 
-/* Add these styles to make first_info and second_info side by side */
-.line-container {
-    display: flex;
-    align-items: center;
-}
-
-#first_info,
-#second_info {
-    display: flex;
-    align-items: center;
-    margin-top: 10px;
-}
-
-#second_info {
-    margin-left: 40px; /* Adjust the margin between first_info and second_info */
-}
-
-/* Add this style to ensure first_info and second_info are at the same height */
-.info {
-    display: flex;
-    align-items: flex-start; /* Align items to the start of the flex container */
-}
-
-#profile_pic_up,
-#profile_pic_down {
-    width: auto; /* Adjust the width as needed */
-    height: 50px; /* Adjust the height as needed */
-    position: relative;
-    right: 100px;
-    top: 200px;
-}
-
-
-
-@media (max-width: 1000px) { /* Adjust the max-width as needed for phone screens */
-    .answer {
-        margin-left: 100px; /* Adjust the margin for smaller screens */
-    }
-
-    #second_info {
-        position: static; /* Remove fixed positioning on smaller screens */
-        margin-left: 0; /* Reset margin */
-    }
-
-    #profile_pic_up,
-    #profile_pic_down {
-        right: 60px;
-    }
-
-    #votes{
-        left: -40px;
-    }
-
-}
-
-#votes{
+.vote-btns span {
+    text-align: center;
+    margin-top: 10px ;
+    margin-bottom: 10px ;
     color: #7C5BF0;
-    font-family: Fredoka;
-    font-size: 22px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-    letter-spacing: 2.2px;
-    position: relative;
-    right: 86px;
-    top: 200px;
+    font-weight: 600;
 }
+
+.top-answer {
+    margin-top: 20px;
+}
+
+
+.top-answer h2 {
+    margin-top: 20px;
+    margin-left: 80px;
+    background-image: url('../images/tick.png'); 
+    background-size: 40px 40px;
+    background-repeat: no-repeat; 
+    padding-left: 50px; 
+    font-size: 40px;
+    font-weight: 600;
+    background-position: left center;
+}
+
+.top-answer>div, .other-answers>div {
+    display: flex;
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.answer-content img{
+    height: 40px;
+    width: 40px;
+    border: 1px solid #7C5BF0;
+    border-radius: 50%;
+} 
+
+.answer-content>div {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+.answer-content p {
+    font-size: 18px;
+    color: #525252;
+    text-align: justify;
+    line-height: 1.2em;
+}
+
+.answer-content>ul {
+    margin-left: 60px;
+    margin-top: 20px;
+    border-bottom: 1px solid #e6e7f3;
+}
+
+#answer-comment-list {
+    background-color: #F8F7FE;
+    width: 100%;
+    margin-left: 60px;
+    margin-top: 30px;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+#answer-comment-list li>div{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+#answer-comment-list li>div a{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+
+#answer-comment-list li {
+    margin-bottom: 20px;
+}
+
+#answer-comment-list li p, .like-comment {
+    margin-left: 60px;
+}
+
+.like-comment{
+   margin-top: 10px;
+  
+}
+
+.like-comment ion-icon {
+    font-size: 25px;
+    color: #7C5BF0;
+}
+
+.like-comment ion-icon:hover{
+   cursor: pointer;
+ }
+
+.like-comment span {
+    font-size: 18px;
+}
+
+.comment-input input {
+    width: 95%;
+    background-color: transparent;
+    font-size: 18px;
+    padding: 10px 0;
+    border-bottom: 1px solid #e6e7f3;
+}
+
+.comment-input ion-icon {
+    font-size: 20px;
+}
+
+
+.other-answers {
+    margin-top: 40px;
+}
+
+.other-answers h2 {
+    margin-top: 20px;
+    margin-left: 80px;
+    font-size: 40px;
+    font-weight: 600;
+}
+
+.vote-btns .ionicon, svg{
+    color:#7C5BF0 !important;
+}
+
+.answerFormContainer{
+    margin: 30px auto;
+    width: 1200px;
+    height: 500px;
+    border-radius: 10px;
+    border: 1px dashed #6D49EB;
+    background: #F8F7FE; 
+    padding: 50px;
+}
+
+.question-title button {
+    font-size: 18px;
+    background-color: #D2CFFF;
+    border: 1px solid #D2CFFF;
+    width: 190px;
+    padding: 5px 0;
+    color: #7C5BF0;
+    border-radius: 5px;
+    transition: all 400ms ease;
+    margin: 0px auto;
+    align-self: center;
+    display: block;
+}
+
+.question-title button:hover {
+    background-color: #7C5BF0;
+    border: 1px solid #7C5BF0;
+    color: white;
+}
+
+.answerFormContainer button {
+    font-size: 18px;
+    background-color: #D2CFFF;
+    border: 1px solid #D2CFFF;
+    width: 190px;
+    padding: 5px 0;
+    color: #7C5BF0;
+    border-radius: 5px;
+    transition: all 400ms ease;
+    margin: 0px auto;
+    align-self: center;
+    display: block;
+}
+
+.answerFormContainer button:hover {
+    background-color: #7C5BF0;
+    border: 1px solid #7C5BF0;
+    color: white;
+}
+
+.answerFormContainer span {
+    color: #7C5BF0;
+}
+
+.answerFormContainer .form-group {
+    margin-bottom: 15px;
+}
+
+.answerFormContainer label {
+    display: block; 
+    font-weight: 500;
+    font-size: 1.2rem;
+}
+
+.answerFormContainer textarea{
+    margin-bottom: 20px;
+    font-size: 18px;
+    padding: 5px 0;
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    background: #FAFAFA; 
+    margin-top: 10px;
+    resize: none; 
+    outline:none;
+    padding: 20px;
+    height: 300px;
+}
+
 
 
 .hasvoted{
-
-    color: red;
+    color:white;
+    background-color: #7C5BF0;
+    
 
 }
 .notvoted{
 
-    color:green;
+    color: #7C5BF0;
+    background-color: white;
 }
 
 
 
-.baixo{
-    background-color: yellow;
-}
 
-.cima{
-    background-color: aqua;
-}
+
