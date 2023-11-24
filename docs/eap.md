@@ -96,116 +96,63 @@ The web resources that were implemented in the prototype are described in the ne
 | R105: Register Action | /register |
 
 
-<b>Module M02: Static pages</b>
+<b>Module M02: Users</b>
 
 | Web Resource Reference | URL                            |
 | ---------------------- | ------------------------------ |
-| R101: Login Form | /login |
+| R201: View GameOn Home page| /home |
+| R202: View all users | /users |
+| R203: View user profile page | /users/{id} |
+| R204: View user questions | /users/questions/{id} |
+| R205: View user answers | /users/answers/{id} |
+| R206: Search for users | /api/users |
+| R207: Edit user profile | /api/users/{id}/edit |
 
-<b>Module M03: Users</b>
-
-| Web Resource Reference | URL                            |
-| ---------------------- | ------------------------------ |
-| R201: Profile page of a user | /users/{id} |
-| R202: User edit page | /api/users/{id}/edit |
-| R203: See list of all users | /users |
-| R204: Question of a user | /users/questions/{id} |
-| R205: Answers of a user | /users/answers/{id} |
-| R206: Search for a user | /api/users |
-| R207:  | /api/users/{id} |
-
-<b>Module M02: Questions</b>
+<b>Module M03: Posts</b>
 
 | Web Resource Reference | URL                            |
 | ---------------------- | ------------------------------ |
-| R201: Profile page of a user | /users/{id} |
-| R202: User edit page | /api/users/{id}/edit |
-| R203: See list of all users | /users |
-| R204: Question of a user | /users/questions/{id} |
-| R205: Answers of a user | /users/answers/{id} |
-| R206: Search for a user | /api/users |
-| R207:  | /api/users/{id} |
+| R301: View all questions | /questions |
+| R302: Search questions | /questions |
+| R303: Create a new question| /new-question |
+| R304: Store a new question| /new-question |
+| R305: View a specific question | /questions/{id} |
+| R306: Store a comment | /comments/store |
 
-<b>Module M02: GameCategory</b>
 
-| Web Resource Reference | URL                            |
-| ---------------------- | ------------------------------ |
-| R201: Profile page of a user | /users/{id} |
-| R202: User edit page | /api/users/{id}/edit |
-| R203: See list of all users | /users |
-| R204: Question of a user | /users/questions/{id} |
-| R205: Answers of a user | /users/answers/{id} |
-| R206: Search for a user | /api/users |
-| R207:  | /api/users/{id} |
-
-<b>Module M05: Game</b>
+<b>Module M04: Games</b>
 
 | Web Resource Reference | URL                            |
 | ---------------------- | ------------------------------ |
-| R501: Game Page | /games/{id} |
+| R401: View all game categories | /categories |
+| R402: View game category page | /categories/{id} |
+| R403: View game page | /game/{id} |
 
-<b>Module M06: Answer</b>
+<b>Module M05: Administration</b>
 
 | Web Resource Reference | URL                            |
 | ---------------------- | ------------------------------ |
-| R601: Add Answer Form | /api/answers |
-| R602: Edit Answer | /api/answers/{id}/edit |
-| R603: Delete Answer Action | /api/answers/{id}/delete |
+| R501: Update user status | /api/users/{id} |
 
 
 ### 2. Prototype
 
-> URL of the prototype plus user credentials necessary to test all features.  
-> Link to the prototype source code in the group's git repository.
+The prototype is available at:  https://lbaw23143.lbaw.fe.up.pt
 
----
+Credentials:
+- admin user: johndoe@example.com/1234
+- regular user: chloehall@email.com/1234
+
+The code is available at: https://git.fe.up.pt/lbaw/lbaw2324/lbaw23143 
 
 ## Revision history
 
-Changes made to the first submission:
+No changes yet.
 
-1. Item 1
-1. ..
+***
+GROUP23143, 26/10/2023
 
----
-
-GROUPYYgg, DD/MM/20YY
-
-- Group member 1 name, email (Editor)
-- Group member 2 name, email
-- ...
-
-Identifier
-Module
-Description
-M01
-Authentication
-
-M02
-Users
-
-M03
-Posts
-Web resources associated with questions, including posting questions, editing questions, viewing question details, and related functionalities.
-M06
-Games
-Web resources associated with games, potentially including game information, reviews, discussions, and related functionalities.  
-M05
-Administration
-Web resources associated with administrative tasks, including user moderation, content management, analytics, and other administrative features.
-
-Identifier
-Name
-Description
-GST
-Guest
-Unauthenticated users
-USR
-User
-Authenticated users
-OWN
-Owner
-User that are owners of the information (e.g. own profile, own questions, own comments)
-ADM
-Administrator
-System administrators
+* Ana Azevedo, up202108654@up.pt 
+* Catarina Canelas, up202103628@up.pt (Editor)
+* Gabriel Ferreira, up202108722@up.pt
+* Luís Du, up202105385@up.pt
