@@ -448,7 +448,7 @@ paths:
  /api/users/{id}:
     post:
       operationId: R501
-      summary: 'R209: Update user status'
+      summary: 'R501: Update user status'
       description: 'Update user status (ban or unban user account). Access: ADM'
       tags:
         - 'M05: Administration'
@@ -649,7 +649,7 @@ paths:
     post:
       operationId: R312
       summary: 'R312: Store Answer'
-      description: 'Store a new answer. Access: User'
+      description: 'Store a new answer. Access: USR'
       tags:
         - 'M03: Posts'
       requestBody:
@@ -678,7 +678,7 @@ paths:
     put:
       operationId: R313
       summary: 'R313: Edit Answer'
-      description: 'Edit an existing answer. Access: User'
+      description: 'Edit an existing answer. Access: OWN'
       tags:
         - 'M03: Posts'
       parameters:
@@ -712,7 +712,7 @@ paths:
     delete:
       operationId: R314
       summary: 'R314: Delete Answer'
-      description: 'Delete an existing answer. Access: User'
+      description: 'Delete an existing answer. Access: OWN'
       tags:
         - 'M03: Posts'
       parameters:
