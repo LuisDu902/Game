@@ -234,8 +234,8 @@ paths:
 
  /api/users:
     get:
-      operationId: R208
-      summary: 'R208: Search for users'
+      operationId: R206
+      summary: 'R206: Search for users'
       description: 'Search for users with filter. Access: GST, USR'
       tags:
         - 'M02: Users'
@@ -471,6 +471,8 @@ paths:
                   type: string
                   enum: ['Active', 'Banned']
                   description: 'The new status for the user account (active or banned).'
+              required:
+                - new_status
       responses:
         '200':
           description: 'Success. User status updated.'
@@ -481,8 +483,8 @@ paths:
           
  /api/users/{id}/edit:
     post:
-      operationId: R206
-      summary: 'R206: Edit user profile'
+      operationId: R207
+      summary: 'R207: Edit user profile'
       description: 'Edit user profile information. Access: OWN'
       tags:
         - 'M02: Users'
@@ -526,23 +528,23 @@ paths:
           description: 'User not found.'
           
   
-
-/api/questions:
+ /api/questions:
     get:
-      operationId: R501
-      summary: 'R501: List Questions'
-      description: 'Retrieve a list of questions. Access: Public'
+      operationId: R307
+      summary: 'R307: List Questions'
+      description: 'Retrieve a list of questions. Access: GST, USR'
       tags:
-        - 'M03: Public Actions'
+        - 'M03: Posts'
       responses:
         '200':
           description: 'Success. List of questions retrieved.'
-
-/api/questions/{id}/delete:
+          
+          
+ /api/questions/{id}/delete:
     delete:
-      operationId: R506
-      summary: 'R506: Delete Question'
-      description: 'Delete an existing question. Access: User'
+      operationId: R308
+      summary: 'R308: Delete Question'
+      description: 'Delete an existing question. Access: OWN'
       tags:
         - 'M03: Posts'
       parameters:
@@ -559,11 +561,11 @@ paths:
         '404':
           description: 'Question not found.'
 
-/api/questions/{id}/vote:
+ /api/questions/{id}/vote:
     post:
-      operationId: R502
-      summary: 'R502: Vote for Question'
-      description: 'Vote for a question. Access: User'
+      operationId: R309
+      summary: 'R309: Vote for Question'
+      description: 'Vote for a question. Access: USR'
       tags:
         - 'M03: Posts'
       parameters:
@@ -580,11 +582,12 @@ paths:
         '404':
           description: 'Question not found.'
 
-/api/questions/{id}/unvote:
+
+ /api/questions/{id}/unvote:
     post:
-      operationId: R508
-      summary: 'R508: Unvote for Question'
-      description: 'Remove vote for a question. Access: User'
+      operationId: R310
+      summary: 'R310: Unvote for Question'
+      description: 'Remove vote for a question. Access: USR'
       tags: 
         - 'M03: Posts'
       parameters:
@@ -600,12 +603,12 @@ paths:
           description: 'Unauthorized. The action requires proper authentication and authorization.'
         '404':
           description: 'Question not found.'
-
-/api/questions/{id}/edit:
+          
+ /api/questions/{id}/edit:
     put:
-      operationId: R509
-      summary: 'R509: Edit Question'
-      description: 'Edit an existing question. Access: User'
+      operationId: R311
+      summary: 'R311: Edit Question'
+      description: 'Edit an existing question. Access: OWN'
       tags:
         - 'M03: Posts'
       parameters:
@@ -621,16 +624,18 @@ paths:
             schema:
               type: object
               properties:
-                // Add properties as needed for editing a question
-              answerId:
-                  type: integer
-                  description: 'The ID of the answer.'
-              userId:
-                  type: integer
-                  description: 'The ID of the user.'
-              comentario:
-                  type: string
-                  description: 'The content of the comment.'
+                user:
+                 type: integer
+                title:
+                 type: string
+                content:
+                 type: string
+                
+              required:
+                    - user
+                    - title
+                    - content
+
       responses:
         '200':
           description: 'Success. Question edited.'
@@ -638,11 +643,12 @@ paths:
           description: 'Unauthorized. The action requires proper authentication and authorization.'
         '404':
           description: 'Question not found.'
-
-/api/answers:
+          
+        
+ /api/answers:
     post:
-      operationId: R502
-      summary: 'R502: Store Answer'
+      operationId: R312
+      summary: 'R312: Store Answer'
       description: 'Store a new answer. Access: User'
       tags:
         - 'M03: Posts'
@@ -668,10 +674,10 @@ paths:
         '401':
           description: 'Unauthorized. The action requires proper authentication and authorization.'
 
-/api/answers/{id}/edit:
+ /api/answers/{id}/edit:
     put:
-      operationId: R503
-      summary: 'R503: Edit Answer'
+      operationId: R313
+      summary: 'R313: Edit Answer'
       description: 'Edit an existing answer. Access: User'
       tags:
         - 'M03: Posts'
@@ -702,11 +708,10 @@ paths:
         '404':
           description: 'Answer not found.'
 
-
-/api/answers/{id}/delete:
+ /api/answers/{id}/delete:
     delete:
-      operationId: R504
-      summary: 'R504: Delete Answer'
+      operationId: R314
+      summary: 'R314: Delete Answer'
       description: 'Delete an existing answer. Access: User'
       tags:
         - 'M03: Posts'
@@ -723,4 +728,4 @@ paths:
           description: 'Unauthorized. The action requires proper authentication and authorization.'
         '404':
           description: 'Answer not found.'
-  
+
