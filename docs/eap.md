@@ -114,7 +114,6 @@ The web resources that were implemented in the prototype are described in the ne
 | R206: Search for a user | /api/users |
 | R207:  | /api/users/{id} |
 
-
 <b>Module M02: Questions</b>
 
 | Web Resource Reference | URL                            |
@@ -139,29 +138,20 @@ The web resources that were implemented in the prototype are described in the ne
 | R206: Search for a user | /api/users |
 | R207:  | /api/users/{id} |
 
-<b>Module M02: Game</b>
+<b>Module M05: Game</b>
 
 | Web Resource Reference | URL                            |
 | ---------------------- | ------------------------------ |
-| R201: Profile page of a user | /users/{id} |
-| R202: User edit page | /api/users/{id}/edit |
-| R203: See list of all users | /users |
-| R204: Question of a user | /users/questions/{id} |
-| R205: Answers of a user | /users/answers/{id} |
-| R206: Search for a user | /api/users |
-| R207:  | /api/users/{id} |
+| R501: Game Page | /games/{id} |
 
-<b>Module M02: Answer</b>
+<b>Module M06: Answer</b>
 
 | Web Resource Reference | URL                            |
 | ---------------------- | ------------------------------ |
-| R201: Profile page of a user | /users/{id} |
-| R202: User edit page | /api/users/{id}/edit |
-| R203: See list of all users | /users |
-| R204: Question of a user | /users/questions/{id} |
-| R205: Answers of a user | /users/answers/{id} |
-| R206: Search for a user | /api/users |
-| R207:  | /api/users/{id} |
+| R601: Add Answer Form | /api/answers |
+| R602: Edit Answer | /api/answers/{id}/edit |
+| R603: Delete Answer Action | /api/answers/{id}/delete |
+
 
 ### 2. Prototype
 
