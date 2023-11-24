@@ -526,3 +526,201 @@ paths:
           description: 'User not found.'
           
   
+
+/api/questions:
+    get:
+      operationId: R501
+      summary: 'R501: List Questions'
+      description: 'Retrieve a list of questions. Access: Public'
+      tags:
+        - 'M03: Public Actions'
+      responses:
+        '200':
+          description: 'Success. List of questions retrieved.'
+
+/api/questions/{id}/delete:
+    delete:
+      operationId: R506
+      summary: 'R506: Delete Question'
+      description: 'Delete an existing question. Access: User'
+      tags:
+        - 'M03: Posts'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: 'Success. Question deleted.'
+        '401':
+          description: 'Unauthorized. The action requires proper authentication and authorization.'
+        '404':
+          description: 'Question not found.'
+
+/api/questions/{id}/vote:
+    post:
+      operationId: R502
+      summary: 'R502: Vote for Question'
+      description: 'Vote for a question. Access: User'
+      tags:
+        - 'M03: Posts'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: 'Success. Vote registered for the question.'
+        '401':
+          description: 'Unauthorized. The action requires proper authentication and authorization.'
+        '404':
+          description: 'Question not found.'
+
+/api/questions/{id}/unvote:
+    post:
+      operationId: R508
+      summary: 'R508: Unvote for Question'
+      description: 'Remove vote for a question. Access: User'
+      tags: 
+        - 'M03: Posts'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: 'Success. Vote removed for the question.'
+        '401':
+          description: 'Unauthorized. The action requires proper authentication and authorization.'
+        '404':
+          description: 'Question not found.'
+
+/api/questions/{id}/edit:
+    put:
+      operationId: R509
+      summary: 'R509: Edit Question'
+      description: 'Edit an existing question. Access: User'
+      tags:
+        - 'M03: Posts'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                // Add properties as needed for editing a question
+              answerId:
+                  type: integer
+                  description: 'The ID of the answer.'
+              userId:
+                  type: integer
+                  description: 'The ID of the user.'
+              comentario:
+                  type: string
+                  description: 'The content of the comment.'
+      responses:
+        '200':
+          description: 'Success. Question edited.'
+        '401':
+          description: 'Unauthorized. The action requires proper authentication and authorization.'
+        '404':
+          description: 'Question not found.'
+
+/api/answers:
+    post:
+      operationId: R502
+      summary: 'R502: Store Answer'
+      description: 'Store a new answer. Access: User'
+      tags:
+        - 'M03: Posts'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                  description: 'The content of the answer.'
+                questionId:
+                  type: integer
+                  description: 'The ID of the question.'
+                userId:
+                  type: integer
+                  description: 'The ID of the user.'
+      responses:
+        '200':
+          description: 'Success. Answer stored.'
+        '401':
+          description: 'Unauthorized. The action requires proper authentication and authorization.'
+
+/api/answers/{id}/edit:
+    put:
+      operationId: R503
+      summary: 'R503: Edit Answer'
+      description: 'Edit an existing answer. Access: User'
+      tags:
+        - 'M03: Posts'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                  description: 'The content of the answer.'
+                userId:
+                  type: integer
+                  description: 'The ID of the user.'
+      responses:
+        '200':
+          description: 'Success. Answer edited.'
+        '401':
+          description: 'Unauthorized. The action requires proper authentication and authorization.'
+        '404':
+          description: 'Answer not found.'
+
+
+/api/answers/{id}/delete:
+    delete:
+      operationId: R504
+      summary: 'R504: Delete Answer'
+      description: 'Delete an existing answer. Access: User'
+      tags:
+        - 'M03: Posts'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: 'Success. Answer deleted.'
+        '401':
+          description: 'Unauthorized. The action requires proper authentication and authorization.'
+        '404':
+          description: 'Answer not found.'
+  
