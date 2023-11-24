@@ -19,7 +19,7 @@
                     @endif
                     <span><a href="{{ route('profile', ['id' => $question->creator->id ]) }}" class="purple">{{ $question->creator->username }}</a> asked {{ $question->timeDifference() }} ago</span>
                 </div>
-                @if(Auth::check() and (Auth::id() == $question->creator->id) and Auth::user()->is_admin)
+                @if(Auth::check() and (Auth::id() == $question->creator->id))
                     <div class="q-delete">
                         <button class="delete-button" onclick="deleteQuestion({{ $question->id }})">Delete</button>
                     </div>
