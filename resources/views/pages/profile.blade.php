@@ -1,15 +1,20 @@
 @extends('layouts.app')
 
 @section('content')
-   
-    <ul class="breadcrumb">
-        <li><a href="{{ route('home') }}">
-            <ion-icon name="home-outline"></ion-icon> Home</a>
-        </li>
-        <li><a href="{{ route('users') }}">Users</a></li>
-        <li> {{ $user->username }} </li>
-    </ul>
+    <x-sidebar></x-sidebar>
 
+    <div class="headers">
+        <button class="open-sidebar">
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ul class="breadcrumb">
+            <li><a href="{{ route('home') }}">
+                <ion-icon name="home-outline"></ion-icon> Home</a>
+            </li>
+            <li><a href="{{ route('users') }}">Users</a></li>
+            <li> {{ $user->username }} </li>
+        </ul>
+    </div>
     <article class="profile-wrapper">
         <div class="profile-left">
             <img class="profile-big-pic" src="../images/user.png"

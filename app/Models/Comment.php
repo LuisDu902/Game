@@ -12,7 +12,6 @@ class Comment extends Model
 {
     use HasFactory;
 
-
     public $timestamps  = false;
 
     protected $table = 'comment';
@@ -34,7 +33,7 @@ class Comment extends Model
     /**
      * Get the latest question content.
      */
-    public function latest_content()
+    public function latestContent()
     {
         return DB::table('version_content')
         ->select('content')

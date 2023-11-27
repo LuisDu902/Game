@@ -109,8 +109,30 @@ body > header {
     transform: scale(0.95);
 }
 
-.dropdown {
+.navbar .left {
     margin-left: auto;
+    display: flex;
+    gap: 30px;
+}
+
+.navbar .admin {
+    display: block;
+    background: #C6FFDD; 
+    background: -webkit-linear-gradient(to right, #f7797d, #FBD786, #C6FFDD); 
+    background: linear-gradient(to right, #f7797d, #FBD786, #C6FFDD); 
+    background-clip: text;
+    color: transparent;
+    animation: gradient 8s ease-in-out infinite;
+    background-size: 300% 300%;
+    font-weight: 500;
+    padding: 5px 15px;
+    border-radius: 5px;
+    border: 1px solid var(--light-purple);
+    transition: 300ms all ease;
+}
+
+.navbar .admin:hover {
+    transform: scale(1.1);
 }
 
 .dropdown .user {

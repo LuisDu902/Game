@@ -15,6 +15,7 @@
         <link href="{{ url('css/app.css') }}" rel="stylesheet">
         <link href="{{ url('css/navbar.css') }}" rel="stylesheet">
         <link href="{{ url('css/auth.css') }}" rel="stylesheet">
+        <link href="{{ url('css/sidebar.css') }}" rel="stylesheet">
         <link href="{{ url('css/footer.css') }}" rel="stylesheet">
         <link href="{{ url('css/breadcrumb.css') }}" rel="stylesheet">
         <link href="{{ url('css/profile.css') }}" rel="stylesheet">
@@ -25,6 +26,7 @@
         <link href="{{ url('css/game.css') }}" rel="stylesheet">
         <link href="{{ url('css/home.css') }}" rel="stylesheet">
         <link href="{{ url('css/question.css') }}" rel="stylesheet">
+        <link href="{{ url('css/faq.css') }}" rel="stylesheet">
 
         <script type="text/javascript">
             // Fix for Firefox autofocus CSS bug
@@ -37,6 +39,8 @@
         <script type="text/javascript" src="{{ url('js/answer.js') }}" defer></script>
         <script type="text/javascript" src="{{ url('js/carousel.js') }}" defer></script>
         <script type="text/javascript" src="{{ url('js/dropdown.js') }}" defer></script>
+        <script type="text/javascript" src="{{ url('js/faq.js') }}" defer></script>
+    
         
         <script nomodule
             src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"

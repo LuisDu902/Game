@@ -49,7 +49,7 @@ class Question extends Model
     /**
      * Get the latest question content.
      */
-    public function latest_content()
+    public function latestContent()
     {
         return DB::table('version_content')
         ->select('content')
@@ -102,7 +102,7 @@ class Question extends Model
         return $question;
     }
 
-    public function last_date()
+    public function lastDate()
     {
         return DB::table('version_content')
         ->select('date')
@@ -112,9 +112,9 @@ class Question extends Model
         ->value('date');
     }
 
-    public function last_modification() {
+    public function lastModification() {
         $now = now();
-        $modifiedAt = $this->last_date();
+        $modifiedAt = $this->lastDate();
         return $now->diffForHumans($modifiedAt, true);
     }
 }

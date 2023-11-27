@@ -17,3 +17,20 @@ if (dropDownButton) {
     });
 
 }
+
+const openSidebarButton = document.querySelector('.open-sidebar');
+
+if (openSidebarButton) {
+    const overlay = document.querySelector('.overlay');
+    const sidebar = document.querySelector('.sidebar');
+    
+    openSidebarButton.addEventListener('click', () => {
+        sidebar.style.left = '0';
+        overlay.style.display = 'block';
+    });
+
+    overlay.addEventListener('click', () => {
+        sidebar.style.left = '-400px';
+        overlay.style.display = 'none';
+    });
+}

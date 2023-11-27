@@ -6,7 +6,7 @@
         <div>
             <img src="../images/user.png" alt="user">
             <p>
-                {{ $answer->latest_content() }}
+                {{ $answer->latestContent() }}
             </p>
             @if(Auth::check() and (Auth::id() == $answer->user_id))
                     <button class="edit-answer" data-id="{{ $answer->id }}">Edit</button>
@@ -14,7 +14,7 @@
         </div>
         <ul>
             <li> <a href="{{ route('profile', ['id' => $answer->creator->id ]) }}" class="purple">{{ $answer->creator->name }}</a> answered {{ $answer->time_difference() }} ago</li>
-            <li class="a-modi"> Modified {{ $answer->last_modification() }} ago </li>
+            <li class="a-modi"> Modified {{ $answer->lastModification() }} ago </li>
             <li> {{ $answer->comments->count() }} comments </li>
         </ul>
         <div class="answer-comments">
@@ -26,7 +26,7 @@
                             <a href="" class="purple">{{ $comment->user->name }}</a>
                         </div>
                         <p>
-                            {{ $comment->latest_content() }}
+                            {{ $comment->latestContent() }}
                         </p>
                     </li>
                 @endforeach

@@ -12,10 +12,10 @@
                         <h2>{{ $question->title }}</h2>
                     </a>
 
-                    @if (strlen($question->latest_content()) >= 300)
-                        <p>{{ substr($question->latest_content(), 0, 300) }}...</p>
+                    @if (strlen($question->latestContent()) >= 300)
+                        <p>{{ substr($question->latestContent(), 0, 300) }}...</p>
                     @else
-                        <p>{{ $question->latest_content() }}</p>
+                        <p>{{ $question->latestContent() }}</p>
                     @endif
                     <span><a href="{{ route('profile', ['id' => $question->creator->id ]) }}" class="purple">{{ $question->creator->username }}</a> asked {{ $question->timeDifference() }} ago</span>
                 </div>

@@ -1,14 +1,20 @@
 @extends('layouts.app')
 
 @section('content')
-    <ul class="breadcrumb">
-        <li><a href="{{ route('home') }}">
-            <ion-icon name="home-outline"></ion-icon> Home</a>
-        </li>
-        <li><a href="{{ route('questions') }}">Questions</a></li>
-        <li>id</li>
-    </ul>
+    <x-sidebar></x-sidebar>
 
+    <div class="headers">
+        <button class="open-sidebar">
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ul class="breadcrumb">
+            <li><a href="{{ route('home') }}">
+                <ion-icon name="home-outline"></ion-icon> Home</a>
+            </li>
+            <li><a href="{{ route('questions') }}">Questions</a></li>
+            <li>id</li>
+        </ul>
+    </div>
     <section class="question-detail-section" data-id="{{$question->id}}" {{ Auth::check() ? 'data-user=' . Auth::id() . ' data-username=' . Auth::user()->username . '' : '' }}
         >
         <div class="question-detail">
@@ -44,11 +50,11 @@
                 <div class="question-description"> 
                     <ul>
                         <li> {{ $question->creator->name }} asked {{ $question->timeDifference() }} ago</li>
-                        <li id="q-modi"> Modified {{ $question->last_modification() }}</li>
+                        <li id="q-modi"> Modified {{ $question->lastModification() }}</li>
                         <li> Viewed {{ $question->nr_views }} times </li>
                     </ul>
                     <p>
-                        {{ $question->latest_content() }}
+                        {{ $question->latestContent() }}
                     </p>
                 </div>
             </div>

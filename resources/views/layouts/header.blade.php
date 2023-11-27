@@ -6,7 +6,6 @@
         </a>
         <ul class="nav-links">
             <li><a href="{{ route('questions') }}">Questions</a></li>
-            <li><a href="{{ route('users') }}">Users</a></li>
             <li><a href="{{ route('categories') }}">Game
                     Categories</a></li>
         </ul>
@@ -21,7 +20,12 @@
         </form>
 
         @if (Auth::check())
+        <div class="left">
+            <a href="{{ route('users') }}" class="admin">
+                Admin Section
+            </a>
             <div class="dropdown">
+                
                 <div class="user">
                     <img src="{{ asset('images/user.png') }}" alt="user-profile">
                     <strong class="username white"> {{ Auth::user()->username }} </strong>
@@ -36,6 +40,7 @@
                     <a href="{{ url('/logout') }}">Sign out</a>
                 </div>
             </div>
+        </div>
         @else
             <div class="buttons">
                 <a href="{{ route('register') }}">

@@ -1,7 +1,6 @@
 .headers {
     display: flex;
-    gap: 80px;
-
+    gap: 30px;
 }
 
 .sidebar {

@@ -50,7 +50,7 @@ class Answer extends Model
     /**
      * Get the latest answer content.
      */
-    public function latest_content()
+    public function latestContent()
     {
         return DB::table('version_content')
         ->select('content')
@@ -61,7 +61,7 @@ class Answer extends Model
     }
 
 
-    public function create_date()
+    public function createDate()
     {
         return DB::table('version_content')
         ->select('date')
@@ -71,7 +71,7 @@ class Answer extends Model
         ->value('date');
     }
 
-    public function last_date()
+    public function lastDate()
     {
         return DB::table('version_content')
         ->select('date')
@@ -83,13 +83,13 @@ class Answer extends Model
 
     public function time_difference() {
         $now = now();
-        $createdAt = $this->create_date();
+        $createdAt = $this->createDate();
         return $now->diffForHumans($createdAt, true);
     }
 
-    public function last_modification() {
+    public function lastModification() {
         $now = now();
-        $modifiedAt = $this->last_date();
+        $modifiedAt = $this->lastDate();
         return $now->diffForHumans($modifiedAt, true);
     }
 

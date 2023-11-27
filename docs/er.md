@@ -57,17 +57,17 @@ For the GameOn system, consider the user stories that are presented in the follo
 | US03       | Exact match search  | High     | As a User, I want an exact match search so that I can quickly find specific posts.|
 | US04       | View top questions          | High | As a User, I want to be able to view the top questions, so that I can have easy access to the most popular questions. |
 | US05       | Browse questions          | High | As a User, I want to browse questions easily so that I can discover a variety of topics related to games and expand my knowledge. |
-| US06       | Full-text search        | Medium     | As a User, I want a full-text search functionality so that I can find information across all aspects of questions and answers.|
-| US07       | Search filters          | Medium | As a User, I want to use search filters based on keywords so that I can narrow down my search results and quickly find specific information about games. |
-| US08       | Search by tags          | Mediun | As a User, I want to be able to search questions by tags so that only the games I'm interested in appear. |
-| US09       | View recent questions          | Medium | As a User, I want to be able to view recently made questions, so that I can easily stay updated on the latest discussions. |
-| US10       | Browse questions by tags          | Medium | As a User, I want to browse questions by tags so that I can quickly find topics related to specific games or themes that match my interests. |
-| US11       | See FAQ page         | Medium | As a User, I want to have access to a FAQ page, so that I can see the answers to the most frequently asked questions about the website. |
-| US12       | See contact us page          | Medium | As a User, I want to have access to a contacts page, so that I can contact the team of the website. |
-| US13       | Order seach results          | Medium | As a User, I want to be able to sort the search results using different filters so that I can find what I want easily. |
-| US14       | View question details          | Medium | As a User, I want to be able to view question details, so that I can have a deeper knowledge about a question. |
-| US15       | View user profiles         | Medium | As a User, I want to view user profiles, so that I can see information about that user. |
-| US16       | Placeholders in Form Inputs         | Medium | As a User, I want placeholders in form inputs so that I can clearly understand what information is expected in each field.  |
+| US06       | Full-text search        | High     | As a User, I want a full-text search functionality so that I can find information across all aspects of questions and answers.|
+| US07       | Search filters          | High | As a User, I want to use search filters based on keywords so that I can narrow down my search results and quickly find specific information about games. |
+| US08       | View recent questions          | High | As a User, I want to be able to view recently made questions, so that I can easily stay updated on the latest discussions. |
+| US09       | Order seach results          | High | As a User, I want to be able to sort the search results using different filters so that I can find what I want easily. |
+| US10       | View question details          | High | As a User, I want to be able to view question details, so that I can have a deeper knowledge about a question. |
+| US11       | View user profiles         | High | As a User, I want to view user profiles, so that I can see information about that user. |
+| US12       | Placeholders in Form Inputs         | High | As a User, I want placeholders in form inputs so that I can clearly understand what information is expected in each field.  |
+| US13       | Search by tags          | Medium | As a User, I want to be able to search questions by tags so that only the games I'm interested in appear. |
+| US14       | Browse questions by tags          | Medium | As a User, I want to browse questions by tags so that I can quickly find topics related to specific games or themes that match my interests. |
+| US15       | See FAQ page         | Medium | As a User, I want to have access to a FAQ page, so that I can see the answers to the most frequently asked questions about the website. |
+| US16       | See contact us page          | Medium | As a User, I want to have access to a contacts page, so that I can contact the team of the website. |
 | US17       | Contextual Error Messages         | Medium | As a User, I want contextual error messages so that I receive clear and specific error messages. |
 | US18       | Contextual Help         | Medium | As a User,  I want contextual help so that I can access relevant guidance within the system. |
 
@@ -99,8 +99,8 @@ Table 3: Guest user stories
 | US31       | Delete question     | High     | As a User, I want to be able to delete questions, so that I can have control over the content I have posted. |
 | US32       | Delete answer     | High | As a user, I want to be able to delete answers, so that I can have control over the content I have contributed. |
 | US33      | Edit profile     | High     | As a User, I want to change profile information, so that I can keep it updated and relevant. |
-| US34       | Vote on post     | Medium     |As a User, I want to upvote or downvote questions and answers, so that I can show my appreciation or my concerns for content and contribute to its visibility on the platform. |
-| US35       | Comment on post     | Medium     | As a User, I want to be able to comment on questions and answers, so that I can engage in discussions and seek clarification. |
+| US34       | Vote on post     | High     |As a User, I want to upvote or downvote questions and answers, so that I can show my appreciation or my concerns for content and contribute to its visibility on the platform. |
+| US35       | Comment on post     | High     | As a User, I want to be able to comment on questions and answers, so that I can engage in discussions and seek clarification. |
 | US36       | Edit comment     | Medium     | As a User, I want to be able to edit my comments so that I can modify my responses for clarity, correctness, or relevance. |
 | US37       | Edit profile picture    | Medium     | As a User, I want to be able to edit a profile picture, so that it can be updated. |
 | US38       | Manage post visibility    | Medium     | As a User, I want to be able to manage a post's visibility, so that I can have control over who can see and interact with that post. |
@@ -127,14 +127,14 @@ Table 4: Authenticated user user stories
 
 | Identifier |          Name          | Priority | Description |
 | ---------- | ---------------------- | -------- | ----------  |
-| US53       | Block and unblock user accounts      | Medium     | As an administrator, I want to be able to block user accounts so that I can maintain a safe and respectful community environment .|
-| US54       | Delete content      | Medium     | As an administrator, I want to be able to delete content, so that I can make sure that the application content follows the community guidelines.|
-| US55       | Create game sections     | Medium     | As an administrator, I want to create game sections so that I can organize discussions and content effectively. |
-| US56       | Manage tags     | Medium     | As an administrator, I want to manage tags so that I can ensure consistent categorization and organization of content across the application. |
-| US57       | Delete user account | Medium | As an administrator, I want to be able to delete user accounts so that can make sure that the application users all follow the community guidelines. |
-| US58 | Remove comments| Low | As an administrator, I want to remove comments, so that offensive comments do not exist in the application. |
-| US59       | Notification of inappropriate content      | Low     | As an administrator, I want to be notified of reported content by users so that I can take appropriate actions.|
-| US60       | User statistics     | Low     | As an administrator, I want to see the user statistics, such as number of posts, questions in the last period of time, so that I can keep track of what interests people have. |
+| US55       | Block and unblock user accounts      | High     | As an administrator, I want to be able to block user accounts so that I can maintain a safe and respectful community environment .|
+| US56       | Delete content      | Medium     | As an administrator, I want to be able to delete content, so that I can make sure that the application content follows the community guidelines.|
+| US57       | Create game sections     | Medium     | As an administrator, I want to create game sections so that I can organize discussions and content effectively. |
+| US58       | Manage tags     | Medium     | As an administrator, I want to manage tags so that I can ensure consistent categorization and organization of content across the application. |
+| US59       | Delete user account | Medium | As an administrator, I want to be able to delete user accounts so that can make sure that the application users all follow the community guidelines. |
+| US60 | Remove comments| Low | As an administrator, I want to remove comments, so that offensive comments do not exist in the application. |
+| US61       | Notification of inappropriate content      | Low     | As an administrator, I want to be notified of reported content by users so that I can take appropriate actions.|
+| US62       | User statistics     | Low     | As an administrator, I want to see the user statistics, such as number of posts, questions in the last period of time, so that I can keep track of what interests people have. |
 
 Table 5: Administrator user stories
 

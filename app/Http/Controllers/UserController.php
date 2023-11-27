@@ -101,20 +101,6 @@ class UserController extends Controller
     }
    
 
-    public function votes()
-    {
-        return $this->hasMany(Vote::class);
-    }
-
-    public function hasVoted($questionId, $userId)
-    {
-        return $this->votes()
-            ->where('vote_type', 'Question_vote')
-            ->where('question_id', $questionId)
-            ->where('user_id', $userId)
-            ->exists();
-    }
-
 
     public function showUserQuestions($id) {
 
