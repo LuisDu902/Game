@@ -47,6 +47,7 @@ Route::get('/faq', function () {
     return view('pages.faq');
 })->name('faq');
 
+
 // User
 Route::controller(UserController::class)->group(function () {
     Route::get('/users/{id}', 'showUserProfile')->name('profile');

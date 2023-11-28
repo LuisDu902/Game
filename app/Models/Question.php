@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 // Added to define Eloquent relationships.
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\DB;
 
 class Question extends Model
@@ -46,17 +47,26 @@ class Question extends Model
     {
         return $this->belongsTo(Game::class, 'game_id');
     }
+
+    public function tags(): BelongsToMany
+    {
+        return $this->belongsToMany(Tag::class, 'question_tag', 'question_id', 'tag_id');
+    }
+    
+    public function versionContent(): HasMany 
+    {
+        return $this->hasMany(VersionContent::class);
+    }
+
     /**
      * Get the latest question content.
      */
     public function latestContent()
     {
-        return DB::table('version_content')
-        ->select('content')
-        ->where('question_id', $this->id)
-        ->orderByDesc('date') 
-        ->limit(1)
-        ->value('content');
+        return $this->versionContent()
+        ->orderByDesc('date')
+        ->first()
+        ->content; 
     }
 
     public function hasTopAnswer(){
@@ -104,12 +114,10 @@ class Question extends Model
 
     public function lastDate()
     {
-        return DB::table('version_content')
-        ->select('date')
-        ->where('question_id', $this->id)
-        ->orderByDesc('date') 
-        ->limit(1)
-        ->value('date');
+        return $this->versionContent()
+        ->orderByDesc('date')
+        ->first()
+        ->date; 
     }
 
     public function lastModification() {
@@ -117,4 +125,9 @@ class Question extends Model
         $modifiedAt = $this->lastDate();
         return $now->diffForHumans($modifiedAt, true);
     }
+
+    public function history() {
+
+    }
+
 }

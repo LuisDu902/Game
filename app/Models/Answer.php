@@ -46,42 +46,40 @@ class Answer extends Model
         return $this->hasMany(Comment::class, 'answer_id');
     }
 
+    public function versionContent(): HasMany 
+    {
+        return $this->hasMany(VersionContent::class);
+    }
 
     /**
      * Get the latest answer content.
      */
     public function latestContent()
     {
-        return DB::table('version_content')
-        ->select('content')
-        ->where('answer_id', $this->id)
-        ->orderByDesc('date') 
-        ->limit(1)
-        ->value('content');
+        return $this->versionContent()
+        ->orderByDesc('date')
+        ->first()
+        ->content; 
     }
 
 
     public function createDate()
     {
-        return DB::table('version_content')
-        ->select('date')
-        ->where('answer_id', $this->id)
-        ->orderBy('date') 
-        ->limit(1)
-        ->value('date');
+        return $this->versionContent()
+        ->orderBy('date')
+        ->first()
+        ->date; 
     }
 
     public function lastDate()
     {
-        return DB::table('version_content')
-        ->select('date')
-        ->where('answer_id', $this->id)
-        ->orderByDesc('date') 
-        ->limit(1)
-        ->value('date');
+        return $this->versionContent()
+        ->orderByDesc('date')
+        ->first()
+        ->date; 
     }
 
-    public function time_difference() {
+    public function timeDifference() {
         $now = now();
         $createdAt = $this->createDate();
         return $now->diffForHumans($createdAt, true);

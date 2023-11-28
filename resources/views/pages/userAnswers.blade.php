@@ -39,7 +39,7 @@
                 <a href="{{ route('question', ['id' => $answer->question_id]) }}" > <span> <strong class="purple">Question</strong>: <span>{{ $answer->question->title }}</span> </span></a>
                 <p>{{ $answer->latestContent() }}</p>
                 <ul class="answer-stats">
-                    <li> Answered {{ $answer->time_difference() }} ago </li>
+                    <li> Answered {{ $answer->timeDifference() }} ago </li>
                     <li> Modified {{ $answer->lastModification() }} ago </li>
                     <li> {{ $answer->comments->count() }} Comments </li>
                     <li> {{ $answer->votes }} votes </li>

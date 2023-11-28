@@ -25,9 +25,9 @@
                 <div class="user-rank">{{ $user->rank }}</div>
                 <div class="stats-text">Badges:</div>
                 <div class="user-badges">
-                    @if($badges && count($badges) > 0)
+                    @if($user->badges()->get() && count($user->badges()->get()) > 0)
                         <ul>
-                            @foreach($badges as $badge)
+                            @foreach($user->badges()->get() as $badge)
                                 <li>{{ $badge->name }}</li>
                             @endforeach
                         </ul>
