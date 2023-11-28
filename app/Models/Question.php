@@ -69,16 +69,20 @@ class Question extends Model
         ->content; 
     }
 
-    public function hasTopAnswer(){
-        return $this->answers()->where('top_answer', true)->count() > 0;
-    }
-
     public function topAnswer(){
-        return $this->answers()->where('top_answer', true)->first();
+        return $this->answers()
+        ->orderByDesc('votes')
+        ->first();
     }
 
     public function otherAnswers(){
-        return $this->answers()->where('top_answer', false);
+        $topAnswerId = $this->topAnswer()->id ?? null;
+
+        return $this->answers()
+            ->when($topAnswerId, function ($query) use ($topAnswerId) {
+                return $query->where('id', '!=', $topAnswerId);
+            })->orderByDesc('votes')
+            ->get();
     }
 
     public function timeDifference() {
@@ -95,10 +99,6 @@ class Question extends Model
         $question->create_date = now();
         $question->title = $title;
         $question->game_id = $game_id;
-        $question->is_solved = false;
-        $question->is_public = true; 
-        $question->nr_views = 0;
-        $question->votes = 0;
 
         $question->save();
 

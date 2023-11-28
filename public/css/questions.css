@@ -155,7 +155,7 @@
     font-weight:500;
 }
 
-.no-questions p{
+.no-questions p, .no-answers p{
     padding: 3rem;
     text-align: center;
     font-size:larger;

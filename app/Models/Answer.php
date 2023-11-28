@@ -96,9 +96,6 @@ class Answer extends Model
 
         $answer->user_id = (int)$userId;
         $answer->question_id = $questionId;
-        $answer->top_answer = false;
-        $answer->is_public = true; 
-        $answer->votes = 0;
 
         $answer->save();
 

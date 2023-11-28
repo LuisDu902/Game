@@ -36,7 +36,22 @@
     transition: all 300ms ease;
 }
 
+
+.question-description ul li:last-child::before {
+    background-color: transparent !important;
+}
+
+.question-description ul li:last-child {
+    background-image: url('../images/clock.png'); 
+    background-size: 15px 15px;
+    background-repeat: no-repeat; 
+    padding-left: 7px; 
+    background-position: left center;
+}
+
+
 .answer-content {
+    width: 100%;
     padding-bottom: 40px;
     border-bottom: 1px solid #e6e7f3;
 }
@@ -80,8 +95,7 @@
 }
 
 .question-detail p {
-    font-size: 20px;
-    color: #525252;
+    font-size: 22px;
     padding: 40px 0 ;
     border-bottom: 1px solid #e6e7f3;
     text-align: justify;
@@ -166,13 +180,12 @@
     border-bottom: 1px solid #e6e7f3;
 }
 
+.no-comment {
+    text-align: center;
+}
+
 #answer-comment-list {
-    background-color: #F8F7FE;
     width: 100%;
-    margin-left: 60px;
-    margin-top: 30px;
-    padding: 20px;
-    border-radius: 10px;
 }
 
 #answer-comment-list li>div{
@@ -181,51 +194,77 @@
     gap: 20px;
 }
 
-#answer-comment-list li>div a{
+#answer-comment-list li>div a {
+    font-size: 22px;
+    font-weight: 500;
+}
+
+.c-desc {
     display: flex;
     align-items: center;
     gap: 20px;
 }
 
+.c-desc span {
+    color: #525252;
+    font-size: 16px;
+}
 
 #answer-comment-list li {
-    margin-bottom: 20px;
+    margin-bottom: 5px;
 }
 
-#answer-comment-list li p, .like-comment {
+#answer-comment-list li p {
     margin-left: 60px;
+    margin-top: 10px;
 }
 
-.like-comment{
-   margin-top: 10px;
-  
+.answer-comments {
+    display: flex;
+    flex-direction: column;
+    margin-left: 60px;
+    background-color: #F8F7FE;
+    margin-top: 30px;
+    padding: 20px;
+    border-radius: 10px;
 }
 
-.like-comment ion-icon {
-    font-size: 25px;
+.comment-input {
+    width: 100%;
+    display: flex;
+    gap: 20px;
+    align-items: start;
+}
+
+.comment-input form {
+    width: 100%;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    background-color: white;
+}
+
+.comment-input form textarea {
+    border: none;
+    overflow-y: scroll;
+    width: 100%;
+    resize: none;
+    padding-bottom: 5px;
+    
+}
+
+.comment-input form div {
+    padding: 10px;
+    display: flex;
+}
+
+.comment-input form button {
+    margin-left: auto;
+    padding: 5px 20px;
+    border-radius: 10px;
+    background-color: #D2CFFF;
     color: #7C5BF0;
+    transition: all 400ms ease;
 }
-
-.like-comment ion-icon:hover{
-   cursor: pointer;
- }
-
-.like-comment span {
-    font-size: 18px;
-}
-
-.comment-input input {
-    width: 90%;
-    background-color: transparent;
-    font-size: 18px;
-    padding: 10px 0;
-    border-bottom: 1px solid #e6e7f3;
-}
-
-.comment-input ion-icon {
-    font-size: 20px;
-}
-
 
 .other-answers {
     margin-top: 40px;
@@ -238,12 +277,16 @@
     font-weight: 600;
 }
 
-.no-answers h2 {
+.no-answers {
+    display: flex;
+    flex-direction: column;
     margin-top: 60px;
-    margin-left: 80px;
-    font-size: 40px;
-    font-weight: 600;
-    color: #b5a5ee;
+    align-items: center;
+}
+
+.no-answers img {
+    height: 400px;
+    width: 400px;
 }
 
 .vote-btns .ionicon, svg{
@@ -251,11 +294,11 @@
 }
 
 .answerFormContainer{
-    margin: 30px auto;
-    width: 1200px;
-    height: 500px;
+    margin-top: 30px;
+    margin-left: 70px;
+    width: calc(100%-70px);
     border-radius: 10px;
-    border: 1px dashed #6D49EB;
+    border: 2px dashed #7C5BF0;
     background: #F8F7FE; 
     padding: 50px;
 }
@@ -263,7 +306,6 @@
 .question-title button {
     font-size: 18px;
     background-color: #D2CFFF;
-    border: 1px solid #D2CFFF;
     width: 190px;
     padding: 5px 0;
     color: #7C5BF0;
@@ -274,9 +316,8 @@
     display: block;
 }
 
-.question-title button:hover {
+.question-title button:hover, .comment-input form button:hover {
     background-color: #7C5BF0;
-    border: 1px solid #7C5BF0;
     color: white;
 }
 
@@ -304,9 +345,6 @@
     color: #7C5BF0;
 }
 
-.answerFormContainer .form-group {
-    margin-bottom: 15px;
-}
 
 .answerFormContainer label {
     display: block; 

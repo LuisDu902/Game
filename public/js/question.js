@@ -81,6 +81,19 @@ if (questionContainer) {
     const questionId = questionContainer.dataset.id;
     const userId = questionContainer.getAttribute('data-user');
 
+    if (!userId) {
+        const no_up = document.querySelectorAll('.no-up');
+        const no_down = document.querySelectorAll('.no-down');
+        no_up.forEach(element => {
+            element.addEventListener('click', showLoginModal);
+        });
+    
+        no_down.forEach(element => {
+            element.addEventListener('click', showLoginModal);
+        });
+    }
+
+
     if (upVote){
     upVote.addEventListener('click', function(){
         if(upVote.classList.contains('hasvoted')){
@@ -106,37 +119,7 @@ if (questionContainer) {
     });}
 
 
-    const answer_btn = document.querySelector('.answer')
-    if (answer_btn){
-    answer_btn.addEventListener('click', function(){
-        const answer = document.querySelector('#answerFormContainer')
-        if (!answer) {
-            const no_answers = document.querySelector('.no-answers');
-            if (no_answers) {
-                no_answers.remove();
-            }
-            questionContainer.innerHTML += ` <div id="answerFormContainer" class="answerFormContainer" >
-                 <form >
-                    <div class="form-group">
-                        <label for="content">Answer <span>*</span></label>
-                        <input type="hidden" name="userId" id="userId" value="${userId}">
-                        <input type="hidden" name="questionId" id="questionId" value="${questionId}">
-                        <textarea name="content" id="content" class="form-control" placeholder="Enter your answer here..." required></textarea>
-                    </div>
-                    <button class="btn btn-primary">Post Answer</button>
-                </form>
-            </div>`;
-            const post_answer = document.querySelector('#answerFormContainer button');
-            post_answer.addEventListener('click', function(){
-                event.preventDefault();
-                const textareaContent = document.querySelector('#content').value;
-                sendAjaxRequest('post', '/api/answers', { content: textareaContent, userId: userId, questionId: questionId }, answerHandler);
-            });
-            const newAnswerFormContainer = document.querySelector('#answerFormContainer');
-            newAnswerFormContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-    })
-}
+  
     const edit_btn = document.querySelector('.edit-question')
 
     if (edit_btn){
@@ -270,37 +253,7 @@ function answerHandler() {
         </div>
     </div>`
     
-    const answer_btn = document.querySelector('.answer')
-
-    answer_btn.addEventListener('click', function(){
-        const answer = document.querySelector('#answerFormContainer')
-        if (!answer) {
-            const no_answers = document.querySelector('.no-answers');
-            if (no_answers) {
-                no_answers.remove();
-            }
-            questionContainer.innerHTML += ` <div id="answerFormContainer" class="answerFormContainer" >
-                 <form >
-                    <div class="form-group">
-                        <label for="content">Answer <span>*</span></label>
-                        <input type="hidden" name="userId" id="userId" value="${userId}">
-                        <input type="hidden" name="questionId" id="questionId" value="${questionId}">
-                        <textarea name="content" id="content" class="form-control" placeholder="Enter your answer here..." required></textarea>
-                    </div>
-                    <button class="btn btn-primary">Post Answer</button>
-                </form>
-            </div>`;
-            const post_answer = document.querySelector('#answerFormContainer button');
-            post_answer.addEventListener('click', function(){
-                event.preventDefault();
-                const textareaContent = document.querySelector('#content').value;
-                sendAjaxRequest('post', '/api/answers', { content: textareaContent, userId: userId, questionId: questionId }, answerHandler);
-            });
-            const newAnswerFormContainer = document.querySelector('#answerFormContainer');
-            newAnswerFormContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
     }
-    )}
 }
 
 

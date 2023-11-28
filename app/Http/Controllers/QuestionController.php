@@ -88,7 +88,7 @@ class QuestionController extends Controller
             'content' => 'required',
         ]);
 
-        $question = Question::createQuestionWithContent(
+        Question::createQuestionWithContent(
             $request->input('title'),
             $request->input('content'),
             $request->input('game_id')
