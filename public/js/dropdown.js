@@ -34,3 +34,22 @@ if (openSidebarButton) {
         overlay.style.display = 'none';
     });
 }
+
+
+
+const questionDropDown = document.querySelector('.question-dropdown button ion-icon');
+
+if (questionDropDown) {
+    let isOpen1 = false;
+    const dropdownContent = document.querySelector('.q-drop-content');
+    
+    questionDropDown.addEventListener('click', function () {
+        if (isOpen1) {
+            dropdownContent.style.display = 'none';
+        } else {
+            dropdownContent.style.display = 'flex';
+        }
+        isOpen1 = !isOpen1;
+    });
+
+}

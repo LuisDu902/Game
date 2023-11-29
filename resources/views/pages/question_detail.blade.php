@@ -22,10 +22,50 @@
                 <img src="../images/user.png" alt="user">
                 <h1> {{ $question->title }} </h1>
                 @if (Auth::check())
-                    @if(Auth::check() and (Auth::id() == $question->user_id))
-                        <button class="edit-question">Edit</button>
+                    @if (Auth::user()->id === $question->user_id)
+                        <div class="question-dropdown">
+                            <button>
+                                <ion-icon name="ellipsis-vertical" class="purple"></ion-icon>
+                            </button>
+                            <div class="q-drop-content">
+                                <div>
+                                    <ion-icon name="create"></ion-icon>
+                                    <span>Edit</span>
+                                </div>
+                                <a href="#">
+                                    <ion-icon name="time"></ion-icon>
+                                    <span>Post activity</span>
+                                </a>
+                                <div>
+                                    <ion-icon name="trash"></ion-icon>
+                                    <span>Delete</span>
+                                </div>
+                            </div>
+                        </div>
                     @else
-                        <button class="follow">Follow</button>
+                        <div class="question-dropdown">
+                            <button>
+                                <ion-icon name="ellipsis-vertical" class="purple"></ion-icon>
+                            </button>
+                            <div class="q-drop-content">
+                                <div>
+                                    <ion-icon name="pencil"></ion-icon>
+                                    <span>Answer</span>
+                                </div>
+                                <div>
+                                    <ion-icon name="bookmark"></ion-icon>
+                                    <span>Follow</span>
+                                </div>
+                                <a href="#">
+                                    <ion-icon name="time"></ion-icon>
+                                    <span>Post activity</span>
+                                </a>
+                                <div>
+                                    <ion-icon name="flag"></ion-icon>
+                                    <span>Report</span>
+                                </div>
+                            </div>
+                        </div>
                     @endif
                 @endif
             </div> 
@@ -56,8 +96,20 @@
                         <li> <a href="{{ route('profile', ['id' => $question->creator->id ]) }}" class="purple">{{ $question->creator->name }}</a> asked {{ $question->timeDifference() }} ago</li>
                         <li id="q-modi"> Modified {{ $question->lastModification() }} ago</li>
                         <li> Viewed {{ $question->nr_views }} times </li>
-                        <li> Show <a href="#" class="purple">post activity</a> </li>
                     </ul>
+                    <div class="q-game-tags">
+                        @if ($question->game)
+                        <div class="q-game">
+                            <span>Game: </span>
+                            <a href="{{ route('game', ['id' => $question->game->id]) }}" class="purple"> {{ $question->game->name }}</a>
+                        </div>
+                        @endif
+                        <div class="q-tags">
+                            @foreach ($question->tags as $tag)
+                                <span>{{ $tag->name }}</span>
+                            @endforeach
+                        </div>
+                    </div>
                     <p>
                         {{ $question->latestContent() }}
                     </p>

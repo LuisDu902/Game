@@ -37,19 +37,6 @@
 }
 
 
-.question-description ul li:last-child::before {
-    background-color: transparent !important;
-}
-
-.question-description ul li:last-child {
-    background-image: url('../images/clock.png'); 
-    background-size: 15px 15px;
-    background-repeat: no-repeat; 
-    padding-left: 7px; 
-    background-position: left center;
-}
-
-
 .answer-content {
     width: 100%;
     padding-bottom: 40px;
@@ -95,8 +82,8 @@
 }
 
 .question-detail p {
-    font-size: 22px;
-    padding: 40px 0 ;
+    font-size: 25px;
+    padding-bottom: 30px;
     border-bottom: 1px solid #e6e7f3;
     text-align: justify;
 }
@@ -132,7 +119,7 @@
 }
 
 .top-answer {
-    margin-top: 20px;
+    margin-top: 40px;
 }
 
 
@@ -303,20 +290,8 @@
     padding: 50px;
 }
 
-.question-title button {
-    font-size: 18px;
-    background-color: #D2CFFF;
-    width: 190px;
-    padding: 5px 0;
-    color: #7C5BF0;
-    border-radius: 5px;
-    transition: all 400ms ease;
-    margin: 0px auto;
-    align-self: center;
-    display: block;
-}
 
-.question-title button:hover, .comment-input form button:hover {
+.comment-input form button:hover {
     background-color: #7C5BF0;
     color: white;
 }
@@ -396,4 +371,85 @@
     background-color: #7C5BF0;
     padding: 5px 10px;
     color: white;
+}
+
+
+.q-game-tags {
+    display: flex;
+    margin-top: 30px;
+    margin-bottom: 20px;
+    align-items: center;
+}
+
+.q-game span {
+    font-weight: 500;
+}
+
+.q-game {
+    font-size: 16px;
+    padding-right: 20px;
+    border-right: 1px solid #e6e7f3;
+}
+
+.q-tags {
+    padding-left: 20px;
+    display: flex;
+    gap: 20px;
+}
+
+.q-tags span {
+    color: #7C5BF0;
+    background-color: #D2CFFF;
+    padding: 5px 15px;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+
+.question-dropdown button {
+    min-width: 180px;
+    display: flex;
+}
+
+.question-dropdown ion-icon {
+    margin-left: auto;
+    font-size: 25px;
+}
+
+.q-drop-content {
+    position: absolute;
+    min-width: 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
+    box-shadow: 0 8px 30px 0 rgba(50,53, 130, 0.08);
+    border-radius: 15px;
+    border: 1px solid #E6E7F3;
+    margin-top: 10px;
+    border-radius: 5px;
+    z-index: 1;
+    margin-right: 20px;
+}
+
+.q-drop-content div, .q-drop-content a {
+    width: 100%;
+    display: flex;
+    justify-content: start;
+    padding: 10px 25px;
+    align-items: center;
+    gap: 10px;
+    color: black;
+}
+
+.q-drop-content div ion-icon, .q-drop-content a ion-icon {
+    color: #525252;
+    margin: 0;
+    font-size: 20px;
+}
+
+.q-drop-content div:hover, .q-drop-content a:hover {
+    background-color: #E6E7F3;
+    cursor: pointer;
+    color: #6D49EB;
 }
