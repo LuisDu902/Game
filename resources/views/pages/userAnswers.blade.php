@@ -2,13 +2,7 @@
 
 @section('content')
 
-<x-sidebar></x-sidebar>
-
-<div class="headers">
-    <button class="open-sidebar">
-        <ion-icon name="menu"></ion-icon>
-    </button>
-    <ul class="breadcrumb">
+<ul class="breadcrumb">
         <li><a href="{{ route('home') }}">
             <ion-icon name="home-outline"></ion-icon> Home</a>
         </li>
@@ -20,7 +14,7 @@
             <li>{{ $user->username }} answers</li>
         @endif
     </ul>
-</div>
+
 <div class="user-answers">
     @if(Auth::check() and (Auth::id() == $user->id))
         <div class="title-user-answers-auth">
@@ -37,10 +31,10 @@
             @foreach($answers as $answer)
             <li class="answer-card" id="{{ $answer->id }}">
                 <a href="{{ route('question', ['id' => $answer->question_id]) }}" > <span> <strong class="purple">Question</strong>: <span>{{ $answer->question->title }}</span> </span></a>
-                <p>{{ $answer->latestContent() }}</p>
+                <p>{{ $answer->latest_content() }}</p>
                 <ul class="answer-stats">
-                    <li> Answered {{ $answer->timeDifference() }} ago </li>
-                    <li> Modified {{ $answer->lastModification() }} ago </li>
+                    <li> Answered {{ $answer->time_difference() }} ago </li>
+                    <li> Modified {{ $answer->last_modification() }} ago </li>
                     <li> {{ $answer->comments->count() }} Comments </li>
                     <li> {{ $answer->votes }} votes </li>
                 </ul>

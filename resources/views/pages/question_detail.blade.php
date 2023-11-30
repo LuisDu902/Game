@@ -1,157 +1,89 @@
-
 @extends('layouts.app')
 
 @section('content')
-    <x-sidebar></x-sidebar>
+    <ul class="breadcrumb">
+        <li><a href="{{ route('home') }}">
+            <ion-icon name="home-outline"></ion-icon> Home</a>
+        </li>
+        <li><a href="{{ route('questions') }}">Questions</a></li>
+        <li>id</li>
+    </ul>
 
-    <div class="headers">
-        <button class="open-sidebar">
-            <ion-icon name="menu"></ion-icon>
-        </button>
-        <ul class="breadcrumb">
-            <li><a href="{{ route('home') }}">
-                <ion-icon name="home-outline"></ion-icon> Home</a>
-            </li>
-            <li><a href="{{ route('questions') }}">Questions</a></li>
-            <li>{{ $question->id }}</li>
-        </ul>
-    </div>
-    
-    <section class="question-detail-section" data-id="{{$question->id}}" {{ Auth::check() ? 'data-user=' . Auth::id() . ' data-username=' . Auth::user()->name . '' : '' }}>
+    <section class="question-detail-section" data-id="{{$question->id}}" {{ Auth::check() ? 'data-user=' . Auth::id() . ' data-username=' . Auth::user()->username . '' : '' }}
+        >
         <div class="question-detail">
             <div class="question-title">
-                <img src="{{ $question->creator->getProfileImage() }}" alt="user">
-                <div class="title">
-                    <h1> {{ $question->title }} </h1>
-                    <div class="q-tags">
-                        @foreach ($question->tags as $tag)
-                            <span>{{ $tag->name }}</span>
-                        @endforeach
-                    </div>
-                </div>
-              
+                <img src="../images/user.png" alt="user">
+                <h1> {{ $question->title }} </h1>
                 @if (Auth::check())
-                    @if (Auth::user()->id === $question->user_id)
-                        <div class="question-dropdown">
-                            <button>
-                                <ion-icon name="ellipsis-vertical" class="purple"></ion-icon>
-                            </button>
-                            <div class="q-drop-content">
-                                <div>
-                                    <ion-icon name="create"></ion-icon>
-                                    <span>Edit</span>
-                                </div>
-                                <a href="#">
-                                    <ion-icon name="time"></ion-icon>
-                                    <span>Post activity</span>
-                                </a>
-                                <div>
-                                    <ion-icon name="trash"></ion-icon>
-                                    <span>Delete</span>
-                                </div>
-                            </div>
-                        </div>
+                    @if(Auth::check() and (Auth::id() == $question->user_id))
+                        <button class="edit-question">Edit</button>
                     @else
-                        <div class="question-dropdown">
-                            <button>
-                                <ion-icon name="ellipsis-vertical" class="purple"></ion-icon>
-                            </button>
-                            <div class="q-drop-content">
-                                <a href="#answerFormContainer">
-                                    <ion-icon name="pencil"></ion-icon>
-                                    <span>Answer</span>
-                                </a>
-                                <div>
-                                    <ion-icon name="bookmark"></ion-icon>
-                                    <span>Follow</span>
-                                </div>
-                                <a href="#">
-                                    <ion-icon name="time"></ion-icon>
-                                    <span>Post activity</span>
-                                </a>
-                                <div>
-                                    <ion-icon name="flag"></ion-icon>
-                                    <span>Report</span>
-                                </div>
-                            </div>
-                        </div>
+                        <button class="answer">Answer</button>
                     @endif
                 @endif
             </div> 
+
+            @php $user = Auth::user(); @endphp
 
             <div class="question-t">
                 <div class="vote-btns">
                     @if (Auth::check())
                         <button class="up-vote">
-                            <ion-icon id="up" class= "{{ Auth::user()->hasVoted($question->id) && (Auth::user()->voteType($question->id)) ? 'hasvoted' : 'notvoted' }}" name="caret-up" ></ion-icon>
+                            <ion-icon id="up" class= "{{ $user->hasVoted($question->id) && ($user->voteType($question->id)) ? 'hasvoted' : 'notvoted' }}  {{$user->voteType($question->id) ? 'cima' : ($user->voteType($question->id) === false ? 'baixo' : 'nulo') }}" name="caret-up" ></ion-icon>
                         </button>
-                        <span>{{ $question->votes }}</span>
-                        <button class="down-vote">
-                            <ion-icon id="down" class= "{{ ((Auth::user()->hasVoted($question->id)) && !Auth::user()->voteType($question->id) ) ? 'hasvoted' : 'notvoted' }} " name="caret-down" ></ion-icon>
-                        </button>
-                    @else 
-                        <button class="up-vote">
-                            <ion-icon class="no-up notvoted" name="caret-up" ></ion-icon>
-                        </button>
-                        <span>{{ $question->votes }}</span>
-                        <button class="down-vote">
-                            <ion-icon class="no-down notvoted" name="caret-down" ></ion-icon>
-                        </button>
+                    @endif
+                    <span>{{ $question->votes }}</span>
+                    @if (Auth::check())
+                    <button class="down-vote">
+                        <ion-icon id="down" class= "{{ (($user->hasVoted($question->id)) && !$user->voteType($question->id) ) ? 'hasvoted' : 'notvoted' }} {{$user->voteType($question->id) ? 'cima' : ($user->voteType($question->id) === false ? 'baixo' : 'nulo') }} " name="caret-down" ></ion-icon>
+                    </button>
                     @endif
                 </div>
 
                 <div class="question-description"> 
                     <ul>
-                        <li> <a href="{{ route('profile', ['id' => $question->creator->id ]) }}" class="purple">{{ $question->creator->name }}</a> asked {{ $question->timeDifference() }} ago</li>
-                        <li id="q-modi"> Modified {{ $question->lastModification() }} ago</li>
+                        <li> {{ $question->creator->name }} asked {{ $question->timeDifference() }} ago</li>
+                        <li id="q-modi"> Modified {{ $question->last_modification() }}</li>
                         <li> Viewed {{ $question->nr_views }} times </li>
-                        <li> Game: <a href="{{ route('game', ['id' => $question->game->id]) }}" class="purple"> {{ $question->game->name }}</a>
-                        </li>
                     </ul>
                     <p>
-                        {{ $question->latestContent() }}
+                        {{ $question->latest_content() }}
                     </p>
-                    <div>
-                        <img src="{{ asset('images/question.png') }}" alt="question-image">
-                    </div>
                 </div>
             </div>
         </div>
       
+
         @if ($question->answers->isNotEmpty())
-            <div class="top-answer">
-                <h2>Top answer</h2>
-                @include('partials._answer', ['answer' => $question->topAnswer()])
-            </div>
+
+            @if ($question->hasTopAnswer())
+                <div class="top-answer">
+                    <h2>Top answer</h2>
+                    @include('partials._answer', ['answer' => $question->topAnswer()])
+                </div>
+            @endif
                 <div class="other-answers">
-                    @if ($question->otherAnswers()->isNotEmpty())
-                        <h2>Other answers</h2>
-                        @foreach ($question->otherAnswers() as $answer)
+                    <h2>{{ $question->hasTopAnswer() ? 'Other answers' : 'Answers'}}</h2>
+                    @if ($question->otherAnswers->isNotEmpty())
+                        @foreach ($question->otherAnswers as $answer)
                             @include('partials._answer', ['answer' => $answer])
                         @endforeach
+                    @else
+                        <div class="no-answers">
+                            <h2>No more answers for this question yet.</h2>
+                        </div>
                     @endif
                 </div>
-        @elseif (!Auth::check())
+        @else
             <div class="no-answers">
-                <img class="no-answers-image" src="{{ asset('images/pikachuConfused.png') }}" alt="Psyduck Image">
-                <p>No answers for this question yet.</p>
+                <h2>No answers for this question yet.</h2>
             </div>
             <div class="other-answers">
+
             </div>
         @endif
-        
 
-        @if (Auth::check() && Auth::user()->id !== $question->user_id)  
-        <div id="answerFormContainer" class="answerFormContainer">
-            <form>
-                <div class="form-group">
-                    <label for="content">Answer <span>*</span></label>
-                    <textarea name="content" id="content" class="form-control" placeholder="Enter your answer here..." required></textarea>
-                </div>
-                <button class="btn btn-primary">Post Answer</button>
-            </form>
-        </div>
-        @endif
         <div id="loginModal" class="modal">
             <div class="modal-content">
                 <span class="close">&times;</span>

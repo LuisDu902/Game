@@ -4,7 +4,6 @@ use App\Http\Controllers\GameCategoryController;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\QuestionController;
-use App\Http\Controllers\FileController;
 use App\Http\Controllers\AnswerController;
 use Illuminate\Support\Facades\Route;
 
@@ -44,11 +43,6 @@ Route::get('/home', function () {
     return view('pages.home');
 })->name('home');
 
-Route::get('/faq', function () {
-    return view('pages.faq');
-})->name('faq');
-
-
 // User
 Route::controller(UserController::class)->group(function () {
     Route::get('/users/{id}', 'showUserProfile')->name('profile');
@@ -68,11 +62,6 @@ Route::controller(QuestionController::class)->group(function () {
     Route::get('/questions/{id}', 'show')->name('question');    
     Route::post('/comments/store', [QuestionController::class, 'store_comment'])->name('store_comment');
 });
-
-
-Route::post('/api/file/upload', [FileController::class, 'upload']);
-
-
 
 // Game Category
 Route::controller(GameCategoryController::class)->group(function () {
@@ -110,8 +99,5 @@ Route::controller(AnswerController::class)->group(function () {
     Route::put('/api/answers/{id}/edit', 'edit');
     Route::delete('/api/answers/{id}/delete', 'delete')->name('answers_delete');
 });
-
-
-
 
 

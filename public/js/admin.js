@@ -13,7 +13,7 @@ function statusUpdatedHandler() {
     if (this.status === 200) {
         let item = JSON.parse(this.responseText);
         console.log('Status updated:', item);
-        createNotificationBox('Successfully saved!', 'User status successfully updated!')
+        createNotificationBox('User status successfully updated!')
     } else {
         console.error('Status update failed:', this.statusText);
     }

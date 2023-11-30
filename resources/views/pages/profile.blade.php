@@ -1,36 +1,28 @@
 @extends('layouts.app')
 
 @section('content')
-    <x-sidebar></x-sidebar>
+   
+    <ul class="breadcrumb">
+        <li><a href="{{ route('home') }}">
+            <ion-icon name="home-outline"></ion-icon> Home</a>
+        </li>
+        <li><a href="{{ route('users') }}">Users</a></li>
+        <li> {{ $user->username }} </li>
+    </ul>
 
-    <div class="headers">
-        <button class="open-sidebar">
-            <ion-icon name="menu"></ion-icon>
-        </button>
-        <ul class="breadcrumb">
-            <li><a href="{{ route('home') }}">
-                <ion-icon name="home-outline"></ion-icon> Home</a>
-            </li>
-            <li><a href="{{ route('users') }}">Users</a></li>
-            <li> {{ $user->username }} </li>
-        </ul>
-    </div>
     <article class="profile-wrapper">
         <div class="profile-left">
-            <img class="profile-big-pic" src="{{ $user->getProfileImage() }}" alt="User's Image" id="profile-preview">
-            <form method="POST" enctype="multipart/form-data">
-                <label for="profile-image-input" class="upload-button">Upload image</label>
-                <input name="file" type="file" id="profile-image-input" accept="image/*">
-            </form>
-        
+            <img class="profile-big-pic" src="../images/user.png"
+                alt="Gengar's Image">
+
             <div class="stats-grid">
                 <div class="stats-text">Rank:</div>
                 <div class="user-rank">{{ $user->rank }}</div>
                 <div class="stats-text">Badges:</div>
                 <div class="user-badges">
-                    @if($user->badges()->get() && count($user->badges()->get()) > 0)
+                    @if($badges && count($badges) > 0)
                         <ul>
-                            @foreach($user->badges()->get() as $badge)
+                            @foreach($badges as $badge)
                                 <li>{{ $badge->name }}</li>
                             @endforeach
                         </ul>

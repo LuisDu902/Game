@@ -26,27 +26,9 @@
 }
 
 .app-description h1 {
-    font-size: 55px;
+    color: white;
+    font-size: 50px;
     margin-bottom: 40px;
-    background: #C6FFDD; 
-    background: -webkit-linear-gradient(to right, #f7797d, #FBD786, #C6FFDD); 
-    background: linear-gradient(to right, #f7797d, #FBD786, #C6FFDD); 
-    background-clip: text;
-    color: transparent;
-    animation: gradient 8s ease-in-out infinite;
-    background-size: 300% 300%;
-}
-
-@keyframes gradient {
-    0% {
-        background-position: 0% 50%;
-    }
-    50% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0% 50%;
-    }
 }
 
 .app-description p {
@@ -56,53 +38,15 @@
     margin-bottom: 40px;
 }
 
-.app-wrapper {
-    box-sizing: content-box;
-    display: flex;
-    gap: 10px;
-    height: 30px;
-}
-
-#typing {
-    overflow: hidden;
+.app-description h2 {
     color: white;
     font-size: 22px;
+    font-weight: 400;
+}
+
+.app-description h2 strong {
     font-weight: 600;
 }
-
-#typing span {
-    display: block;
-    text-align: center;
-    animation: animate 8s infinite;
-}
-
-@keyframes animate {
-    10% {
-        transform: translateY(-112%);
-    }
-    25% {
-        transform: translateY(-100%);
-    }
-    35% {
-        transform: translateY(-212%);
-    }
-    50% {
-        transform: translateY(-200%);
-    }
-    60% {
-        transform: translateY(-312%);
-    }
-    75% {
-        transform: translateY(-300%);
-    }
-    85% {
-        transform: translateY(-412%);
-    }
-    100% {
-        transform: translateY(-400%);
-    }
-}
-
 
 .home-games {
     display: flex;

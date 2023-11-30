@@ -45,7 +45,7 @@ class QuestionController extends Controller
         $questions->getCollection()->transform(function ($question) {
             $question['time'] = $question->timeDifference();
             $question['answers'] = $question->answers; 
-            $question['content'] = $question->latestContent(); 
+            $question['content'] = $question->latest_content(); 
             $question['creator'] = $question->creator; 
             return $question;
         });
@@ -88,7 +88,7 @@ class QuestionController extends Controller
             'content' => 'required',
         ]);
 
-        Question::createQuestionWithContent(
+        $question = Question::createQuestionWithContent(
             $request->input('title'),
             $request->input('content'),
             $request->input('game_id')
@@ -160,6 +160,7 @@ class QuestionController extends Controller
     public function vote(Request $request, $question_id)
     {
         $question = Question::findOrFail($question_id);
+        $this->authorize('vote', [Auth::user(), $question]);
         
         $reaction = $request->input('reaction');
 
@@ -199,6 +200,23 @@ class QuestionController extends Controller
         return response()->json(['hasVoted' => $hasVoted]);
     }
 
+    public function store_answer(Request $request)
+    {
+
+        $request->validate([
+            'content' => 'required|string',
+            'questionId' => 'required',
+            'userId' => 'required',
+        ]);
+
+        $answer = Answer::createAnswerWithContent(
+            $request->input('content'),
+            $request->input('questionId'),
+            $request->input('userId'),
+        );
+    
+        return redirect()->route('question', ['id' => $request->input('questionId')]);
+    }
 
     public function store_comment(Request $request)
     {

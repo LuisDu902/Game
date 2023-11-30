@@ -9,6 +9,7 @@ body > header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    max-width: 90vw;
 }
 
 .logo {
@@ -108,42 +109,17 @@ body > header {
     transform: scale(0.95);
 }
 
-.navbar .left {
+.dropdown {
     margin-left: auto;
-    display: flex;
-    gap: 30px;
-}
-
-.navbar .admin {
-    display: block;
-    background: #C6FFDD; 
-    background: -webkit-linear-gradient(to right, #f7797d, #FBD786, #C6FFDD); 
-    background: linear-gradient(to right, #f7797d, #FBD786, #C6FFDD); 
-    background-clip: text;
-    color: transparent;
-    animation: gradient 8s ease-in-out infinite;
-    background-size: 300% 300%;
-    font-weight: 500;
-    padding: 5px 15px;
-    border-radius: 5px;
-    border: 1px solid var(--light-purple);
-    transition: 300ms all ease;
-}
-
-.navbar .admin:hover {
-    transform: scale(1.1);
 }
 
 .dropdown .user {
     display: flex;
     align-items: center;
-    justify-content: end;
-    width: 200px;
 }
 
 .dropdown img{
     height: 2em;
-    width: 2em;
     border-radius: 50%;
     border: 2px solid var(--dark-purple);
 }
@@ -165,45 +141,26 @@ body > header {
 
 .dropdown-content {
     position: absolute;
-    min-width: 200px;
+    min-width: 150px;
     display: none;
     flex-direction: column;
-    margin-top: 10px;
-    z-index: 1;
-    background-color: white;
-    box-shadow: 0 8px 30px 0 #32358214;
-    border: 1px solid #E6E7F3;
-    border-radius: 5px;
-}
-
-.q-drop-content div, .q-drop-content a, .dropdown-content a {
-    width: 100%;
-    display: flex;
-    justify-content: start;
-    padding: 10px 25px;
     align-items: center;
-    gap: 10px;
-    color: black;
+    background-color: var(--light-purple);
+    margin-top: 10px;
+    border-radius: 5px;
+    z-index: 1;
 }
 
 .dropdown-content a {
-    font-size: 18px;
+    color: black;
+    padding-bottom: 10px;
+    margin-top: 10px;
+    width: 90%;
+    text-align: center;  
 }
 
-.q-drop-content div ion-icon, .q-drop-content a ion-icon, .dropdown-content a ion-icon {
-    color: #525252;
-    margin: 0;
-    font-size: 20px;
-}
-
-.q-drop-content div:hover, .q-drop-content a:hover, .dropdown-content a:hover {
-    background-color: #E6E7F3;
-    cursor: pointer;
-    color: #6D49EB;
-}
-
-.q-drop-content div:hover ion-icon, .q-drop-content a:hover ion-icon, .dropdown-content a:hover ion-icon {
-    color: #6D49EB;
+.dropdown-content a:not(:last-child){
+    border-bottom: 2px solid var(--purple);
 }
 
 @media (max-width: 1180px) {

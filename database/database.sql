@@ -75,7 +75,6 @@ CREATE TABLE users (
   description TEXT,
   rank Rank NOT NULL DEFAULT 'Bronze',
   remember_token VARCHAR,
-  profile_image VARCHAR,
   is_banned BOOLEAN NOT NULL DEFAULT FALSE,
   is_admin BOOLEAN NOT NULL DEFAULT FALSE
 );
@@ -116,6 +115,7 @@ CREATE TABLE answer (
   user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   question_id INTEGER NOT NULL REFERENCES question(id) ON DELETE CASCADE,
   is_public BOOLEAN NOT NULL DEFAULT True,
+  top_answer BOOLEAN NOT NULL DEFAULT False,
   votes INTEGER NOT NULL DEFAULT 0
 );
 
@@ -345,7 +345,7 @@ BEGIN
 
     SELECT COUNT(*) INTO user_correct_answer_count
     FROM answer
-    WHERE user_id = NEW.user_id;
+    WHERE user_id = NEW.user_id AND top_answer = TRUE;
 
     IF user_question_count >= 50 THEN
         INSERT INTO user_badge (user_id, badge_id)
@@ -999,27 +999,27 @@ INSERT INTO question(user_id, create_date, title, is_solved, is_public, nr_views
 (21, '2022-12-29 14:30:00', 'Complaint about misleading advertisement', FALSE, TRUE, 89, 8);
 
 
-INSERT INTO answer(user_id, question_id, is_public) VALUES
-(1, 1, TRUE),
-(2, 1, TRUE),
-(3, 3, TRUE),
-(4, 4, TRUE),
-(5, 5, TRUE),
-(6, 6, TRUE),
-(7, 7, TRUE),
-(8, 8, TRUE),
-(9, 9, TRUE),
-(10, 10, TRUE),
-(11, 11, TRUE),
-(12, 12, TRUE),
-(13, 13, TRUE),
-(14, 14, TRUE),
-(15, 15, TRUE),
-(16, 16, TRUE),
-(17, 17, TRUE),
-(18, 18, TRUE),
-(19, 19, TRUE),
-(20, 20, TRUE);
+INSERT INTO answer(user_id, question_id, is_public, top_answer) VALUES
+(1, 1, TRUE, TRUE),
+(2, 1, TRUE, TRUE),
+(3, 3, TRUE, TRUE),
+(4, 4, TRUE, TRUE),
+(5, 5, TRUE, TRUE),
+(6, 6, TRUE, TRUE),
+(7, 7, TRUE, TRUE),
+(8, 8, TRUE, TRUE),
+(9, 9, TRUE, TRUE),
+(10, 10, TRUE, TRUE),
+(11, 11, TRUE, TRUE),
+(12, 12, TRUE, TRUE),
+(13, 13, TRUE, TRUE),
+(14, 14, TRUE, TRUE),
+(15, 15, TRUE, TRUE),
+(16, 16, TRUE, TRUE),
+(17, 17, TRUE, TRUE),
+(18, 18, TRUE, TRUE),
+(19, 19, TRUE, TRUE),
+(20, 20, TRUE, TRUE);
 
 INSERT INTO comment(user_id, answer_id, is_public) VALUES
 (99, 1, TRUE),
@@ -1623,6 +1623,8 @@ INSERT INTO game_member(user_id, game_id) VALUES
 INSERT INTO question_tag(question_id, tag_id) VALUES
 (1, 1),
 (1, 7),
+(1, 3),
+(1, 8),
 (2, 5),
 (2, 2),
 (2, 9),
@@ -1630,8 +1632,11 @@ INSERT INTO question_tag(question_id, tag_id) VALUES
 (3, 10),
 (5, 1),
 (5, 9),
+(5, 8),
+(5, 4),
 (7, 3),
 (7, 6),
+(7, 2),
 (9, 5),
 (9, 1),
 (10, 2),
@@ -1674,6 +1679,7 @@ INSERT INTO question_tag(question_id, tag_id) VALUES
 (60, 5),
 (65, 8),
 (65, 1),
+(65, 6),
 (66, 2),
 (66, 9),
 (71, 5),
