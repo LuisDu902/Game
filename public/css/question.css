@@ -9,7 +9,6 @@
 
 .question-detail .question-title {
     display: flex;
-    gap: 30px;
     align-items: center;
 }
 
@@ -18,12 +17,34 @@
     width: 50px;
     border: 1px solid #7C5BF0;
     border-radius: 50%;
+    margin-right: 30px;
+}
+
+.title {
+    flex: 9;
+    display: flex;
+    gap: 20px;
+    align-items: center;
 }
 
 .question-detail .question-title h1{
-    flex: 9;
     font-size: 50px;
 }
+
+.q-tags {
+    display: flex;
+    gap: 20px;
+    padding-top: 10px;
+}
+
+.q-tags span {
+    color: #7C5BF0;
+    background-color: #D2CFFF;
+    padding: 5px 15px;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
 
 .create-answer {
     margin-left: auto;
@@ -36,7 +57,9 @@
     transition: all 300ms ease;
 }
 
+
 .answer-content {
+    width: 100%;
     padding-bottom: 40px;
     border-bottom: 1px solid #e6e7f3;
 }
@@ -80,11 +103,16 @@
 }
 
 .question-detail p {
-    font-size: 20px;
-    color: #525252;
-    padding: 40px 0 ;
-    border-bottom: 1px solid #e6e7f3;
+    font-size: 22px;
+    padding: 30px 0;
     text-align: justify;
+}
+
+.question-description div {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 30px;
+    border-bottom: 1px solid #e6e7f3;
 }
 
 .question-t {
@@ -118,9 +146,8 @@
 }
 
 .top-answer {
-    margin-top: 20px;
+    margin-top: 30px;
 }
-
 
 .top-answer h2 {
     margin-top: 20px;
@@ -166,13 +193,12 @@
     border-bottom: 1px solid #e6e7f3;
 }
 
+.no-comment {
+    text-align: center;
+}
+
 #answer-comment-list {
-    background-color: #F8F7FE;
     width: 100%;
-    margin-left: 60px;
-    margin-top: 30px;
-    padding: 20px;
-    border-radius: 10px;
 }
 
 #answer-comment-list li>div{
@@ -181,51 +207,77 @@
     gap: 20px;
 }
 
-#answer-comment-list li>div a{
+#answer-comment-list li>div a {
+    font-size: 22px;
+    font-weight: 500;
+}
+
+.c-desc {
     display: flex;
     align-items: center;
     gap: 20px;
 }
 
+.c-desc span {
+    color: #525252;
+    font-size: 16px;
+}
 
 #answer-comment-list li {
-    margin-bottom: 20px;
+    margin-bottom: 5px;
 }
 
-#answer-comment-list li p, .like-comment {
+#answer-comment-list li p {
     margin-left: 60px;
+    margin-top: 10px;
 }
 
-.like-comment{
-   margin-top: 10px;
-  
+.answer-comments {
+    display: flex;
+    flex-direction: column;
+    margin-left: 60px;
+    background-color: #F8F7FE;
+    margin-top: 30px;
+    padding: 20px;
+    border-radius: 10px;
 }
 
-.like-comment ion-icon {
-    font-size: 25px;
+.comment-input {
+    width: 100%;
+    display: flex;
+    gap: 20px;
+    align-items: start;
+}
+
+.comment-input form {
+    width: 100%;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    background-color: white;
+}
+
+.comment-input form textarea {
+    border: none;
+    overflow-y: scroll;
+    width: 100%;
+    resize: none;
+    padding-bottom: 5px;
+    
+}
+
+.comment-input form div {
+    padding: 10px;
+    display: flex;
+}
+
+.comment-input form button {
+    margin-left: auto;
+    padding: 5px 20px;
+    border-radius: 10px;
+    background-color: #D2CFFF;
     color: #7C5BF0;
+    transition: all 400ms ease;
 }
-
-.like-comment ion-icon:hover{
-   cursor: pointer;
- }
-
-.like-comment span {
-    font-size: 18px;
-}
-
-.comment-input input {
-    width: 90%;
-    background-color: transparent;
-    font-size: 18px;
-    padding: 10px 0;
-    border-bottom: 1px solid #e6e7f3;
-}
-
-.comment-input ion-icon {
-    font-size: 20px;
-}
-
 
 .other-answers {
     margin-top: 40px;
@@ -238,12 +290,16 @@
     font-weight: 600;
 }
 
-.no-answers h2 {
+.no-answers {
+    display: flex;
+    flex-direction: column;
     margin-top: 60px;
-    margin-left: 80px;
-    font-size: 40px;
-    font-weight: 600;
-    color: #b5a5ee;
+    align-items: center;
+}
+
+.no-answers img {
+    height: 400px;
+    width: 400px;
 }
 
 .vote-btns .ionicon, svg{
@@ -251,32 +307,18 @@
 }
 
 .answerFormContainer{
-    margin: 30px auto;
-    width: 1200px;
-    height: 500px;
+    margin-top: 30px;
+    margin-left: 70px;
+    width: calc(100%-70px);
     border-radius: 10px;
-    border: 1px dashed #6D49EB;
+    border: 2px dashed #7C5BF0;
     background: #F8F7FE; 
     padding: 50px;
 }
 
-.question-title button {
-    font-size: 18px;
-    background-color: #D2CFFF;
-    border: 1px solid #D2CFFF;
-    width: 190px;
-    padding: 5px 0;
-    color: #7C5BF0;
-    border-radius: 5px;
-    transition: all 400ms ease;
-    margin: 0px auto;
-    align-self: center;
-    display: block;
-}
 
-.question-title button:hover {
+.comment-input form button:hover {
     background-color: #7C5BF0;
-    border: 1px solid #7C5BF0;
     color: white;
 }
 
@@ -304,9 +346,6 @@
     color: #7C5BF0;
 }
 
-.answerFormContainer .form-group {
-    margin-bottom: 15px;
-}
 
 .answerFormContainer label {
     display: block; 
@@ -329,15 +368,15 @@
     height: 300px;
 }
 
-.hasvoted{
-   
+.hasvoted, .notvoted:hover{
     background-color:#6542e6 ;
     color: white;
 }
 
-.notvoted{
+.notvoted {
     background-color:white ;
     color: #6D49EB;
+    transition: all 300ms ease;
 }
 
 .question-input, .question-c, .answer-input {
@@ -358,4 +397,30 @@
     background-color: #7C5BF0;
     padding: 5px 10px;
     color: white;
+}
+
+.question-dropdown button {
+    min-width: 180px;
+    display: flex;
+}
+
+.question-dropdown ion-icon {
+    margin-left: auto;
+    font-size: 25px;
+}
+
+.q-drop-content {
+    position: absolute;
+    min-width: 150px;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
+    box-shadow: 0 8px 30px 0 rgba(50,53, 130, 0.08);
+    border-radius: 15px;
+    border: 1px solid #E6E7F3;
+    margin-top: 10px;
+    border-radius: 5px;
+    z-index: 1;
+    margin-right: 20px;
 }

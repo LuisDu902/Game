@@ -6,12 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Comment extends Model
 {
     use HasFactory;
-
 
     public $timestamps  = false;
 
@@ -31,22 +30,35 @@ class Comment extends Model
         return $this->belongsTo(Answer::class, 'answer_id');
     }
 
+    public function versionContent(): HasMany 
+    {
+        return $this->hasMany(VersionContent::class);
+    }
+
     /**
      * Get the latest question content.
      */
-    public function latest_content()
+    public function latestContent()
     {
-        return DB::table('version_content')
-        ->select('content')
-        ->where('comment_id', $this->id)
-        ->orderByDesc('date') 
-        ->limit(1)
-        ->value('content');
+        return $this->versionContent()
+        ->orderByDesc('date')
+        ->first()
+        ->content; 
     }
     
+    public function lastDate()
+    {
+        return $this->versionContent()
+        ->orderByDesc('date')
+        ->first()
+        ->date; 
+    }
 
-
-
+    public function lastModification() {
+        $now = now();
+        $modifiedAt = $this->lastDate();
+        return $now->diffForHumans($modifiedAt, true);
+    }
 
 
     public function user()

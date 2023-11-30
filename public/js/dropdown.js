@@ -17,3 +17,39 @@ if (dropDownButton) {
     });
 
 }
+
+const openSidebarButton = document.querySelector('.open-sidebar');
+
+if (openSidebarButton) {
+    const overlay = document.querySelector('.overlay');
+    const sidebar = document.querySelector('.sidebar');
+    
+    openSidebarButton.addEventListener('click', () => {
+        sidebar.style.left = '0';
+        overlay.style.display = 'block';
+    });
+
+    overlay.addEventListener('click', () => {
+        sidebar.style.left = '-400px';
+        overlay.style.display = 'none';
+    });
+}
+
+
+
+const questionDropDown = document.querySelector('.question-dropdown button ion-icon');
+
+if (questionDropDown) {
+    let isOpen1 = false;
+    const dropdownContent = document.querySelector('.q-drop-content');
+    
+    questionDropDown.addEventListener('click', function () {
+        if (isOpen1) {
+            dropdownContent.style.display = 'none';
+        } else {
+            dropdownContent.style.display = 'flex';
+        }
+        isOpen1 = !isOpen1;
+    });
+
+}

@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 // Added to define Eloquent relationships.
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\DB;
 
 class Question extends Model
@@ -46,29 +47,42 @@ class Question extends Model
     {
         return $this->belongsTo(Game::class, 'game_id');
     }
+
+    public function tags(): BelongsToMany
+    {
+        return $this->belongsToMany(Tag::class, 'question_tag', 'question_id', 'tag_id');
+    }
+    
+    public function versionContent(): HasMany 
+    {
+        return $this->hasMany(VersionContent::class);
+    }
+
     /**
      * Get the latest question content.
      */
-    public function latest_content()
+    public function latestContent()
     {
-        return DB::table('version_content')
-        ->select('content')
-        ->where('question_id', $this->id)
-        ->orderByDesc('date') 
-        ->limit(1)
-        ->value('content');
-    }
-
-    public function hasTopAnswer(){
-        return $this->answers()->where('top_answer', true)->count() > 0;
+        return $this->versionContent()
+        ->orderByDesc('date')
+        ->first()
+        ->content; 
     }
 
     public function topAnswer(){
-        return $this->answers()->where('top_answer', true)->first();
+        return $this->answers()
+        ->orderByDesc('votes')
+        ->first();
     }
 
     public function otherAnswers(){
-        return $this->answers()->where('top_answer', false);
+        $topAnswerId = $this->topAnswer()->id ?? null;
+
+        return $this->answers()
+            ->when($topAnswerId, function ($query) use ($topAnswerId) {
+                return $query->where('id', '!=', $topAnswerId);
+            })->orderByDesc('votes')
+            ->get();
     }
 
     public function timeDifference() {
@@ -85,10 +99,6 @@ class Question extends Model
         $question->create_date = now();
         $question->title = $title;
         $question->game_id = $game_id;
-        $question->is_solved = false;
-        $question->is_public = true; 
-        $question->nr_views = 0;
-        $question->votes = 0;
 
         $question->save();
 
@@ -102,19 +112,22 @@ class Question extends Model
         return $question;
     }
 
-    public function last_date()
+    public function lastDate()
     {
-        return DB::table('version_content')
-        ->select('date')
-        ->where('question_id', $this->id)
-        ->orderByDesc('date') 
-        ->limit(1)
-        ->value('date');
+        return $this->versionContent()
+        ->orderByDesc('date')
+        ->first()
+        ->date; 
     }
 
-    public function last_modification() {
+    public function lastModification() {
         $now = now();
-        $modifiedAt = $this->last_date();
+        $modifiedAt = $this->lastDate();
         return $now->diffForHumans($modifiedAt, true);
     }
+
+    public function history() {
+
+    }
+
 }

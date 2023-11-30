@@ -46,50 +46,48 @@ class Answer extends Model
         return $this->hasMany(Comment::class, 'answer_id');
     }
 
+    public function versionContent(): HasMany 
+    {
+        return $this->hasMany(VersionContent::class);
+    }
 
     /**
      * Get the latest answer content.
      */
-    public function latest_content()
+    public function latestContent()
     {
-        return DB::table('version_content')
-        ->select('content')
-        ->where('answer_id', $this->id)
-        ->orderByDesc('date') 
-        ->limit(1)
-        ->value('content');
+        return $this->versionContent()
+        ->orderByDesc('date')
+        ->first()
+        ->content; 
     }
 
 
-    public function create_date()
+    public function createDate()
     {
-        return DB::table('version_content')
-        ->select('date')
-        ->where('answer_id', $this->id)
-        ->orderBy('date') 
-        ->limit(1)
-        ->value('date');
+        return $this->versionContent()
+        ->orderBy('date')
+        ->first()
+        ->date; 
     }
 
-    public function last_date()
+    public function lastDate()
     {
-        return DB::table('version_content')
-        ->select('date')
-        ->where('answer_id', $this->id)
-        ->orderByDesc('date') 
-        ->limit(1)
-        ->value('date');
+        return $this->versionContent()
+        ->orderByDesc('date')
+        ->first()
+        ->date; 
     }
 
-    public function time_difference() {
+    public function timeDifference() {
         $now = now();
-        $createdAt = $this->create_date();
+        $createdAt = $this->createDate();
         return $now->diffForHumans($createdAt, true);
     }
 
-    public function last_modification() {
+    public function lastModification() {
         $now = now();
-        $modifiedAt = $this->last_date();
+        $modifiedAt = $this->lastDate();
         return $now->diffForHumans($modifiedAt, true);
     }
 
@@ -98,9 +96,6 @@ class Answer extends Model
 
         $answer->user_id = (int)$userId;
         $answer->question_id = $questionId;
-        $answer->top_answer = false;
-        $answer->is_public = true; 
-        $answer->votes = 0;
 
         $answer->save();
 

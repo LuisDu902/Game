@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\DB;
 
 // Added to define Eloquent relationships.
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+
+
+use App\Http\Controllers\FileController;
 
 class User extends Authenticatable
 {
@@ -69,6 +73,14 @@ class User extends Authenticatable
         return $this->hasMany(Answer::class);
     }
 
+    public function badges(): BelongsToMany
+    {
+        return $this->belongsToMany(Badge::class, 'user_badge', 'user_id', 'badge_id');
+    }
+
+    public function getProfileImage() {
+        return FileController::get('profile', $this->id);
+    }    
 
      public function hasVoted($questionId)
     {
@@ -76,7 +88,6 @@ class User extends Authenticatable
             ->where('vote_type', 'Question_vote')
             ->where('question_id', $questionId)
             ->where('user_id', $this->id)
-            
             ->exists();   
     }
 
@@ -87,8 +98,6 @@ class User extends Authenticatable
             ->where('question_id', $questionId)
             ->where('user_id', $this->id)
             ->first();
-    
-    
         return $vote ? $vote->reaction : null;
     }
     
