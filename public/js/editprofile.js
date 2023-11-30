@@ -138,7 +138,9 @@ function profileEditdHandler(){
 function imageHandler(){
     if (this.status === 200) {
         let item = JSON.parse(this.responseText);
-        console.log('Profile updated:', item);
+        const img = document.querySelector('.profile-left img');
+        const profile = document.querySelector('.dropdown img');
+        profile.src = img.src;
     } else {
         console.error('Profile update failed:', this.statusText);
     }

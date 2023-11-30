@@ -2,6 +2,9 @@ function createNotificationBox(text) {
     const notificationBox = document.querySelector('.notification-box');
     notificationBox.style.display = 'flex';
 
+    const icon = document.createElement('ion-icon');
+    icon.setAttribute('name', 'checkmark-circle');
+
     const span = document.createElement('span');
     span.textContent = text;
     
@@ -12,7 +15,7 @@ function createNotificationBox(text) {
         notificationBox.style.display = 'none';
         notificationBox.innerHTML = '';
     })
-
+    notificationBox.appendChild(icon);
     notificationBox.appendChild(span);
     notificationBox.appendChild(close);
 

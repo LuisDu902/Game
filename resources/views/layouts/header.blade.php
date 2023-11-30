@@ -21,9 +21,11 @@
 
         @if (Auth::check())
         <div class="left">
-            <a href="{{ route('users') }}" class="admin">
-                Admin Section
-            </a>
+            @if (Auth::user()->is_admin && !Auth::user()->is_banned)
+                <a href="{{ route('users') }}" class="admin">
+                    Admin Section
+                </a>
+            @endif
             <div class="dropdown">
                 
                 <div class="user">
