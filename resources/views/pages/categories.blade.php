@@ -1,12 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-    <x-sidebar></x-sidebar>
-
-    <div class="headers">
-        <button class="open-sidebar">
-            <ion-icon name="menu"></ion-icon>
-        </button>
+   
+   <div class="headers">
         <ul class="breadcrumb">
             <li><a href="{{ route('home') }}">
                 <ion-icon name="home-outline"></ion-icon> Home</a>

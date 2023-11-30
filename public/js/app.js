@@ -1,17 +1,21 @@
-function createNotificationBox(title, content) {
+function createNotificationBox(text) {
     const notificationBox = document.querySelector('.notification-box');
     notificationBox.style.display = 'flex';
 
-    const span1 = document.querySelector('.notification-box span:first-child');
-    span1.textContent = title;
+    const span = document.createElement('span');
+    span.textContent = text;
+    
+    const close = document.createElement('ion-icon');
+    close.setAttribute('name', 'close');
 
-    const span2 = document.querySelector('.notification-box span:last-child');
-    span2.textContent = content;
-
-    const close = document.querySelector('#close-notification');
     close.addEventListener('click', function(){
         notificationBox.style.display = 'none';
-    });
+        notificationBox.innerHTML = '';
+    })
+
+    notificationBox.appendChild(span);
+    notificationBox.appendChild(close);
+
 }
 
 function encodeForAjax(data) {

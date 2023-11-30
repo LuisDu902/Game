@@ -12,7 +12,7 @@ function answerDeletedHandler(answerId){
 
         if (this.status === 200) {
             console.log('Answer deleted successfully');
-            createNotificationBox('Successfully saved!', 'Answer deleted successfully!');
+            createNotificationBox('Answer deleted successfully!');
             const questionElement = document.getElementById(answerId);
             if (questionElement) {
                 questionElement.remove();

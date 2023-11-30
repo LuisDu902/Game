@@ -57,7 +57,7 @@ function questionDeletedHandler(questionId){
 
         if (this.status === 200) {
             console.log('Question deleted successfully');
-            createNotificationBox('Successfully saved!', 'Question deleted successfully!');
+            createNotificationBox('Question deleted successfully!');
             const questionElement = document.getElementById(questionId);
             if (questionElement) {
                 questionElement.remove();
@@ -80,19 +80,6 @@ if (questionContainer) {
     const downVote =  document.getElementById('down');
     const questionId = questionContainer.dataset.id;
     const userId = questionContainer.getAttribute('data-user');
-
-    if (!userId) {
-        const no_up = document.querySelectorAll('.no-up');
-        const no_down = document.querySelectorAll('.no-down');
-        no_up.forEach(element => {
-            element.addEventListener('click', showLoginModal);
-        });
-    
-        no_down.forEach(element => {
-            element.addEventListener('click', showLoginModal);
-        });
-    }
-
 
     if (upVote){
     upVote.addEventListener('click', function(){
@@ -119,7 +106,37 @@ if (questionContainer) {
     });}
 
 
-  
+    const answer_btn = document.querySelector('.answer')
+    if (answer_btn){
+    answer_btn.addEventListener('click', function(){
+        const answer = document.querySelector('#answerFormContainer')
+        if (!answer) {
+            const no_answers = document.querySelector('.no-answers');
+            if (no_answers) {
+                no_answers.remove();
+            }
+            questionContainer.innerHTML += ` <div id="answerFormContainer" class="answerFormContainer" >
+                 <form >
+                    <div class="form-group">
+                        <label for="content">Answer <span>*</span></label>
+                        <input type="hidden" name="userId" id="userId" value="${userId}">
+                        <input type="hidden" name="questionId" id="questionId" value="${questionId}">
+                        <textarea name="content" id="content" class="form-control" placeholder="Enter your answer here..." required></textarea>
+                    </div>
+                    <button class="btn btn-primary">Post Answer</button>
+                </form>
+            </div>`;
+            const post_answer = document.querySelector('#answerFormContainer button');
+            post_answer.addEventListener('click', function(){
+                event.preventDefault();
+                const textareaContent = document.querySelector('#content').value;
+                sendAjaxRequest('post', '/api/answers', { content: textareaContent, userId: userId, questionId: questionId }, answerHandler);
+            });
+            const newAnswerFormContainer = document.querySelector('#answerFormContainer');
+            newAnswerFormContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    })
+}
     const edit_btn = document.querySelector('.edit-question')
 
     if (edit_btn){
@@ -227,7 +244,7 @@ function answerHandler() {
         </div>
         <div class="answer-content"> 
             <div>
-                <img src="{{ $user->getProfileImage() }}">>
+                <img src="../images/user.png" alt="user">
                 <p>
                     ${textareaContent}
                 </p>
@@ -253,7 +270,37 @@ function answerHandler() {
         </div>
     </div>`
     
+    const answer_btn = document.querySelector('.answer')
+
+    answer_btn.addEventListener('click', function(){
+        const answer = document.querySelector('#answerFormContainer')
+        if (!answer) {
+            const no_answers = document.querySelector('.no-answers');
+            if (no_answers) {
+                no_answers.remove();
+            }
+            questionContainer.innerHTML += ` <div id="answerFormContainer" class="answerFormContainer" >
+                 <form >
+                    <div class="form-group">
+                        <label for="content">Answer <span>*</span></label>
+                        <input type="hidden" name="userId" id="userId" value="${userId}">
+                        <input type="hidden" name="questionId" id="questionId" value="${questionId}">
+                        <textarea name="content" id="content" class="form-control" placeholder="Enter your answer here..." required></textarea>
+                    </div>
+                    <button class="btn btn-primary">Post Answer</button>
+                </form>
+            </div>`;
+            const post_answer = document.querySelector('#answerFormContainer button');
+            post_answer.addEventListener('click', function(){
+                event.preventDefault();
+                const textareaContent = document.querySelector('#content').value;
+                sendAjaxRequest('post', '/api/answers', { content: textareaContent, userId: userId, questionId: questionId }, answerHandler);
+            });
+            const newAnswerFormContainer = document.querySelector('#answerFormContainer');
+            newAnswerFormContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
     }
+    )}
 }
 
 
@@ -266,7 +313,7 @@ function editQuestionHandler() {
         title.innerHTML = `${new_title}`
         const content = document.querySelector('.question-description p')
         content.innerHTML =  `${new_content}`
-        createNotificationBox('Successfully saved!', 'Question successfully edit!')
+        createNotificationBox('Question successfully edit!')
         const modi = document.querySelector('#q-modi')
         modi.textContent = 'Modified 0 seconds ago'
     }
@@ -276,7 +323,7 @@ function editQuestionHandler() {
 
 function editAnswerHandler() {
     if (this.status == 200) {
-        createNotificationBox('Successfully saved!', 'Answer successfully edit!')
+        createNotificationBox('Answer successfully edit!')
     }
 }
 

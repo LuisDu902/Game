@@ -31,13 +31,11 @@
         <h5>Quick links</h5>
         <ul class="quick-links">
             <li> <ion-icon name="chevron-forward-outline"></ion-icon>
-                <a href="{{ route('questions') }}">Questions</a> </li>
+                <a href="{{ route('questions') }}">Question</a> </li>
             <li> <ion-icon name="chevron-forward-outline"></ion-icon>
-                <a href="{{ route('faq') }}">FAQ</a> </li>
+                <a href="{{ route('users') }}">Users</a> </li>
             <li> <ion-icon name="chevron-forward-outline"></ion-icon>
-                <a href="{{ route('users') }}">About us</a> </li>
-            <li> <ion-icon name="chevron-forward-outline"></ion-icon>
-                <a href="{{ route('categories') }}">Contact us</a> </li>
+                <a href="{{ route('categories') }}">Game Categories</a> </li>
         </ul>
     </div>
     <div class="footer-col follow">

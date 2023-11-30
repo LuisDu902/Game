@@ -1,4 +1,4 @@
-.questions-sec, .user-manage-section, .faq-sec {
+.questions-sec, .user-manage-section {
     margin: 20px;
 }
 
@@ -155,7 +155,7 @@
     font-weight:500;
 }
 
-.no-questions p, .no-answers p{
+.no-questions p{
     padding: 3rem;
     text-align: center;
     font-size:larger;
