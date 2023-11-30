@@ -17,9 +17,12 @@
     </div>
     <article class="profile-wrapper">
         <div class="profile-left">
-            <img class="profile-big-pic" src="../images/user.png"
-                alt="Gengar's Image">
-
+            <img class="profile-big-pic" src="{{ $user->getProfileImage() }}" alt="User's Image" id="profile-preview">
+            <form method="POST" enctype="multipart/form-data">
+                <label for="profile-image-input" class="upload-button">Upload image</label>
+                <input name="file" type="file" id="profile-image-input" accept="image/*">
+            </form>
+        
             <div class="stats-grid">
                 <div class="stats-text">Rank:</div>
                 <div class="user-rank">{{ $user->rank }}</div>

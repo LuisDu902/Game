@@ -16,6 +16,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 
+use App\Http\Controllers\FileController;
+
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -75,6 +77,10 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Badge::class, 'user_badge', 'user_id', 'badge_id');
     }
+
+    public function getProfileImage() {
+        return FileController::get('profile', $this->id);
+    }    
 
      public function hasVoted($questionId)
     {

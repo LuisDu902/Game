@@ -75,6 +75,7 @@ CREATE TABLE users (
   description TEXT,
   rank Rank NOT NULL DEFAULT 'Bronze',
   remember_token VARCHAR,
+  profile_image VARCHAR,
   is_banned BOOLEAN NOT NULL DEFAULT FALSE,
   is_admin BOOLEAN NOT NULL DEFAULT FALSE
 );
@@ -1622,8 +1623,6 @@ INSERT INTO game_member(user_id, game_id) VALUES
 INSERT INTO question_tag(question_id, tag_id) VALUES
 (1, 1),
 (1, 7),
-(1, 3),
-(1, 8),
 (2, 5),
 (2, 2),
 (2, 9),
@@ -1631,11 +1630,8 @@ INSERT INTO question_tag(question_id, tag_id) VALUES
 (3, 10),
 (5, 1),
 (5, 9),
-(5, 8),
-(5, 4),
 (7, 3),
 (7, 6),
-(7, 2),
 (9, 5),
 (9, 1),
 (10, 2),
@@ -1678,7 +1674,6 @@ INSERT INTO question_tag(question_id, tag_id) VALUES
 (60, 5),
 (65, 8),
 (65, 1),
-(65, 6),
 (66, 2),
 (66, 9),
 (71, 5),

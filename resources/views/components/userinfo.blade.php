@@ -1,5 +1,5 @@
 <tr class="user-info">
-    <td><img src="../images/user.png" alt="User Image"></td>
+    <td><img src="{{ $user->getProfileImage() }}"> alt="User Image"></td>
     <td><a href="{{ route('profile', ['id' => $user->id]) }}">{{ $user->username }}</a></td>
     <td>{{ $user->name }}</td>
     <td>{{ $user->email }}</td>

@@ -227,7 +227,7 @@ function answerHandler() {
         </div>
         <div class="answer-content"> 
             <div>
-                <img src="../images/user.png" alt="user">
+                <img src="{{ $user->getProfileImage() }}">>
                 <p>
                     ${textareaContent}
                 </p>

@@ -9,7 +9,6 @@
 
 .question-detail .question-title {
     display: flex;
-    gap: 30px;
     align-items: center;
 }
 
@@ -18,12 +17,34 @@
     width: 50px;
     border: 1px solid #7C5BF0;
     border-radius: 50%;
+    margin-right: 30px;
+}
+
+.title {
+    flex: 9;
+    display: flex;
+    gap: 20px;
+    align-items: center;
 }
 
 .question-detail .question-title h1{
-    flex: 9;
     font-size: 50px;
 }
+
+.q-tags {
+    display: flex;
+    gap: 20px;
+    padding-top: 10px;
+}
+
+.q-tags span {
+    color: #7C5BF0;
+    background-color: #D2CFFF;
+    padding: 5px 15px;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
 
 .create-answer {
     margin-left: auto;
@@ -82,10 +103,16 @@
 }
 
 .question-detail p {
-    font-size: 25px;
+    font-size: 22px;
+    padding: 30px 0;
+    text-align: justify;
+}
+
+.question-description div {
+    display: flex;
+    justify-content: center;
     padding-bottom: 30px;
     border-bottom: 1px solid #e6e7f3;
-    text-align: justify;
 }
 
 .question-t {
@@ -119,9 +146,8 @@
 }
 
 .top-answer {
-    margin-top: 40px;
+    margin-top: 30px;
 }
-
 
 .top-answer h2 {
     margin-top: 20px;
@@ -373,39 +399,6 @@
     color: white;
 }
 
-
-.q-game-tags {
-    display: flex;
-    margin-top: 30px;
-    margin-bottom: 20px;
-    align-items: center;
-}
-
-.q-game span {
-    font-weight: 500;
-}
-
-.q-game {
-    font-size: 16px;
-    padding-right: 20px;
-    border-right: 1px solid #e6e7f3;
-}
-
-.q-tags {
-    padding-left: 20px;
-    display: flex;
-    gap: 20px;
-}
-
-.q-tags span {
-    color: #7C5BF0;
-    background-color: #D2CFFF;
-    padding: 5px 15px;
-    border-radius: 5px;
-    font-size: 16px;
-}
-
-
 .question-dropdown button {
     min-width: 180px;
     display: flex;
@@ -419,7 +412,7 @@
 .q-drop-content {
     position: absolute;
     min-width: 150px;
-    display: flex;
+    display: none;
     flex-direction: column;
     align-items: center;
     background-color: white;
@@ -451,5 +444,9 @@
 .q-drop-content div:hover, .q-drop-content a:hover {
     background-color: #E6E7F3;
     cursor: pointer;
+    color: #6D49EB;
+}
+
+.q-drop-content div:hover ion-icon, .q-drop-content a:hover ion-icon {
     color: #6D49EB;
 }

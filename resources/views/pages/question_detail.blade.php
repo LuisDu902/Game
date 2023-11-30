@@ -16,11 +16,20 @@
             <li>{{ $question->id }}</li>
         </ul>
     </div>
+    
     <section class="question-detail-section" data-id="{{$question->id}}" {{ Auth::check() ? 'data-user=' . Auth::id() . ' data-username=' . Auth::user()->name . '' : '' }}>
         <div class="question-detail">
             <div class="question-title">
-                <img src="../images/user.png" alt="user">
-                <h1> {{ $question->title }} </h1>
+                <img src="{{ $question->creator->getProfileImage() }}" alt="user">
+                <div class="title">
+                    <h1> {{ $question->title }} </h1>
+                    <div class="q-tags">
+                        @foreach ($question->tags as $tag)
+                            <span>{{ $tag->name }}</span>
+                        @endforeach
+                    </div>
+                </div>
+              
                 @if (Auth::check())
                     @if (Auth::user()->id === $question->user_id)
                         <div class="question-dropdown">
@@ -48,10 +57,10 @@
                                 <ion-icon name="ellipsis-vertical" class="purple"></ion-icon>
                             </button>
                             <div class="q-drop-content">
-                                <div>
+                                <a href="#answerFormContainer">
                                     <ion-icon name="pencil"></ion-icon>
                                     <span>Answer</span>
-                                </div>
+                                </a>
                                 <div>
                                     <ion-icon name="bookmark"></ion-icon>
                                     <span>Follow</span>
@@ -96,28 +105,19 @@
                         <li> <a href="{{ route('profile', ['id' => $question->creator->id ]) }}" class="purple">{{ $question->creator->name }}</a> asked {{ $question->timeDifference() }} ago</li>
                         <li id="q-modi"> Modified {{ $question->lastModification() }} ago</li>
                         <li> Viewed {{ $question->nr_views }} times </li>
+                        <li> Game: <a href="{{ route('game', ['id' => $question->game->id]) }}" class="purple"> {{ $question->game->name }}</a>
+                        </li>
                     </ul>
-                    <div class="q-game-tags">
-                        @if ($question->game)
-                        <div class="q-game">
-                            <span>Game: </span>
-                            <a href="{{ route('game', ['id' => $question->game->id]) }}" class="purple"> {{ $question->game->name }}</a>
-                        </div>
-                        @endif
-                        <div class="q-tags">
-                            @foreach ($question->tags as $tag)
-                                <span>{{ $tag->name }}</span>
-                            @endforeach
-                        </div>
-                    </div>
                     <p>
                         {{ $question->latestContent() }}
                     </p>
+                    <div>
+                        <img src="{{ asset('images/question.png') }}" alt="question-image">
+                    </div>
                 </div>
             </div>
         </div>
       
-
         @if ($question->answers->isNotEmpty())
             <div class="top-answer">
                 <h2>Top answer</h2>
@@ -131,8 +131,7 @@
                         @endforeach
                     @endif
                 </div>
-        @elseif (Auth::check() && Auth::user()->id !== $question->user_id)  
-        @else
+        @elseif (!Auth::check())
             <div class="no-answers">
                 <img class="no-answers-image" src="{{ asset('images/pikachuConfused.png') }}" alt="Psyduck Image">
                 <p>No answers for this question yet.</p>
@@ -140,6 +139,9 @@
             <div class="other-answers">
             </div>
         @endif
+        
+
+        @if (Auth::check() && Auth::user()->id !== $question->user_id)  
         <div id="answerFormContainer" class="answerFormContainer">
             <form>
                 <div class="form-group">
@@ -149,6 +151,7 @@
                 <button class="btn btn-primary">Post Answer</button>
             </form>
         </div>
+        @endif
         <div id="loginModal" class="modal">
             <div class="modal-content">
                 <span class="close">&times;</span>

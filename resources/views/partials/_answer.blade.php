@@ -20,7 +20,7 @@
     </div>
     <div class="answer-content"> 
         <div>
-            <img src="../images/user.png" alt="user">
+            <img src="{{ $answer->creator->getProfileImage() }}" alt="user">
             <p>
                 {{ $answer->latestContent() }}
             </p>
@@ -39,7 +39,7 @@
                     @foreach ($answer->comments as $comment)
                         <li>
                             <div>
-                                <img src="../images/user.png" alt="user">
+                                <img src="{{ $comment->creator->getProfileImage() }}" alt="user">
                                 <div class="c-desc">
                                     <a href="{{ route('profile', ['id' => $comment->user_id ]) }}" class="purple">{{ $comment->user->name }}</a>
                                     <span> {{ $comment->lastModification() }} ago </span>
@@ -56,7 +56,7 @@
             </ul>
             @auth
                 <div class="comment-input">
-                    <img src="../images/user.png" alt="user">
+                    <img src="{{ Auth::user()->getProfileImage() }}" alt="user">
                     <form>
                         <textarea name="content" id="c-content" class="form-control" placeholder="Enter your comment here..." required></textarea>
                         <div><button> Comment </button></div>

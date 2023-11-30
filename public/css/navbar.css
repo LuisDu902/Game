@@ -142,6 +142,7 @@ body > header {
 
 .dropdown img{
     height: 2em;
+    width: 2em;
     border-radius: 50%;
     border: 2px solid var(--dark-purple);
 }
