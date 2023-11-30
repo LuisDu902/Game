@@ -53,7 +53,14 @@
             @yield('authentication')
         @else
             @include('layouts.header')
-            <div class="notification-box"></div>
+            <div class="notification-box"> 
+                <ion-icon name="checkmark-circle"></ion-icon>
+                <div>
+                    <span></span>
+                    <span></span>
+                </div>
+                <ion-icon name="close" id="close-notification"></ion-icon>
+            </div>
             @if(in_array(request()->route()->getName(), ['category', 'game']))
             <div class="purple-section"></div>
             @endif

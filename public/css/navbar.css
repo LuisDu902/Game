@@ -9,7 +9,6 @@ body > header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    max-width: 90vw;
 }
 
 .logo {
@@ -138,6 +137,8 @@ body > header {
 .dropdown .user {
     display: flex;
     align-items: center;
+    justify-content: end;
+    width: 200px;
 }
 
 .dropdown img{
@@ -164,26 +165,45 @@ body > header {
 
 .dropdown-content {
     position: absolute;
-    min-width: 150px;
+    min-width: 200px;
     display: none;
     flex-direction: column;
-    align-items: center;
-    background-color: var(--light-purple);
     margin-top: 10px;
-    border-radius: 5px;
     z-index: 1;
+    background-color: white;
+    box-shadow: 0 8px 30px 0 #32358214;
+    border: 1px solid #E6E7F3;
+    border-radius: 5px;
+}
+
+.q-drop-content div, .q-drop-content a, .dropdown-content a {
+    width: 100%;
+    display: flex;
+    justify-content: start;
+    padding: 10px 25px;
+    align-items: center;
+    gap: 10px;
+    color: black;
 }
 
 .dropdown-content a {
-    color: black;
-    padding-bottom: 10px;
-    margin-top: 10px;
-    width: 90%;
-    text-align: center;  
+    font-size: 18px;
 }
 
-.dropdown-content a:not(:last-child){
-    border-bottom: 2px solid var(--purple);
+.q-drop-content div ion-icon, .q-drop-content a ion-icon, .dropdown-content a ion-icon {
+    color: #525252;
+    margin: 0;
+    font-size: 20px;
+}
+
+.q-drop-content div:hover, .q-drop-content a:hover, .dropdown-content a:hover {
+    background-color: #E6E7F3;
+    cursor: pointer;
+    color: #6D49EB;
+}
+
+.q-drop-content div:hover ion-icon, .q-drop-content a:hover ion-icon, .dropdown-content a:hover ion-icon {
+    color: #6D49EB;
 }
 
 @media (max-width: 1180px) {

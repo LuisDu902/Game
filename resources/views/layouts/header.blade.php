@@ -36,10 +36,22 @@
                     </button>
                 </div>
                 <div class="dropdown-content">
-                    <a href="{{ route('profile', ['id' => Auth::user()->id]) }}">Profile</a>
-                    <a href="{{ route('users_questions', ['id' => Auth::user()->id]) }}">My Questions</a>
-                    <a href="{{ route('users_answers', ['id' => Auth::user()->id]) }}">My Answers</a>
-                    <a href="{{ url('/logout') }}">Sign out</a>
+                    <a href="{{ route('profile', ['id' => Auth::user()->id]) }}">
+                        <ion-icon name="person-circle"></ion-icon>
+                        <span>Profile</span>
+                    </a>
+                    <a href="{{ route('users_questions', ['id' => Auth::user()->id]) }}">
+                        <ion-icon name="help-circle"></ion-icon>
+                        <span> My Questions</span>
+                    </a>
+                    <a href="{{ route('users_answers', ['id' => Auth::user()->id]) }}">
+                    <ion-icon name="book"></ion-icon>
+                        <span> My Answers</span>
+                    </a>
+                    <a href="{{ url('/logout') }}">
+                        <ion-icon name="log-out"></ion-icon>
+                        <span> Sign out</span>
+                    </a>
                 </div>
             </div>
         </div>

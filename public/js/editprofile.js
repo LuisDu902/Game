@@ -129,7 +129,7 @@ function profileEditdHandler(){
     if (this.status === 200) {
         let item = JSON.parse(this.responseText);
         console.log('Profile updated:', item);
-        createNotificationBox('Profile successfully updated!')
+        createNotificationBox('Successfully saved!', 'User profile successfully updated!')
     } else {
         console.error('Profile update failed:', this.statusText);
     }

@@ -424,29 +424,3 @@
     z-index: 1;
     margin-right: 20px;
 }
-
-.q-drop-content div, .q-drop-content a {
-    width: 100%;
-    display: flex;
-    justify-content: start;
-    padding: 10px 25px;
-    align-items: center;
-    gap: 10px;
-    color: black;
-}
-
-.q-drop-content div ion-icon, .q-drop-content a ion-icon {
-    color: #525252;
-    margin: 0;
-    font-size: 20px;
-}
-
-.q-drop-content div:hover, .q-drop-content a:hover {
-    background-color: #E6E7F3;
-    cursor: pointer;
-    color: #6D49EB;
-}
-
-.q-drop-content div:hover ion-icon, .q-drop-content a:hover ion-icon {
-    color: #6D49EB;
-}

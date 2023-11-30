@@ -57,7 +57,7 @@ function questionDeletedHandler(questionId){
 
         if (this.status === 200) {
             console.log('Question deleted successfully');
-            createNotificationBox('Question deleted successfully!');
+            createNotificationBox('Successfully saved!', 'Question deleted successfully!');
             const questionElement = document.getElementById(questionId);
             if (questionElement) {
                 questionElement.remove();
@@ -266,7 +266,7 @@ function editQuestionHandler() {
         title.innerHTML = `${new_title}`
         const content = document.querySelector('.question-description p')
         content.innerHTML =  `${new_content}`
-        createNotificationBox('Question successfully edit!')
+        createNotificationBox('Successfully saved!', 'Question successfully edit!')
         const modi = document.querySelector('#q-modi')
         modi.textContent = 'Modified 0 seconds ago'
     }
@@ -276,7 +276,7 @@ function editQuestionHandler() {
 
 function editAnswerHandler() {
     if (this.status == 200) {
-        createNotificationBox('Answer successfully edit!')
+        createNotificationBox('Successfully saved!', 'Answer successfully edit!')
     }
 }
 
