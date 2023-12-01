@@ -118,54 +118,16 @@ if (questionContainer) {
         }
     });}
 
+}
 
-  
-    const edit_btn = document.querySelector('.edit-question')
+function showLoginModal() {
+    document.getElementById('loginModal').style.display = 'block';
 
-    if (edit_btn){
-        edit_btn.addEventListener('click', function(){
-            if (edit_btn.textContent == 'Edit') {
-                const title = document.querySelector('.question-title h1')
-                title.innerHTML = `<input type="text" value="${title.textContent}" class="question-input" required>`
-                const content = document.querySelector('.question-description p')
-                content.innerHTML = `<textarea class="question-c" placeholder="Question details..." value="${content.textContent}">${content.textContent}</textarea>`
-                edit_btn.textContent = 'Save'
-            } else {
-                const new_title = document.querySelector('.question-input').value;
-                const new_content = document.querySelector('.question-c').value;
-                if (new_title != '' && new_content != ''){
-                    sendAjaxRequest('put', '/api/questions/' + questionId + '/edit', {title: new_title, content: new_content}, editQuestionHandler);
-                    edit_btn.textContent = 'Edit'
-                }
-            }
-        })
-    }
-
-    const answer_btns = document.querySelectorAll(".edit-answer")
-
-    if (answer_btns) {
-        for (let edit_button of answer_btns) {
-            edit_button.addEventListener('click', function(){
-                const content = event.target.closest('div').querySelector('p');
-                if (edit_button.textContent == 'Edit') {
-                    content.innerHTML = `<input type="text" value="${content.textContent}" class="answer-input" required>`
-                    edit_button.textContent = 'Save'
-                } else {
-                    const new_content = event.target.closest('div').querySelector('p input').value;
-                    const time = event.target.closest('.answer-content').querySelector('.a-modi');
-                    const answerId = edit_button.getAttribute('data-id');
-                    
-                    if (new_content != '') {
-                        sendAjaxRequest('put', '/api/answers/' + answerId + '/edit', {content: new_content}, editAnswerHandler);
-                        content.innerHTML = `${new_content}`;
-                        time.textContent = 'Modified 0 seconds ago'
-                    }
-                    edit_button.textContent = 'Edit'
-                }
-            })
-        }
-    }
-    
+    document.querySelectorAll('.close').forEach(function (closeButton) {
+        closeButton.addEventListener('click', function () {
+            document.getElementById('loginModal').style.display = 'none';
+        });
+    });
 }
 
 
@@ -206,87 +168,4 @@ function downVoteHandler(){
 }
 
 
-function answerHandler() {
-    if (this.status == 200){
-        const questionId = questionContainer.dataset.id;
-        const userId = questionContainer.getAttribute('data-user');
-        const newAnswerFormContainer = document.querySelector('#answerFormContainer');
 
-        const textareaContent = document.querySelector('#content').value;
-        newAnswerFormContainer.remove();
-        const user = questionContainer.getAttribute('data-username');
-        const answerContainer = document.querySelector('.other-answers');
-        const h2 = document.querySelector('.other-answers h2');
-        if (!h2){
-            answerContainer.innerHTML += `<h2>Answers</h2>`
-        }
-
-        answerContainer.innerHTML += `<div class="answer-details">
-        <div class="vote-btns">
-        
-        </div>
-        <div class="answer-content"> 
-            <div>
-                <img src="{{ $user->getProfileImage() }}">>
-                <p>
-                    ${textareaContent}
-                </p>
-            </div>
-            <ul>
-                <li> <a href="#" class="purple"> ${user} </a> answered 0 seconds ago</li>
-                <li> Modified 0 seconds ago </li>
-                <li> 0 comments </li>
-            </ul>
-            <div class="answer-comments">
-                <ul id="answer-comment-list">
-                    <li>
-                        <div class="comment-input">
-                            <img src="../images/user.png" alt="user">
-                            <input type="text" placeholder="Add new comment">
-                            <button>
-                                <ion-icon name="arrow-forward-circle-outline"></ion-icon>
-                            </button>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>`
-    
-    }
-}
-
-
-
-function editQuestionHandler() {
-    if (this.status == 200) {
-        const new_title = document.querySelector('.question-input').value;
-        const new_content = document.querySelector('.question-c').value;
-        const title = document.querySelector('.question-title h1')
-        title.innerHTML = `${new_title}`
-        const content = document.querySelector('.question-description p')
-        content.innerHTML =  `${new_content}`
-        createNotificationBox('Successfully saved!', 'Question successfully edit!')
-        const modi = document.querySelector('#q-modi')
-        modi.textContent = 'Modified 0 seconds ago'
-    }
-}
-
-
-
-function editAnswerHandler() {
-    if (this.status == 200) {
-        createNotificationBox('Successfully saved!', 'Answer successfully edit!')
-    }
-}
-
-
-function showLoginModal() {
-    document.getElementById('loginModal').style.display = 'block';
-
-    document.querySelectorAll('.close').forEach(function (closeButton) {
-        closeButton.addEventListener('click', function () {
-            document.getElementById('loginModal').style.display = 'none';
-        });
-    });
-}
