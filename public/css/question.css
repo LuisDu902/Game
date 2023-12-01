@@ -424,3 +424,133 @@
     z-index: 1;
     margin-right: 20px;
 }
+
+
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content{
+    justify-content: center;
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 30px 60px;
+    width: fit-content;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.modal-content ion-icon {
+    background-color: #D2CFFF;
+    color: #7C5BF0;
+    padding: 10px;
+    border-radius: 50%;
+    font-size: 40px;
+}
+
+.modal-content h2 {
+    font-size: 30px;
+}
+
+.modal-content div {
+    display: flex;
+    justify-content: space-around;
+    gap: 40px;
+    margin-top: 10px;
+}
+
+.modal-content a {
+    background-color: #D2CFFF;
+    padding: 10px 30px;
+    border-radius: 10px;
+    transition: all 500ms ease;
+}
+
+.modal-content a button {
+    color: #7C5BF0;
+    font-weight: 500;
+}
+
+.modal-content a:hover {
+    background-color: #7C5BF0;
+}
+
+.modal-content a:hover button {
+    color: white;
+}
+
+
+.delete-modal ion-icon {
+    background-color: rgb(254 226 226);
+    color: rgb(220 38 38);
+    padding: 10px;
+    border-radius: 50%;
+    font-size: 20px;
+}
+
+.delete-modal {
+    padding: 30px;
+    background-color: white;
+    justify-content: center;
+    margin: 15% auto;
+    width: fit-content;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.modal-c {
+    display: flex;
+    gap: 20px;
+}
+
+.modal-c div {
+    display: flex;
+    flex-direction: column;
+    max-width: 550px;
+    gap: 10px;
+}
+
+.modal-c h2 {
+    font-size: 25px;
+}
+
+.d-buttons {
+    display: flex;
+    justify-content: end;
+    gap: 20px;
+}
+
+.d-buttons button {
+    border-radius: 10px;
+    transition: all 400ms ease;
+    padding: 5px 20px;
+    font-weight: 500;
+}
+
+#d-cancel {
+    border: 1px solid #E6E7F3;
+}
+
+#d-confirm {
+    background-color: rgb(254 226 226);
+    color: rgb(220 38 38);
+}
+
+#d-confirm:hover {
+    color: rgb(254 226 226);
+    background-color: rgb(220 38 38);
+}

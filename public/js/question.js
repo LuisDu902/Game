@@ -80,6 +80,7 @@ if (questionContainer) {
     const downVote =  document.getElementById('down');
     const questionId = questionContainer.dataset.id;
     const userId = questionContainer.getAttribute('data-user');
+    const deleteBtn = document.querySelector('#delete-question');
 
     if (!userId) {
         const no_up = document.querySelectorAll('.no-up');
@@ -118,12 +119,46 @@ if (questionContainer) {
         }
     });}
 
+    if (deleteBtn) {
+        deleteBtn.addEventListener('click', showDeleteModal);
+    }
+
+}
+
+
+function showDeleteModal() {
+    const modal = document.getElementById('deleteModal');
+    modal.style.display = 'block';
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    };
+
+    const cancel = document.getElementById('d-cancel');
+
+    cancel.addEventListener('click', function(){
+        modal.style.display = 'none';
+    });
+
+    const confirm = document.getElementById('d-confirm');
+    const questionId = questionContainer.dataset.id;
+    confirm.addEventListener('click', function(){
+        sendAjaxRequest('DELETE', '/api/questions/' + questionId + '/delete',{}, deleteHandler);
+    })
+}
+
+function deleteHandler() {
+    if (this.status == 200) {
+        window.location.href = '/questions';
+    }
 }
 
 function showLoginModal() {
-    document.getElementById('loginModal').style.display = 'block';
 
     const modal = document.getElementById('loginModal');
+    modal.style.display = 'block';
     
     window.onclick = function(event) {
         if (event.target == modal) {

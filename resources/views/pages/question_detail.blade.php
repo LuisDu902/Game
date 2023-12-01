@@ -45,7 +45,7 @@
                                     <ion-icon name="time"></ion-icon>
                                     <span>Post activity</span>
                                 </a>
-                                <div>
+                                <div id="delete-question">
                                     <ion-icon name="trash"></ion-icon>
                                     <span>Delete</span>
                                 </div>
@@ -166,5 +166,22 @@
                 </div>
             </div>
         </div>
+
+        <div id="deleteModal" class="modal">
+            <div class="delete-modal">
+                <div class="modal-c">
+                    <ion-icon name="warning-outline"></ion-icon>
+                    <div>
+                    <h2>Delete question</h2>
+                    <p>Are you sure you want to delete this question? All of its answers and comments will be permanently removed. This action cannot be undone.</p>
+                    </div>
+                </div>
+                <div class="d-buttons">
+                    <button id="d-cancel">Cancel</button>
+                    <button id="d-confirm">Delete</button>
+                </div>
+            </div>
+        </div>
+
     </section>
 @endsection
