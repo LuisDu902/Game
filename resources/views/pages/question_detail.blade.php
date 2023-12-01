@@ -140,7 +140,6 @@
             </div>
         @endif
         
-
         @if (Auth::check() && Auth::user()->id !== $question->user_id)  
         <div id="answerFormContainer" class="answerFormContainer">
             <form>
@@ -154,14 +153,16 @@
         @endif
         <div id="loginModal" class="modal">
             <div class="modal-content">
-                <span class="close">&times;</span>
+                <ion-icon name="warning-outline"></ion-icon>
                 <h2>Authentication required</h2>
-                <p>Please log in to ask a question.</p>
-                <div class="loginModalButtons">
+                <p>Please sign up or sign in to continue</p>
+                <div>
                     <a href="{{ route('register') }}">
-                        <button class="sign-up-btn-modal">Sign Up</button></a>
+                        <button>Sign Up</button>
+                    </a>
                     <a href="{{ route('login') }}">
-                        <button class="sign-in-btn-modal">Sign In</button></a>
+                        <button>Sign In</button>
+                    </a>
                 </div>
             </div>
         </div>

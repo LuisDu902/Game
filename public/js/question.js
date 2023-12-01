@@ -123,11 +123,13 @@ if (questionContainer) {
 function showLoginModal() {
     document.getElementById('loginModal').style.display = 'block';
 
-    document.querySelectorAll('.close').forEach(function (closeButton) {
-        closeButton.addEventListener('click', function () {
-            document.getElementById('loginModal').style.display = 'none';
-        });
-    });
+    const modal = document.getElementById('loginModal');
+    
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    };
 }
 
 
