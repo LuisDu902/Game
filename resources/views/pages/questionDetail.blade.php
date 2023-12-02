@@ -1,0 +1,94 @@
+
+@extends('layouts.app')
+
+@section('content')
+    <x-sidebar></x-sidebar>
+
+    <div class="headers">
+        <button class="open-sidebar">
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ul class="breadcrumb">
+            <li><a href="{{ route('home') }}">
+                <ion-icon name="home-outline"></ion-icon> Home</a>
+            </li>
+            <li><a href="{{ route('questions') }}">Questions</a></li>
+            <li>{{ $question->id }}</li>
+        </ul>
+    </div>
+    
+    <section class="question-detail-section" data-id="{{$question->id}}" {{ Auth::check() ? 'data-user=' . Auth::id() . ' data-username=' . Auth::user()->name . '' : '' }}>
+        
+        @include('partials._questionDetail', ['question' => $question])
+
+        @if ($question->answers->isNotEmpty())
+            <div class="top-answer">
+                <h2>Top answer</h2>
+                @include('partials._answer', ['answer' => $question->topAnswer()])
+            </div>
+                <div class="other-answers">
+                    @if ($question->otherAnswers()->isNotEmpty())
+                        <h2>Other answers</h2>
+                        @foreach ($question->otherAnswers() as $answer)
+                            @include('partials._answer', ['answer' => $answer])
+                        @endforeach
+                    @endif
+                </div>
+        @elseif (!Auth::check())
+            <div class="no-answers">
+                <img class="no-answers-image" src="{{ asset('images/pikachuConfused.png') }}" alt="Psyduck Image">
+                <p>No answers for this question yet.</p>
+            </div>
+            <div class="other-answers">
+            </div>
+        @endif
+        
+        @if (Auth::check() && Auth::user()->id !== $question->user_id)  
+        <div id="answerFormContainer" class="answerFormContainer">
+            <form>
+                <div class="form-group">
+                    <label for="content">Answer <span>*</span></label>
+                    <textarea name="content" id="content" class="form-control" placeholder="Enter your answer here..." required></textarea>
+                </div>
+                <button class="btn btn-primary">Post Answer</button>
+            </form>
+        </div>
+        @endif
+        <div id="loginModal" class="modal">
+            <div class="modal-content">
+                <ion-icon name="warning-outline"></ion-icon>
+                <h2>Authentication required</h2>
+                <p>Please sign up or sign in to continue</p>
+                <div>
+                    <a href="{{ route('register') }}">
+                        <button>Sign Up</button>
+                    </a>
+                    <a href="{{ route('login') }}">
+                        <button>Sign In</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div id="deleteModal" class="modal">
+            <div class="delete-modal">
+                <div class="modal-c">
+                    <ion-icon name="warning-outline"></ion-icon>
+                    <div>
+                    <h2>Delete question</h2>
+                    <p>Are you sure you want to delete this question? All of its answers and comments will be permanently removed. This action cannot be undone.</p>
+                    </div>
+                </div>
+                <div class="d-buttons">
+                    <button id="d-cancel">Cancel</button>
+                    <form method="POST" action="/questions/{{ $question->id }}">
+                        @csrf
+                        @method('DELETE')
+                        <button id="d-confirm">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </section>
+@endsection

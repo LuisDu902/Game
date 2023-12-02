@@ -41,7 +41,6 @@
         <script type="text/javascript" src="{{ url('js/dropdown.js') }}" defer></script>
         <script type="text/javascript" src="{{ url('js/faq.js') }}" defer></script>
     
-        
         <script nomodule
             src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
             defer></script>
@@ -53,8 +52,18 @@
             @yield('authentication')
         @else
             @include('layouts.header')
+            @if (session()->has('delete'))
+                <div class="notification-box" id="delete-noti"> 
+                    <ion-icon name="checkmark-circle" id="noti-icon"></ion-icon>
+                    <div>
+                        <span> Question deleted!</span>
+                        <span> {{ session('delete') }} </span>
+                    </div>
+                    <ion-icon name="close" id="close-notification"></ion-icon>
+                </div>
+            @endif
             <div class="notification-box"> 
-                <ion-icon name="checkmark-circle"></ion-icon>
+                <ion-icon name="checkmark-circle" id="noti-icon" ></ion-icon>
                 <div>
                     <span></span>
                     <span></span>

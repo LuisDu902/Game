@@ -74,13 +74,13 @@ function questionDeletedHandler(questionId){
 
 const questionContainer = document.querySelector('.question-detail-section');
 
-
 if (questionContainer) {
     const upVote = document.getElementById('up');
     const downVote =  document.getElementById('down');
     const questionId = questionContainer.dataset.id;
     const userId = questionContainer.getAttribute('data-user');
     const deleteBtn = document.querySelector('#delete-question');
+    const editBtn = document.querySelector('#edit-question');
 
     if (!userId) {
         const no_up = document.querySelectorAll('.no-up');
@@ -94,8 +94,7 @@ if (questionContainer) {
         });
     }
 
-
-    if (upVote){
+    if (upVote) {
     upVote.addEventListener('click', function(){
         if(upVote.classList.contains('hasvoted')){
             sendAjaxRequest('post', '/api/questions/' + questionId + "/unvote", {}, upVoteHandler);
@@ -107,7 +106,7 @@ if (questionContainer) {
         }
     });}
 
-    if (downVote){
+    if (downVote) {
     downVote.addEventListener('click', function(){
         if(downVote.classList.contains('hasvoted')){
             sendAjaxRequest('post', '/api/questions/' + questionId + "/unvote", {}, downVoteHandler);
@@ -141,18 +140,6 @@ function showDeleteModal() {
     cancel.addEventListener('click', function(){
         modal.style.display = 'none';
     });
-
-    const confirm = document.getElementById('d-confirm');
-    const questionId = questionContainer.dataset.id;
-    confirm.addEventListener('click', function(){
-        sendAjaxRequest('DELETE', '/api/questions/' + questionId + '/delete',{}, deleteHandler);
-    })
-}
-
-function deleteHandler() {
-    if (this.status == 200) {
-        window.location.href = '/questions';
-    }
 }
 
 function showLoginModal() {
@@ -177,7 +164,7 @@ function upVoteHandler(){
         if (this.responseText == '{"action":"vote"}'){
             upVote.classList.add('hasvoted');
             upVote.classList.remove('notvoted');
-            nr.textContent = parseInt(nr.textContent, 10) +1;
+            nr.textContent = parseInt(nr.textContent, 10) + 1;
         }
         else if (this.responseText == '{"action":"unvote"}') {
             upVote.classList.add('notvoted');
@@ -206,3 +193,107 @@ function downVoteHandler(){
 
 
 
+
+
+const newPage = document.querySelector('.new-question-form');
+let tags = [];
+let selectHtml = '';
+
+if (newPage) {
+    
+    const selectTag = document.getElementById('tag_id');
+    const newTagsDiv = document.querySelector('.new-tags');
+
+    selectTag.addEventListener('change', tagHandler);
+
+    newTagsDiv.addEventListener('click', function(event) {
+        if (event.target.tagName === 'ION-ICON') {
+            const tagDiv = event.target.parentElement;
+            const tagId = tagDiv.getAttribute('data-tagid');
+
+            const index = tags.indexOf(tagId);
+            if (index !== -1) {
+                tags.splice(index, 1);
+            }
+
+            tagDiv.remove();
+        }
+    });
+
+    const createTag = document.getElementById('create-tag');
+    if (createTag) {
+        createTag.addEventListener('click', createTagHandler);
+    }
+}
+
+function createTagHandler() {
+    const tagBtns = document.querySelector('.tag-btns');
+    const selectTag = document.getElementById('tag_id');
+    selectHtml = selectTag.outerHTML;
+    tagBtns.innerHTML = `<button id="cancel-tag">Cancel</button>
+    <button id="conf-tag">Create</button>`;
+
+    const tagsLabel = document.querySelector('label[for="tags"]');
+    tagsLabel.textContent = 'New tag:';
+    selectTag.outerHTML = '<input type="text" name="tag-name" placeholder="New tag name..." required>';
+
+    const confirm = document.getElementById('conf-tag');
+    confirm.addEventListener('click', async function(){
+        event.preventDefault();
+        const newTag = document.querySelector('.tag-con input');
+        if (newTag.value !== '') {
+            sendAjaxRequest('post', '/api/tags', {name: newTag.value}, newTagHandler);
+        }
+    });
+
+    const cancel = document.getElementById('cancel-tag');
+    cancel.addEventListener('click', () => { event.preventDefault(); closeTag()});   
+
+}
+
+function closeTag() {
+    const tagsLabel = document.querySelector('label[for="tags"]');
+    const tagBtns = document.querySelector('.tag-btns');
+    tagsLabel.textContent = 'Tags';
+    document.querySelector('.tag-con input').outerHTML = selectHtml;
+    tagBtns.innerHTML = '<button id="create-tag">Create new tag</button>';
+    const createTag = document.getElementById('create-tag');
+    createTag.addEventListener('click', createTagHandler);
+    const select = document.getElementById('tag_id');
+    select.addEventListener('change', tagHandler);
+}
+
+function tagHandler() {
+    const selectTag = document.getElementById('tag_id');
+    const newTagsDiv = document.querySelector('.new-tags');
+    const selectedOption = selectTag.options[selectTag.selectedIndex];
+    if (selectedOption.value !== "None") {
+        const tagId = selectedOption.value;
+        const tagName = selectedOption.text;
+        if (!tags.includes(tagId)) {
+            tags.push(tagId);
+            newTagsDiv.innerHTML += ` <div class="new-tag" data-tagid=${tagId}><span>${tagName}</span><ion-icon name="close"></ion-icon></div>`;
+        }
+    }
+}
+
+function newTagHandler() {
+    if (this.status == 200) {
+        const tagId = JSON.parse(this.responseText).id;
+        const name = JSON.parse(this.responseText).name;
+        createNotificationBox('Successfully created!', 'A new tag has created successfully!');
+        selectHtml = selectHtml.replace('</select>', '');
+        selectHtml += `<option value="${tagId}"> ${ name }</option>`;
+        selectHtml += '</select>';
+        closeTag();
+        tags.push(tagId);
+        const newTagsDiv = document.querySelector('.new-tags');
+        newTagsDiv.innerHTML += ` <div class="new-tag" data-tagid=${tagId}><span>${name}</span><ion-icon name="close"></ion-icon></div>`;
+
+    } else {
+        const errorResponse = JSON.parse(this.responseText);
+        createNotificationBox('Something went wrong!', errorResponse.error.name, 'error');
+        const input = document.querySelector('.tag-con input');
+        input.focus();
+    }
+}

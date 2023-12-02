@@ -7,6 +7,8 @@ use App\Models\Answer;
 use App\Models\Comment;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\GameCategory;
+use App\Models\Tag;
 use Illuminate\Support\Facades\Auth;
 
 class QuestionController extends Controller
@@ -75,7 +77,9 @@ class QuestionController extends Controller
      */
     public function create()
     {
-        return view('pages.newQuestion');
+        $categories = GameCategory::all();
+        $tags = Tag::all();
+        return view('pages.newQuestion', ['categories' => $categories, 'tags' => $tags]);
     }
 
     /**
@@ -102,7 +106,7 @@ class QuestionController extends Controller
      */
     public function show(Question $question)
     {
-        return view('pages.question_detail', ['question' => $question]);
+        return view('pages.questionDetail', ['question' => $question]);
     }
 
     /**
@@ -153,7 +157,7 @@ class QuestionController extends Controller
 
         $question->delete();
 
-        return response()->json(["success" => true], 200);
+        return redirect('/questions')->with('delete', 'Question successfully deleted!');
     }
 
     

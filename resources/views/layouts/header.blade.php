@@ -10,7 +10,7 @@
                     Categories</a></li>
         </ul>
 
-        <form class="search-box" method="POST" action="{{ route('questions') }}">
+        <form class="search-box" method="GET" action="{{ route('questions.search') }}">
             @csrf
             <input type="text" id="search-input" name="query"
                 placeholder="Search for posts...">

@@ -121,3 +121,7 @@ p, .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6  {
     cursor: pointer;
     color: #ff5757;
 }
+
+.red {
+    color: #ff5757 !important;
+}

@@ -1,6 +1,13 @@
-function createNotificationBox(title, content) {
+function createNotificationBox(title, content, type='success') {
     const notificationBox = document.querySelector('.notification-box');
     notificationBox.style.display = 'flex';
+
+    if (type == 'error') {
+        document.querySelector('#noti-icon').setAttribute('name', 'close-circle');
+        document.querySelector('#noti-icon').classList.add('red');
+    } else {
+        document.querySelector('#noti-icon').outerHTML = '<ion-icon name="checkmark-circle" id="noti-icon" ></ion-icon>';
+    }
 
     const span1 = document.querySelector('.notification-box span:first-child');
     span1.textContent = title;
@@ -29,3 +36,15 @@ function sendAjaxRequest(method, url, data, handler) {
     request.addEventListener('load', handler);
     request.send(encodeForAjax(data));
 }
+
+
+const close = document.querySelector('#close-notification');
+    
+if (close) {
+   const notificationBox = document.querySelector('.notification-box');
+
+    close.addEventListener('click', function(){
+        notificationBox.style.display = 'none';
+    });
+}
+

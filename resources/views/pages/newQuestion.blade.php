@@ -20,26 +20,42 @@
     <div class="new-question-form">
         <form action="{{ route('questions.store') }}" method="POST">
             @csrf
-            
             <div class="form-group">
                 <label for="title">Title <span>*</span></label>
-                <textarea name="title" id="title" class="form-control" required></textarea>
+                <textarea name="title" id="title" class="form-control" placeholder="Question title..." required></textarea>
             </div>
             
             <div class="form-group">
                 <label for="content">Description <span>*</span></label>
-                <textarea name="content" id="content" class="form-control" required></textarea>
+                <textarea name="content" id="content" class="form-control" placeholder="Question description..." required></textarea>
             </div>
             
-            <div class="form-group">
-                <label for="game">Game <span>*</span></label>
+            <div class="form-grid">
+                <label for="game">Game: </label>
                 <select name="game_id" id="game_id" class="form-control" required>
-                    @foreach($games as $game)
-                        <option value="{{ $game->id }}">{{ $game->name }}</option>
+                    <option value="None" selected>None</option>
+                    @foreach($categories as $category)
+                        <optgroup label="{{ $category->name }}">
+                            @foreach($category->games as $game)
+                                <option value="{{ $game->id }}">{{ $game->name }}</option>
+                            @endforeach
+                        </optgroup>
                     @endforeach
                 </select>
+                <label for="tags">Tags: </label>
+                <div class="tag-con">
+                    <select name="tag_id" id="tag_id" class="form-control" required>
+                        <option value="None" selected>None</option>
+                        @foreach($tags as $tag)
+                            <option value="{{ $tag->id }}">{{ $tag->name }}</option>
+                        @endforeach
+                    </select>
+                    <div class="tag-btns">
+                        <button id="create-tag">Create new tag</button>
+                    </div>
+                </div>
+                <div class="new-tags"></div>
             </div>
-            
             <button type="submit" class="btn btn-primary">Post Question</button>
         </form>
     </div>

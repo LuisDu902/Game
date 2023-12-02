@@ -4,6 +4,7 @@ use App\Http\Controllers\GameCategoryController;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\TagController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\AnswerController;
 use Illuminate\Support\Facades\Route;
@@ -60,13 +61,13 @@ Route::controller(UserController::class)->group(function () {
 // Question
 Route::controller(QuestionController::class)->group(function () {
     Route::get('/questions', 'index')->name('questions');
-    Route::post('/questions', 'search');
-    Route::get('/questions/new-question', [QuestionController::class, 'create'])->name('questions.create');
-    Route::post('/questions/new-question', [QuestionController::class, 'store'])->name('questions.store');
-    Route::get('/questions/new-question', [GameController::class, 'index'])->name('questions.create');
-    Route::get('/questions/{question}', [QuestionController::class, 'show']);
+    Route::get('/questions/search', 'search')->name('questions.search');
+    Route::get('/questions/create', 'create')->name('questions.create');
+    Route::post('/questions', 'store')->name('questions.store');
     Route::get('/questions/{id}', 'show')->name('question');    
-    Route::post('/comments/store', [QuestionController::class, 'store_comment'])->name('store_comment');
+    Route::get('/questions/{id}/edit', 'edit')->name('questions.edit');
+    Route::put('/questions/{id}', 'update')->name('questions.update');
+    Route::delete('/questions/{id}', 'questions.destroy');
 });
 
 
@@ -97,21 +98,23 @@ Route::controller(UserController::class)->group(function () {
 // Question API
 Route::controller(QuestionController::class)->group(function () {
     Route::get('/api/questions', 'list');
-    Route::delete('/api/questions/{id}/delete', 'delete')->name('questions_delete');
     Route::get('/api/questions', 'list'); 
     Route::post('/api/questions/{id}/vote', 'vote');
     Route::post('/api/questions/{id}/unvote', 'unvote'); 
     Route::put('/api/questions/{id}/edit', 'edit');
 });
 
-// Answers
+// Answers API
 Route::controller(AnswerController::class)->group(function () {
     Route::post('/api/answers', 'store');
     Route::put('/api/answers/{id}/edit', 'edit');
     Route::delete('/api/answers/{id}/delete', 'delete')->name('answers_delete');
 });
 
-
+// TAG API
+Route::controller(TagController::class)->group(function () {
+    Route::post('/api/tags', 'store');
+});
 
 
 

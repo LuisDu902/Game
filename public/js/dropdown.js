@@ -52,4 +52,13 @@ if (questionDropDown) {
         isOpen1 = !isOpen1;
     });
 
+    const deleteBtn = document.querySelector('#delete-question');
+    const editBtn = document.querySelector('#edit-question');
+
+    deleteBtn.addEventListener('click', function(){
+        dropdownContent.style.display = 'none';
+    });
+    editBtn.addEventListener('click', function(){
+        dropdownContent.style.display = 'none';
+    });
 }
