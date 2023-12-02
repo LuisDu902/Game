@@ -199,6 +199,7 @@ const newPage = document.querySelector('.new-question-form');
 let tags = [];
 let selectHtml = '';
 let validFiles = [];
+let fileNames = [];
 
 if (newPage) {
     
@@ -229,6 +230,7 @@ if (newPage) {
     const uploadButton = document.getElementById('up-f');
     const fileInput = document.getElementById('file');
     const questionImages = document.querySelector('.question-img');
+    const questionDocs = document.querySelector('.question-files');
 
     uploadButton.addEventListener('click', function(){
         event.preventDefault();
@@ -239,11 +241,34 @@ if (newPage) {
         const files = fileInput.files; 
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
-            const allowedExtensions = ['png', 'jpeg', 'jpg'];
+            const imageExtentions = ["png", "jpeg", "jpg", "gif"];
+            const documentExtentions = ["doc", "docx", "txt", "pdf"];
             const fileExtension = file.name.split('.').pop().toLowerCase();
-    
-            if (allowedExtensions.includes(fileExtension)) {
+            
+            if (fileNames.includes(file.name)) {
+                createNotificationBox('Repeated file!', 'This file was already upload!', 'warning');
+                continue;
+            }
+            else if (documentExtentions.includes(fileExtension)) {
                 validFiles.push(file);
+                fileNames.push(file.name);
+                const reader = new FileReader();
+
+                reader.onload = function(event) {
+                    const fileDataUrl = event.target.result;
+                    questionDocs.innerHTML += `<div>
+                        <ion-icon name="document"></ion-icon>
+                        <a href="${fileDataUrl}" download="${file.name}">
+                            <span>${file.name}</span>
+                        </a>
+                        <ion-icon name="close-circle" class="close"></ion-icon>
+                    </div>`;
+                }
+                reader.readAsDataURL(file);
+
+            }  else if (imageExtentions.includes(fileExtension)){
+                validFiles.push(file);
+                fileNames.push(file.name);
                 const reader = new FileReader();
                 
                 reader.onload = function(event) {
@@ -252,12 +277,11 @@ if (newPage) {
                         <img src="${src}">
                         <ion-icon name="close-circle"></ion-icon>
                     </div>`;
-
                 }
                 reader.readAsDataURL(file);
-
-            } else {
-                console.log('Invalid file type! Please choose a PNG, JPEG, or JPG image.');
+            }
+            else {
+                createNotificationBox('Invalid file type!', 'Please choose a valid file type to upload!', 'error');
                 this.value = ''; 
             }
             
@@ -265,6 +289,13 @@ if (newPage) {
     });
 
     questionImages.addEventListener('click', function(event) {
+        if (event.target.tagName === 'ION-ICON') {
+            const imgDiv = event.target.parentElement;
+            imgDiv.remove();
+        }
+    }); 
+
+    questionDocs.addEventListener('click', function(event) {
         if (event.target.tagName === 'ION-ICON') {
             const imgDiv = event.target.parentElement;
             imgDiv.remove();

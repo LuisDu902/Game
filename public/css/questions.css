@@ -280,7 +280,7 @@
     align-items: center;
 }
 
-.question-img {
+.question-img, .question-files {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
@@ -290,6 +290,29 @@
     position: relative;
     text-align: center;
     color: white;
+}
+
+.question-files div {
+    margin-top: 20px;
+    position: relative;
+    border: 1px solid #e6e7f3;
+    padding: 10px 20px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.question-files ion-icon:first-child {
+    color: #525252;
+}
+
+.question-files .close {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    font-size: 25px;
+    color: #FF5757;
 }
 
 .question-img img {
@@ -308,7 +331,7 @@
     color: #FF5757;
 }
 
-.question-img ion-icon:hover {
+.question-img ion-icon:hover, .question-files .close {
     cursor: pointer;
 }
 

@@ -125,3 +125,7 @@ p, .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6  {
 .red {
     color: #ff5757 !important;
 }
+
+.yellow {
+    color: rgb(250 204 21) !important;
+}

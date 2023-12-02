@@ -3,9 +3,11 @@ function createNotificationBox(title, content, type='success') {
     notificationBox.style.display = 'flex';
 
     if (type == 'error') {
-        document.querySelector('#noti-icon').setAttribute('name', 'close-circle');
-        document.querySelector('#noti-icon').classList.add('red');
-    } else {
+        document.querySelector('#noti-icon').outerHTML = '<ion-icon name="close-circle" id="noti-icon" class="red"></ion-icon>';
+    } else if (type == 'warning') {
+      document.querySelector('#noti-icon').outerHTML = '<ion-icon name="alert-circle" id="noti-icon" class="yellow"></ion-icon>';
+    } 
+    else {
         document.querySelector('#noti-icon').outerHTML = '<ion-icon name="checkmark-circle" id="noti-icon" ></ion-icon>';
     }
 
