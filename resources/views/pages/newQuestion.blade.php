@@ -65,7 +65,7 @@
             <div class="question-files"></div>
             <div class="question-img"></div>
 
-            <button type="submit" class="btn btn-primary">Post Question</button>
+            <button type="submit" id="create-question">Post Question</button>
         </form>
     </div>
 @endsection

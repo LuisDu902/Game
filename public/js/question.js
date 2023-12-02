@@ -361,7 +361,7 @@ function tagHandler() {
         const tagName = selectedOption.text;
         if (!tags.includes(tagId)) {
             tags.push(tagId);
-            newTagsDiv.innerHTML += ` <div class="new-tag" data-tagid=${tagId}><span>${tagName}</span><ion-icon name="close"></ion-icon></div>`;
+            newTagsDiv.innerHTML += ` <div class="new-tag" data-tagid=${tagId}><span>${tagName}</span><ion-icon name="close-circle"></ion-icon></div>`;
         }
     }
 }

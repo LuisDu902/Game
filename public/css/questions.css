@@ -223,7 +223,7 @@
     border-radius: 10px;
 }
 
-#up-f {
+#up-f, #create-tag {
     font-size: 20px;
 }
 
@@ -241,12 +241,12 @@
     color: white;
 }
 
-.new-tag span {
-    color: #7C5BF0;
+.new-tag {
+    position: relative;
 }
 
-.new-tag ion-icon {
-    color: #525252;
+.new-tag span {
+    color: #7C5BF0;
 }
 
 .new-tag ion-icon:hover {
@@ -307,7 +307,7 @@
     color: #525252;
 }
 
-.question-files .close {
+.question-files .close, .new-tag ion-icon {
     position: absolute;
     top: -10px;
     right: -10px;
@@ -333,6 +333,21 @@
 
 .question-img ion-icon:hover, .question-files .close {
     cursor: pointer;
+}
+
+#create-question {
+    width: fit-content;
+    margin: 0 auto;
+    padding: 10px 30px;
+    border-radius: 10px;
+    background-color: #7C5BF0;
+    color: white;
+    font-size: 20px;
+    transition: all 400ms ease;
+}
+
+#create-question:hover {
+    transform: scale(0.95);
 }
 
 .answer-card:last-child {
