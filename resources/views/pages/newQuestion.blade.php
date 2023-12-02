@@ -18,7 +18,7 @@
         </ul>
     </div>
     <div class="new-question-form">
-        <form action="{{ route('questions.store') }}" method="POST">
+        <form action="{{ route('questions.store') }}" method="POST" enctype='multipart/form-data'>
             @csrf
             <div class="form-group">
                 <label for="title">Title <span>*</span></label>
@@ -56,6 +56,24 @@
                 </div>
                 <div class="new-tags"></div>
             </div>
+
+            <div class="upload-files">
+                <label for="file">Upload Files:</label>
+                <input type='file' name='files[]' id="file" multiple hidden>
+                <button id="up-f">Upload</button>
+            </div>
+            <div class="question-files"></div>
+            <div class="question-img">
+                <div>
+                    <img src="/images/clock.png">
+                    <ion-icon name="close-circle"></ion-icon>
+                </div>
+                <div>
+                    <img src="/images/user.png">
+                    <ion-icon name="close-circle"></ion-icon>
+                </div>
+            </div>
+
             <button type="submit" class="btn btn-primary">Post Question</button>
         </form>
     </div>

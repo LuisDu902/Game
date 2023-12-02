@@ -40,30 +40,30 @@ function toggleEdit() {
     upload.style.display = profileButtonsDisplay === 'block' ? 'none' : 'block';
 
     const input = document.getElementById('profile-image-input');
-        const preview = document.getElementById('profile-preview');
+    const preview = document.getElementById('profile-preview');
+
+    input.addEventListener('change', function() {
+        const file = this.files[0];
+
+        if (file) {
+            const allowedExtensions = ['png', 'jpeg', 'jpg'];
+            const fileExtension = file.name.split('.').pop().toLowerCase();
     
-        input.addEventListener('change', function() {
-            const file = this.files[0];
+            if (allowedExtensions.includes(fileExtension)) {
+                const reader = new FileReader();
     
-            if (file) {
-                const allowedExtensions = ['png', 'jpeg', 'jpg'];
-                const fileExtension = file.name.split('.').pop().toLowerCase();
-        
-                if (allowedExtensions.includes(fileExtension)) {
-                    const reader = new FileReader();
-        
-                    reader.onload = function(event) {
-                        preview.src = event.target.result;
-                    }
-                    reader.readAsDataURL(file);
-                } else {
-                    console.log('Invalid file type! Please choose a PNG, JPEG, or JPG image.');
-                    this.value = ''; 
+                reader.onload = function(event) {
+                    preview.src = event.target.result;
                 }
+                reader.readAsDataURL(file);
             } else {
-                preview.src = "{{ $user->getProfileImage() }}";
+                console.log('Invalid file type! Please choose a PNG, JPEG, or JPG image.');
+                this.value = ''; 
             }
-        });
+        } else {
+            preview.src = "{{ $user->getProfileImage() }}";
+        }
+    });
 }
 
 function saveChanges() {

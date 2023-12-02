@@ -198,6 +198,7 @@ function downVoteHandler(){
 const newPage = document.querySelector('.new-question-form');
 let tags = [];
 let selectHtml = '';
+let validFiles = [];
 
 if (newPage) {
     
@@ -224,6 +225,51 @@ if (newPage) {
     if (createTag) {
         createTag.addEventListener('click', createTagHandler);
     }
+
+    const uploadButton = document.getElementById('up-f');
+    const fileInput = document.getElementById('file');
+    const questionImages = document.querySelector('.question-img');
+
+    uploadButton.addEventListener('click', function(){
+        event.preventDefault();
+        fileInput.click(); 
+    })
+
+    fileInput.addEventListener('change', function() {
+        const files = fileInput.files; 
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const allowedExtensions = ['png', 'jpeg', 'jpg'];
+            const fileExtension = file.name.split('.').pop().toLowerCase();
+    
+            if (allowedExtensions.includes(fileExtension)) {
+                validFiles.push(file);
+                const reader = new FileReader();
+                
+                reader.onload = function(event) {
+                    const src = event.target.result;
+                    questionImages.innerHTML += `<div>
+                        <img src="${src}">
+                        <ion-icon name="close-circle"></ion-icon>
+                    </div>`;
+
+                }
+                reader.readAsDataURL(file);
+
+            } else {
+                console.log('Invalid file type! Please choose a PNG, JPEG, or JPG image.');
+                this.value = ''; 
+            }
+            
+        }
+    });
+
+    questionImages.addEventListener('click', function(event) {
+        if (event.target.tagName === 'ION-ICON') {
+            const imgDiv = event.target.parentElement;
+            imgDiv.remove();
+        }
+    }); 
 }
 
 function createTagHandler() {
@@ -254,7 +300,7 @@ function createTagHandler() {
 function closeTag() {
     const tagsLabel = document.querySelector('label[for="tags"]');
     const tagBtns = document.querySelector('.tag-btns');
-    tagsLabel.textContent = 'Tags';
+    tagsLabel.textContent = 'Tags:';
     document.querySelector('.tag-con input').outerHTML = selectHtml;
     tagBtns.innerHTML = '<button id="create-tag">Create new tag</button>';
     const createTag = document.getElementById('create-tag');
