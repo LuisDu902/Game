@@ -377,7 +377,7 @@ function newTagHandler() {
         closeTag();
         tags.push(tagId);
         const newTagsDiv = document.querySelector('.new-tags');
-        newTagsDiv.innerHTML += ` <div class="new-tag" data-tagid=${tagId}><span>${name}</span><ion-icon name="close"></ion-icon></div>`;
+        newTagsDiv.innerHTML += ` <div class="new-tag" data-tagid=${tagId}><span>${name}</span><ion-icon name="close-circle"></ion-icon></div>`;
 
     } else {
         const errorResponse = JSON.parse(this.responseText);

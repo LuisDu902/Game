@@ -104,8 +104,9 @@ class QuestionController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Question $question)
+    public function show($id)
     {
+        $question = Question::findOrFail($id);
         return view('pages.questionDetail', ['question' => $question]);
     }
 
