@@ -256,7 +256,7 @@ if (newPage) {
 
                 reader.onload = function(event) {
                     const fileDataUrl = event.target.result;
-                    questionDocs.innerHTML += `<div>
+                    questionDocs.innerHTML += `<div data-filename="${file.name}>
                         <ion-icon name="document"></ion-icon>
                         <a href="${fileDataUrl}" download="${file.name}">
                             <span>${file.name}</span>
@@ -273,7 +273,7 @@ if (newPage) {
                 
                 reader.onload = function(event) {
                     const src = event.target.result;
-                    questionImages.innerHTML += `<div>
+                    questionImages.innerHTML += `<div data-filename="${file.name}">
                         <img src="${src}">
                         <ion-icon name="close-circle"></ion-icon>
                     </div>`;
@@ -291,6 +291,12 @@ if (newPage) {
     questionImages.addEventListener('click', function(event) {
         if (event.target.tagName === 'ION-ICON') {
             const imgDiv = event.target.parentElement;
+            const filenameToRemove = imgDiv.getAttribute('data-filename');
+            fileNames = fileNames.filter(name => name !== filenameToRemove);
+            const indexToRemove = validFiles.findIndex(file => file.name === filenameToRemove);
+            if (indexToRemove !== -1) {
+                validFiles.splice(indexToRemove, 1);
+            }
             imgDiv.remove();
         }
     }); 
@@ -298,6 +304,12 @@ if (newPage) {
     questionDocs.addEventListener('click', function(event) {
         if (event.target.tagName === 'ION-ICON') {
             const imgDiv = event.target.parentElement;
+            const filenameToRemove = imgDiv.getAttribute('data-filename');
+            fileNames = fileNames.filter(name => name !== filenameToRemove);
+            const indexToRemove = validFiles.findIndex(file => file.name === filenameToRemove);
+            if (indexToRemove !== -1) {
+                validFiles.splice(indexToRemove, 1);
+            }
             imgDiv.remove();
         }
     }); 

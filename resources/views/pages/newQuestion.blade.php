@@ -62,18 +62,7 @@
                 <input type='file' name='files[]' id="file" multiple hidden>
                 <button id="up-f">Upload</button>
             </div>
-            <div class="question-files">
-                <div>
-                    <ion-icon name="document"></ion-icon>
-                    <span>document.pdf</span>
-                    <ion-icon name="close-circle" class="close"></ion-icon>
-                </div>
-                <div>
-                    <ion-icon name="document"></ion-icon>
-                    <span>document.pdf</span>
-                    <ion-icon name="close-circle" class="close"></ion-icon>
-                </div>
-            </div>
+            <div class="question-files"></div>
             <div class="question-img"></div>
 
             <button type="submit" class="btn btn-primary">Post Question</button>
