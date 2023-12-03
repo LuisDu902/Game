@@ -82,8 +82,9 @@
                 <li> <a href="{{ route('profile', ['id' => $question->creator->id ]) }}" class="purple">{{ $question->creator->name }}</a> asked {{ $question->timeDifference() }} ago</li>
                 <li id="q-modi"> Modified {{ $question->lastModification() }} ago</li>
                 <li> Viewed {{ $question->nr_views }} times </li>
-                <li> Game: <a href="{{ route('game', ['id' => $question->game->id]) }}" class="purple"> {{ $question->game->name }}</a>
-                </li>
+                @if ($question->game)
+                    <li> Game: <a href="{{ route('game', ['id' => $question->game->id]) }}" class="purple"> {{ $question->game->name }}</a></li>
+                @endif
             </ul>
             <p>{{ $question->latestContent() }}</p>
             <div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use App\Models\Question;
 use App\Models\Answer;
+use App\Models\VersionContent;
 use App\Models\Comment;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -90,15 +91,35 @@ class QuestionController extends Controller
         $request->validate([
             'title' => 'required|max:256',
             'content' => 'required',
+            'game_id' => 'nullable|exists:game,id'
         ]);
 
-        Question::createQuestionWithContent(
-            $request->input('title'),
-            $request->input('content'),
-            $request->input('game_id')
-        );
-    
-        return redirect()->route('questions');
+        $game_id = $request->input('game_id');
+
+        $question = Question::create([
+          'title' => $request->input('title'),
+          'user_id' => Auth::id(),
+          'create_date' => now(),
+          'game_id' => ($game_id == 0 ? NULL : $game_id),
+        ]);
+
+        VersionContent::create([
+            'date' => now(),
+            'content' => $request->input('content'),
+            'content_type' => 'Question_content',
+            'question_id' => $question->id
+        ]);
+
+        $tags = explode(',', $request->tags);
+
+        foreach ($tags as $tag) {
+            DB::table('question_tag')->insert([
+                'question_id' => $question->id,
+                'tag_id' => $tag
+            ]);
+        }
+        
+        return response()->json(['id' => $question->id]);
     }
 
     /**
@@ -150,7 +171,6 @@ class QuestionController extends Controller
         $this->authorize('delete', $question);
 
         $answers = $question->answers;
-
 
         for($i=0; $i<count($answers); $i++){
             $answers[$i]->delete();

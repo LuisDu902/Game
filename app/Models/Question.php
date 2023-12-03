@@ -91,27 +91,6 @@ class Question extends Model
         return $now->diffForHumans($createdAt, true);
     }
 
-    public static function createQuestionWithContent($title, $content, $game_id)
-    {
-        $question = new static;
-
-        $question->user_id = Auth::id();
-        $question->create_date = now();
-        $question->title = $title;
-        $question->game_id = $game_id;
-
-        $question->save();
-
-        DB::table('version_content')->insert([
-            'question_id' => $question->id,
-            'content' => $content,
-            'date' => now(),
-            'content_type' => 'Question_content',
-        ]);
-
-        return $question;
-    }
-
     public function lastDate()
     {
         return $this->versionContent()

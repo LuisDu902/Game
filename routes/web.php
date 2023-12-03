@@ -63,11 +63,10 @@ Route::controller(QuestionController::class)->group(function () {
     Route::get('/questions', 'index')->name('questions');
     Route::get('/questions/search', 'search')->name('questions.search');
     Route::get('/questions/create', 'create')->name('questions.create');
-    Route::post('/questions', 'store')->name('questions.store');
     Route::get('/questions/{id}', 'show')->name('question');    
     Route::get('/questions/{id}/edit', 'edit')->name('questions.edit');
     Route::put('/questions/{id}', 'update')->name('questions.update');
-    Route::delete('/questions/{id}', 'questions.destroy');
+    Route::delete('/questions/{id}', 'delete')->name('questions.destroy');
 });
 
 
@@ -101,7 +100,7 @@ Route::controller(QuestionController::class)->group(function () {
     Route::get('/api/questions', 'list'); 
     Route::post('/api/questions/{id}/vote', 'vote');
     Route::post('/api/questions/{id}/unvote', 'unvote'); 
-    Route::put('/api/questions/{id}/edit', 'edit');
+    Route::post('/api/questions', 'store');
 });
 
 // Answers API

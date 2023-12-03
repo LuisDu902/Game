@@ -193,13 +193,14 @@ function downVoteHandler(){
 
 
 
+/* Create question page */
 
-
-const newPage = document.querySelector('.new-question-form');
+const newPage = document.querySelector('.new-question-form form');
 let tags = [];
 let selectHtml = '';
 let validFiles = [];
 let fileNames = [];
+let newQuestionId = 0;
 
 if (newPage) {
     
@@ -313,6 +314,33 @@ if (newPage) {
             imgDiv.remove();
         }
     }); 
+
+    const createBtn = document.getElementById('create-question');
+    createBtn.addEventListener('click', function(){
+        event.preventDefault();
+
+        tags.forEach(function(tagId) {
+            var input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'selected_tags[]'; 
+            input.value = tagId;
+            newPage.appendChild(input);
+        });
+        const title = document.getElementById('title').value;
+        const content = document.getElementById('content').value;
+        const game = document.getElementById('game_id').value;
+        const cTags = tags.join(',');
+        sendAjaxRequest('post', '/api/questions', {title: title, content: content, tags: cTags, game: game}, createHandler);
+
+        /*
+        if (validFiles.length > 0) {
+            const fileData = new FormData();
+            validFiles.forEach(function(file, index) {
+                fileData.append('file' + index, file); 
+            });
+            sendAjaxRequest('post', 'api/questions', formData, createHandler);
+        }*/
+    });
 }
 
 function createTagHandler() {
@@ -384,5 +412,12 @@ function newTagHandler() {
         createNotificationBox('Something went wrong!', errorResponse.error.name, 'error');
         const input = document.querySelector('.tag-con input');
         input.focus();
+    }
+}
+
+function createHandler() {
+    if (this.status === 200) {
+        console.log(this);
+        console.log('hello');
     }
 }

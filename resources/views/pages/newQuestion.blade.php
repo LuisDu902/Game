@@ -18,7 +18,7 @@
         </ul>
     </div>
     <div class="new-question-form">
-        <form action="{{ route('questions.store') }}" method="POST" enctype='multipart/form-data'>
+        <form method="POST" enctype='multipart/form-data'>
             @csrf
             <div class="form-group">
                 <label for="title">Title <span>*</span></label>
@@ -33,7 +33,7 @@
             <div class="form-grid">
                 <label for="game">Game: </label>
                 <select name="game_id" id="game_id" class="form-control" required>
-                    <option value="None" selected>None</option>
+                    <option value="0" selected>None</option>
                     @foreach($categories as $category)
                         <optgroup label="{{ $category->name }}">
                             @foreach($category->games as $game)

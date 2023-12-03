@@ -90,7 +90,6 @@ function saveChanges() {
     if (fileInput.files.length > 0) {
         const formData = new FormData();
         formData.append('file', fileInput.files[0]); 
-    
         formData.append('id', id);
         formData.append('type', 'profile');    
         console.log(formData);
@@ -100,7 +99,6 @@ function saveChanges() {
         request.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').content);
         request.addEventListener('load', imageHandler);
         request.send(formData);
-      
     }
 
     console.log('Changes saved');
