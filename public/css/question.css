@@ -420,6 +420,15 @@
     display: flex;
 }
 
+.question-dropdown button:hover {
+    cursor: default;
+}
+
+.question-dropdown button ion-icon {
+    cursor: pointer;
+}
+
+
 .question-dropdown ion-icon {
     margin-left: auto;
     font-size: 25px;

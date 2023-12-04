@@ -342,7 +342,7 @@
     cursor: pointer;
 }
 
-#create-question {
+#create-question, #save-question {
     width: fit-content;
     margin: 0 auto;
     padding: 10px 30px;
@@ -353,7 +353,7 @@
     transition: all 400ms ease;
 }
 
-#create-question:hover {
+#create-question:hover, #save-question:hover {
     transform: scale(0.95);
 }
 

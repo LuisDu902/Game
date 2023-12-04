@@ -69,7 +69,7 @@ Route::controller(QuestionController::class)->group(function () {
     Route::delete('/questions/{id}', 'delete')->name('questions.destroy');
 });
 
-
+// File Storage
 Route::controller(FileController::class)->group(function () {
     Route::post('/api/file/clear', 'clear');
     Route::post('/api/file/upload', 'upload');
@@ -87,14 +87,12 @@ Route::controller(GameController::class)->group(function () {
     Route::get('/game/{id}', 'show')->name('game');
 });
 
-
 // User API
 Route::controller(UserController::class)->group(function () {
     Route::get('/api/users', 'search');
     Route::post('/api/users/{id}', 'updateStatus');
     Route::post('/api/users/{id}/edit', 'edit');
 });
-
 
 // Question API
 Route::controller(QuestionController::class)->group(function () {
@@ -112,7 +110,7 @@ Route::controller(AnswerController::class)->group(function () {
     Route::delete('/api/answers/{id}/delete', 'delete')->name('answers_delete');
 });
 
-// TAG API
+// Tag API
 Route::controller(TagController::class)->group(function () {
     Route::post('/api/tags', 'store');
 });

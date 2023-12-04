@@ -93,14 +93,15 @@ class QuestionController extends Controller
             'content' => 'required',
             'game_id' => 'nullable|exists:game,id'
         ]);
-
-        $game_id = $request->input('game_id');
+        
+        $game_id = $request->input('game');
+       
 
         $question = Question::create([
           'title' => $request->input('title'),
           'user_id' => Auth::id(),
           'create_date' => now(),
-          'game_id' => ($game_id == 0 ? NULL : $game_id),
+          'game_id' => $game_id == 0 ? NULL : $game_id,
         ]);
 
         VersionContent::create([
@@ -130,7 +131,7 @@ class QuestionController extends Controller
     public function show($id)
     {
         $question = Question::findOrFail($id);
-        return view('pages.questionDetail', ['question' => $question]);
+        return view('pages.question', ['question' => $question]);
     }
 
     /**
@@ -138,28 +139,10 @@ class QuestionController extends Controller
      */
     public function edit(Request $request, $id)
     {
-        $question = Question::findOrFail($id);
-        $this->authorize('edit', [Auth::user(), $question]);
-        
-        $request->validate([
-            'content' => 'required|string',
-            'title' => 'required|string',
-        ]);
-        
-        $question->title = $request->input('title');
-
-        $question->save();
-
-        DB::table('version_content')->insert([
-            'date' => now(),
-            'content' => $request->input('content'),
-            'content_type' => 'Question_content',
-            'question_id' => $id,
-            'answer_id' => null,
-            'comment_id' => null,
-        ]);
-
-        return response()->json(['message' => 'Question updated successfully']);
+      $question = Question::findOrFail($id);
+      $categories = GameCategory::all();
+      $tags = Tag::all();
+      return view('pages.editQuestion', ['question'=> $question, 'categories' => $categories, 'tags' => $tags]);
     }
 
 

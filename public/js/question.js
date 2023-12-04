@@ -80,7 +80,6 @@ if (questionContainer) {
     const questionId = questionContainer.dataset.id;
     const userId = questionContainer.getAttribute('data-user');
     const deleteBtn = document.querySelector('#delete-question');
-    const editBtn = document.querySelector('#edit-question');
 
     if (!userId) {
         const no_up = document.querySelectorAll('.no-up');
@@ -328,9 +327,9 @@ if (newPage) {
         });
         const title = document.getElementById('title').value;
         const content = document.getElementById('content').value;
-        const game = document.getElementById('game_id').value;
+        const chosenGame = document.getElementById('game_id').value;
         const cTags = tags.join(',');
-        sendAjaxRequest('post', '/api/questions', {title: title, content: content, tags: (cTags.length == 0 ? '0' : cTags), game: game}, createHandler);
+        sendAjaxRequest('post', '/api/questions', {title: title, content: content, tags: (cTags.length == 0 ? '0' : cTags), game: chosenGame}, createHandler);
 
     });
 }
@@ -423,7 +422,6 @@ async function createHandler() {
         } 
         else {
             window.location.href = '/questions';
-            createNotificationBox('Successfully saved!', 'Question created successfully!');
         }
     }
 }
@@ -441,6 +439,5 @@ function questionFileHandler() {
     count++;
     if (count == validFiles.length) {
         window.location.href = '/questions';
-        createNotificationBox('Successfully saved!', 'Question created successfully!');
     }
 }

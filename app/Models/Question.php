@@ -25,6 +25,7 @@ class Question extends Model
         'user_id',
         'create_date',
         'title',
+        'game_id'
     ];
 
     /**

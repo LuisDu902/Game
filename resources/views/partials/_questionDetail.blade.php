@@ -14,10 +14,10 @@
                         <ion-icon name="ellipsis-vertical" class="purple"></ion-icon>
                     </button>
                     <div class="q-drop-content">
-                        <div id="edit-question">
+                        <a href="{{ route('questions.edit', ['id' => $question->id]) }}" id="edit-question">
                             <ion-icon name="create"></ion-icon>
                             <span>Edit</span>
-                        </div>
+                        </a>
                         <a href="#">
                             <ion-icon name="time"></ion-icon>
                             <span>Post activity</span>
@@ -82,7 +82,7 @@
                 <li> <a href="{{ route('profile', ['id' => $question->creator->id ]) }}" class="purple">{{ $question->creator->name }}</a> asked {{ $question->timeDifference() }} ago</li>
                 <li id="q-modi"> Modified {{ $question->lastModification() }} ago</li>
                 <li> Viewed {{ $question->nr_views }} times </li>
-                @if ($question->game)
+                @if ($question->game_id)
                     <li> Game: <a href="{{ route('game', ['id' => $question->game->id]) }}" class="purple"> {{ $question->game->name }}</a></li>
                 @endif
             </ul>
