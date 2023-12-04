@@ -69,6 +69,31 @@ class Question extends Model
         ->content; 
     }
 
+    public function images() {
+        return DB::table('question_file')
+        ->select('file_name')
+        ->where('question_id', $this->id)
+        ->where(function ($query) {
+            $query->where('file_name', 'LIKE', '%.png')
+                ->orWhere('file_name', 'LIKE', '%.jpeg')
+                ->orWhere('file_name', 'LIKE', '%.jpg')
+                ->orWhere('file_name', 'LIKE', '%.gif');
+        })
+        ->get();
+    }
+
+    public function documents() {
+        return DB::table('question_file')
+        ->select('file_name')
+        ->where('question_id', $this->id)
+        ->where(function ($query) {
+            $query->where('file_name', 'LIKE', '%.doc')
+                ->orWhere('file_name', 'LIKE', '%.docx')
+                ->orWhere('file_name', 'LIKE', '%.pdf')
+                ->orWhere('file_name', 'LIKE', '%.txt');
+        })
+        ->get();
+    }
     public function topAnswer(){
         return $this->answers()
         ->orderByDesc('votes')

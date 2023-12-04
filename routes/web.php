@@ -70,8 +70,10 @@ Route::controller(QuestionController::class)->group(function () {
 });
 
 
-Route::post('/api/file/upload', [FileController::class, 'upload']);
-
+Route::controller(FileController::class)->group(function () {
+    Route::post('/api/file/clear', 'clear');
+    Route::post('/api/file/upload', 'upload');
+});
 
 
 // Game Category

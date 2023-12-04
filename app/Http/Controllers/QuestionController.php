@@ -109,14 +109,16 @@ class QuestionController extends Controller
             'content_type' => 'Question_content',
             'question_id' => $question->id
         ]);
-
-        $tags = explode(',', $request->tags);
-
-        foreach ($tags as $tag) {
-            DB::table('question_tag')->insert([
-                'question_id' => $question->id,
-                'tag_id' => $tag
-            ]);
+        
+        if ($request->tags !== "0") {
+            $tags = explode(',', $request->tags);
+        
+            foreach ($tags as $tag) {
+                DB::table('question_tag')->insert([
+                    'question_id' => $question->id,
+                    'tag_id' => $tag
+                ]);
+            }
         }
         
         return response()->json(['id' => $question->id]);

@@ -200,7 +200,7 @@ let tags = [];
 let selectHtml = '';
 let validFiles = [];
 let fileNames = [];
-let newQuestionId = 0;
+let count = 0;
 
 if (newPage) {
     
@@ -330,16 +330,8 @@ if (newPage) {
         const content = document.getElementById('content').value;
         const game = document.getElementById('game_id').value;
         const cTags = tags.join(',');
-        sendAjaxRequest('post', '/api/questions', {title: title, content: content, tags: cTags, game: game}, createHandler);
+        sendAjaxRequest('post', '/api/questions', {title: title, content: content, tags: (cTags.length == 0 ? '0' : cTags), game: game}, createHandler);
 
-        /*
-        if (validFiles.length > 0) {
-            const fileData = new FormData();
-            validFiles.forEach(function(file, index) {
-                fileData.append('file' + index, file); 
-            });
-            sendAjaxRequest('post', 'api/questions', formData, createHandler);
-        }*/
     });
 }
 
@@ -415,9 +407,40 @@ function newTagHandler() {
     }
 }
 
-function createHandler() {
+async function createHandler() {
     if (this.status === 200) {
-        console.log(this);
-        console.log('hello');
+        const id = JSON.parse(this.response).id;
+        if (validFiles.length > 0) {
+            count = 0;
+            validFiles.map(async function(file) {
+                let formData = new FormData();
+                formData.append('file', file); 
+                formData.append('id', id);
+                formData.append('type', 'question');    
+                console.log(formData);
+                await sendFile(formData);
+            });
+        } 
+        else {
+            window.location.href = '/questions';
+            createNotificationBox('Successfully saved!', 'Question created successfully!');
+        }
+    }
+}
+
+async function sendFile(formData) {
+    let request = new XMLHttpRequest();
+    request.open('post', '/api/file/upload', true);
+    request.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').content);
+    request.addEventListener('load', questionFileHandler);
+    request.send(formData);
+}
+
+
+function questionFileHandler() {
+    count++;
+    if (count == validFiles.length) {
+        window.location.href = '/questions';
+        createNotificationBox('Successfully saved!', 'Question created successfully!');
     }
 }

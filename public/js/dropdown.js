@@ -55,10 +55,15 @@ if (questionDropDown) {
     const deleteBtn = document.querySelector('#delete-question');
     const editBtn = document.querySelector('#edit-question');
 
-    deleteBtn.addEventListener('click', function(){
-        dropdownContent.style.display = 'none';
-    });
-    editBtn.addEventListener('click', function(){
-        dropdownContent.style.display = 'none';
-    });
+    if (deleteBtn) {
+        deleteBtn.addEventListener('click', function(){
+            dropdownContent.style.display = 'none';
+        });
+    }
+    if (editBtn) {
+        editBtn.addEventListener('click', function(){
+            dropdownContent.style.display = 'none';
+        });
+    }
+   
 }

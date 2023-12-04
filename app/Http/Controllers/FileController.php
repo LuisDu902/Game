@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 use App\Models\User;
+use App\Models\Question;
+
 
 class FileController extends Controller
 {
@@ -13,9 +16,9 @@ class FileController extends Controller
 
     static $systemTypes = [
         'profile' => ['png', 'jpg', 'jpeg'],
-        'question' => ['png', 'jpg', 'jpeg'],
-        'answer' => ['png', 'jpg', 'jpeg'],
-        'game' => ['png', 'jpg', 'jpeg'],
+        'question' => ['png', 'jpg', 'jpeg', 'doc', 'docx', 'txt', 'pdf'],
+        'answer' => ['png', 'jpg', 'jpeg', 'doc', 'docx', 'txt', 'pdf'],
+        'game' => ['png', 'jpg', 'jpeg', 'doc', 'docx', 'txt', 'pdf'],
     ];
 
     private static function isValidType(String $type) {
@@ -36,50 +39,65 @@ class FileController extends Controller
     }
     
     private static function getFileName(String $type, int $id, String $extension = null) {
-
-        $fileName = null;
         switch($type) {
             case 'profile':
-                $fileName = User::find($id)->profile_image; 
-                break;
-            case 'post':
-                break;
+                return User::find($id)->profile_image; 
+            case 'question':
+                $fileNames = DB::table('question_file')
+                        ->select('file_name')
+                        ->where('question_id', $id)
+                        ->pluck('file_name')
+                        ->toArray();
+                return $fileNames;
             default:
                 return null;
         }
-
-        return $fileName;
     }
     
     private static function delete(String $type, int $id) {
         $existingFileName = self::getFileName($type, $id);
         if ($existingFileName) {
-            Storage::disk(self::$diskName)->delete($type . '/' . $existingFileName);
-
             switch($type) {
                 case 'profile':
+                    Storage::disk(self::$diskName)->delete($type . '/' . $existingFileName);
                     User::find($id)->profile_image = null;
                     break;
-                case 'post':
+                case 'question':
+                    foreach ($existingFileName as $fileName) {
+                        Storage::disk(self::$diskName)->delete($type . '/' . $fileName);
+                        DB::table('question_file')->where('question_id', $id)->where('file_name', $fileName)->delete();
+                    }
                     break;
             }
         }
+    }
+
+    function clear(Request $request) {
+        $this->delete($request->type, $request->id);
+        return response()->json(['id' => $request->id]);
     }
 
     function upload(Request $request) {
         if (!$request->hasFile('file')) {
             return response()->json(['error' => 'File not found'], 400);
         }
+        
         if (!$this->isValidType($request->type)) {
             return response()->json(['error' => 'Unsupported upload type'], 400);
         }
+        
         $file = $request->file('file');
         $type = $request->type;
         $extension = $file->extension();
+        
         if (!$this->isValidExtension($type, $extension)) {
             return response()->json(['error' => 'Unsupported upload extension'], 400);
         }
-        $this->delete($type, $request->id);
+
+        if ($type == 'profile') {
+            $this->delete($type, $request->id);
+        }
+
         $fileName = $file->hashName();
         $error = null;
         switch($request->type) {
@@ -93,7 +111,16 @@ class FileController extends Controller
                 }
                 break;
 
-            case 'post':
+            case 'question':
+                $question = Question::findOrFail($request->id);
+                if ($question) {
+                    DB::table('question_file')->insert([
+                        'question_id' => $question->id,
+                        'file_name' => $fileName
+                    ]);
+                } else {
+                    $error = "unknown question";
+                }
                 break;
 
             default:

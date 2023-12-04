@@ -87,8 +87,21 @@
                 @endif
             </ul>
             <p>{{ $question->latestContent() }}</p>
-            <div>
-                <img src="{{ asset('images/question.png') }}" alt="question-image">
+           
+            <div class="q-files">
+                @foreach($question->documents() as $document)
+                    <div class="q-file">
+                        <ion-icon name="document"></ion-icon>
+                        <a href="{{ asset('question/' . $document->file_name) }}" download="{{ asset('question/' . $document->file_name) }}">
+                            <span>Document</span>
+                        </a>
+                    </div>
+                @endforeach
+            </div>
+            <div class="q-img">
+                @foreach($question->images() as $image)
+                    <img src="{{ asset('question/' . $image->file_name) }}" alt="question-image">
+                @endforeach
             </div>
         </div>
     </div>
