@@ -1,4 +1,4 @@
-<div class="answer-details" id="answer{{ $answer->id }}">
+<div class="answer-details" id="answer{{ $answer->id }}" data-id="{{ $answer->id }}">
     <div class="vote-btns answer-btns" data-id="{{ $answer->id }}">
         @auth
             @if ($answer->user_id === Auth::user()->id)
@@ -45,7 +45,7 @@
                                 <ion-icon name="create"></ion-icon>
                                 <span>Edit</span>
                             </div>
-                            <div>
+                            <div onclick="showAnswerDelete()">
                                 <ion-icon name="trash"></ion-icon>
                                 <span>Delete</span>
                             </div>

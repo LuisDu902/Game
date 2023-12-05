@@ -57,7 +57,7 @@ class AnswerController extends Controller
 
         $answer->delete();
 
-        return response()->json(["success" => true], 200);
+        return response()->json(["success" => true, 'id' => $id], 200);
     }
 
     public function vote(Request $request, $answer_id)

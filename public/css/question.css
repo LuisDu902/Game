@@ -587,16 +587,16 @@
     font-weight: 500;
 }
 
-#d-cancel {
+#d-cancel, #ad-cancel {
     border: 1px solid #E6E7F3;
 }
 
-#d-confirm {
+#d-confirm, #ad-confirm {
     background-color: rgb(254 226 226);
     color: rgb(220 38 38);
 }
 
-#d-confirm:hover {
+#d-confirm:hover, #ad-confirm:hover {
     color: rgb(254 226 226);
     background-color: rgb(220 38 38);
 }

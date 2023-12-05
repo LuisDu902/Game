@@ -90,5 +90,25 @@
             </div>
         </div>
 
+        <div id="answerDeleteModal" class="modal">
+            <div class="delete-modal">
+                <div class="modal-c">
+                    <ion-icon name="warning-outline"></ion-icon>
+                    <div>
+                    <h2>Delete answer</h2>
+                    <p>Are you sure you want to delete this answer? All of its comments will be permanently removed. This action cannot be undone.</p>
+                    </div>
+                </div>
+                <div class="d-buttons">
+                    <button id="ad-cancel">Cancel</button>
+                    <form method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button id="ad-confirm">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
     </section>
 @endsection

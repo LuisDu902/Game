@@ -1,3 +1,4 @@
+/*
 function deleteAnswer(answerId){
     if (confirm('Are you sure you want to delete this question?')) {
         sendAjaxRequest('DELETE', '/api/answers/' + answerId + '/delete', null, function () {
@@ -22,7 +23,7 @@ function answerDeletedHandler(answerId){
         }
     };
 }
-
+*/
 
 const answerVote = document.querySelectorAll('.answer-btns');
 
@@ -95,6 +96,65 @@ function dVoteHandler(){
             downVote.classList.add('notvoted');
             downVote.classList.remove('hasvoted');
             nr.textContent = parseInt(nr.textContent, 10) + 1;
+        }
+    }
+}
+
+
+function showAnswerDelete() {
+    const modal = document.querySelector('#answerDeleteModal');
+    modal.style.display = 'block';
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    };
+
+    const cancel = document.getElementById('ad-cancel');
+
+    cancel.addEventListener('click', function(){
+        modal.style.display = 'none';
+    });
+
+    const id = event.target.closest('.answer-details').getAttribute('data-id');
+    
+    const confirm = document.getElementById('ad-confirm');
+    
+    confirm.addEventListener('click', function(){
+        event.preventDefault();
+        sendAjaxRequest('delete', '/api/answers/' + id, {}, answerDeleteHandler);
+    });
+    
+}
+
+
+function answerDeleteHandler() {
+    if (this.status === 200) {
+        const response = JSON.parse(this.responseText);
+        const id = response.id;
+        const answer = document.querySelector(`#answer${id}`);
+        const modal = document.querySelector('#answerDeleteModal');
+        modal.style.display = 'none';
+        answer.remove();
+        createNotificationBox('Successfully saved!', 'Answer deleted successfully!');
+
+        const other = document.querySelector('.other-answers');
+        
+
+        const top = document.querySelector('.top-answer');
+
+        const hasTopAnswer = top.querySelector('.answer-details');
+        if (!hasTopAnswer) {
+            const nextAnswer = other.querySelector('.answer-details');
+            top.innerHTML += nextAnswer.outerHTML;
+            nextAnswer.remove();
+        }
+
+        const hasMoreAnswers = other.querySelector('.answer-details');
+        
+        if (!hasMoreAnswers) {
+            other.querySelector('h2').remove();
         }
     }
 }

@@ -726,7 +726,7 @@ CREATE INDEX search_user ON users USING GIN (tsvectors);
 ---POPULATE
 INSERT INTO users(name, username, email, password, description, rank, is_admin, is_banned, profile_image) VALUES
 ('John Doe', 'johndoe', 'johndoe@example.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Some description', 'Bronze', True, False, '090PJ3bfsG7io3zBEURDsdxYNbIjrsdXoyUbMNgz.jpg'),
-('Alice Johnson', 'alicej', 'alicejohnson@example.com', '5d41402abc4b2a76b9719d911017c592', 'Another description', 'Bronze', False, True, NULL),
+('Alice Johnson', 'alicej', 'alicejohnson@example.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Another description', 'Bronze', False, True, NULL),
 ('Michael Smith', 'mikesmith', 'mikesmith@example.com', '5d41402abc4b2a76b9719d911017c592', 'Description for Michael', 'Gold', True, False, NULL),
 ('Emily Davis', 'emilyd', 'emilydavis@example.com', '5d41402abc4b2a76b9719d911017c592', 'Emilys profile description', 'Bronze', False, True, NULL),
 ('David Wilson', 'davidw', 'davidwilson@example.com', '5d41402abc4b2a76b9719d911017c592', 'Description for David', 'Bronze', True, False, NULL),
@@ -823,7 +823,7 @@ INSERT INTO users(name, username, email, password, description, rank, is_admin, 
 ('Oliver Wright', 'oliverwright', 'oliverwright@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Gold', False, False, NULL),
 ('Brooklyn Lewis', 'brooklynlewis', 'brooklynlewis@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
 ('Jacob Green', 'jacobgreen', 'jacobgreen@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
-('Chloe Hall', 'chloehall', 'chloehall@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, '4MfTV80AU5vin4wlmlFC3Qx0GNeSXM3J9J85QjzR.jpg'),
+('Chloe Hall', 'chloehall', 'chloehall@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, 'nOdv16qJWwW4sTvMP4eJxeKLmshoNwwf5MDhrTLk.jpg'),
 ('Miala Davis', 'mialadavis', 'mialadavis@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Gold', False, False, NULL);
 
 INSERT INTO badge(name) VALUES
