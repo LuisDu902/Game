@@ -217,6 +217,7 @@ CREATE TABLE question_tag (
 CREATE TABLE question_file (
   question_id INTEGER REFERENCES question(id) ON DELETE CASCADE,
   file_name VARCHAR,
+  f_name VARCHAR,
   PRIMARY KEY (question_id, file_name)
 );
 
@@ -1691,7 +1692,7 @@ INSERT INTO question_tag(question_id, tag_id) VALUES
 (78, 2),
 (78, 9);
 
-INSERT INTO question_file(question_id, file_name) VALUES
-(1, 'IHUuFgM1T8a4McoFeDixQ6T89uywof843TkY0jNs.png'),
-(79, 'IHUuFgM1T8a4McoFeDixQ6T89uywof843TkY0jNs.png'),
-(79, 'oeSuX93uRTHcKA6ODWFLmdaXPOfxRZ4JuTPUG1H7.pdf');
+INSERT INTO question_file(question_id, file_name, f_name) VALUES
+(1, 'IHUuFgM1T8a4McoFeDixQ6T89uywof843TkY0jNs.png', 'question.png'),
+(79, 'IHUuFgM1T8a4McoFeDixQ6T89uywof843TkY0jNs.png', 'question.png'),
+(79, 'oeSuX93uRTHcKA6ODWFLmdaXPOfxRZ4JuTPUG1H7.pdf', 'document.pdf');

@@ -65,13 +65,12 @@ Route::controller(QuestionController::class)->group(function () {
     Route::get('/questions/create', 'create')->name('questions.create');
     Route::get('/questions/{id}', 'show')->name('question');    
     Route::get('/questions/{id}/edit', 'edit')->name('questions.edit');
-    Route::put('/questions/{id}', 'update')->name('questions.update');
     Route::delete('/questions/{id}', 'delete')->name('questions.destroy');
 });
 
 // File Storage
 Route::controller(FileController::class)->group(function () {
-    Route::post('/api/file/clear', 'clear');
+    Route::post('/api/file/delete', 'delete');
     Route::post('/api/file/upload', 'upload');
 });
 
@@ -101,6 +100,7 @@ Route::controller(QuestionController::class)->group(function () {
     Route::post('/api/questions/{id}/vote', 'vote');
     Route::post('/api/questions/{id}/unvote', 'unvote'); 
     Route::post('/api/questions', 'store');
+    Route::put('/api/questions/{id}', 'update');
 });
 
 // Answers API

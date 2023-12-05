@@ -43,6 +43,7 @@ function questionListHandler() {
     }
 }
 
+/*
 function deleteQuestion(questionId){
     if (confirm('Are you sure you want to delete this question?')) {
         sendAjaxRequest('DELETE', '/api/questions/' + questionId + '/delete', null, function () {
@@ -67,7 +68,7 @@ function questionDeletedHandler(questionId){
         }
     };
 }
-
+*/
 
 
 /* Question detail page */
@@ -195,42 +196,32 @@ function downVoteHandler(){
 /* Create question page */
 
 const newPage = document.querySelector('.new-question-form form');
+
 let tags = [];
 let selectHtml = '';
 let validFiles = [];
 let fileNames = [];
 let count = 0;
+let deletedFiles = [];
 
 if (newPage) {
     
     const selectTag = document.getElementById('tag_id');
     const newTagsDiv = document.querySelector('.new-tags');
-
-    selectTag.addEventListener('change', tagHandler);
-
-    newTagsDiv.addEventListener('click', function(event) {
-        if (event.target.tagName === 'ION-ICON') {
-            const tagDiv = event.target.parentElement;
-            const tagId = tagDiv.getAttribute('data-tagid');
-
-            const index = tags.indexOf(tagId);
-            if (index !== -1) {
-                tags.splice(index, 1);
-            }
-
-            tagDiv.remove();
-        }
-    });
-
-    const createTag = document.getElementById('create-tag');
-    if (createTag) {
-        createTag.addEventListener('click', createTagHandler);
-    }
-
     const uploadButton = document.getElementById('up-f');
     const fileInput = document.getElementById('file');
     const questionImages = document.querySelector('.question-img');
     const questionDocs = document.querySelector('.question-files');
+    const createTag = document.getElementById('create-tag');
+    const createBtn = document.getElementById('create-question');
+
+    selectTag.addEventListener('change', tagHandler);
+
+    newTagsDiv.addEventListener('click', () => removeTag(event));
+
+    if (createTag) {
+        createTag.addEventListener('click', createTagHandler);
+    }
 
     uploadButton.addEventListener('click', function(){
         event.preventDefault();
@@ -288,43 +279,12 @@ if (newPage) {
         }
     });
 
-    questionImages.addEventListener('click', function(event) {
-        if (event.target.tagName === 'ION-ICON') {
-            const imgDiv = event.target.parentElement;
-            const filenameToRemove = imgDiv.getAttribute('data-filename');
-            fileNames = fileNames.filter(name => name !== filenameToRemove);
-            const indexToRemove = validFiles.findIndex(file => file.name === filenameToRemove);
-            if (indexToRemove !== -1) {
-                validFiles.splice(indexToRemove, 1);
-            }
-            imgDiv.remove();
-        }
-    }); 
+    questionImages.addEventListener('click', () => removeImage(event));
 
-    questionDocs.addEventListener('click', function(event) {
-        if (event.target.tagName === 'ION-ICON') {
-            const imgDiv = event.target.parentElement;
-            const filenameToRemove = imgDiv.getAttribute('data-filename');
-            fileNames = fileNames.filter(name => name !== filenameToRemove);
-            const indexToRemove = validFiles.findIndex(file => file.name === filenameToRemove);
-            if (indexToRemove !== -1) {
-                validFiles.splice(indexToRemove, 1);
-            }
-            imgDiv.remove();
-        }
-    }); 
+    questionDocs.addEventListener('click', () => removeDocument(event));
 
-    const createBtn = document.getElementById('create-question');
     createBtn.addEventListener('click', function(){
         event.preventDefault();
-
-        tags.forEach(function(tagId) {
-            var input = document.createElement('input');
-            input.type = 'hidden';
-            input.name = 'selected_tags[]'; 
-            input.value = tagId;
-            newPage.appendChild(input);
-        });
         const title = document.getElementById('title').value;
         const content = document.getElementById('content').value;
         const chosenGame = document.getElementById('game_id').value;
@@ -406,6 +366,48 @@ function newTagHandler() {
     }
 }
 
+function removeTag(event) {
+    if (event.target.tagName === 'ION-ICON') {
+        const tagDiv = event.target.parentElement;
+        const tagId = tagDiv.getAttribute('data-tagid');
+
+        const index = tags.indexOf(tagId);
+        if (index !== -1) {
+            tags.splice(index, 1);
+        }
+
+        tagDiv.remove();
+    }
+}
+
+function removeImage(event) {
+    if (event.target.tagName === 'ION-ICON') {
+        const imgDiv = event.target.parentElement;
+        const filenameToRemove = imgDiv.getAttribute('data-filename');
+        fileNames = fileNames.filter(name => name !== filenameToRemove);
+        deletedFiles.push(filenameToRemove);
+        const indexToRemove = validFiles.findIndex(file => file.name === filenameToRemove);
+        if (indexToRemove !== -1) {
+            validFiles.splice(indexToRemove, 1);
+        }
+        imgDiv.remove();
+    }
+}
+
+function removeDocument(event) {
+    if (event.target.tagName === 'ION-ICON') {
+        const docDiv = event.target.parentElement;
+        const filenameToRemove = docDiv.getAttribute('data-filename');
+        fileNames = fileNames.filter(name => name !== filenameToRemove);
+        deletedFiles.push(filenameToRemove);
+        const indexToRemove = validFiles.findIndex(file => file.name === filenameToRemove);
+        if (indexToRemove !== -1) {
+            validFiles.splice(indexToRemove, 1);
+        }
+        docDiv.remove();
+    }
+}
+
 async function createHandler() {
     if (this.status === 200) {
         const id = JSON.parse(this.response).id;
@@ -434,10 +436,131 @@ async function sendFile(formData) {
     request.send(formData);
 }
 
-
 function questionFileHandler() {
     count++;
     if (count == validFiles.length) {
         window.location.href = '/questions';
+    }
+}
+
+
+/* Edit question page */
+
+const editPage = document.querySelector('.edit-question-form form');
+
+if (editPage) {
+    
+    const selectTag = document.getElementById('tag_id');
+    const newTagsDiv = document.querySelector('.new-tags');
+    const uploadButton = document.getElementById('up-f');
+    const fileInput = document.getElementById('file');
+    const questionImages = document.querySelector('.question-img');
+    const questionDocs = document.querySelector('.question-files');
+    const createTag = document.getElementById('create-tag');
+    const imageFiles = document.querySelectorAll('.question-img img');
+    const docFiles = document.querySelectorAll('.question-files span');
+    const oldTags = document.querySelectorAll('.new-tags div');
+    const saveBtn = document.querySelector('#save-question');
+
+
+    for (const tag of oldTags) {
+        tags.push(tag.getAttribute('data-tagid'));
+    }
+
+    for (const document of docFiles) {
+        fileNames.push(document.textContent);
+    }
+    for (const image of imageFiles) {
+        fileNames.push(image.alt);
+    }
+    
+    const oldFiles = fileNames;
+    selectTag.addEventListener('change', tagHandler);
+
+    newTagsDiv.addEventListener('click', () => removeTag(event));
+
+    if (createTag) {
+        createTag.addEventListener('click', createTagHandler);
+    }
+
+    uploadButton.addEventListener('click', function(){
+        event.preventDefault();
+        fileInput.click(); 
+    })
+
+    fileInput.addEventListener('change', function() {
+        const files = fileInput.files; 
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const imageExtentions = ["png", "jpeg", "jpg", "gif"];
+            const documentExtentions = ["doc", "docx", "txt", "pdf"];
+            const fileExtension = file.name.split('.').pop().toLowerCase();
+            
+            if (fileNames.includes(file.name)) {
+                createNotificationBox('Repeated file!', 'This file was already upload!', 'warning');
+                continue;
+            }
+            else if (documentExtentions.includes(fileExtension)) {
+                validFiles.push(file);
+                fileNames.push(file.name);
+                const reader = new FileReader();
+
+                reader.onload = function(event) {
+                    const fileDataUrl = event.target.result;
+                    questionDocs.innerHTML += `<div data-filename="${file.name}>
+                        <ion-icon name="document"></ion-icon>
+                        <a href="${fileDataUrl}" download="${file.name}">
+                            <span>${file.name}</span>
+                        </a>
+                        <ion-icon name="close-circle" class="close"></ion-icon>
+                    </div>`;
+                }
+                reader.readAsDataURL(file);
+
+            }  else if (imageExtentions.includes(fileExtension)){
+                validFiles.push(file);
+                fileNames.push(file.name);
+                const reader = new FileReader();
+                
+                reader.onload = function(event) {
+                    const src = event.target.result;
+                    questionImages.innerHTML += `<div data-filename="${file.name}">
+                        <img src="${src}">
+                        <ion-icon name="close-circle"></ion-icon>
+                    </div>`;
+                }
+                reader.readAsDataURL(file);
+            }
+            else {
+                createNotificationBox('Invalid file type!', 'Please choose a valid file type to upload!', 'error');
+                this.value = ''; 
+            }
+            
+        }
+    });
+
+    questionImages.addEventListener('click', () => removeImage(event));
+
+    questionDocs.addEventListener('click', () => removeDocument(event));
+
+    saveBtn.addEventListener('click', function() {
+        event.preventDefault();
+
+        const filesToDelete = oldFiles.filter(element => deletedFiles.includes(element));
+        
+        const id = editPage.getAttribute('data-id');
+        console.log(id);
+        const title = document.getElementById('title').value;
+        const content = document.getElementById('content').value;
+        const chosenGame = document.getElementById('game_id').value;
+        const cTags = tags.join(',');
+        sendAjaxRequest('put', '/api/questions/' + id, {title: title, content: content, tags: (cTags.length == 0 ? '0' : cTags), game: chosenGame}, editHandler);
+
+    })
+}
+
+function editHandler() {
+    if (this.response == 200) {
+        console.log('hi');
     }
 }

@@ -72,7 +72,7 @@ class Question extends Model
 
     public function images() {
         return DB::table('question_file')
-        ->select('file_name')
+        ->select('file_name', 'f_name')
         ->where('question_id', $this->id)
         ->where(function ($query) {
             $query->where('file_name', 'LIKE', '%.png')
@@ -85,7 +85,7 @@ class Question extends Model
 
     public function documents() {
         return DB::table('question_file')
-        ->select('file_name')
+        ->select('file_name', 'f_name')
         ->where('question_id', $this->id)
         ->where(function ($query) {
             $query->where('file_name', 'LIKE', '%.doc')

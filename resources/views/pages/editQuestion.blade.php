@@ -16,8 +16,8 @@
             <li>Edit</li>
         </ul>
     </div>
-    <div class="new-question-form">
-        <form method="POST" enctype='multipart/form-data'>
+    <div class="edit-question-form">
+        <form method="POST" enctype='multipart/form-data' data-id="{{ $question->id }}">
             @csrf
             <div class="form-group">
                 <label for="title">Title <span>*</span></label>
@@ -70,19 +70,19 @@
             </div>
             <div class="question-files">
                 @foreach($question->documents() as $document)
-                    <div class="q-file">
+                    <div class="q-file" data-filename="{{ $document->f_name }}">
                         <ion-icon name="document"></ion-icon>
                         <a href="{{ asset('question/' . $document->file_name) }}" download="{{ asset('question/' . $document->file_name) }}">
-                            <span>Document</span>
+                            <span>{{ $document->f_name }}</span>
                         </a>
-                        <ion-icon name="close-circle"></ion-icon>
+                        <ion-icon class="close" name="close-circle"></ion-icon>
                     </div>
                 @endforeach
             </div>
             <div class="question-img">
                 @foreach($question->images() as $image)
-                    <div>
-                        <img src="{{ asset('question/' . $image->file_name) }}" alt="question-image">
+                    <div data-filename="{{ $image->f_name }}">
+                        <img src="{{ asset('question/' . $image->file_name) }}" alt="{{ $image->f_name }}">
                         <ion-icon name="close-circle"></ion-icon>
                     </div>
                 @endforeach

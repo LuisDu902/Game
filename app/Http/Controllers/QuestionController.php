@@ -145,6 +145,45 @@ class QuestionController extends Controller
       return view('pages.editQuestion', ['question'=> $question, 'categories' => $categories, 'tags' => $tags]);
     }
 
+    public function update(Request $request, $id) {
+        $request->validate([
+            'title' => 'required|max:256',
+            'content' => 'required',
+            'game_id' => 'nullable|exists:game,id'
+        ]);
+
+        $game_id = $request->input('game');
+
+        $question = Question::findOrFail($id);
+
+        $question->update([
+            'title' => $request->input('title'),
+            'game_id' => $game_id == 0 ? NULL : $game_id,
+        ]);
+
+        VersionContent::create([
+            'date' => now(),
+            'content' => $request->input('content'),
+            'content_type' => 'Question_content',
+            'question_id' => $question->id
+        ]);
+
+        DB::table('question_tag')->where('question_id', $id)->delete();
+
+        if ($request->tags !== "0") {
+            $tags = explode(',', $request->tags);
+        
+            foreach ($tags as $tag) {
+                DB::table('question_tag')->insert([
+                    'question_id' => $question->id,
+                    'tag_id' => $tag
+                ]);
+            }
+        }
+        
+        return response()->json();
+
+    }
 
     /**
      * Remove the specified resource from storage.

@@ -135,7 +135,7 @@
     padding: 2rem 29rem;
 }
 
-.new-question-form{
+.new-question-form, .edit-question-form{
     margin: 30px auto;
     width: 1200px;
     height: fit-content;
@@ -146,19 +146,19 @@
     border: 1px solid #E6E7F3;
 }
 
-.new-question-form form {
+.new-question-form form, .edit-question-form form {
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
-.new-question-form label {
+.new-question-form label, .edit-question-form label {
     display: block; 
     font-weight: 500;
     font-size: 1.2rem;
 }
 
-.new-question-form textarea {
+.new-question-form textarea, .edit-question-form textarea {
     margin-bottom: 20px;
     font-size: 18px;
     padding: 5px 0;
@@ -172,7 +172,7 @@
     padding: 20px;
 }
 
-.new-question-form select, .new-question-form input {
+.new-question-form select, .new-question-form input, .edit-question-form select, .edit-question-form input {
     font-size: 18px;
     padding: 10px 20px 10px 10px;
     width: 360px;
@@ -181,6 +181,10 @@
     background: #FAFAFA; 
     resize: none; 
     outline:none;
+}
+
+.new-question-form select:hover, .edit-question-form select:hover {
+    cursor: pointer;
 }
 
 .form-grid {
@@ -261,23 +265,15 @@
     cursor: pointer;
 }
 
-.new-question-form #placeholder{
-    color:#7C5BF0
-}
-
-.new-question-form textarea:focus {
-    border: 1px solid #7C5BF0; 
-}
-
-.new-question-form #content{
+.new-question-form #content, .edit-question-form #content {
     height: 200px;
 }
 
-.new-question-form #title{
+.new-question-form #title, .edit-question-form #title{
     height: auto;
 }
 
-.new-question-form label span {
+.new-question-form label span, .edit-question-form label span {
     color: #7C5BF0;
 }
 

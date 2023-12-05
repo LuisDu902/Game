@@ -93,14 +93,14 @@
                     <div class="q-file">
                         <ion-icon name="document"></ion-icon>
                         <a href="{{ asset('question/' . $document->file_name) }}" download="{{ asset('question/' . $document->file_name) }}">
-                            <span>Document</span>
+                            <span>{{ $document->f_name }}</span>
                         </a>
                     </div>
                 @endforeach
             </div>
             <div class="q-img">
                 @foreach($question->images() as $image)
-                    <img src="{{ asset('question/' . $image->file_name) }}" alt="question-image">
+                    <img src="{{ asset('question/' . $image->file_name) }}" alt="{{ $image->f_name }}">
                 @endforeach
             </div>
         </div>
