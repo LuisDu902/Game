@@ -439,7 +439,7 @@ function questionFileHandler() {
     count++;
     if (count == validFiles.length) {
         if (newPage) window.location.href = '/questions';
-        else if (editPage) window.location.href = '/question/' + JSON.parse(this.response).id;
+        else if (editPage) window.location.href = '/questions/' + JSON.parse(this.response).id;
     }
 }
 
