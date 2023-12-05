@@ -36,22 +36,7 @@ class AnswerController extends Controller
      */
     public function edit(Request $request, $id)
     {
-        $answer = Answer::findOrFail($id);
-        $this->authorize('updateStatus', [Auth::user(), $answer]);
-        $request->validate([
-            'content' => 'required|string'
-        ]);
-
-        DB::table('version_content')->insert([
-            'date' => now(),
-            'content' => $request->input('content'),
-            'content_type' => 'Answer_content',
-            'question_id' => null,
-            'answer_id' => $id,
-            'comment_id' => null,
-        ]);
-
-        return response()->json(['message' => 'Question updated successfully']);
+        
     }
 
     /**
@@ -73,5 +58,33 @@ class AnswerController extends Controller
         $answer->delete();
 
         return response()->json(["success" => true], 200);
+    }
+
+    public function vote(Request $request, $answer_id)
+    {        
+        $reaction = $request->input('reaction');
+
+        DB::table('vote')->insert([
+            'date' => now(),
+            'vote_type' => 'Answer_vote',
+            'reaction' => $reaction,
+            'answer_id' => $answer_id,
+            'user_id' =>  Auth::user()->id,
+        ]);
+
+        return response()->json(['action'=> 'vote', 'id' => $answer_id]);
+    }
+
+
+    public function unvote(Request $request, $answer_id)
+    {
+        $user_id = Auth::user()->id;
+    
+        DB::table('vote')
+            ->where('user_id', $user_id)
+            ->where('answer_id', $answer_id)
+            ->delete();
+    
+        return response()->json(['action' => 'unvote', 'id' => $answer_id]);
     }
 }

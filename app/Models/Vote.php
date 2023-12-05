@@ -16,7 +16,6 @@ class Vote extends Model
     public function creator() {
         return $this->belongsTo(User::class, 'user_id');
     }
-
     public function answer() {
         return $this->belongsTo(Answer::class, 'answer_id');
     }

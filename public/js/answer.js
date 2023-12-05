@@ -22,3 +22,79 @@ function answerDeletedHandler(answerId){
         }
     };
 }
+
+
+const answerVote = document.querySelectorAll('.answer-btns');
+
+if (answerVote) {
+    for (const answer of answerVote) {
+        answer.addEventListener('click', function() {
+            const id = answer.getAttribute('data-id');
+            
+            if (event.target.tagName === 'ION-ICON'){
+                const upVote = answer.querySelector('.up-vote ion-icon');
+                const downVote = answer.querySelector('.down-vote ion-icon');
+
+                if (event.target.closest('.up-vote')) {
+                    if(upVote.classList.contains('hasvoted')){
+                        sendAjaxRequest('post', '/api/answers/' + id + "/unvote", {}, uVoteHandler);
+                    } else {
+                        if (downVote.classList.contains('hasvoted')) {
+                            sendAjaxRequest('post', '/api/answers/' + id + "/unvote", {}, dVoteHandler);
+                        }
+                        sendAjaxRequest('post', '/api/answers/' + id + "/vote", {reaction: true}, uVoteHandler);
+                    }
+                } else if (event.target.closest('.down-vote')) {
+                    if(downVote.classList.contains('hasvoted')){
+                        sendAjaxRequest('post', '/api/answers/' + id + "/unvote", {}, dVoteHandler);
+                    } else {
+                        if (upVote.classList.contains('hasvoted')) {
+                            sendAjaxRequest('post', '/api/answers/' + id + "/unvote", {}, uVoteHandler);
+                        }
+                        sendAjaxRequest('post', '/api/answers/' + id + "/vote", {reaction: false}, dVoteHandler);
+                    }
+                }
+            }
+        });
+    }
+}
+
+function uVoteHandler(){
+    if (this.status === 200) {
+        const response = JSON.parse(this.responseText);
+        const id = response.id;
+        const answer = document.querySelector(`#answer${id}`);
+        const upVote = answer.querySelector('.up-vote ion-icon');
+        const nr = answer.querySelector('.answer-btns span');
+        if (response.action == 'vote'){
+            upVote.classList.add('hasvoted');
+            upVote.classList.remove('notvoted');
+            nr.textContent = parseInt(nr.textContent, 10) + 1;
+        }
+        else if (response.action == 'unvote') {
+            upVote.classList.add('notvoted');
+            upVote.classList.remove('hasvoted');
+            nr.textContent = parseInt(nr.textContent, 10) - 1;
+        }
+    }
+}
+
+function dVoteHandler(){
+    if (this.status === 200) {
+        const response = JSON.parse(this.responseText);
+        const id = response.id;
+        const answer = document.querySelector(`#answer${id}`);
+        const downVote = answer.querySelector('.down-vote ion-icon');
+        const nr = answer.querySelector('.answer-btns span');
+        if (response.action == 'vote'){
+            downVote.classList.add('hasvoted');
+            downVote.classList.remove('notvoted');
+            nr.textContent = parseInt(nr.textContent, 10) - 1;
+        }
+        else if (response.action == 'unvote') {
+            downVote.classList.add('notvoted');
+            downVote.classList.remove('hasvoted');
+            nr.textContent = parseInt(nr.textContent, 10) + 1;
+        }
+    }
+}

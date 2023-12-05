@@ -156,7 +156,6 @@ function showLoginModal() {
 
 
 function upVoteHandler(){
-    console.log(this)
     const upVote = document.getElementById('up');
    
     const nr = document.querySelector('.vote-btns span');
@@ -171,7 +170,7 @@ function upVoteHandler(){
             upVote.classList.remove('hasvoted');
             nr.textContent = parseInt(nr.textContent, 10) - 1;
         }
-    }
+    } 
 }
 
 function downVoteHandler(){
@@ -574,3 +573,8 @@ if (editPage) {
     })
 }
 
+
+
+function showVoteWarning() {
+    createNotificationBox('Action not authorized!', 'You cannot vote on your own posts!', 'error');
+}

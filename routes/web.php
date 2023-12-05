@@ -96,7 +96,6 @@ Route::controller(UserController::class)->group(function () {
 // Question API
 Route::controller(QuestionController::class)->group(function () {
     Route::get('/api/questions', 'list');
-    Route::get('/api/questions', 'list'); 
     Route::post('/api/questions/{id}/vote', 'vote');
     Route::post('/api/questions/{id}/unvote', 'unvote'); 
     Route::post('/api/questions', 'store');
@@ -106,8 +105,10 @@ Route::controller(QuestionController::class)->group(function () {
 // Answers API
 Route::controller(AnswerController::class)->group(function () {
     Route::post('/api/answers', 'store');
-    Route::put('/api/answers/{id}/edit', 'edit');
-    Route::delete('/api/answers/{id}/delete', 'delete')->name('answers_delete');
+    Route::put('/api/answers/{id}', 'update');
+    Route::delete('/api/answers/{id}', 'delete');
+    Route::post('/api/answers/{id}/vote', 'vote');
+    Route::post('/api/answers/{id}/unvote', 'unvote'); 
 });
 
 // Tag API

@@ -210,6 +210,8 @@ class QuestionController extends Controller
     {
         $question = Question::findOrFail($question_id);
         
+        $this->authorize('vote', $question);
+        
         $reaction = $request->input('reaction');
 
         DB::table('vote')->insert([
@@ -235,38 +237,5 @@ class QuestionController extends Controller
     
         return response()->json(['action' => 'unvote']);
     }
-    
-
-    public function hasVoted($questionId, $userId) {
-
-        $hasVoted = DB::table('vote')
-            ->where('vote_type', 'Question_vote')
-            ->where('question_id', $questionId)
-            ->where('user_id', $userId)
-            ->exists();
-
-        return response()->json(['hasVoted' => $hasVoted]);
-    }
-
-
-    public function store_comment(Request $request)
-    {
-
-        $request->validate([
-            'commentario' => 'required|string',
-            'answerId' => 'required',
-            'userId' => 'required',
-        ]);
-
-        $comment = Comment::createCommentWithContent(
-            $request->input('commentario'),
-            $request->input('answerId'),
-            $request->input('userId'),
-        );
-    
-        return redirect()->route('question', ['id' => $request->input('questionId')]);
-    }
-
-
 
 }

@@ -82,22 +82,38 @@ class User extends Authenticatable
         return FileController::get('profile', $this->id);
     }    
 
-     public function hasVoted($questionId)
+     public function hasVoted($type, $id)
     {
-        return DB::table('vote')
+        if ($type === 'question') {
+            return DB::table('vote')
+                ->where('vote_type', 'Question_vote')
+                ->where('question_id', $id)
+                ->where('user_id', $this->id)
+                ->exists();   
+        } else {
+            return DB::table('vote')
             ->where('vote_type', 'Question_vote')
-            ->where('question_id', $questionId)
+            ->where('answer_id', $id)
             ->where('user_id', $this->id)
-            ->exists();   
+            ->exists();
+        }
     }
 
-    public function voteType($questionId)
+    public function voteType($type, $id)
     {
-        $vote = DB::table('vote')
-            ->where('vote_type', 'Question_vote')
-            ->where('question_id', $questionId)
-            ->where('user_id', $this->id)
-            ->first();
+        if ($type === 'question') {
+            $vote = DB::table('vote')
+                ->where('vote_type', 'Question_vote')
+                ->where('question_id', $id)
+                ->where('user_id', $this->id)
+                ->first();
+        } else {
+            $vote = DB::table('vote')
+                ->where('vote_type', 'Answer_vote')
+                ->where('question_id', $id)
+                ->where('user_id', $this->id)
+                ->first();
+        }
         return $vote ? $vote->reaction : null;
     }
     
