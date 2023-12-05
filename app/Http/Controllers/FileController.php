@@ -73,7 +73,8 @@ class FileController extends Controller
     }
 
     function clear(Request $request) {
-        $this->delete($request->type, $request->id);
+        Storage::disk(self::$diskName)->delete($request->type . '/' . $request->name);
+        DB::table('question_file')->where('question_id', $request->id)->where('f_name', $request->name)->delete();
         return response()->json(['id' => $request->id]);
     }
 
@@ -132,7 +133,7 @@ class FileController extends Controller
         }
 
         $file->storeAs($type, $fileName, self::$diskName);
-        return response()->json(['success' => 'Upload completed!'], 200);
+        return response()->json(['success' => 'Upload completed!', 'id' => $request->id], 200);
     }
 
     static function get(String $type, int $userId) {

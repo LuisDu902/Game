@@ -290,7 +290,6 @@ if (newPage) {
         const chosenGame = document.getElementById('game_id').value;
         const cTags = tags.join(',');
         sendAjaxRequest('post', '/api/questions', {title: title, content: content, tags: (cTags.length == 0 ? '0' : cTags), game: chosenGame}, createHandler);
-
     });
 }
 
@@ -439,7 +438,8 @@ async function sendFile(formData) {
 function questionFileHandler() {
     count++;
     if (count == validFiles.length) {
-        window.location.href = '/questions';
+        if (newPage) window.location.href = '/questions';
+        else if (editPage) window.location.href = '/question/' + JSON.parse(this.response).id;
     }
 }
 
@@ -549,18 +549,31 @@ if (editPage) {
         const filesToDelete = oldFiles.filter(element => deletedFiles.includes(element));
         
         const id = editPage.getAttribute('data-id');
-        console.log(id);
         const title = document.getElementById('title').value;
         const content = document.getElementById('content').value;
         const chosenGame = document.getElementById('game_id').value;
         const cTags = tags.join(',');
-        sendAjaxRequest('put', '/api/questions/' + id, {title: title, content: content, tags: (cTags.length == 0 ? '0' : cTags), game: chosenGame}, editHandler);
+        sendAjaxRequest('put', '/api/questions/' + id, {title: title, content: content, tags: (cTags.length == 0 ? '0' : cTags), game: chosenGame}, () => {});
 
+        if (filesToDelete.length > 0) {
+            for (const fileName of filesToDelete) {
+                sendAjaxRequest('delete', '/api/file/delete', {type: 'question', id: id, name: fileName}, () => {});
+            }
+        }
+
+        if (validFiles.length > 0) {
+            count = 0;
+            validFiles.map(async function(file) {
+                let formData = new FormData();
+                formData.append('file', file); 
+                formData.append('id', id);
+                formData.append('type', 'question');    
+                console.log(formData);
+                await sendFile(formData);
+            });
+        } else {
+            window.location.href = '/question/' + id;
+        }
     })
 }
 
-function editHandler() {
-    if (this.response == 200) {
-        console.log('hi');
-    }
-}

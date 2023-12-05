@@ -70,8 +70,8 @@ Route::controller(QuestionController::class)->group(function () {
 
 // File Storage
 Route::controller(FileController::class)->group(function () {
-    Route::post('/api/file/delete', 'delete');
     Route::post('/api/file/upload', 'upload');
+    Route::delete('/api/file/delete', 'clear');
 });
 
 
