@@ -90,12 +90,12 @@ class User extends Authenticatable
                 ->where('question_id', $id)
                 ->where('user_id', $this->id)
                 ->exists();   
-        } else {
+        } else if ($type === 'answer'){
             return DB::table('vote')
-            ->where('vote_type', 'Question_vote')
-            ->where('answer_id', $id)
-            ->where('user_id', $this->id)
-            ->exists();
+                ->where('vote_type', 'Answer_vote')
+                ->where('answer_id', $id)
+                ->where('user_id', $this->id)
+                ->exists();
         }
     }
 
@@ -107,10 +107,10 @@ class User extends Authenticatable
                 ->where('question_id', $id)
                 ->where('user_id', $this->id)
                 ->first();
-        } else {
+        } else if ($type === 'answer'){
             $vote = DB::table('vote')
                 ->where('vote_type', 'Answer_vote')
-                ->where('question_id', $id)
+                ->where('answer_id', $id)
                 ->where('user_id', $this->id)
                 ->first();
         }

@@ -297,6 +297,29 @@ WHEN (NEW.vote_type = 'Answer_vote' AND NEW.answer_id IS NOT NULL)
 EXECUTE FUNCTION update_answer_vote_count_trigger_function();
 
 
+-- Trigger function for updating vote count when a row is deleted
+CREATE OR REPLACE FUNCTION update_answer_vote_count_trigger_function_delete()
+RETURNS TRIGGER AS $$
+BEGIN
+  IF OLD.reaction = TRUE THEN
+    UPDATE answer
+    SET votes = votes - 1
+    WHERE id = OLD.answer_id;
+  ELSE
+    UPDATE answer
+    SET votes = votes + 1
+    WHERE id = OLD.answer_id;
+  END IF;
+  RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Trigger for updating vote count when a row is deleted
+CREATE TRIGGER update_answer_vote_count_trigger_delete
+BEFORE DELETE ON vote
+FOR EACH ROW
+EXECUTE FUNCTION update_answer_vote_count_trigger_function_delete();
+
 --Trigger 2
 
 CREATE OR REPLACE FUNCTION prevent_self_upvote_trigger_function()

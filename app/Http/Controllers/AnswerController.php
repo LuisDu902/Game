@@ -79,7 +79,6 @@ class AnswerController extends Controller
     public function unvote(Request $request, $answer_id)
     {
         $user_id = Auth::user()->id;
-    
         DB::table('vote')
             ->where('user_id', $user_id)
             ->where('answer_id', $answer_id)

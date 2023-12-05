@@ -41,10 +41,10 @@
                             <ion-icon name="ellipsis-vertical"></ion-icon>
                         </button>
                         <div class="q-drop-content">
-                            <a href="#" id="edit-question">
+                            <div id="edit-question">
                                 <ion-icon name="create"></ion-icon>
                                 <span>Edit</span>
-                            </a>
+                            </div>
                             <div>
                                 <ion-icon name="trash"></ion-icon>
                                 <span>Delete</span>
