@@ -59,8 +59,6 @@ class QuestionController extends Controller
 
         return view('partials._questions', compact('questions'))->render();
     }
-
-
     public function search(Request $request)
     {
         $query = $request->input('query');
@@ -72,12 +70,14 @@ class QuestionController extends Controller
         return view('pages.search', ['questions' => $questions]);
     }
 
-
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
+        if (!$this->authorize('create')) {
+            return redirect()->back()->withResponse($this->getNoPrivilegesMessage());
+        }
         $categories = GameCategory::all();
         $tags = Tag::all();
         return view('pages.newQuestion', ['categories' => $categories, 'tags' => $tags]);
@@ -137,12 +137,12 @@ class QuestionController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Request $request, $id)
-    {
-      $question = Question::findOrFail($id);
-      $categories = GameCategory::all();
-      $tags = Tag::all();
-      return view('pages.editQuestion', ['question'=> $question, 'categories' => $categories, 'tags' => $tags]);
+    public function edit(Request $request, $id) {
+        $question = Question::findOrFail($id);
+        $this->authorize('edit', $question);
+        $categories = GameCategory::all();
+        $tags = Tag::all();
+        return view('pages.editQuestion', ['question'=> $question, 'categories' => $categories, 'tags' => $tags]);
     }
 
     public function update(Request $request, $id) {
