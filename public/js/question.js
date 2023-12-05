@@ -571,9 +571,7 @@ if (editPage) {
                 console.log(formData);
                 await sendFile(formData);
             });
-        } else {
-            window.location.href = '/question/' + id;
-        }
+        } 
     })
 }
 
