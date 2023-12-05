@@ -19,14 +19,42 @@
         @endif
     </div>
     <div class="answer-content"> 
-        <div>
+        <div class="a-content">
             <img src="{{ $answer->creator->getProfileImage() }}" alt="user">
             <p>
                 {{ $answer->latestContent() }}
             </p>
-            @if(Auth::check() and (Auth::id() == $answer->user_id))
-                    <button class="edit-answer" data-id="{{ $answer->id }}">Edit</button>
-            @endif
+            @auth
+                @if (Auth::user()->id === $answer->user_id)
+                    <div class="answer-dropdown">
+                        <button class="drop-btn">
+                            <ion-icon name="ellipsis-vertical"></ion-icon>
+                        </button>
+                        <div class="q-drop-content">
+                            <a href="#" id="edit-question">
+                                <ion-icon name="create"></ion-icon>
+                                <span>Edit</span>
+                            </a>
+                            <div>
+                                <ion-icon name="trash"></ion-icon>
+                                <span>Delete</span>
+                            </div>
+                        </div>
+                    </div>
+                @else
+                    <div class="answer-dropdown">
+                        <button>
+                            <ion-icon name="ellipsis-vertical"></ion-icon>
+                        </button>
+                        <div class="q-drop-content">
+                            <div>
+                                <ion-icon name="flag"></ion-icon>
+                                <span>Report</span>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+            @endauth
         </div>
         <ul>
             <li> <a href="{{ route('profile', ['id' => $answer->creator->id ]) }}" class="purple">{{ $answer->creator->name }}</a> answered {{ $answer->timeDifference() }} ago</li>
@@ -34,21 +62,10 @@
             <li> {{ $answer->comments->count() }} comments </li>
         </ul>
         <div class="answer-comments">
-            <ul id="answer-comment-list">
+            <ul class="answer-comment-list">
                 @if ($answer->comments->isNotEmpty())
                     @foreach ($answer->comments as $comment)
-                        <li>
-                            <div>
-                                <img src="{{ $comment->creator->getProfileImage() }}" alt="user">
-                                <div class="c-desc">
-                                    <a href="{{ route('profile', ['id' => $comment->user_id ]) }}" class="purple">{{ $comment->user->name }}</a>
-                                    <span> {{ $comment->lastModification() }} ago </span>
-                                </div>
-                            </div>
-                            <p>
-                                {{ $comment->latestContent() }}
-                            </p>
-                        </li>
+                        @include('partials._comment', ['comment' => $comment])
                     @endforeach
                 @else
                     <li class="no-comment"> No comments yet, be the first to comment!</li>

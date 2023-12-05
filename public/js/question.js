@@ -443,7 +443,6 @@ function questionFileHandler() {
     }
 }
 
-
 /* Edit question page */
 
 const editPage = document.querySelector('.edit-question-form form');

@@ -67,3 +67,39 @@ if (questionDropDown) {
     }
    
 }
+
+
+const answerDropDown = document.querySelectorAll('.answer-dropdown');
+
+if (answerDropDown) {
+    answerDropDown.forEach(function(dropdown) {
+        let isOpen2 = false;
+        dropdown.addEventListener('click', function() {
+            const dropdownContent = dropdown.querySelector('.q-drop-content');
+            if (isOpen2) {
+                dropdownContent.style.display = 'none';
+            } else {
+                dropdownContent.style.display = 'flex';
+            }
+            isOpen2 = !isOpen2;
+        });
+    });
+}
+
+
+const commentDropDown = document.querySelectorAll('.comment-dropdown');
+
+if (commentDropDown) {
+    commentDropDown.forEach(function(dropdown) {
+        let isOpen3 = false;
+        dropdown.addEventListener('click', function() {
+            const dropdownContent = dropdown.querySelector('.q-drop-content');
+            if (isOpen3) {
+                dropdownContent.style.display = 'none';
+            } else {
+                dropdownContent.style.display = 'flex';
+            }
+            isOpen3 = !isOpen3;
+        });
+    });
+}

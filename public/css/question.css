@@ -214,17 +214,17 @@
     text-align: center;
 }
 
-#answer-comment-list {
+.answer-comment-list {
     width: 100%;
 }
 
-#answer-comment-list li>div{
+.answer-comment-list li>div{
     display: flex;
     align-items: center;
     gap: 20px;
 }
 
-#answer-comment-list li>div a {
+.answer-comment-list li>div a {
     font-size: 22px;
     font-weight: 500;
 }
@@ -240,11 +240,11 @@
     font-size: 16px;
 }
 
-#answer-comment-list li {
+.answer-comment-list li {
     margin-bottom: 5px;
 }
 
-#answer-comment-list li p {
+.answer-comment-list li p {
     margin-left: 60px;
     margin-top: 10px;
 }
@@ -408,11 +408,13 @@
     min-height: 120px;
 }
 
-.edit-answer {
-    border-radius: 10px;
-    background-color: #7C5BF0;
-    padding: 5px 10px;
-    color: white;
+
+.a-content {
+    display: flex;
+}
+
+.answer-dropdown {
+    margin-left: auto;
 }
 
 .question-dropdown button {
@@ -420,16 +422,21 @@
     display: flex;
 }
 
-.question-dropdown button:hover {
+.answer-dropdown button, .comment-dropdown button {
+    min-width: 160px;
+    display: flex;
+}
+
+.question-dropdown button:hover, .answer-dropdown button:hover, .comment-dropdown button:hover {
     cursor: default;
 }
 
-.question-dropdown button ion-icon {
+.question-dropdown button ion-icon, .answer-dropdown button ion-icon, .comment-dropdown button ion-icon {
     cursor: pointer;
 }
 
 
-.question-dropdown ion-icon {
+.question-dropdown ion-icon, .answer-dropdown ion-icon, .comment-dropdown ion-icon {
     margin-left: auto;
     font-size: 25px;
 }
@@ -450,7 +457,21 @@
     margin-right: 20px;
 }
 
+.answer-content:hover .answer-dropdown>button, .answer-comment-list li:hover .comment-dropdown>button{
+    color: #7C5BF0;
+}
 
+.comment-dropdown {
+    margin-left: auto;
+}
+
+.answer-dropdown>button {
+    color: white;
+}
+
+.comment-dropdown>button {
+    color: #F8F7FE;
+}
 
 .modal {
     display: none;
