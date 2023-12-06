@@ -9,7 +9,7 @@
             @if (Auth::user()->id === $comment->user_id)
                 <div class="comment-dropdown">
                     <button class="drop-btn">
-                        <ion-icon name="ellipsis-vertical"></ion-icon>
+                        <ion-icon name="ellipsis-vertical" onclick="toggleCommentDropDown()"></ion-icon>
                     </button>
                     <div class="q-drop-content">
                         <div id="edit-question">
@@ -25,7 +25,7 @@
             @else
             <div class="comment-dropdown">
                 <button>
-                    <ion-icon name="ellipsis-vertical"></ion-icon>
+                    <ion-icon name="ellipsis-vertical" onclick="toggleCommentDropDown()"></ion-icon>
                 </button>
                 <div class="q-drop-content">
                     <div>

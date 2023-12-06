@@ -69,37 +69,27 @@ if (questionDropDown) {
 }
 
 
-const answerDropDown = document.querySelectorAll('.answer-dropdown');
 
-if (answerDropDown) {
-    answerDropDown.forEach(function(dropdown) {
-        let isOpen2 = false;
-        dropdown.addEventListener('click', function() {
-            const dropdownContent = dropdown.querySelector('.q-drop-content');
-            if (isOpen2) {
-                dropdownContent.style.display = 'none';
-            } else {
-                dropdownContent.style.display = 'flex';
-            }
-            isOpen2 = !isOpen2;
-        });
-    });
+function toggleAnswerDropDown() {
+    const dropdown = event.target;
+    const dropdownContent = dropdown.closest('.answer-dropdown').querySelector('.q-drop-content');
+    if (dropdown.classList.contains('isOpen')) {
+        dropdownContent.style.display = 'none';
+        dropdown.classList.remove('isOpen');
+    } else {
+        dropdownContent.style.display = 'flex';
+        dropdown.classList.add('isOpen');
+    }
 }
 
-
-const commentDropDown = document.querySelectorAll('.comment-dropdown');
-
-if (commentDropDown) {
-    commentDropDown.forEach(function(dropdown) {
-        let isOpen3 = false;
-        dropdown.addEventListener('click', function() {
-            const dropdownContent = dropdown.querySelector('.q-drop-content');
-            if (isOpen3) {
-                dropdownContent.style.display = 'none';
-            } else {
-                dropdownContent.style.display = 'flex';
-            }
-            isOpen3 = !isOpen3;
-        });
-    });
+function toggleCommentDropDown() {
+    const dropdown = event.target;
+    const dropdownContent = dropdown.closest('.comment-dropdown').querySelector('.q-drop-content');
+    if (dropdown.classList.contains('isOpen')) {
+        dropdownContent.style.display = 'none';
+        dropdown.classList.remove('isOpen');
+    } else {
+        dropdownContent.style.display = 'flex';
+        dropdown.classList.add('isOpen');
+    }
 }

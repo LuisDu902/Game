@@ -91,29 +91,5 @@ class Answer extends Model
         return $now->diffForHumans($modifiedAt, true);
     }
 
-    public static function createAnswerWithContent($content, $questionId, $userId){
-        $answer = new static;
-
-        $answer->user_id = (int)$userId;
-        $answer->question_id = $questionId;
-
-        $answer->save();
-
-        $answerId = $answer->id;
-
-
-        DB::table('version_content')->insert([
-            'date' => now(),
-            'content' => $content,
-            'content_type' => 'Answer_content',
-            'question_id' => null,
-            'answer_id' => $answerId,
-            'comment_id' => null,
-        ]);
-
-
-        return $answer;
-    }
-
 
 }

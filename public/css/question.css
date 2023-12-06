@@ -333,29 +333,14 @@
     padding: 50px;
 }
 
+.answerFormContainer form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
 
 .comment-input form button:hover {
     background-color: #7C5BF0;
-    color: white;
-}
-
-.answerFormContainer button {
-    font-size: 18px;
-    background-color: #D2CFFF;
-    border: 1px solid #D2CFFF;
-    width: 190px;
-    padding: 5px 0;
-    color: #7C5BF0;
-    border-radius: 5px;
-    transition: all 400ms ease;
-    margin: 0px auto;
-    align-self: center;
-    display: block;
-}
-
-.answerFormContainer button:hover {
-    background-color: #7C5BF0;
-    border: 1px solid #7C5BF0;
     color: white;
 }
 
@@ -382,7 +367,7 @@
     resize: none; 
     outline:none;
     padding: 20px;
-    height: 300px;
+    height: 200px;
 }
 
 .hasvoted, .notvoted:hover{
@@ -605,3 +590,37 @@
     display: flex;
 }
 
+#answer-up-f {
+    margin: 0;
+    padding: 5px 30px;
+    width: fit-content;
+    transition: all 300ms ease;
+    border-radius: 10px;
+    background-color: #D2CFFF;
+    color: #7C5BF0;
+}
+
+#answer-up-f:hover {
+    background-color: #7C5BF0;
+    color: white;
+}
+
+.answer-files div {
+    background-color: white;
+}
+
+
+#create-answer {
+    margin: 0 auto;
+    padding: 10px 30px;
+    width: fit-content;
+    transition: all 400ms ease;
+    border-radius: 10px;
+    background-color: #7C5BF0;
+    color: white;
+    font-size: 20px;
+}
+
+#create-answer:hover {
+    transform: scale(0.95);
+}

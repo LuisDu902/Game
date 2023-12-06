@@ -158,3 +158,115 @@ function answerDeleteHandler() {
         }
     }
 }
+
+
+const answerPage = document.querySelector('#answerFormContainer form');
+
+if (answerPage) {
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const textareas = document.querySelectorAll('textarea');
+        textareas.forEach(function(textarea) {
+          textarea.value = '';
+        });
+    });
+
+    const uploadButton = document.getElementById('answer-up-f');
+    const fileInput = document.getElementById('file');
+    const answerImages = document.querySelector('.answer-img');
+    const answerDocs = document.querySelector('.answer-files');
+    const createBtn = document.getElementById('create-answer');
+
+
+    uploadButton.addEventListener('click', function(){
+        event.preventDefault();
+        fileInput.click();
+    });
+
+    fileInput.addEventListener('change', function() {
+        const files = fileInput.files; 
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const imageExtentions = ["png", "jpeg", "jpg", "gif"];
+            const documentExtentions = ["doc", "docx", "txt", "pdf"];
+            const fileExtension = file.name.split('.').pop().toLowerCase();
+            
+            if (fileNames.includes(file.name)) {
+                createNotificationBox('Repeated file!', 'This file was already upload!', 'warning');
+                continue;
+            }
+            else if (documentExtentions.includes(fileExtension)) {
+                validFiles.push(file);
+                fileNames.push(file.name);
+                const reader = new FileReader();
+
+                reader.onload = function(event) {
+                    const fileDataUrl = event.target.result;
+                    answerDocs.innerHTML += `<div data-filename="${file.name}">
+                        <ion-icon name="document"></ion-icon>
+                        <a href="${fileDataUrl}" download="${file.name}">
+                            <span>${file.name}</span>
+                        </a>
+                        <ion-icon name="close-circle" class="close"></ion-icon>
+                    </div>`;
+                }
+                reader.readAsDataURL(file);
+
+            }  else if (imageExtentions.includes(fileExtension)){
+                validFiles.push(file);
+                fileNames.push(file.name);
+                const reader = new FileReader();
+                
+                reader.onload = function(event) {
+                    const src = event.target.result;
+                    answerImages.innerHTML += `<div data-filename="${file.name}">
+                        <img src="${src}">
+                        <ion-icon name="close-circle"></ion-icon>
+                    </div>`;
+                }
+                reader.readAsDataURL(file);
+            }
+            else {
+                createNotificationBox('Invalid file type!', 'Please choose a valid file type to upload!', 'error');
+                this.value = ''; 
+            }
+            
+        }
+    });
+
+    answerImages.addEventListener('click', () => removeImage(event));
+
+    answerDocs.addEventListener('click', () => removeDocument(event));
+
+
+    function createAnswer(){
+        event.preventDefault();
+        const content = document.getElementById('content').value;
+        const question = document.querySelector('.question-detail-section').getAttribute('data-id');
+        sendAjaxRequest('post', '/api/answers', {content: content, question_id: question}, createAnswerHandler);
+        
+    }
+
+}
+
+function createAnswerHandler(){
+    if (this.status == 200) {
+        console.log(this.responseText);
+        const otherAnswers = document.querySelector('.other-answers');
+        if (otherAnswers) {
+            if (!otherAnswers.querySelector('h2')) {
+                otherAnswers.innerHTML += ' <h2>Other answers</h2>'
+            }
+            otherAnswers.innerHTML += this.responseText;
+        }
+        else {
+            const answers = document.querySelector('.answerFormContainer');
+            answers.outerHTML = `
+            <div class="top-answer">
+                <h2>Top answer</h2>
+                ${this.responseText}
+            </div><div class="other-answers"></div>` + answers.outerHTML;
+        }
+    }
+ 
+}

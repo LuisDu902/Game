@@ -17,7 +17,7 @@
         </ul>
     </div>
     
-    <section class="question-detail-section" data-id="{{$question->id}}" {{ Auth::check() ? 'data-user=' . Auth::id() . ' data-username=' . Auth::user()->name . '' : '' }}>
+    <section class="question-detail-section" data-id="{{$question->id}}" {{ Auth::check() ? 'data-user=' . Auth::id() . ' data-username=' . Auth::user()->username . '' : '' }}>
         
         @include('partials._questionDetail', ['question' => $question])
 
@@ -50,7 +50,14 @@
                     <label for="content">Answer <span>*</span></label>
                     <textarea name="content" id="content" class="form-control" placeholder="Enter your answer here..." required></textarea>
                 </div>
-                <button class="btn btn-primary">Post Answer</button>
+                <div class="upload-files">
+                    <label for="file">Upload Files:</label>
+                    <input type='file' name='files[]' id="file" multiple hidden>
+                    <button id="answer-up-f">Upload</button>
+                </div>
+                <div class="answer-files"></div>
+                <div class="answer-img"></div>
+                <button id="create-answer" onclick="createAnswer()">Post Answer</button>
             </form>
         </div>
         @endif
@@ -89,7 +96,7 @@
                 </div>
             </div>
         </div>
-
+        
         <div id="answerDeleteModal" class="modal">
             <div class="delete-modal">
                 <div class="modal-c">

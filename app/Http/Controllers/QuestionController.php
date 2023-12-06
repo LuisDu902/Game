@@ -75,7 +75,7 @@ class QuestionController extends Controller
      */
     public function create()
     {
-        if (!$this->authorize('create')) {
+        if (!Auth::check()) {
             return redirect()->back()->withResponse($this->getNoPrivilegesMessage());
         }
         $categories = GameCategory::all();

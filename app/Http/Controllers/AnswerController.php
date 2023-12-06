@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
 use App\Models\Answer;
+use App\Models\VersionContent;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
@@ -18,16 +19,24 @@ class AnswerController extends Controller
     {
         $request->validate([
             'content' => 'required|string',
-            'questionId' => 'required',
-            'userId' => 'required',
+            'question_id' => 'required'
         ]);
-        $answer = Answer::createAnswerWithContent(
-            $request->input('content'),
-            $request->input('questionId'),
-            $request->input('userId'),
-        );
+        
+        $answer = Answer::create([
+            'user_id' => Auth::id(),
+            'question_id' => $request->input('question_id'),
+        ]);
       
-        return response()->json();
+        $answer->votes = 0;
+
+        VersionContent::create([
+            'date' => now(),
+            'content' => $request->input('content'),
+            'content_type' => 'Answer_content',
+            'answer_id' => $answer->id
+        ]);
+
+        return view('partials._answer', compact('answer'))->render();
     }
 
 

@@ -246,7 +246,7 @@ if (newPage) {
 
                 reader.onload = function(event) {
                     const fileDataUrl = event.target.result;
-                    questionDocs.innerHTML += `<div data-filename="${file.name}>
+                    questionDocs.innerHTML += `<div data-filename="${file.name}">
                         <ion-icon name="document"></ion-icon>
                         <a href="${fileDataUrl}" download="${file.name}">
                             <span>${file.name}</span>

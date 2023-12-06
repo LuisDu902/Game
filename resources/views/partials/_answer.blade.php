@@ -38,10 +38,10 @@
                 @if (Auth::user()->id === $answer->user_id)
                     <div class="answer-dropdown">
                         <button class="drop-btn">
-                            <ion-icon name="ellipsis-vertical"></ion-icon>
+                            <ion-icon name="ellipsis-vertical" onclick="toggleAnswerDropDown()"></ion-icon>
                         </button>
                         <div class="q-drop-content">
-                            <div id="edit-question">
+                            <div id="edit-answer">
                                 <ion-icon name="create"></ion-icon>
                                 <span>Edit</span>
                             </div>
@@ -54,7 +54,7 @@
                 @else
                     <div class="answer-dropdown">
                         <button>
-                            <ion-icon name="ellipsis-vertical"></ion-icon>
+                            <ion-icon name="ellipsis-vertical" onclick="toggleAnswerDropDown()"></ion-icon>
                         </button>
                         <div class="q-drop-content">
                             <div>
