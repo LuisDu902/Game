@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\Question;
+use App\Models\Answer;
 
 
 class FileController extends Controller
@@ -18,7 +19,7 @@ class FileController extends Controller
         'profile' => ['png', 'jpg', 'jpeg'],
         'question' => ['png', 'jpg', 'jpeg', 'doc', 'docx', 'txt', 'pdf'],
         'answer' => ['png', 'jpg', 'jpeg', 'doc', 'docx', 'txt', 'pdf'],
-        'game' => ['png', 'jpg', 'jpeg', 'doc', 'docx', 'txt', 'pdf'],
+        'game' => ['png', 'jpg', 'jpeg'],
     ];
 
     private static function isValidType(String $type) {
@@ -49,6 +50,13 @@ class FileController extends Controller
                         ->pluck('file_name')
                         ->toArray();
                 return $fileNames;
+            case 'answer':
+                $fileNames = DB::table('answer_file')
+                        ->select('file_name')
+                        ->where('answer_id', $id)
+                        ->pluck('file_name')
+                        ->toArray();
+                return $fileNames;
             default:
                 return null;
         }
@@ -68,17 +76,33 @@ class FileController extends Controller
                         DB::table('question_file')->where('question_id', $id)->where('file_name', $fileName)->delete();
                     }
                     break;
+                case 'answer':
+                    foreach ($existingFileName as $fileName) {
+                        Storage::disk(self::$diskName)->delete($type . '/' . $fileName);
+                        DB::table('answer_file')->where('answer_id', $id)->where('file_name', $fileName)->delete();
+                    }
+                    break;
             }
         }
     }
 
     function clear(Request $request) {
-        Storage::disk(self::$diskName)->delete($request->type . '/' . $request->name);
-        DB::table('question_file')->where('question_id', $request->id)->where('f_name', $request->name)->delete();
+        if ($request->type == 'question') {
+            $fileName = DB::table('question_file')->where('question_id', $request->id)->where('f_name', $request->name)->value('file_name');
+            Storage::disk(self::$diskName)->delete($request->type . '/' . $fileName);
+            DB::table('question_file')->where('question_id', $request->id)->where('f_name', $request->name)->delete();
+        } else if ($request->type == 'answer') { 
+            $fileName = DB::table('answer_file')->where('answer_id', $request->id)->where('f_name', $request->name)->value('file_name');
+            Storage::disk(self::$diskName)->delete($request->type . '/' . $fileName);
+            DB::table('answer_file')->where('answer_id', $request->id)->where('f_name', $request->name)->delete();
+        }
+
+
         return response()->json(['id' => $request->id]);
     }
 
     function upload(Request $request) {
+       
         if (!$request->hasFile('file')) {
             return response()->json(['error' => 'File not found'], 400);
         }
@@ -117,13 +141,27 @@ class FileController extends Controller
                 if ($question) {
                     DB::table('question_file')->insert([
                         'question_id' => $question->id,
-                        'file_name' => $fileName
+                        'file_name' => $fileName,
+                        'f_name' => $file->getClientOriginalName()
                     ]);
                 } else {
                     $error = "unknown question";
                 }
                 break;
 
+            case 'answer':
+                $answer = Answer::findOrFail($request->id);
+                if ($answer) {
+                    DB::table('answer_file')->insert([
+                        'answer_id' => $answer->id,
+                        'file_name' => $fileName,
+                        'f_name' => $file->getClientOriginalName()
+                    ]);
+                } else {
+                    $error = "unknown answer";
+                }
+                break;
+    
             default:
                 return response()->json(['error' => 'Unsupported upload object'], 400);
         }

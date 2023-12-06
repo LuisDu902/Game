@@ -7,6 +7,7 @@ SET DateStyle TO European;
 -----------
 
 DROP TABLE IF EXISTS question_file;
+DROP TABLE IF EXISTS answer_file;
 DROP TABLE IF EXISTS question_tag;
 DROP TABLE IF EXISTS game_member;
 DROP TABLE IF EXISTS user_badge;
@@ -219,6 +220,13 @@ CREATE TABLE question_file (
   file_name VARCHAR,
   f_name VARCHAR,
   PRIMARY KEY (question_id, file_name)
+);
+
+CREATE TABLE answer_file (
+  answer_id INTEGER REFERENCES answer(id) ON DELETE CASCADE,
+  file_name VARCHAR,
+  f_name VARCHAR,
+  PRIMARY KEY (answer_id, file_name)
 );
 
 -----------
@@ -1719,3 +1727,8 @@ INSERT INTO question_file(question_id, file_name, f_name) VALUES
 (1, 'IHUuFgM1T8a4McoFeDixQ6T89uywof843TkY0jNs.png', 'question.png'),
 (79, 'IHUuFgM1T8a4McoFeDixQ6T89uywof843TkY0jNs.png', 'question.png'),
 (79, 'oeSuX93uRTHcKA6ODWFLmdaXPOfxRZ4JuTPUG1H7.pdf', 'document.pdf');
+
+
+INSERT INTO answer_file(answer_id, file_name, f_name) VALUES
+(1, 'picture1.png', 'answer.png'),
+(1, '2fMAEYPeXh6iY2ux4SYEJWM2nTu4UlRLB09LrvCs.pdf', 'document.pdf');

@@ -52,11 +52,11 @@
                 </div>
                 <div class="upload-files">
                     <label for="file">Upload Files:</label>
-                    <input type='file' name='files[]' id="file" multiple hidden>
-                    <button id="answer-up-f">Upload</button>
+                    <input type='file' name='files[]' id="file" multiple hidden onchange="fileInputChange()">
+                    <button id="answer-up-f" onclick="uploadAFiles()">Upload</button>
                 </div>
                 <div class="answer-files"></div>
-                <div class="answer-img"></div>
+                <div class="answer-images"></div>
                 <button id="create-answer" onclick="createAnswer()">Post Answer</button>
             </form>
         </div>

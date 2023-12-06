@@ -1,6 +1,6 @@
 <li>
     <div>
-        <img src="{{ $comment->creator->getProfileImage() }}" alt="user">
+        <img class="answer-img" src="{{ $comment->creator->getProfileImage() }}" alt="user">
         <div class="c-desc">
             <a href="{{ route('profile', ['id' => $comment->user_id ]) }}" class="purple">{{ $comment->user->name }}</a>
             <span> {{ $comment->lastModification() }} ago </span>

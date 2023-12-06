@@ -30,7 +30,7 @@
     </div>
     <div class="answer-content"> 
         <div class="a-content">
-            <img src="{{ $answer->creator->getProfileImage() }}" alt="user">
+            <img class="answer-img" src="{{ $answer->creator->getProfileImage() }}" alt="user">
             <p>
                 {{ $answer->latestContent() }}
             </p>
@@ -66,6 +66,21 @@
                 @endif
             @endauth
         </div>
+        <div class="a-files">
+            @foreach($answer->documents() as $document)
+                <div class="a-file">
+                    <ion-icon name="document"></ion-icon>
+                    <a href="{{ asset('answer/' . $document->file_name) }}" download="{{ asset('answer/' . $document->file_name) }}">
+                        <span>{{ $document->f_name }}</span>
+                    </a>
+                </div>
+            @endforeach
+        </div>
+        <div class="a-img">
+            @foreach($answer->images() as $image)
+                <img src="{{ asset('answer/' . $image->file_name) }}" alt="{{ $image->f_name }}">
+            @endforeach
+        </div>
         <ul>
             <li> <a href="{{ route('profile', ['id' => $answer->creator->id ]) }}" class="purple">{{ $answer->creator->name }}</a> answered {{ $answer->timeDifference() }} ago</li>
             <li class="a-modi"> Modified {{ $answer->lastModification() }} ago </li>
@@ -83,7 +98,7 @@
             </ul>
             @auth
                 <div class="comment-input">
-                    <img src="{{ Auth::user()->getProfileImage() }}" alt="user">
+                    <img class="answer-img" src="{{ Auth::user()->getProfileImage() }}" alt="user">
                     <form>
                         <textarea name="content" id="c-content" class="form-control" placeholder="Enter your comment here..." required></textarea>
                         <div><button> Comment </button></div>

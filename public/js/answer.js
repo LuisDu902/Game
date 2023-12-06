@@ -171,19 +171,17 @@ if (answerPage) {
         });
     });
 
-    const uploadButton = document.getElementById('answer-up-f');
-    const fileInput = document.getElementById('file');
-    const answerImages = document.querySelector('.answer-img');
+    const answerImages = document.querySelector('.answer-images');
     const answerDocs = document.querySelector('.answer-files');
-    const createBtn = document.getElementById('create-answer');
 
-
-    uploadButton.addEventListener('click', function(){
+    function uploadAFiles() {
         event.preventDefault();
+        const fileInput = document.getElementById('file');
         fileInput.click();
-    });
+    }
 
-    fileInput.addEventListener('change', function() {
+    function fileInputChange() {
+        const fileInput = document.getElementById('file');
         const files = fileInput.files; 
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
@@ -232,7 +230,7 @@ if (answerPage) {
             }
             
         }
-    });
+    }
 
     answerImages.addEventListener('click', () => removeImage(event));
 
@@ -244,14 +242,16 @@ if (answerPage) {
         const content = document.getElementById('content').value;
         const question = document.querySelector('.question-detail-section').getAttribute('data-id');
         sendAjaxRequest('post', '/api/answers', {content: content, question_id: question}, createAnswerHandler);
-        
     }
+}
 
+function answerFileHandler() {
+    count++;
+    console.log(count);
 }
 
 function createAnswerHandler(){
     if (this.status == 200) {
-        console.log(this.responseText);
         const otherAnswers = document.querySelector('.other-answers');
         if (otherAnswers) {
             if (!otherAnswers.querySelector('h2')) {
@@ -267,6 +267,34 @@ function createAnswerHandler(){
                 ${this.responseText}
             </div><div class="other-answers"></div>` + answers.outerHTML;
         }
+
+        let tmp = document.createElement('div');
+        tmp.innerHTML = this.responseText;
+        const id = tmp.querySelector('.answer-details').getAttribute('data-id');
+
+        createNotificationBox('Answer created!', 'Answer created successfully!');
+        document.querySelector('#answerFormContainer form textarea').value = ''; 
+        
+        if (validFiles.length > 0) {
+            count = 0;
+            validFiles.map(async function(file) {
+                let formData = new FormData();
+                formData.append('file', file); 
+                formData.append('id', id);
+                formData.append('type', 'answer');    
+                let request = new XMLHttpRequest();
+                request.open('post', '/api/file/upload', true);
+                request.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').content);
+                request.addEventListener('load', answerFileHandler);
+                request.send(formData);
+            });
+        } 
+        tags = [];
+        selectHtml = '';
+        validFiles = [];
+        fileNames = [];
+        count = 0;
+        deletedFiles = [];
     }
  
 }

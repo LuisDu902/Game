@@ -406,27 +406,26 @@ function removeDocument(event) {
     }
 }
 
-async function createHandler() {
+function createHandler() {
     if (this.status === 200) {
         const id = JSON.parse(this.response).id;
+        
         if (validFiles.length > 0) {
             count = 0;
-            validFiles.map(async function(file) {
+            validFiles.map(function(file) {
                 let formData = new FormData();
                 formData.append('file', file); 
                 formData.append('id', id);
                 formData.append('type', 'question');    
-                console.log(formData);
-                await sendFile(formData);
+                sendFile(formData);
             });
-        } 
-        else {
+        } else {
             window.location.href = '/questions';
         }
     }
 }
 
-async function sendFile(formData) {
+function sendFile(formData) {
     let request = new XMLHttpRequest();
     request.open('post', '/api/file/upload', true);
     request.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').content);
@@ -438,7 +437,7 @@ function questionFileHandler() {
     count++;
     if (count == validFiles.length) {
         if (newPage) window.location.href = '/questions';
-        else if (editPage) window.location.href = '/questions/' + JSON.parse(this.response).id;
+        else window.location.href = '/questions/' + JSON.parse(this.responseText).id;
     }
 }
 
@@ -561,15 +560,16 @@ if (editPage) {
 
         if (validFiles.length > 0) {
             count = 0;
-            validFiles.map(async function(file) {
+            validFiles.map(function(file) {
                 let formData = new FormData();
                 formData.append('file', file); 
                 formData.append('id', id);
                 formData.append('type', 'question');    
-                console.log(formData);
-                await sendFile(formData);
+                sendFile(formData);
             });
-        } 
+        } else {
+            window.location.href = '/questions/' + id;
+        }
     })
 }
 
