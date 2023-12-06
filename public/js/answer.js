@@ -247,7 +247,36 @@ if (answerPage) {
 
 function answerFileHandler() {
     count++;
-    console.log(count);
+    if (validFiles.length == count) {
+        const id = JSON.parse(this.responseText).id;
+        const answer = document.getElementById('answer' + id);
+        const aFiles = document.querySelectorAll('.answer-files div');
+        const aImgs = document.querySelectorAll('.answer-images img');
+        
+        const answerF = answer.querySelector('.a-files');
+        const answerI = answer.querySelector('.a-img');
+
+        for (const image of aImgs) {
+            answerI.innerHTML += image.outerHTML;
+        }
+
+        for (const file of aFiles) {
+            file.querySelector('.close').remove();
+            file.classList.add('a-file');
+            answerF.innerHTML += file.outerHTML;
+        }
+
+        aFiles.innerHTML = ``;
+        aImgs.innerHTML = ``;
+
+        tags = [];
+        selectHtml = '';
+        validFiles = [];
+        fileNames = [];
+        count = 0;
+        deletedFiles = [];
+
+    }
 }
 
 function createAnswerHandler(){
@@ -288,13 +317,15 @@ function createAnswerHandler(){
                 request.addEventListener('load', answerFileHandler);
                 request.send(formData);
             });
-        } 
-        tags = [];
-        selectHtml = '';
-        validFiles = [];
-        fileNames = [];
-        count = 0;
-        deletedFiles = [];
+        } else {
+            tags = [];
+            selectHtml = '';
+            validFiles = [];
+            fileNames = [];
+            count = 0;
+            deletedFiles = [];
+        }
+       
     }
  
 }
