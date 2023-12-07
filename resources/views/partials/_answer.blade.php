@@ -84,7 +84,7 @@
         <ul>
             <li> <a href="{{ route('profile', ['id' => $answer->creator->id ]) }}" class="purple">{{ $answer->creator->name }}</a> answered {{ $answer->timeDifference() }} ago</li>
             <li class="a-modi"> Modified {{ $answer->lastModification() }} ago </li>
-            <li> {{ $answer->comments->count() }} comments </li>
+            <li class="comment-count"> {{ $answer->comments->count() }} comments </li>
         </ul>
         <div class="answer-comments">
             <ul class="answer-comment-list">
@@ -101,7 +101,7 @@
                     <img class="answer-img" src="{{ Auth::user()->getProfileImage() }}" alt="user">
                     <form>
                         <textarea name="content" id="c-content" class="form-control" placeholder="Enter your comment here..." required></textarea>
-                        <div><button> Comment </button></div>
+                        <div><button onclick="submitComment()"> Comment </button></div>
                     </form>
                 </div>
             @endauth 
