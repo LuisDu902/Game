@@ -12,7 +12,7 @@
                         <ion-icon name="ellipsis-vertical" onclick="toggleCommentDropDown()"></ion-icon>
                     </button>
                     <div class="q-drop-content">
-                        <div id="edit-question">
+                        <div id="edit-question" onclick="showEditComment()">
                             <ion-icon name="create"></ion-icon>
                             <span>Edit</span>
                         </div>

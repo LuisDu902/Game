@@ -38,17 +38,31 @@ class CommentController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Comment $comment)
+    public function edit(Request $request, $id)
     {
-        //
+        $comment = Comment::findOrFail($id);
+        return view('partials._editComment', compact('comment'))->render();
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Comment $comment)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'content' => 'required',
+        ]);
+
+        $comment = Comment::findOrFail($id);
+
+        VersionContent::create([
+            'date' => now(),
+            'content' => $request->input('content'),
+            'content_type' => 'Comment_content',
+            'comment_id' => $comment->id
+        ]);
+        
+        return view('partials._comment', compact('comment'))->render();
     }
 
     public function delete(Request $request, $id)

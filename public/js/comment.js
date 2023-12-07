@@ -81,3 +81,55 @@ function commentDeleteHandler() {
         }
     }
 }
+
+let oldComment = "";
+
+function showEditComment() {
+    const comment = event.target.closest('.comment-container');
+    oldComment = comment.outerHTML;
+    const id = comment.getAttribute('data-id');
+
+    sendAjaxRequest('get', '/api/comments/' + id + '/edit', {}, toggleEditComment);
+}
+
+function toggleEditComment() {
+    if (this.status == 200) {
+        const editComment = this.responseText;
+        var tmp = document.createElement('div');
+        tmp.innerHTML = editComment;
+        const id = tmp.querySelector('.comment-container').getAttribute('data-id');
+
+        const comment = document.querySelector('#comment' + id);
+        comment.outerHTML = editComment;
+    }
+}
+
+function restoreComment() {
+    const comment = event.target.closest('.comment-container');
+    comment.outerHTML = oldComment;
+}
+
+function updateComment() {
+    const comment = event.target.closest('.comment-container');
+    const id = comment.getAttribute('data-id');
+    const content = comment.querySelector('textarea').value;
+
+    if (content !== '') {
+        sendAjaxRequest('put', '/api/comments/' + id, {content: content}, updatedCommentHandler);
+    } else {
+        createNotificationBox('Empty comment content', 'Please enter your comment before saving!', 'warning');
+    }
+}
+
+function updatedCommentHandler() {
+    const updatedComment = this.responseText;
+    var tmp = document.createElement('div');
+    tmp.innerHTML = updatedComment;
+    const id = tmp.querySelector('.comment-container').getAttribute('data-id');
+
+    const comment = document.querySelector('#comment' + id);
+
+    comment.outerHTML = updatedComment;
+    createNotificationBox('Comment edited!', 'Comment was edited successfully!');
+
+}
