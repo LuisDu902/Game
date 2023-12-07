@@ -66,6 +66,7 @@ Route::controller(QuestionController::class)->group(function () {
     Route::get('/questions/create', 'create')->name('questions.create');
     Route::get('/questions/{id}', 'show')->name('question');    
     Route::get('/questions/{id}/edit', 'edit')->name('questions.edit');
+    Route::get('/questions/{id}/activity', 'activity')->name('questions.activity');
     Route::delete('/questions/{id}', 'delete')->name('questions.destroy');
 });
 
