@@ -238,4 +238,67 @@ class QuestionController extends Controller
         return response()->json(['action' => 'unvote']);
     }
 
+    public function activity($id) {
+        $question = Question::findOrFail($id);
+        
+        $answers = $question->answers;
+        
+        $all_contents = [];
+
+        $question_content = $question->versionContent;
+
+        $first_content = $question->versionContent()
+                ->orderBy('date')
+                ->first()->date;
+        foreach($question_content as $content) {
+            $all_contents[] = [
+                'content' => $content->content,
+                'date' => $content->date,
+                'user' => $question->creator->name,
+                'type' => 'Question_content',
+                'action' => ($content->date == $first_content) ? 'Created' : 'Edited'    
+            ];
+        }
+
+        foreach($answers as $answer) {
+            $answer_content = $answer->versionContent;
+            $first_content = $answer->versionContent()
+                ->orderBy('date')
+                ->first()->date;
+            foreach($answer_content as $content) {
+                $all_contents[] = [
+                    'content' => $content->content,
+                    'date' => $content->date,
+                    'user' => $answer->creator->name,
+                    'type' => 'Answer_content',
+                    'action' => ($content->date == $first_content) ? 'Created' : 'Edited'  
+                ];
+            }
+            $comments = $answer->comments;
+            foreach($comments as $comment) {
+                $comment_content = $comment->versionContent;
+                $first_content = $comment->versionContent()
+                    ->orderBy('date')
+                    ->first()->date;
+                foreach($comment_content as $content) {
+                    $all_contents[] = [
+                        'content' => $content->content,
+                        'date' => $content->date,
+                        'user' => $comment->creator->name,
+                        'type' => 'Comment_content',
+                        'action' => ($content->date == $first_content) ? 'Created' : 'Edited' 
+                    ];
+                }
+                $comments = $answer->comments;
+                
+            }
+        }
+
+        usort($all_contents, function ($a, $b) {
+            return strtotime($b['date']) - strtotime($a['date']);
+        });
+        
+        return view('pages.activity', ['question'=> $question, 'contents' => $all_contents]);
+    }
+
 }
