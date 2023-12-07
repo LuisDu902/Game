@@ -1,21 +1,26 @@
-function createNotificationBox(text) {
+function createNotificationBox(title, content, type='success') {
     const notificationBox = document.querySelector('.notification-box');
     notificationBox.style.display = 'flex';
 
-    const span = document.createElement('span');
-    span.textContent = text;
-    
-    const close = document.createElement('ion-icon');
-    close.setAttribute('name', 'close');
+    if (type == 'error') {
+        document.querySelector('#noti-icon').outerHTML = '<ion-icon name="close-circle" id="noti-icon" class="red"></ion-icon>';
+    } else if (type == 'warning') {
+      document.querySelector('#noti-icon').outerHTML = '<ion-icon name="alert-circle" id="noti-icon" class="yellow"></ion-icon>';
+    } 
+    else {
+        document.querySelector('#noti-icon').outerHTML = '<ion-icon name="checkmark-circle" id="noti-icon" ></ion-icon>';
+    }
 
+    const span1 = document.querySelector('.notification-box span:first-child');
+    span1.textContent = title;
+
+    const span2 = document.querySelector('.notification-box span:last-child');
+    span2.textContent = content;
+
+    const close = document.querySelector('#close-notification');
     close.addEventListener('click', function(){
         notificationBox.style.display = 'none';
-        notificationBox.innerHTML = '';
-    })
-
-    notificationBox.appendChild(span);
-    notificationBox.appendChild(close);
-
+    });
 }
 
 function encodeForAjax(data) {
@@ -33,3 +38,15 @@ function sendAjaxRequest(method, url, data, handler) {
     request.addEventListener('load', handler);
     request.send(encodeForAjax(data));
 }
+
+
+const close = document.querySelector('#close-notification');
+    
+if (close) {
+   const notificationBox = document.querySelector('.notification-box');
+
+    close.addEventListener('click', function(){
+        notificationBox.style.display = 'none';
+    });
+}
+

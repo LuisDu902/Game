@@ -33,13 +33,7 @@ class UserController extends Controller
           abort(404, 'User not found');
         }
 
-        $badges = DB::table('badge')
-            ->join('user_badge', 'badge.id', '=', 'user_badge.badge_id')
-            ->select('badge.*')
-            ->where('user_badge.user_id', '=', $id)
-            ->get();
-
-        return view('pages.profile', ['user' => $user, 'badges' => $badges]);
+        return view('pages.profile', ['user' => $user]);
     }
 
     public function index(){
@@ -100,20 +94,6 @@ class UserController extends Controller
       return response()->json(['profile update'=> 'success']);
     }
    
-
-    public function votes()
-    {
-        return $this->hasMany(Vote::class);
-    }
-
-    public function hasVoted($questionId, $userId)
-    {
-        return $this->votes()
-            ->where('vote_type', 'Question_vote')
-            ->where('question_id', $questionId)
-            ->where('user_id', $userId)
-            ->exists();
-    }
 
 
     public function showUserQuestions($id) {

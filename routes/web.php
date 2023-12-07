@@ -4,6 +4,8 @@ use App\Http\Controllers\GameCategoryController;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\TagController;
+use App\Http\Controllers\FileController;
 use App\Http\Controllers\AnswerController;
 use Illuminate\Support\Facades\Route;
 
@@ -43,6 +45,11 @@ Route::get('/home', function () {
     return view('pages.home');
 })->name('home');
 
+Route::get('/faq', function () {
+    return view('pages.faq');
+})->name('faq');
+
+
 // User
 Route::controller(UserController::class)->group(function () {
     Route::get('/users/{id}', 'showUserProfile')->name('profile');
@@ -54,14 +61,19 @@ Route::controller(UserController::class)->group(function () {
 // Question
 Route::controller(QuestionController::class)->group(function () {
     Route::get('/questions', 'index')->name('questions');
-    Route::post('/questions', 'search');
-    Route::get('/questions/new-question', [QuestionController::class, 'create'])->name('questions.create');
-    Route::post('/questions/new-question', [QuestionController::class, 'store'])->name('questions.store');
-    Route::get('/questions/new-question', [GameController::class, 'index'])->name('questions.create');
-    Route::get('/questions/{question}', [QuestionController::class, 'show']);
+    Route::get('/questions/search', 'search')->name('questions.search');
+    Route::get('/questions/create', 'create')->name('questions.create');
     Route::get('/questions/{id}', 'show')->name('question');    
-    Route::post('/comments/store', [QuestionController::class, 'store_comment'])->name('store_comment');
+    Route::get('/questions/{id}/edit', 'edit')->name('questions.edit');
+    Route::delete('/questions/{id}', 'delete')->name('questions.destroy');
 });
+
+// File Storage
+Route::controller(FileController::class)->group(function () {
+    Route::post('/api/file/upload', 'upload');
+    Route::delete('/api/file/delete', 'clear');
+});
+
 
 // Game Category
 Route::controller(GameCategoryController::class)->group(function () {
@@ -74,7 +86,6 @@ Route::controller(GameController::class)->group(function () {
     Route::get('/game/{id}', 'show')->name('game');
 });
 
-
 // User API
 Route::controller(UserController::class)->group(function () {
     Route::get('/api/users', 'search');
@@ -82,22 +93,29 @@ Route::controller(UserController::class)->group(function () {
     Route::post('/api/users/{id}/edit', 'edit');
 });
 
-
 // Question API
 Route::controller(QuestionController::class)->group(function () {
     Route::get('/api/questions', 'list');
-    Route::delete('/api/questions/{id}/delete', 'delete')->name('questions_delete');
-    Route::get('/api/questions', 'list'); 
     Route::post('/api/questions/{id}/vote', 'vote');
     Route::post('/api/questions/{id}/unvote', 'unvote'); 
-    Route::put('/api/questions/{id}/edit', 'edit');
+    Route::post('/api/questions', 'store');
+    Route::put('/api/questions/{id}', 'update');
 });
 
-// Answers
+// Answers API
 Route::controller(AnswerController::class)->group(function () {
     Route::post('/api/answers', 'store');
-    Route::put('/api/answers/{id}/edit', 'edit');
-    Route::delete('/api/answers/{id}/delete', 'delete')->name('answers_delete');
+    Route::get('/api/answers/{id}/edit', 'edit');
+    Route::put('/api/answers/{id}', 'update');
+    Route::delete('/api/answers/{id}', 'delete');
+    Route::post('/api/answers/{id}/vote', 'vote');
+    Route::post('/api/answers/{id}/unvote', 'unvote'); 
 });
+
+// Tag API
+Route::controller(TagController::class)->group(function () {
+    Route::post('/api/tags', 'store');
+});
+
 
 

@@ -6,6 +6,8 @@ SET DateStyle TO European;
 -- Drop tables
 -----------
 
+DROP TABLE IF EXISTS question_file;
+DROP TABLE IF EXISTS answer_file;
 DROP TABLE IF EXISTS question_tag;
 DROP TABLE IF EXISTS game_member;
 DROP TABLE IF EXISTS user_badge;
@@ -74,9 +76,10 @@ CREATE TABLE users (
   password VARCHAR(256) NOT NULL,
   description TEXT,
   rank Rank NOT NULL DEFAULT 'Bronze',
-  remember_token VARCHAR,
   is_banned BOOLEAN NOT NULL DEFAULT FALSE,
-  is_admin BOOLEAN NOT NULL DEFAULT FALSE
+  is_admin BOOLEAN NOT NULL DEFAULT FALSE,
+  remember_token VARCHAR,
+  profile_image VARCHAR
 );
 
 CREATE TABLE badge (
@@ -115,7 +118,6 @@ CREATE TABLE answer (
   user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   question_id INTEGER NOT NULL REFERENCES question(id) ON DELETE CASCADE,
   is_public BOOLEAN NOT NULL DEFAULT True,
-  top_answer BOOLEAN NOT NULL DEFAULT False,
   votes INTEGER NOT NULL DEFAULT 0
 );
 
@@ -213,6 +215,20 @@ CREATE TABLE question_tag (
   PRIMARY KEY (question_id, tag_id)
 );
 
+CREATE TABLE question_file (
+  question_id INTEGER REFERENCES question(id) ON DELETE CASCADE,
+  file_name VARCHAR,
+  f_name VARCHAR,
+  PRIMARY KEY (question_id, file_name)
+);
+
+CREATE TABLE answer_file (
+  answer_id INTEGER REFERENCES answer(id) ON DELETE CASCADE,
+  file_name VARCHAR,
+  f_name VARCHAR,
+  PRIMARY KEY (answer_id, file_name)
+);
+
 -----------
 -- Create triggers
 -----------
@@ -289,6 +305,29 @@ WHEN (NEW.vote_type = 'Answer_vote' AND NEW.answer_id IS NOT NULL)
 EXECUTE FUNCTION update_answer_vote_count_trigger_function();
 
 
+-- Trigger function for updating vote count when a row is deleted
+CREATE OR REPLACE FUNCTION update_answer_vote_count_trigger_function_delete()
+RETURNS TRIGGER AS $$
+BEGIN
+  IF OLD.reaction = TRUE THEN
+    UPDATE answer
+    SET votes = votes - 1
+    WHERE id = OLD.answer_id;
+  ELSE
+    UPDATE answer
+    SET votes = votes + 1
+    WHERE id = OLD.answer_id;
+  END IF;
+  RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Trigger for updating vote count when a row is deleted
+CREATE TRIGGER update_answer_vote_count_trigger_delete
+BEFORE DELETE ON vote
+FOR EACH ROW
+EXECUTE FUNCTION update_answer_vote_count_trigger_function_delete();
+
 --Trigger 2
 
 CREATE OR REPLACE FUNCTION prevent_self_upvote_trigger_function()
@@ -345,7 +384,7 @@ BEGIN
 
     SELECT COUNT(*) INTO user_correct_answer_count
     FROM answer
-    WHERE user_id = NEW.user_id AND top_answer = TRUE;
+    WHERE user_id = NEW.user_id;
 
     IF user_question_count >= 50 THEN
         INSERT INTO user_badge (user_id, badge_id)
@@ -693,108 +732,107 @@ CREATE INDEX search_user ON users USING GIN (tsvectors);
 
 
 ---POPULATE
-INSERT INTO users(name, username, email, password, description, rank, is_admin, is_banned) VALUES
-('John Doe', 'johndoe', 'johndoe@example.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Some description', 'Bronze', True, False),
-('Alice Johnson', 'alicej', 'alicejohnson@example.com', '5d41402abc4b2a76b9719d911017c592', 'Another description', 'Bronze', False, True),
-('Michael Smith', 'mikesmith', 'mikesmith@example.com', '5d41402abc4b2a76b9719d911017c592', 'Description for Michael', 'Gold', True, False),
-('Emily Davis', 'emilyd', 'emilydavis@example.com', '5d41402abc4b2a76b9719d911017c592', 'Emilys profile description', 'Bronze', False, True),
-('David Wilson', 'davidw', 'davidwilson@example.com', '5d41402abc4b2a76b9719d911017c592', 'Description for David', 'Bronze', True, False),
-('Sophia Brown', 'sophiab', 'sophiabrown@example.com', '5d41402abc4b2a76b9719d911017c592', 'Sophias profile description', 'Gold', False, True),
-('Liam Lee', 'liaml', 'liamlee@example.com', '5d41402abc4b2a76b9719d911017c592', 'Description for Liam', 'Bronze', False, True),
-('Olivia White', 'oliviaw', 'oliviawhite@example.com', '5d41402abc4b2a76b9719d911017c592', 'Olivias profile description', 'Bronze', False, True),
-('Ethan Johnson', 'ethanj', 'ethanjohnson@example.com', '5d41402abc4b2a76b9719d911017c592', 'Ethans profile description', 'Gold', False, True),
-('Ava Martinez', 'avam', 'avamartinez@example.com', '5d41402abc4b2a76b9719d911017c592', 'Avas profile description', 'Master', False, False),
-('Noah Taylor', 'noaht', 'noahtaylor@example.com', '5d41402abc4b2a76b9719d911017c592', 'Description for Noah', 'Bronze', False, False),
-('Evelyn Lee', 'evelynlee', 'evelynlee@example.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Gold', False, False),
-('Nicholas Campbell', 'nicholascampbell', 'nicholascampbell@example.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Gold', False, False),
-('Aria Scott', 'ariascott', 'ariascott@example.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('Jacob Johnson', 'jacobjohnson', 'jacobjohnson@example.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Gold', False, False),
-('Lily White', 'lilywhite', 'lilywhite@example.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('Ethan Adams', 'ethanadams', 'ethanadams@example.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Gold', False, False),
-('Isabella Martin', 'isabellamartin', 'isabellamartin@example.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('James Brown', 'jamesbrown', 'jamesbrown@example.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Gold', False, False),
-('Avery Taylor', 'averytaylor', 'averytaylor@example.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('Emma Rodriguez', 'emmar', 'emmar@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('William Garcia', 'williamg', 'williamg@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('Madison Martinez', 'madisonm', 'madisonm@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Gold', False, False),
-('James Hernandez', 'jamesh', 'jamesh@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('Mason Moore', 'masonm', 'masonm@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('Avery Lee', 'averyl', 'averyl@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Gold', False, False),
-('Evelyn Clark', 'evelync', 'evelync@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Gold', False, False),
-('Elijah Perez', 'elijahp', 'elijahp@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Gold', False, False),
-('Lillian Young', 'lilliany', 'lilliany@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('Logan Allen', 'logana', 'logana@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('Aria Wright', 'ariaw', 'ariaw@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('Caleb King', 'calebk', 'calebk@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('Abigail Scott', 'abigails', 'abigails@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('Owen Green', 'oweng', 'oweng@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Master', False, False),
-('Amelia Baker', 'ameliab', 'ameliab@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('Luke Adams', 'lukea', 'lukea@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('Harper Nelson', 'harpern', 'harpern@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('Levi Carter', 'levic', 'levic@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('Emily Mitchell', 'emilym', 'emilym@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Gold', False, False),
-('Carter Perez', 'carterp', 'carterp@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('Samantha Lee', 'samanthalee', 'samanthalee@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('David Chen', 'davidchen', 'davidchen@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('Maria Rodriguez', 'mariarodriguez', 'mariarodriguez@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Gold', False, False),
-('Mohammed Ali', 'mohammedali', 'mohammedali@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('Julia Wang', 'juliawang', 'juliawang@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Gold', False, False),
-('Sophia Kim', 'sophiakim', 'sophiakim@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('William Davis', 'williamdavis', 'williamdavis@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('Gabriel Martinez', 'gabrielmartinez', 'gabrielmartinez@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Gold', False, False),
-('Emma Johnson', 'emmajohnson', 'emmajohnson@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('Alexander Brown', 'alexanderbrown', 'alexanderbrown@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Gold', False, False),
-('Sophie Anderson', 'sophieanderson', 'sophieanderson@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Master', False, False),
-('Hiroshi Nakamura', 'hiroshinakamura', 'hiroshinakamura@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('Laura Garcia', 'lauragarcia', 'lauragarcia@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('Jacob Kim', 'jacobkim', 'jacobkim@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Master', False, False),
-('Mia Davis', 'miadavis', 'miadavis@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('Ethan Nguyen', 'ethannguyen', 'ethannguyen@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Gold', False, False),
-('Lily Chen', 'lilychen', 'lilychen@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Master', False, False),
-('Lucas Perez', 'lucasperez', 'lucasperez@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('Ava Wilson', 'avawilson', 'avawilson@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Gold', False, False),
-('Nathan Kim', 'nathankim', 'nathankim@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('Ella Hernandez', 'ellahernandez', 'ellahernandez@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('Sebastian Kim', 'sebastiankim', 'sebastiankim@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('Aaliyah Lee', 'aaliyahlee', 'aaliyahlee@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('Maxwell Young', 'maxwellyoung', 'maxwellyoung@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('Hazel Turner', 'hazelturner', 'hazelturner@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('Miles Mitchell', 'milesmitchell', 'milesmitchell@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Gold', False, False),
-('Ariana Scott', 'arianascott', 'arianascott@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('Samantha Allen', 'samanthaallen', 'samanthaallen@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('Landon Green', 'landongreen', 'landongreen@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('Nora Baker', 'norabaker', 'norabaker@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('Adam Clark', 'adamclark', 'adamclark@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('Emily Rodriguez', 'emilyrodriguez', 'emilyrodriguez@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('Benjamin Davis', 'benjamindavis', 'benjamindavis@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('Olivia Lee', 'olivialeee', 'olivialeee@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W','Description for Noah', 'Master', False, False),
-('Henry Martinez', 'henrymartinez', 'henrymartinez@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('Sophia Hernandez', 'sophiahernandez', 'sophiahernandez@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('Michael Adams', 'michaeladams', 'michaeladams@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Master', False, False),
-('Isabella Lewis', 'isabellalewis', 'isabellalewis@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('William Jackson', 'williamjackson', 'williamjackson@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Gold', False, False), 
-('Mia Garcia', 'miagarcia', 'miagarcia@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('Alexander Nelson', 'alexandernelson', 'alexandernelson@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('Abigail White', 'abigailwhite', 'abigailwhite@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W','Description for Noah', 'Bronze', False, False),
-('David Gonzalez', 'davidgonzalez', 'davidgonzalez@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Master', False, False),
-('Victoria Turner', 'victoriaturner', 'victoriaturner@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('Christopher Parker', 'christopherparker', 'christopherparker@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Master', False, False),
-('Elizabeth Perez', 'elizabethperez', 'elizabethperez@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('Daniel Taylor', 'danieltaylor', 'danieltaylor@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Master', False, False),
-('Evelyn Collins', 'evelyncollins', 'evelyncollins@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('Matthew Hernandez', 'matthewhernandez', 'matthewhernandez@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Gold', False, False),
-('Sofia Adams', 'sofiaadams', 'sofiaadams@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('Ethan Cooper', 'ethancooper', 'ethancooper@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('Avery Jackson', 'averyjackson', 'averyjackson@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Gold', False, False),
-('Evelyn Hill', 'evelynhill', 'evelynhill@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('Aiden Parker', 'aidenparker', 'aidenparker@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('Madison Adams', 'madisonadams', 'madisonadams@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('Oliver Wright', 'oliverwright', 'oliverwright@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Gold', False, False),
-('Brooklyn Lewis', 'brooklynlewis', 'brooklynlewis@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('Jacob Green', 'jacobgreen', 'jacobgreen@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('Chloe Hall', 'chloehall', 'chloehall@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False),
-('Miala Davis', 'mialadavis', 'mialadavis@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Gold', False, False);
-
+INSERT INTO users(name, username, email, password, description, rank, is_admin, is_banned, profile_image) VALUES
+('John Doe', 'johndoe', 'johndoe@example.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Some description', 'Bronze', True, False, '090PJ3bfsG7io3zBEURDsdxYNbIjrsdXoyUbMNgz.jpg'),
+('Alice Johnson', 'alicej', 'alicejohnson@example.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Another description', 'Bronze', False, True, NULL),
+('Michael Smith', 'mikesmith', 'mikesmith@example.com', '5d41402abc4b2a76b9719d911017c592', 'Description for Michael', 'Gold', True, False, NULL),
+('Emily Davis', 'emilyd', 'emilydavis@example.com', '5d41402abc4b2a76b9719d911017c592', 'Emilys profile description', 'Bronze', False, True, NULL),
+('David Wilson', 'davidw', 'davidwilson@example.com', '5d41402abc4b2a76b9719d911017c592', 'Description for David', 'Bronze', True, False, NULL),
+('Sophia Brown', 'sophiab', 'sophiabrown@example.com', '5d41402abc4b2a76b9719d911017c592', 'Sophias profile description', 'Gold', False, True, NULL),
+('Liam Lee', 'liaml', 'liamlee@example.com', '5d41402abc4b2a76b9719d911017c592', 'Description for Liam', 'Bronze', False, True, NULL),
+('Olivia White', 'oliviaw', 'oliviawhite@example.com', '5d41402abc4b2a76b9719d911017c592', 'Olivias profile description', 'Bronze', False, True, NULL),
+('Ethan Johnson', 'ethanj', 'ethanjohnson@example.com', '5d41402abc4b2a76b9719d911017c592', 'Ethans profile description', 'Gold', False, True, NULL),
+('Ava Martinez', 'avam', 'avamartinez@example.com', '5d41402abc4b2a76b9719d911017c592', 'Avas profile description', 'Master', False, False, NULL),
+('Noah Taylor', 'noaht', 'noahtaylor@example.com', '5d41402abc4b2a76b9719d911017c592', 'Description for Noah', 'Bronze', False, False, NULL),
+('Evelyn Lee', 'evelynlee', 'evelynlee@example.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Gold', False, False, NULL),
+('Nicholas Campbell', 'nicholascampbell', 'nicholascampbell@example.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Gold', False, False, NULL),
+('Aria Scott', 'ariascott', 'ariascott@example.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('Jacob Johnson', 'jacobjohnson', 'jacobjohnson@example.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Gold', False, False, NULL),
+('Lily White', 'lilywhite', 'lilywhite@example.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('Ethan Adams', 'ethanadams', 'ethanadams@example.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Gold', False, False, NULL),
+('Isabella Martin', 'isabellamartin', 'isabellamartin@example.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('James Brown', 'jamesbrown', 'jamesbrown@example.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Gold', False, False, NULL),
+('Avery Taylor', 'averytaylor', 'averytaylor@example.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('Emma Rodriguez', 'emmar', 'emmar@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('William Garcia', 'williamg', 'williamg@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('Madison Martinez', 'madisonm', 'madisonm@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Gold', False, False, NULL),
+('James Hernandez', 'jamesh', 'jamesh@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('Mason Moore', 'masonm', 'masonm@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('Avery Lee', 'averyl', 'averyl@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Gold', False, False, NULL),
+('Evelyn Clark', 'evelync', 'evelync@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Gold', False, False, NULL),
+('Elijah Perez', 'elijahp', 'elijahp@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Gold', False, False, NULL),
+('Lillian Young', 'lilliany', 'lilliany@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('Logan Allen', 'logana', 'logana@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('Aria Wright', 'ariaw', 'ariaw@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('Caleb King', 'calebk', 'calebk@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('Abigail Scott', 'abigails', 'abigails@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('Owen Green', 'oweng', 'oweng@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Master', False, False, NULL),
+('Amelia Baker', 'ameliab', 'ameliab@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('Luke Adams', 'lukea', 'lukea@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('Harper Nelson', 'harpern', 'harpern@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('Levi Carter', 'levic', 'levic@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('Emily Mitchell', 'emilym', 'emilym@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Gold', False, False, NULL),
+('Carter Perez', 'carterp', 'carterp@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('Samantha Lee', 'samanthalee', 'samanthalee@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('David Chen', 'davidchen', 'davidchen@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('Maria Rodriguez', 'mariarodriguez', 'mariarodriguez@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Gold', False, False, NULL),
+('Mohammed Ali', 'mohammedali', 'mohammedali@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('Julia Wang', 'juliawang', 'juliawang@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Gold', False, False, NULL),
+('Sophia Kim', 'sophiakim', 'sophiakim@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('William Davis', 'williamdavis', 'williamdavis@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('Gabriel Martinez', 'gabrielmartinez', 'gabrielmartinez@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Gold', False, False, NULL),
+('Emma Johnson', 'emmajohnson', 'emmajohnson@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('Alexander Brown', 'alexanderbrown', 'alexanderbrown@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Gold', False, False, NULL),
+('Sophie Anderson', 'sophieanderson', 'sophieanderson@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Master', False, False, NULL),
+('Hiroshi Nakamura', 'hiroshinakamura', 'hiroshinakamura@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('Laura Garcia', 'lauragarcia', 'lauragarcia@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('Jacob Kim', 'jacobkim', 'jacobkim@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Master', False, False, NULL),
+('Mia Davis', 'miadavis', 'miadavis@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('Ethan Nguyen', 'ethannguyen', 'ethannguyen@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Gold', False, False, NULL),
+('Lily Chen', 'lilychen', 'lilychen@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Master', False, False, NULL),
+('Lucas Perez', 'lucasperez', 'lucasperez@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('Ava Wilson', 'avawilson', 'avawilson@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Gold', False, False, NULL),
+('Nathan Kim', 'nathankim', 'nathankim@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('Ella Hernandez', 'ellahernandez', 'ellahernandez@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('Sebastian Kim', 'sebastiankim', 'sebastiankim@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('Aaliyah Lee', 'aaliyahlee', 'aaliyahlee@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('Maxwell Young', 'maxwellyoung', 'maxwellyoung@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('Hazel Turner', 'hazelturner', 'hazelturner@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('Miles Mitchell', 'milesmitchell', 'milesmitchell@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Gold', False, False, NULL),
+('Ariana Scott', 'arianascott', 'arianascott@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('Samantha Allen', 'samanthaallen', 'samanthaallen@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('Landon Green', 'landongreen', 'landongreen@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('Nora Baker', 'norabaker', 'norabaker@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('Adam Clark', 'adamclark', 'adamclark@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('Emily Rodriguez', 'emilyrodriguez', 'emilyrodriguez@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('Benjamin Davis', 'benjamindavis', 'benjamindavis@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('Olivia Lee', 'olivialeee', 'olivialeee@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W','Description for Noah', 'Master', False, False, NULL),
+('Henry Martinez', 'henrymartinez', 'henrymartinez@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('Sophia Hernandez', 'sophiahernandez', 'sophiahernandez@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('Michael Adams', 'michaeladams', 'michaeladams@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Master', False, False, NULL),
+('Isabella Lewis', 'isabellalewis', 'isabellalewis@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('William Jackson', 'williamjackson', 'williamjackson@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Gold', False, False, NULL), 
+('Mia Garcia', 'miagarcia', 'miagarcia@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('Alexander Nelson', 'alexandernelson', 'alexandernelson@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('Abigail White', 'abigailwhite', 'abigailwhite@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W','Description for Noah', 'Bronze', False, False, NULL),
+('David Gonzalez', 'davidgonzalez', 'davidgonzalez@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Master', False, False, NULL),
+('Victoria Turner', 'victoriaturner', 'victoriaturner@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('Christopher Parker', 'christopherparker', 'christopherparker@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Master', False, False, NULL),
+('Elizabeth Perez', 'elizabethperez', 'elizabethperez@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('Daniel Taylor', 'danieltaylor', 'danieltaylor@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Master', False, False, NULL),
+('Evelyn Collins', 'evelyncollins', 'evelyncollins@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('Matthew Hernandez', 'matthewhernandez', 'matthewhernandez@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Gold', False, False, NULL),
+('Sofia Adams', 'sofiaadams', 'sofiaadams@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('Ethan Cooper', 'ethancooper', 'ethancooper@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('Avery Jackson', 'averyjackson', 'averyjackson@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Gold', False, False, NULL),
+('Evelyn Hill', 'evelynhill', 'evelynhill@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('Aiden Parker', 'aidenparker', 'aidenparker@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('Madison Adams', 'madisonadams', 'madisonadams@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('Oliver Wright', 'oliverwright', 'oliverwright@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Gold', False, False, NULL),
+('Brooklyn Lewis', 'brooklynlewis', 'brooklynlewis@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('Jacob Green', 'jacobgreen', 'jacobgreen@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
+('Chloe Hall', 'chloehall', 'chloehall@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, 'nOdv16qJWwW4sTvMP4eJxeKLmshoNwwf5MDhrTLk.jpg'),
+('Miala Davis', 'mialadavis', 'mialadavis@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Gold', False, False, NULL);
 
 INSERT INTO badge(name) VALUES
 ('Best_comment'),
@@ -999,27 +1037,27 @@ INSERT INTO question(user_id, create_date, title, is_solved, is_public, nr_views
 (21, '2022-12-29 14:30:00', 'Complaint about misleading advertisement', FALSE, TRUE, 89, 8);
 
 
-INSERT INTO answer(user_id, question_id, is_public, top_answer) VALUES
-(1, 1, TRUE, TRUE),
-(2, 1, TRUE, TRUE),
-(3, 3, TRUE, TRUE),
-(4, 4, TRUE, TRUE),
-(5, 5, TRUE, TRUE),
-(6, 6, TRUE, TRUE),
-(7, 7, TRUE, TRUE),
-(8, 8, TRUE, TRUE),
-(9, 9, TRUE, TRUE),
-(10, 10, TRUE, TRUE),
-(11, 11, TRUE, TRUE),
-(12, 12, TRUE, TRUE),
-(13, 13, TRUE, TRUE),
-(14, 14, TRUE, TRUE),
-(15, 15, TRUE, TRUE),
-(16, 16, TRUE, TRUE),
-(17, 17, TRUE, TRUE),
-(18, 18, TRUE, TRUE),
-(19, 19, TRUE, TRUE),
-(20, 20, TRUE, TRUE);
+INSERT INTO answer(user_id, question_id, is_public) VALUES
+(1, 1, TRUE),
+(2, 1, TRUE),
+(3, 3, TRUE),
+(4, 4, TRUE),
+(5, 5, TRUE),
+(6, 6, TRUE),
+(7, 7, TRUE),
+(8, 8, TRUE),
+(9, 9, TRUE),
+(10, 10, TRUE),
+(11, 11, TRUE),
+(12, 12, TRUE),
+(13, 13, TRUE),
+(14, 14, TRUE),
+(15, 15, TRUE),
+(16, 16, TRUE),
+(17, 17, TRUE),
+(18, 18, TRUE),
+(19, 19, TRUE),
+(20, 20, TRUE);
 
 INSERT INTO comment(user_id, answer_id, is_public) VALUES
 (99, 1, TRUE),
@@ -1623,8 +1661,6 @@ INSERT INTO game_member(user_id, game_id) VALUES
 INSERT INTO question_tag(question_id, tag_id) VALUES
 (1, 1),
 (1, 7),
-(1, 3),
-(1, 8),
 (2, 5),
 (2, 2),
 (2, 9),
@@ -1632,11 +1668,8 @@ INSERT INTO question_tag(question_id, tag_id) VALUES
 (3, 10),
 (5, 1),
 (5, 9),
-(5, 8),
-(5, 4),
 (7, 3),
 (7, 6),
-(7, 2),
 (9, 5),
 (9, 1),
 (10, 2),
@@ -1679,7 +1712,6 @@ INSERT INTO question_tag(question_id, tag_id) VALUES
 (60, 5),
 (65, 8),
 (65, 1),
-(65, 6),
 (66, 2),
 (66, 9),
 (71, 5),
@@ -1690,3 +1722,13 @@ INSERT INTO question_tag(question_id, tag_id) VALUES
 (78, 4),
 (78, 2),
 (78, 9);
+
+INSERT INTO question_file(question_id, file_name, f_name) VALUES
+(1, 'IHUuFgM1T8a4McoFeDixQ6T89uywof843TkY0jNs.png', 'question.png'),
+(79, 'IHUuFgM1T8a4McoFeDixQ6T89uywof843TkY0jNs.png', 'question.png'),
+(79, 'oeSuX93uRTHcKA6ODWFLmdaXPOfxRZ4JuTPUG1H7.pdf', 'document.pdf');
+
+
+INSERT INTO answer_file(answer_id, file_name, f_name) VALUES
+(1, 'picture1.png', 'answer.png'),
+(1, '2fMAEYPeXh6iY2ux4SYEJWM2nTu4UlRLB09LrvCs.pdf', 'document.pdf');

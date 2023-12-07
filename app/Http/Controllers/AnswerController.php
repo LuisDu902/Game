@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
 use App\Models\Answer;
+use App\Models\VersionContent;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
@@ -18,18 +19,25 @@ class AnswerController extends Controller
     {
         $request->validate([
             'content' => 'required|string',
-            'questionId' => 'required',
-            'userId' => 'required',
+            'question_id' => 'required'
         ]);
-        $answer = Answer::createAnswerWithContent(
-            $request->input('content'),
-            $request->input('questionId'),
-            $request->input('userId'),
-        );
+        
+        $answer = Answer::create([
+            'user_id' => Auth::id(),
+            'question_id' => $request->input('question_id'),
+        ]);
       
-        return response()->json();
-    }
+        $answer->votes = 0;
 
+        VersionContent::create([
+            'date' => now(),
+            'content' => $request->input('content'),
+            'content_type' => 'Answer_content',
+            'answer_id' => $answer->id
+        ]);
+
+        return view('partials._answer', compact('answer'))->render();
+    }
 
 
     /**
@@ -38,21 +46,25 @@ class AnswerController extends Controller
     public function edit(Request $request, $id)
     {
         $answer = Answer::findOrFail($id);
-        $this->authorize('updateStatus', [Auth::user(), $answer]);
+        return view('partials._editAnswer', compact('answer'))->render();
+    }
+
+    public function update(Request $request, $id) {
         $request->validate([
-            'content' => 'required|string'
+            'content' => 'required',
         ]);
 
-        DB::table('version_content')->insert([
+        $answer = Answer::findOrFail($id);
+
+        VersionContent::create([
             'date' => now(),
             'content' => $request->input('content'),
             'content_type' => 'Answer_content',
-            'question_id' => null,
-            'answer_id' => $id,
-            'comment_id' => null,
+            'answer_id' => $answer->id
         ]);
+        
+        return view('partials._answer', compact('answer'))->render();
 
-        return response()->json(['message' => 'Question updated successfully']);
     }
 
     /**
@@ -73,6 +85,33 @@ class AnswerController extends Controller
 
         $answer->delete();
 
-        return response()->json(["success" => true], 200);
+        return response()->json(["success" => true, 'id' => $id], 200);
+    }
+
+    public function vote(Request $request, $answer_id)
+    {        
+        $reaction = $request->input('reaction');
+
+        DB::table('vote')->insert([
+            'date' => now(),
+            'vote_type' => 'Answer_vote',
+            'reaction' => $reaction,
+            'answer_id' => $answer_id,
+            'user_id' =>  Auth::user()->id,
+        ]);
+
+        return response()->json(['action'=> 'vote', 'id' => $answer_id]);
+    }
+
+
+    public function unvote(Request $request, $answer_id)
+    {
+        $user_id = Auth::user()->id;
+        DB::table('vote')
+            ->where('user_id', $user_id)
+            ->where('answer_id', $answer_id)
+            ->delete();
+    
+        return response()->json(['action' => 'unvote', 'id' => $answer_id]);
     }
 }

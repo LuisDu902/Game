@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use App\Models\Question;
 use App\Models\Answer;
+use App\Models\VersionContent;
 use App\Models\Comment;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\GameCategory;
+use App\Models\Tag;
 use Illuminate\Support\Facades\Auth;
 
 class QuestionController extends Controller
@@ -45,7 +48,7 @@ class QuestionController extends Controller
         $questions->getCollection()->transform(function ($question) {
             $question['time'] = $question->timeDifference();
             $question['answers'] = $question->answers; 
-            $question['content'] = $question->latest_content(); 
+            $question['content'] = $question->latestContent(); 
             $question['creator'] = $question->creator; 
             return $question;
         });
@@ -56,8 +59,6 @@ class QuestionController extends Controller
 
         return view('partials._questions', compact('questions'))->render();
     }
-
-
     public function search(Request $request)
     {
         $query = $request->input('query');
@@ -69,13 +70,17 @@ class QuestionController extends Controller
         return view('pages.search', ['questions' => $questions]);
     }
 
-
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        return view('pages.newQuestion');
+        if (!Auth::check()) {
+            return redirect()->back()->withResponse($this->getNoPrivilegesMessage());
+        }
+        $categories = GameCategory::all();
+        $tags = Tag::all();
+        return view('pages.newQuestion', ['categories' => $categories, 'tags' => $tags]);
     }
 
     /**
@@ -86,54 +91,99 @@ class QuestionController extends Controller
         $request->validate([
             'title' => 'required|max:256',
             'content' => 'required',
+            'game_id' => 'nullable|exists:game,id'
+        ]);
+        
+        $game_id = $request->input('game');
+       
+
+        $question = Question::create([
+          'title' => $request->input('title'),
+          'user_id' => Auth::id(),
+          'create_date' => now(),
+          'game_id' => $game_id == 0 ? NULL : $game_id,
         ]);
 
-        $question = Question::createQuestionWithContent(
-            $request->input('title'),
-            $request->input('content'),
-            $request->input('game_id')
-        );
-    
-        return redirect()->route('questions');
+        VersionContent::create([
+            'date' => now(),
+            'content' => $request->input('content'),
+            'content_type' => 'Question_content',
+            'question_id' => $question->id
+        ]);
+        
+        if ($request->tags !== "0") {
+            $tags = explode(',', $request->tags);
+        
+            foreach ($tags as $tag) {
+                DB::table('question_tag')->insert([
+                    'question_id' => $question->id,
+                    'tag_id' => $tag
+                ]);
+            }
+        }
+        
+        return response()->json(['id' => $question->id]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Question $question)
+    public function show($id)
     {
-        return view('pages.question_detail', ['question' => $question]);
+        $question = Question::findOrFail($id);
+        return view('pages.question', ['question' => $question]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Request $request, $id)
-    {
+    public function edit(Request $request, $id) {
         $question = Question::findOrFail($id);
-        $this->authorize('edit', [Auth::user(), $question]);
-        
+        $this->authorize('edit', $question);
+        $categories = GameCategory::all();
+        $tags = Tag::all();
+        return view('pages.editQuestion', ['question'=> $question, 'categories' => $categories, 'tags' => $tags]);
+    }
+
+    public function update(Request $request, $id) {
         $request->validate([
-            'content' => 'required|string',
-            'title' => 'required|string',
+            'title' => 'required|max:256',
+            'content' => 'required',
+            'game_id' => 'nullable|exists:game,id'
         ]);
-        
-        $question->title = $request->input('title');
 
-        $question->save();
+        $game_id = $request->input('game');
 
-        DB::table('version_content')->insert([
+        $question = Question::findOrFail($id);
+
+        $question->update([
+            'title' => $request->input('title'),
+            'game_id' => $game_id == 0 ? NULL : $game_id,
+        ]);
+
+        VersionContent::create([
             'date' => now(),
             'content' => $request->input('content'),
             'content_type' => 'Question_content',
-            'question_id' => $id,
-            'answer_id' => null,
-            'comment_id' => null,
+            'question_id' => $question->id
         ]);
 
-        return response()->json(['message' => 'Question updated successfully']);
-    }
+        DB::table('question_tag')->where('question_id', $id)->delete();
 
+        if ($request->tags !== "0") {
+            $tags = explode(',', $request->tags);
+        
+            foreach ($tags as $tag) {
+                DB::table('question_tag')->insert([
+                    'question_id' => $question->id,
+                    'tag_id' => $tag
+                ]);
+            }
+        }
+        
+        return response()->json();
+
+    }
 
     /**
      * Remove the specified resource from storage.
@@ -146,21 +196,21 @@ class QuestionController extends Controller
 
         $answers = $question->answers;
 
-
         for($i=0; $i<count($answers); $i++){
             $answers[$i]->delete();
         }
 
         $question->delete();
 
-        return response()->json(["success" => true], 200);
+        return redirect('/questions')->with('delete', 'Question successfully deleted!');
     }
 
     
     public function vote(Request $request, $question_id)
     {
         $question = Question::findOrFail($question_id);
-        $this->authorize('vote', [Auth::user(), $question]);
+        
+        $this->authorize('vote', $question);
         
         $reaction = $request->input('reaction');
 
@@ -187,55 +237,5 @@ class QuestionController extends Controller
     
         return response()->json(['action' => 'unvote']);
     }
-    
-
-    public function hasVoted($questionId, $userId) {
-
-        $hasVoted = DB::table('vote')
-            ->where('vote_type', 'Question_vote')
-            ->where('question_id', $questionId)
-            ->where('user_id', $userId)
-            ->exists();
-
-        return response()->json(['hasVoted' => $hasVoted]);
-    }
-
-    public function store_answer(Request $request)
-    {
-
-        $request->validate([
-            'content' => 'required|string',
-            'questionId' => 'required',
-            'userId' => 'required',
-        ]);
-
-        $answer = Answer::createAnswerWithContent(
-            $request->input('content'),
-            $request->input('questionId'),
-            $request->input('userId'),
-        );
-    
-        return redirect()->route('question', ['id' => $request->input('questionId')]);
-    }
-
-    public function store_comment(Request $request)
-    {
-
-        $request->validate([
-            'commentario' => 'required|string',
-            'answerId' => 'required',
-            'userId' => 'required',
-        ]);
-
-        $comment = Comment::createCommentWithContent(
-            $request->input('commentario'),
-            $request->input('answerId'),
-            $request->input('userId'),
-        );
-    
-        return redirect()->route('question', ['id' => $request->input('questionId')]);
-    }
-
-
 
 }

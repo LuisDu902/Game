@@ -10,6 +10,9 @@ if (form) {
         }
     
         textarea.disabled = true;
+
+        const fileInput = document.getElementById('profile-image-input');
+        fileInput.value = '';
     })
 }
 
@@ -32,6 +35,35 @@ function toggleEdit() {
     
     profileButtons.style.display = profileButtonsDisplay === 'block' ? 'none' : 'block';
     profileButton.style.display = profileButtonDisplay === 'block' ? 'none' : 'block';
+
+    const upload = document.querySelector('.profile-left form label');
+    upload.style.display = profileButtonsDisplay === 'block' ? 'none' : 'block';
+
+    const input = document.getElementById('profile-image-input');
+    const preview = document.getElementById('profile-preview');
+
+    input.addEventListener('change', function() {
+        const file = this.files[0];
+
+        if (file) {
+            const allowedExtensions = ['png', 'jpeg', 'jpg'];
+            const fileExtension = file.name.split('.').pop().toLowerCase();
+    
+            if (allowedExtensions.includes(fileExtension)) {
+                const reader = new FileReader();
+    
+                reader.onload = function(event) {
+                    preview.src = event.target.result;
+                }
+                reader.readAsDataURL(file);
+            } else {
+                console.log('Invalid file type! Please choose a PNG, JPEG, or JPG image.');
+                this.value = ''; 
+            }
+        } else {
+            preview.src = "{{ $user->getProfileImage() }}";
+        }
+    });
 }
 
 function saveChanges() {
@@ -53,6 +85,21 @@ function saveChanges() {
     textarea.removeAttribute('disabled');
     sendAjaxRequest('post', '/api/users/' + id + '/edit', { name: name, username: username, email: email, description: description }, profileEditdHandler);
 
+    const fileInput = document.getElementById('profile-image-input');
+   
+    if (fileInput.files.length > 0) {
+        const formData = new FormData();
+        formData.append('file', fileInput.files[0]); 
+        formData.append('id', id);
+        formData.append('type', 'profile');    
+        console.log(formData);
+
+        let request = new XMLHttpRequest();
+        request.open('post', '/api/file/upload', true);
+        request.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').content);
+        request.addEventListener('load', imageHandler);
+        request.send(formData);
+    }
 
     console.log('Changes saved');
 
@@ -80,7 +127,18 @@ function profileEditdHandler(){
     if (this.status === 200) {
         let item = JSON.parse(this.responseText);
         console.log('Profile updated:', item);
-        createNotificationBox('Profile successfully updated!')
+        createNotificationBox('Successfully saved!', 'User profile successfully updated!')
+    } else {
+        console.error('Profile update failed:', this.statusText);
+    }
+}
+
+function imageHandler(){
+    if (this.status === 200) {
+        let item = JSON.parse(this.responseText);
+        const img = document.querySelector('.profile-left img');
+        const profile = document.querySelector('.dropdown img');
+        profile.src = img.src;
     } else {
         console.error('Profile update failed:', this.statusText);
     }

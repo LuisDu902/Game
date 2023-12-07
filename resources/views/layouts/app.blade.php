@@ -15,6 +15,7 @@
         <link href="{{ url('css/app.css') }}" rel="stylesheet">
         <link href="{{ url('css/navbar.css') }}" rel="stylesheet">
         <link href="{{ url('css/auth.css') }}" rel="stylesheet">
+        <link href="{{ url('css/sidebar.css') }}" rel="stylesheet">
         <link href="{{ url('css/footer.css') }}" rel="stylesheet">
         <link href="{{ url('css/breadcrumb.css') }}" rel="stylesheet">
         <link href="{{ url('css/profile.css') }}" rel="stylesheet">
@@ -25,6 +26,7 @@
         <link href="{{ url('css/game.css') }}" rel="stylesheet">
         <link href="{{ url('css/home.css') }}" rel="stylesheet">
         <link href="{{ url('css/question.css') }}" rel="stylesheet">
+        <link href="{{ url('css/faq.css') }}" rel="stylesheet">
 
         <script type="text/javascript">
             // Fix for Firefox autofocus CSS bug
@@ -37,7 +39,8 @@
         <script type="text/javascript" src="{{ url('js/answer.js') }}" defer></script>
         <script type="text/javascript" src="{{ url('js/carousel.js') }}" defer></script>
         <script type="text/javascript" src="{{ url('js/dropdown.js') }}" defer></script>
-        
+        <script type="text/javascript" src="{{ url('js/faq.js') }}" defer></script>
+    
         <script nomodule
             src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
             defer></script>
@@ -49,7 +52,24 @@
             @yield('authentication')
         @else
             @include('layouts.header')
-            <div class="notification-box"></div>
+            @if (session()->has('delete'))
+                <div class="notification-box" id="delete-noti"> 
+                    <ion-icon name="checkmark-circle" id="noti-icon"></ion-icon>
+                    <div>
+                        <span> Question deleted!</span>
+                        <span> {{ session('delete') }} </span>
+                    </div>
+                    <ion-icon name="close" id="close-notification"></ion-icon>
+                </div>
+            @endif
+            <div class="notification-box"> 
+                <ion-icon name="checkmark-circle" id="noti-icon" ></ion-icon>
+                <div>
+                    <span></span>
+                    <span></span>
+                </div>
+                <ion-icon name="close" id="close-notification"></ion-icon>
+            </div>
             @if(in_array(request()->route()->getName(), ['category', 'game']))
             <div class="purple-section"></div>
             @endif

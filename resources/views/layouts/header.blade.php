@@ -6,12 +6,11 @@
         </a>
         <ul class="nav-links">
             <li><a href="{{ route('questions') }}">Questions</a></li>
-            <li><a href="{{ route('users') }}">Users</a></li>
             <li><a href="{{ route('categories') }}">Game
                     Categories</a></li>
         </ul>
 
-        <form class="search-box" method="POST" action="{{ route('questions') }}">
+        <form class="search-box" method="GET" action="{{ route('questions.search') }}">
             @csrf
             <input type="text" id="search-input" name="query"
                 placeholder="Search for posts...">
@@ -21,21 +20,41 @@
         </form>
 
         @if (Auth::check())
+        <div class="left">
+            @if (Auth::user()->is_admin && !Auth::user()->is_banned)
+                <a href="{{ route('users') }}" class="admin">
+                    Admin Section
+                </a>
+            @endif
             <div class="dropdown">
+                
                 <div class="user">
-                    <img src="{{ asset('images/user.png') }}" alt="user-profile">
+                    <img src="{{ Auth::user()->getProfileImage() }}" alt="user-profile">
                     <strong class="username white"> {{ Auth::user()->username }} </strong>
                     <button class="dropbtn white">
                         <ion-icon name="chevron-down"></ion-icon>
                     </button>
                 </div>
                 <div class="dropdown-content">
-                    <a href="{{ route('profile', ['id' => Auth::user()->id]) }}">Profile</a>
-                    <a href="{{ route('users_questions', ['id' => Auth::user()->id]) }}">My Questions</a>
-                    <a href="{{ route('users_answers', ['id' => Auth::user()->id]) }}">My Answers</a>
-                    <a href="{{ url('/logout') }}">Sign out</a>
+                    <a href="{{ route('profile', ['id' => Auth::user()->id]) }}">
+                        <ion-icon name="person-circle"></ion-icon>
+                        <span>Profile</span>
+                    </a>
+                    <a href="{{ route('users_questions', ['id' => Auth::user()->id]) }}">
+                        <ion-icon name="help-circle"></ion-icon>
+                        <span> My Questions</span>
+                    </a>
+                    <a href="{{ route('users_answers', ['id' => Auth::user()->id]) }}">
+                    <ion-icon name="book"></ion-icon>
+                        <span> My Answers</span>
+                    </a>
+                    <a href="{{ url('/logout') }}">
+                        <ion-icon name="log-out"></ion-icon>
+                        <span> Sign out</span>
+                    </a>
                 </div>
             </div>
+        </div>
         @else
             <div class="buttons">
                 <a href="{{ route('register') }}">

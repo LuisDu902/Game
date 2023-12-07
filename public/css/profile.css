@@ -31,6 +31,23 @@
     border: 4px solid var(--purple);
 }
 
+.profile-left form input {
+    display: none;
+}
+
+.profile-left form label {
+    background-color: var(--purple);
+    color: white;
+    margin-top: 10px;
+    padding: 5px 15px;
+    border-radius: 10px;
+    display: none;
+}
+
+.profile-left form label:hover {
+    cursor: pointer;
+}
+
 .stats-grid {
     display: grid;
     grid-template-columns: 1fr 3fr;
@@ -88,12 +105,12 @@
 .edit-profile-button {
     display:block;
     margin-top: 20px;
-    text-align: center; /* Center the button horizontally */
+    text-align: center; 
 }
 
 
 .edit-button {
-    background-color: var(--dark-purple);
+    background-color: var(--purple);
     color: white;
     padding: 10px 20px;
     font-size: 20px;
@@ -110,7 +127,7 @@
 }
 
 .save-button{
-    background-color: var(--dark-purple);
+    background-color: var(--purple);
     color: white;
     padding: 10px 20px;
     font-size: 20px;

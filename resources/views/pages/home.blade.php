@@ -7,7 +7,19 @@
             <div class="app-description">
                <h1>GameOn</h1>
                <p>Join GameOn for a unified gaming haven where conections thrive, knowledge flows, and every contribution shines.</p>
-               <h2>Every <strong>gamer</strong> has a tab open to <strong>GameOn</strong></h2>
+               <div class="app-wrapper"> 
+                  <p> Every </p>
+                  <div id="typing">
+                     <span>game streamer</span>
+                     <span>content creator</span>
+                     <span>game developer</span>
+                     <span>game enthusiast</span>
+                     <span>game streamer</span>
+                  </div> 
+                  <p>
+                     has a tab open to <strong>GameOn</strong>
+                  </p>
+               </div>
             </div>
             <img src="../images/panda.png" alt="panda.png">
       </div>
