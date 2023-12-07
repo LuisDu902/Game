@@ -1,4 +1,4 @@
-<li>
+<li class="comment-container" id="comment{{ $comment->id }}" data-id="{{ $comment->id }}">
     <div>
         <img class="answer-img" src="{{ $comment->creator->getProfileImage() }}" alt="user">
         <div class="c-desc">
@@ -16,7 +16,7 @@
                             <ion-icon name="create"></ion-icon>
                             <span>Edit</span>
                         </div>
-                        <div>
+                        <div onclick="showCommentDelete()">
                             <ion-icon name="trash"></ion-icon>
                             <span>Delete</span>
                         </div>
