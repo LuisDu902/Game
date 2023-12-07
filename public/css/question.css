@@ -645,31 +645,35 @@
 }
 
 
-.edit-answer-btns {
+.edit-answer-btns, .edit-comment-btns {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 20px;
 }
 
-.edit-answer-btns button {
+.edit-answer-btns button, .edit-comment-btns button {
     border-radius: 10px;
     padding: 5px 20px;
 }
 
-.edit-answer-btns #cancel-answer-edit {
+#cancel-answer-edit {
     border: 1px solid black;
     color: black;
 }
 
-.edit-answer-btns #save-answer-edit {
+#save-answer-edit {
     background-color: #D2CFFF;
     color: #7C5BF0;
     transition: all 300ms ease;
     padding: 5px 25px;
 }
 
-.edit-answer-btns #save-answer-edit:hover {
+.edit-comment-btns {
+    margin-left: auto;
+}
+
+#save-answer-edit:hover {
     background-color: #7C5BF0;
     color: #D2CFFF;
 }
@@ -687,3 +691,10 @@
     flex-wrap: wrap;
 }
 
+.comment-container textarea {
+    margin-top: 20px;
+    margin-left: 60px;
+    width: calc(100% - 60px);
+    height: auto;
+    resize: none;
+}

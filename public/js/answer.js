@@ -489,6 +489,6 @@ function editedAnswerHandler() {
     const answer = document.querySelector('#answer' + id);
 
     answer.outerHTML = updatedAnswer;
-    createNotificationBox('Answer edited!', 'Answer edits is saved successfully!');
+    createNotificationBox('Answer edited!', 'Answer was edited successfully!');
 
 }

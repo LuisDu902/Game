@@ -37,6 +37,7 @@
         <script type="text/javascript" src="{{ url('js/editprofile.js') }}" defer></script>
         <script type="text/javascript" src="{{ url('js/question.js') }}" defer></script>
         <script type="text/javascript" src="{{ url('js/answer.js') }}" defer></script>
+        <script type="text/javascript" src="{{ url('js/comment.js') }}" defer></script>
         <script type="text/javascript" src="{{ url('js/carousel.js') }}" defer></script>
         <script type="text/javascript" src="{{ url('js/dropdown.js') }}" defer></script>
         <script type="text/javascript" src="{{ url('js/faq.js') }}" defer></script>

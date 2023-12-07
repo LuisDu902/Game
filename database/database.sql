@@ -1730,5 +1730,5 @@ INSERT INTO question_file(question_id, file_name, f_name) VALUES
 
 
 INSERT INTO answer_file(answer_id, file_name, f_name) VALUES
-(1, 'picture1.png', 'answer.png'),
+(1, 'h5umJWOrhetb9RtaqFaoyG3z5bi1d1bKvmAtg6VU.png', 'answer.png'),
 (1, '2fMAEYPeXh6iY2ux4SYEJWM2nTu4UlRLB09LrvCs.pdf', 'document.pdf');

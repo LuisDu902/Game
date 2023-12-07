@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\GameCategoryController;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\UserController;
@@ -102,7 +103,7 @@ Route::controller(QuestionController::class)->group(function () {
     Route::put('/api/questions/{id}', 'update');
 });
 
-// Answers API
+// Answer API
 Route::controller(AnswerController::class)->group(function () {
     Route::post('/api/answers', 'store');
     Route::get('/api/answers/{id}/edit', 'edit');
@@ -112,10 +113,20 @@ Route::controller(AnswerController::class)->group(function () {
     Route::post('/api/answers/{id}/unvote', 'unvote'); 
 });
 
+// Comment API
+Route::controller(CommentController::class)->group(function () {
+    Route::post('/api/comments', 'store');
+    Route::get('/api/comments/{id}/edit', 'edit');
+    Route::put('/api/comments/{id}', 'update');
+    Route::delete('/api/comments/{id}', 'delete');
+});
+
 // Tag API
 Route::controller(TagController::class)->group(function () {
     Route::post('/api/tags', 'store');
 });
+
+
 
 
 
