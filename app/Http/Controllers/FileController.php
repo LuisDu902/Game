@@ -97,7 +97,6 @@ class FileController extends Controller
             DB::table('answer_file')->where('answer_id', $request->id)->where('f_name', $request->name)->delete();
         }
 
-
         return response()->json(['id' => $request->id]);
     }
 

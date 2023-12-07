@@ -45,7 +45,26 @@ class AnswerController extends Controller
      */
     public function edit(Request $request, $id)
     {
+        $answer = Answer::findOrFail($id);
+        return view('partials._editAnswer', compact('answer'))->render();
+    }
+
+    public function update(Request $request, $id) {
+        $request->validate([
+            'content' => 'required',
+        ]);
+
+        $answer = Answer::findOrFail($id);
+
+        VersionContent::create([
+            'date' => now(),
+            'content' => $request->input('content'),
+            'content_type' => 'Answer_content',
+            'answer_id' => $answer->id
+        ]);
         
+        return view('partials._answer', compact('answer'))->render();
+
     }
 
     /**

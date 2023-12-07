@@ -105,6 +105,7 @@ Route::controller(QuestionController::class)->group(function () {
 // Answers API
 Route::controller(AnswerController::class)->group(function () {
     Route::post('/api/answers', 'store');
+    Route::get('/api/answers/{id}/edit', 'edit');
     Route::put('/api/answers/{id}', 'update');
     Route::delete('/api/answers/{id}', 'delete');
     Route::post('/api/answers/{id}/vote', 'vote');

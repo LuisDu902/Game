@@ -1,30 +1,3 @@
-/*
-function deleteAnswer(answerId){
-    if (confirm('Are you sure you want to delete this question?')) {
-        sendAjaxRequest('DELETE', '/api/answers/' + answerId + '/delete', null, function () {
-            answerDeletedHandler(answerId).apply(this);
-        });
-    }
-}
-
-function answerDeletedHandler(answerId){
-    return function () {
-        console.log('Response:', this.responseText);
-
-        if (this.status === 200) {
-            console.log('Answer deleted successfully');
-            createNotificationBox('Successfully saved!', 'Answer deleted successfully!');
-            const questionElement = document.getElementById(answerId);
-            if (questionElement) {
-                questionElement.remove();
-            }
-        } else {
-            console.error('Answer delete failed:', this.statusText);
-        }
-    };
-}
-*/
-
 const answerVote = document.querySelectorAll('.answer-btns');
 
 if (answerVote) {
@@ -266,18 +239,15 @@ function answerFileHandler() {
             answerF.innerHTML += file.outerHTML;
         }
 
-        aFiles.innerHTML = ``;
-        aImgs.innerHTML = ``;
-
-        tags = [];
-        selectHtml = '';
+        document.querySelector('.answer-files').innerHTML = ``;
+        document.querySelector('.answer-images').innerHTML = ``;
         validFiles = [];
         fileNames = [];
         count = 0;
-        deletedFiles = [];
-
     }
 }
+
+let oldAnswerFiles = [];
 
 function createAnswerHandler(){
     if (this.status == 200) {
@@ -318,14 +288,207 @@ function createAnswerHandler(){
                 request.send(formData);
             });
         } else {
-            tags = [];
-            selectHtml = '';
             validFiles = [];
             fileNames = [];
             count = 0;
-            deletedFiles = [];
         }
        
     }
  
+}
+
+let oldAnswer = "";
+
+function showEditAnswer() {
+    const answer = event.target.closest('.answer-details');
+    oldAnswer = answer.outerHTML;
+    const id = answer.getAttribute('data-id');
+    
+    validFiles = [];
+    fileNames = [];
+    count = 0;
+    deletedFiles = [];
+    oldAnswerFiles = [];
+
+    const docFiles = answer.querySelectorAll('.a-file span');
+    const imageFiles = answer.querySelectorAll('.a-img img');
+
+    for (const document of docFiles) {
+        fileNames.push(document.textContent);
+    }
+    for (const image of imageFiles) {
+        fileNames.push(image.alt);
+    }
+
+    oldAnswerFiles = fileNames;
+    
+    sendAjaxRequest('get', '/api/answers/' + id + '/edit', {}, toggleEditAnswer);
+
+}
+
+
+function toggleEditAnswer() {
+    if (this.status == 200) {
+        const editAnswer = this.responseText;
+        var tmp = document.createElement('div');
+        tmp.innerHTML = editAnswer;
+        const id = tmp.querySelector('.answer-details').getAttribute('data-id');
+
+        const answer = document.querySelector('#answer' + id);
+        answer.outerHTML = editAnswer;
+    }
+}
+
+function restoreAnswer() {
+    const answer = event.target.closest('.answer-details');
+    answer.outerHTML = oldAnswer;
+}
+
+function removeAnswerImages() {
+    if (event.target.tagName === 'ION-ICON') {
+        const imgDiv = event.target.parentElement;
+        const filenameToRemove = imgDiv.querySelector('img').alt;
+        fileNames = fileNames.filter(name => name !== filenameToRemove);
+        deletedFiles.push(filenameToRemove);
+        const indexToRemove = validFiles.findIndex(file => file.name === filenameToRemove);
+        if (indexToRemove !== -1) {
+            validFiles.splice(indexToRemove, 1);
+        }
+        imgDiv.remove();
+    }
+}
+
+function removeAnswerDocs() {
+    if (event.target.tagName === 'ION-ICON') {
+        const docDiv = event.target.parentElement;
+        const filenameToRemove = docDiv.querySelector('span').textContent;
+        console.log(filenameToRemove)
+        fileNames = fileNames.filter(name => name !== filenameToRemove);
+        deletedFiles.push(filenameToRemove);
+        const indexToRemove = validFiles.findIndex(file => file.name === filenameToRemove);
+        if (indexToRemove !== -1) {
+            validFiles.splice(indexToRemove, 1);
+        }
+        docDiv.remove();
+    }
+}
+
+function uploadAnswerFiles() {
+    event.preventDefault();
+    const fileInput = document.getElementById('answer-file');
+    fileInput.click();
+}
+
+function uploadAnswerFile() {
+    const answerDocs = document.querySelector('.edit-a-files');
+    const answerImages = document.querySelector('.edit-a-img');
+    const fileInput = document.getElementById('answer-file');
+    const files = fileInput.files; 
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const imageExtentions = ["png", "jpeg", "jpg", "gif"];
+        const documentExtentions = ["doc", "docx", "txt", "pdf"];
+        const fileExtension = file.name.split('.').pop().toLowerCase();
+        
+        if (fileNames.includes(file.name)) {
+            createNotificationBox('Repeated file!', 'This file was already upload!', 'warning');
+            continue;
+        }
+        else if (documentExtentions.includes(fileExtension)) {
+            validFiles.push(file);
+            fileNames.push(file.name);
+            const reader = new FileReader();
+
+            reader.onload = function(event) {
+                const fileDataUrl = event.target.result;
+                answerDocs.innerHTML += `<div class="edit-a-file">
+                    <ion-icon name="document"></ion-icon>
+                    <a href="${fileDataUrl}" download="${file.name}">
+                        <span>${file.name}</span>
+                    </a>
+                    <ion-icon name="close-circle" class="close"></ion-icon>
+                </div>`;
+            }
+            reader.readAsDataURL(file);
+
+        }  else if (imageExtentions.includes(fileExtension)){
+            validFiles.push(file);
+            fileNames.push(file.name);
+            const reader = new FileReader();
+            
+            reader.onload = function(event) {
+                const src = event.target.result;
+                answerImages.innerHTML += `<div class="edit-img">
+                    <img src="${src}" alt="${file.name}">
+                    <ion-icon name="close-circle"></ion-icon>
+                </div>`;
+            }
+            reader.readAsDataURL(file);
+        }
+        else {
+            createNotificationBox('Invalid file type!', 'Please choose a valid file type to upload!', 'error');
+            this.value = ''; 
+        }
+    }
+}
+
+
+function updateAnswer() {
+    const filesToDelete = oldAnswerFiles.filter(element => deletedFiles.includes(element));
+    const id = event.target.closest('.answer-details').getAttribute('data-id');
+    
+    if (filesToDelete.length > 0) {
+        for (const fileName of filesToDelete) {
+            sendAjaxRequest('delete', '/api/file/delete', {type: 'answer', id: id, name: fileName}, () => {});
+        }
+    }
+
+    if (validFiles.length > 0) {
+        count = 0;
+        validFiles.map(function(file) {
+            let formData = new FormData();
+            formData.append('file', file); 
+            formData.append('id', id);
+            formData.append('type', 'answer');    
+            let request = new XMLHttpRequest();
+            request.open('post', '/api/file/upload', true);
+            request.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').content);
+            request.addEventListener('load', editAnswerFileHandler);
+            request.send(formData);
+        });
+    } else {
+        const content = document.querySelector('#edit-content').value;
+        if (content !== '') {
+            sendAjaxRequest('put', '/api/answers/' + id, {content: content}, editedAnswerHandler);
+        } else {
+            createNotificationBox('Empty answer content', 'Please enter your answer before saving!', 'warning');
+        }
+    }
+}
+
+
+function editAnswerFileHandler() {
+    count++;
+    if (count == validFiles.length) {
+        const content = document.querySelector('#edit-content').value;
+        const id = JSON.parse(this.responseText).id;
+        if (content !== '') {
+            sendAjaxRequest('put', '/api/answers/' + id, {content: content}, editedAnswerHandler);
+        } else {
+            createNotificationBox('Empty answer content', 'Please enter your answer before saving!', 'warning');
+        }
+    }
+}
+
+function editedAnswerHandler() {
+    const updatedAnswer = this.responseText;
+    var tmp = document.createElement('div');
+    tmp.innerHTML = updatedAnswer;
+    const id = tmp.querySelector('.answer-details').getAttribute('data-id');
+
+    const answer = document.querySelector('#answer' + id);
+
+    answer.outerHTML = updatedAnswer;
+    createNotificationBox('Answer edited!', 'Answer edits is saved successfully!');
+
 }

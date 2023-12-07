@@ -643,3 +643,47 @@
     justify-content: center;
     align-items: center;
 }
+
+
+.edit-answer-btns {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.edit-answer-btns button {
+    border-radius: 10px;
+    padding: 5px 20px;
+}
+
+.edit-answer-btns #cancel-answer-edit {
+    border: 1px solid black;
+    color: black;
+}
+
+.edit-answer-btns #save-answer-edit {
+    background-color: #D2CFFF;
+    color: #7C5BF0;
+    transition: all 300ms ease;
+    padding: 5px 25px;
+}
+
+.edit-answer-btns #save-answer-edit:hover {
+    background-color: #7C5BF0;
+    color: #D2CFFF;
+}
+
+#edit-content {
+    height: 20px;
+    resize: none;
+}
+
+.edit-a-img, .edit-a-files {
+    margin-left: 60px;
+    margin-top: 10px;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
