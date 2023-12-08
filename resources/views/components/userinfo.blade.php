@@ -10,4 +10,5 @@
         <option value="banned" {{ $user->is_banned ? 'selected' : '' }}>Banned</option>
     </select>
     </td>
+    <td class="delete-user"><button class="delete-user-button"><i class="fa-regular fa-trash-can" style="color: #c52b2b;"></i></button></td>
 </tr>

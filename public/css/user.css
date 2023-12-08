@@ -65,28 +65,40 @@
 
 .users-table th:nth-child(1){
     padding-left: 100px;
-    width: 10%;
+    width: 5%;
 }
  
 .users-table th:nth-child(2){
-    width: 15%;
+    width: 11%;
 }
 
 .users-table th:nth-child(3){
-    width: 25%;
+    width: 11%;
 }
 
 .users-table th:nth-child(4){
-    width: 30%;
+    width: 15%;
 }
 
 .users-table th:nth-child(5){
-    width: 20%;
+    width: 8%;
 }
 
 .users-table th:nth-child(6){
-    padding-right: 120px;
+    width: 7%;
 }
+
+.users-table th:nth-child(7) {
+    text-align: center;
+    width: 7.5%;
+    padding-right: 20px;
+}
+
+.users-table td:nth-child(7) {
+    text-align: center;
+    padding-right: 20px !important;
+}
+
 
 .users-table img {
     margin: 0 30px;

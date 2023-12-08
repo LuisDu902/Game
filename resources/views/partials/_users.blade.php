@@ -6,6 +6,7 @@
                 <th></th> <th>Username</th>
                 <th>Name</th> <th>Email Address</th>
                 <th>Rank</th> <th>Status</th>
+                <th>Delete User</th>
             </tr>
         </thead>
         <tbody>
