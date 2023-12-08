@@ -18,7 +18,7 @@
                             <ion-icon name="create"></ion-icon>
                             <span>Edit</span>
                         </a>
-                        <a href="#">
+                        <a href="{{ route('questions.activity', ['id' => $question->id]) }}">
                             <ion-icon name="time"></ion-icon>
                             <span>Post activity</span>
                         </a>
@@ -42,7 +42,7 @@
                             <ion-icon name="bookmark"></ion-icon>
                             <span>Follow</span>
                         </div>
-                        <a href="#">
+                        <a href="{{ route('questions.activity', ['id' => $question->id]) }}">
                             <ion-icon name="time"></ion-icon>
                             <span>Post activity</span>
                         </a>

@@ -1,5 +1,6 @@
-.questions-sec, .user-manage-section, .faq-sec {
+.questions-sec, .user-manage-section, .faq-sec, .activity-section {
     margin: 20px;
+    margin-left: 0;
 }
 
 .questions-sec .questions-actions {
