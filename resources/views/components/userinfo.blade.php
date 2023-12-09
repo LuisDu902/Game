@@ -1,4 +1,4 @@
-<tr class="user-info">
+<tr class="user-info" id="user{{ $user->id }}" data-id="{{ $user->id }}">
     <td><img src="{{ $user->getProfileImage() }}" alt="User Image"></td>
     <td><a href="{{ route('profile', ['id' => $user->id]) }}">{{ $user->username }}</a></td>
     <td>{{ $user->name }}</td>
@@ -10,5 +10,5 @@
         <option value="banned" {{ $user->is_banned ? 'selected' : '' }}>Banned</option>
     </select>
     </td>
-    <td class="delete-user"><button class="delete-user-button"><i class="fa-regular fa-trash-can" style="color: #c52b2b;"></i></button></td>
+    <td class="delete-user"><button class="delete-user-button" onclick="showUserDelete()"><i class="fa-regular fa-trash-can" style="color: #c52b2b;"></i></button></td>
 </tr>
