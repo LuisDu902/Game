@@ -93,6 +93,7 @@ Route::controller(UserController::class)->group(function () {
     Route::get('/api/users', 'search');
     Route::post('/api/users/{id}', 'updateStatus');
     Route::post('/api/users/{id}/edit', 'edit');
+    Route::delete('/api/users/{id}', 'delete')->name('users.destroy');
 });
 
 // Question API
