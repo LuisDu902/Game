@@ -2,7 +2,7 @@
     <div>
         <img class="answer-img" src="{{ $comment->creator->getProfileImage() }}" alt="user">
         <div class="c-desc">
-            <a href="{{ route('profile', ['id' => $comment->user_id ]) }}" class="purple">{{ $comment->user->name }}</a>
+            <a href="{{ route('profile', ['id' => $comment->user_id ]) }}" class="purple comment-creator">{{ $comment->user->name }}</a>
             <span> {{ $comment->lastModification() }} ago </span>
         </div>
         @auth
@@ -37,7 +37,7 @@
             @endif
         @endauth
     </div>
-    <p>
+    <p class="comment-content">
         {{ $comment->latestContent() }}
     </p>
 </li>
