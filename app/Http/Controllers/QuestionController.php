@@ -302,4 +302,12 @@ class QuestionController extends Controller
         return view('pages.activity', ['question'=> $question, 'contents' => $all_contents]);
     }
 
+    function visibility(Request $request, $id) {
+        $question = Question::findOrFail($id);
+        $visibility = $request->visibility == 'public' ? TRUE : FALSE;
+        $question->is_public = $visibility; 
+        $question->save();
+        return response()->json(['visibility' => $request->visibility]);
+    }
+
 }

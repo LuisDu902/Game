@@ -61,7 +61,7 @@ function showCommentDelete() {
 
     const id = event.target.closest('.comment-container').getAttribute('data-id');
     const confirm = document.getElementById('ad-confirm');
-    
+    confirm.textContent = 'Delete';
     confirm.addEventListener('click', function(){
         event.preventDefault();
         if (title.textContent == 'Delete comment') {

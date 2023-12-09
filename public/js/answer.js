@@ -100,7 +100,7 @@ function showAnswerDelete() {
     const id = event.target.closest('.answer-details').getAttribute('data-id');
     
     const confirm = document.getElementById('ad-confirm');
-    
+    confirm.textContent = 'Delete';
     confirm.addEventListener('click', function(){
         event.preventDefault();
         if (title.textContent == 'Delete answer')

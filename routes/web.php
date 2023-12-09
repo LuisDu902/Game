@@ -100,6 +100,7 @@ Route::controller(QuestionController::class)->group(function () {
     Route::get('/api/questions', 'list');
     Route::post('/api/questions/{id}/vote', 'vote');
     Route::post('/api/questions/{id}/unvote', 'unvote'); 
+    Route::post('/api/questions/{id}/visibility', 'visibility'); 
     Route::post('/api/questions', 'store');
     Route::put('/api/questions/{id}', 'update');
 });

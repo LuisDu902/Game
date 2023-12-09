@@ -111,7 +111,7 @@
                     <form method="POST">
                         @csrf
                         @method('DELETE')
-                        <button id="ad-confirm">Delete</button>
+                        <button id="ad-confirm"></button>
                     </form>
                 </div>
             </div>

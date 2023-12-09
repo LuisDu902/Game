@@ -26,14 +26,15 @@
                             <ion-icon name="trash"></ion-icon>
                             <span>Delete</span>
                         </div>
-                        <div id="question-visibility">
-                            <ion-icon name="eye"></ion-icon>
+                        <div id="question-visibility" onclick="showVisibilityToggle()">
+                            @if ($question->is_public)
+                                <ion-icon name="eye"></ion-icon>
+                            @else
+                                <ion-icon name="eye-off"></ion-icon>
+                            @endif
                             <span>Visibility</span>
-                            <label class="switch">
-                                <input type="checkbox">
-                                <span class="slider round"></span>
-                            </label>
                         </div>
+                       
                     </div>
                 </div>
             @else

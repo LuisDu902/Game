@@ -558,3 +558,65 @@ if (editPage) {
 function showVoteWarning() {
     createNotificationBox('Action not authorized!', 'You cannot vote on your own posts!', 'error');
 }
+
+
+function showVisibilityToggle() {
+
+    const icon = document.querySelector('#question-visibility ion-icon');
+    const id = document.querySelector('.question-detail-section').getAttribute('data-id');
+
+    if (icon.getAttribute('name') == 'eye') {
+        const modal = document.querySelector('#answerDeleteModal');
+        modal.style.display = 'block';
+
+        const title = modal.querySelector('h2'); 
+        const content = modal.querySelector('p');
+
+        title.textContent = 'Post visibility';
+        content.textContent = 'Are you sure you want to make this question private? All of its answers and content will not be visible.';
+
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        };
+
+        const cancel = document.getElementById('ad-cancel');
+
+        cancel.addEventListener('click', function(){
+            modal.style.display = 'none';
+        });
+
+        
+        const confirm = document.getElementById('ad-confirm');
+        confirm.textContent = 'Confirm';
+        confirm.addEventListener('click', function(){
+            event.preventDefault();
+            if (title.textContent == 'Post visibility') {
+                modal.style.display = 'none';
+                sendAjaxRequest('post', '/api/questions/' + id + '/visibility', {visibility : 'private'}, visibilityHandler);
+            }
+        });
+    } else {
+        sendAjaxRequest('post', '/api/questions/' + id + '/visibility', {visibility : 'public'}, visibilityHandler);
+    }
+}
+
+
+function visibilityHandler() {
+    if (this.status === 200) {
+        const response = JSON.parse(this.responseText);
+        const icon = document.querySelector('#question-visibility ion-icon');
+        
+        if (response.visibility == 'public') {
+            icon.outerHTML = `<ion-icon name="eye"></ion-icon>`;
+            createNotificationBox('Sucessfully updated!', 'Question visibility set to public!');
+        } else {
+            console.log('hi');
+            icon.outerHTML = `<ion-icon name="eye-off"></ion-icon>`;
+            createNotificationBox('Sucessfully updated!', 'Question visibility set to private!');
+        }
+
+    }
+}
