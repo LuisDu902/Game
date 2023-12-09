@@ -134,7 +134,7 @@ class UserController extends Controller
         $user->delete();
 
 
-        return redirect('/users')->with('delete', 'User successfully deleted!');
+        return response()->json(['id' => $user->id ]); 
     }
 
 }

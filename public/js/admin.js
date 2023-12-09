@@ -168,7 +168,7 @@ function userDeleteHandler() {
         const modal = document.querySelector('#userDeleteModal');
         modal.style.display = 'none';
         user.remove();
-        createNotificationBox('Successfully saved!', 'User deleted successfully!');
+        createNotificationBox('Successfully deleted!', 'User deleted successfully!');
     }
 }
  
