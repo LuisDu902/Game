@@ -118,6 +118,7 @@ CREATE TABLE answer (
   user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   question_id INTEGER NOT NULL REFERENCES question(id) ON DELETE CASCADE,
   is_public BOOLEAN NOT NULL DEFAULT True,
+  is_correct BOOLEAN NOT NULL DEFAULT False,
   votes INTEGER NOT NULL DEFAULT 0
 );
 
@@ -592,7 +593,22 @@ FOR EACH ROW
 EXECUTE FUNCTION update_question_on_insert();
 
 
+CREATE OR REPLACE FUNCTION mark_question_solved()
+RETURNS TRIGGER AS $$
+BEGIN
+    UPDATE question
+    SET is_solved = TRUE
+    WHERE id = NEW.question_id;
 
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER update_question_solved
+AFTER UPDATE OF is_correct ON answer
+FOR EACH ROW
+WHEN (NEW.is_correct = TRUE)
+EXECUTE FUNCTION mark_question_solved();
 
 
 -----------
@@ -956,45 +972,45 @@ INSERT INTO game(name, description, nr_members, game_category_id) VALUES
 ('The Division 2', 'Developed by Ubisoft Massive, Tom Clancys The Division 2 is an online action RPG set in a post-apocalyptic Washington D.C. Players can team up with others to explore the open world, complete missions, engage in PvP combat, and participate in endgame content, including raids and strongholds.', 0, 10);
 
 INSERT INTO question(user_id, create_date, title, is_solved, is_public, nr_views, game_id) VALUES
-(99, '2022-10-01 14:30:00', 'Pokemon GO connection issue', TRUE, TRUE, 100, 1),
-(98, '2022-10-02 14:30:00', 'Game client not launching', TRUE, TRUE, 120, 1),
-(97, '2022-10-03 14:30:00', 'CS:GO frame rate drop', TRUE, TRUE, 90, 1),
+(99, '2022-10-01 14:30:00', 'Pokemon GO connection issue', FALSE, TRUE, 100, 1),
+(98, '2022-10-02 14:30:00', 'Game client not launching', FALSE, TRUE, 120, 1),
+(97, '2022-10-03 14:30:00', 'CS:GO frame rate drop', FALSE, TRUE, 90, 1),
 (96, '2022-10-04 14:30:00', 'Connection issues', FALSE, TRUE, 60, 1),
-(95, '2022-10-05 14:30:00', 'Fortnite multiplayer problem', TRUE, TRUE, 110, 1),
+(95, '2022-10-05 14:30:00', 'Fortnite multiplayer problem', FALSE, TRUE, 110, 1),
 (94, '2022-10-06 14:30:00', 'Super Mario not loading', FALSE, TRUE, 80, 1),
-(93, '2022-10-07 14:30:00', 'Overwatch lagging', TRUE, TRUE, 95, 1),
+(93, '2022-10-07 14:30:00', 'Overwatch lagging', FALSE, TRUE, 95, 1),
 (92, '2022-10-08 14:30:00', 'Crash when starting game', FALSE, TRUE, 70, 1),
-(91, '2022-10-09 14:30:00', 'Overwatch server down', TRUE, TRUE, 85, 1),
-(90, '2022-10-10 14:30:00', 'Super Mario Bros. level bug', TRUE, TRUE, 105, 1),
+(91, '2022-10-09 14:30:00', 'Overwatch server down', FALSE, TRUE, 85, 1),
+(90, '2022-10-10 14:30:00', 'Super Mario Bros. level bug', FALSE, TRUE, 105, 1),
 (89, '2022-10-11 14:30:00', 'Need help with game controls', FALSE, TRUE, 65, 2),
-(88, '2022-10-12 14:30:00', 'Overwatch character balance issue', TRUE, TRUE, 88, 2),
+(88, '2022-10-12 14:30:00', 'Overwatch character balance issue', FALSE, TRUE, 88, 2),
 (87, '2022-10-13 14:30:00', 'Unable to complete a quest', FALSE, TRUE, 72, 2),
-(86, '2022-10-14 14:30:00', 'Pokemon Go gym bug', TRUE, TRUE, 93, 2),
+(86, '2022-10-14 14:30:00', 'Pokemon Go gym bug', FALSE, TRUE, 93, 2),
 (85, '2022-10-15 14:30:00', 'CS:GO matchmaking issue', FALSE, TRUE, 78, 2),
-(84, '2022-10-16 14:30:00', 'Super Smash Bros. bug', TRUE, TRUE, 115, 2),
+(84, '2022-10-16 14:30:00', 'Super Smash Bros. bug', FALSE, TRUE, 115, 2),
 (83, '2022-10-17 14:30:00', 'Need help with a gameplay strategy', FALSE, TRUE, 82, 2),
-(82, '2022-10-18 14:30:00', 'League of Legends champion bug', TRUE, TRUE, 97, 2),
-(81, '2022-10-19 14:30:00', 'Game of Thrones quest not working', TRUE, TRUE, 68, 2),
+(82, '2022-10-18 14:30:00', 'League of Legends champion bug', FALSE, TRUE, 97, 2),
+(81, '2022-10-19 14:30:00', 'Game of Thrones quest not working', FALSE, TRUE, 68, 2),
 (80, '2022-10-20 14:30:00', 'League of Legends login issue', FALSE, TRUE, 89, 2),
-(79, '2022-10-20 14:30:00', 'Error purchasing in-game currency', TRUE, TRUE, 100, 3),
-(78, '2022-10-20 14:30:00', 'Billing issue', TRUE, TRUE, 120, 3),
-(77, '2022-10-21 14:30:00', 'Gamer tag change', TRUE, TRUE, 90, 3),
+(79, '2022-10-20 14:30:00', 'Error purchasing in-game currency', FALSE, TRUE, 100, 3),
+(78, '2022-10-20 14:30:00', 'Billing issue', FALSE, TRUE, 120, 3),
+(77, '2022-10-21 14:30:00', 'Gamer tag change', FALSE, TRUE, 90, 3),
 (76, '2022-10-22 14:30:00', 'Payment not going through', FALSE, TRUE, 60, 3),
-(75, '2022-10-23 14:30:00', 'In-game item missing', TRUE, TRUE, 110, 3),
+(75, '2022-10-23 14:30:00', 'In-game item missing', FALSE, TRUE, 110, 3),
 (74, '2022-10-24 14:30:00', 'Subscription renewal error', FALSE, TRUE, 80, 3),
-(73, '2022-10-25 14:30:00', 'Cannot link payment method to account', TRUE, TRUE, 95, 3),
+(73, '2022-10-25 14:30:00', 'Cannot link payment method to account', FALSE, TRUE, 95, 3),
 (72, '2022-10-26 14:30:00', 'Refund request for accidental purchase', FALSE, TRUE, 70, 3),
-(71, '2022-10-27 14:30:00', 'Account suspension or ban', TRUE, TRUE, 85, 3),
-(70, '2022-10-28 14:30:00', 'Missing rewards from game event', TRUE, TRUE, 105, 3),
+(71, '2022-10-27 14:30:00', 'Account suspension or ban', FALSE, TRUE, 85, 3),
+(70, '2022-10-28 14:30:00', 'Missing rewards from game event', FALSE, TRUE, 105, 3),
 (69, '2022-10-30 14:30:00', 'Request to remove inappropriate player username', FALSE, TRUE, 65, 4),
-(68, '2022-10-30 14:30:00', 'Toxic player in chat', TRUE, TRUE, 88, 4),
+(68, '2022-10-30 14:30:00', 'Toxic player in chat', FALSE, TRUE, 88, 4),
 (67, '2022-10-31 14:30:00', 'Community event suggestion', FALSE, TRUE, 72, 4),
-(66, '2022-11-01 14:30:00', 'Reporting inappropriate forum post', TRUE, TRUE, 93, 4),
+(66, '2022-11-01 14:30:00', 'Reporting inappropriate forum post', FALSE, TRUE, 93, 4),
 (65, '2022-11-02 14:30:00', 'Abusive in-game chat behavior', FALSE, TRUE, 78, 4),
-(64, '2022-11-03 14:30:00', 'Reporting a player for cheating', TRUE, TRUE, 115, 4),
+(64, '2022-11-03 14:30:00', 'Reporting a player for cheating', FALSE, TRUE, 115, 4),
 (63, '2022-11-03 14:30:00', 'Community event feedback', FALSE, TRUE, 82, 4),
-(62, '2022-11-04 14:30:00', 'Inappropriate forum post', TRUE, TRUE, 97, 4),
-(61, '2022-11-05 14:30:00', 'Incorrect information on website', TRUE, TRUE, 68, 4),
+(62, '2022-11-04 14:30:00', 'Inappropriate forum post', FALSE, TRUE, 97, 4),
+(61, '2022-11-05 14:30:00', 'Incorrect information on website', FALSE, TRUE, 68, 4),
 (60, '2022-11-06 14:30:00', 'Esports tournament registration issue', FALSE, TRUE, 89, 4),
 (59, '2022-11-07 14:30:00', 'Setting up team for tournament', FALSE, TRUE, 89, 5),
 (58, '2022-11-08 14:30:00', 'Unable to register for upcoming tournament', FALSE, TRUE, 89, 5),
@@ -1005,7 +1021,7 @@ INSERT INTO question(user_id, create_date, title, is_solved, is_public, nr_views
 (53, '2022-11-13 14:30:00', 'Issue with prize distribution', FALSE, TRUE, 89, 5),
 (52, '2022-11-14 14:30:00', 'Team disqualification from tournament', FALSE, TRUE, 89, 5),
 (51, '2022-11-15 14:30:00', 'Streaming issues during tournamen', FALSE, TRUE, 89, 5),
-(50, '2022-11-16 14:30:00', 'Game crashes every time I try to load it', TRUE, TRUE, 89, 5),
+(50, '2022-11-16 14:30:00', 'Game crashes every time I try to load it', FALSE, TRUE, 89, 5),
 (49, '2022-11-17 14:30:00', 'Game freezes during gameplay', FALSE, TRUE, 89, 6),
 (48, '2022-11-18 14:30:00', 'Game lags frequently', FALSE, TRUE, 89, 6),
 (47, '2022-11-19 14:30:00', 'Audio issue in game', FALSE, TRUE, 89, 6),
@@ -1023,7 +1039,7 @@ INSERT INTO question(user_id, create_date, title, is_solved, is_public, nr_views
 (35, '2022-12-10 14:30:00', 'Need more diverse character designs', FALSE, TRUE, 89, 7),
 (34, '2022-12-11 14:30:00', 'Tutorial is confusing and unclear', FALSE, TRUE, 89, 7),
 (33, '2022-12-12 14:30:00', 'Map design is too simple', FALSE, TRUE, 89, 7),
-(32, '2022-12-13 14:30:00', 'Game character balance issue', TRUE, TRUE, 89, 7),
+(32, '2022-12-13 14:30:00', 'Game character balance issue', FALSE, TRUE, 89, 7),
 (31, '2022-12-14 14:30:00', 'Request for a new item', FALSE, TRUE, 89, 7),
 (30, '2022-12-15 14:30:00', 'Promotion not applying at checkout', FALSE, TRUE, 89, 7),
 (29, '2022-12-17 14:30:00', 'Event page not loading', FALSE, TRUE, 89,  8),

@@ -14,6 +14,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 
 use App\Models\User;
+use App\Models\Comment;
 use Illuminate\Http\Request;
 
 /*
@@ -100,6 +101,7 @@ Route::controller(QuestionController::class)->group(function () {
     Route::get('/api/questions', 'list');
     Route::post('/api/questions/{id}/vote', 'vote');
     Route::post('/api/questions/{id}/unvote', 'unvote'); 
+    Route::post('/api/questions/{id}/visibility', 'visibility'); 
     Route::post('/api/questions', 'store');
     Route::put('/api/questions/{id}', 'update');
 });
@@ -112,6 +114,8 @@ Route::controller(AnswerController::class)->group(function () {
     Route::delete('/api/answers/{id}', 'delete');
     Route::post('/api/answers/{id}/vote', 'vote');
     Route::post('/api/answers/{id}/unvote', 'unvote'); 
+    Route::post('/api/answers/{id}/status', 'status'); 
+
 });
 
 // Comment API
