@@ -131,6 +131,7 @@ class QuestionController extends Controller
     public function show($id)
     {
         $question = Question::findOrFail($id);
+        $question->increment('nr_views');
         return view('pages.question', ['question' => $question]);
     }
 

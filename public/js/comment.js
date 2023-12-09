@@ -64,8 +64,11 @@ function showCommentDelete() {
     
     confirm.addEventListener('click', function(){
         event.preventDefault();
-        sendAjaxRequest('delete', '/api/comments/' + id, {}, commentDeleteHandler);
-        modal.style.display = 'none';
+        if (title.textContent == 'Delete comment') {
+            sendAjaxRequest('delete', '/api/comments/' + id, {}, commentDeleteHandler);
+            modal.style.display = 'none';
+        }
+       
     });
     
 }

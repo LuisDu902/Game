@@ -78,6 +78,13 @@ function showAnswerDelete() {
     const modal = document.querySelector('#answerDeleteModal');
     modal.style.display = 'block';
 
+    const title = modal.querySelector('h2'); 
+    const content = modal.querySelector('p');
+
+    title.textContent = 'Delete answer';
+    content.textContent = 'Are you sure you want to delete this answer? All of its comments will be permanently removed. This action cannot be undone.';
+
+
     window.onclick = function(event) {
         if (event.target == modal) {
             modal.style.display = 'none';
@@ -96,7 +103,8 @@ function showAnswerDelete() {
     
     confirm.addEventListener('click', function(){
         event.preventDefault();
-        sendAjaxRequest('delete', '/api/answers/' + id, {}, answerDeleteHandler);
+        if (title.textContent == 'Delete answer')
+            sendAjaxRequest('delete', '/api/answers/' + id, {}, answerDeleteHandler);
     });
     
 }
@@ -214,7 +222,12 @@ if (answerPage) {
         event.preventDefault();
         const content = document.getElementById('content').value;
         const question = document.querySelector('.question-detail-section').getAttribute('data-id');
-        sendAjaxRequest('post', '/api/answers', {content: content, question_id: question}, createAnswerHandler);
+        if (content !== '')
+            sendAjaxRequest('post', '/api/answers', {content: content, question_id: question}, createAnswerHandler);
+        else {
+            createNotificationBox('Empty answer content', 'Please enter your answer content!', 'warning');
+            document.getElementById('content').focus();
+        }
     }
 }
 

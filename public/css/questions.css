@@ -444,3 +444,16 @@
         gap:20px   
     }
 }
+
+
+.q-lline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.q-ltags {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}

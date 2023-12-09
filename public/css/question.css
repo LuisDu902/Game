@@ -37,7 +37,7 @@
     padding-top: 10px;
 }
 
-.q-tags span {
+.q-tags span, .q-ltags span {
     color: #7C5BF0;
     background-color: #D2CFFF;
     padding: 5px 15px;
@@ -697,3 +697,4 @@
     height: auto;
     resize: none;
 }
+

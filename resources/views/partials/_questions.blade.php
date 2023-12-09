@@ -17,13 +17,15 @@
                     @else
                         <p>{{ $question->latestContent() }}</p>
                     @endif
-                    <span><a href="{{ route('profile', ['id' => $question->creator->id ]) }}" class="purple">{{ $question->creator->username }}</a> asked {{ $question->timeDifference() }} ago</span>
-                </div>
-                @if(Auth::check() and (Auth::id() == $question->creator->id))
-                    <div class="q-delete">
-                        <button class="delete-button" onclick="deleteQuestion({{ $question->id }})">Delete</button>
+                    <div class="q-lline">
+                        <div class="q-ltags">
+                            @foreach ($question->tags as $tag)
+                             <span>{{ $tag->name }}</span>
+                            @endforeach
+                        </div>
+                        <span><a href="{{ route('profile', ['id' => $question->creator->id ]) }}" class="purple">{{ $question->creator->username }}</a> asked {{ $question->timeDifference() }} ago</span>
                     </div>
-                @endif
+                </div>
             </li>
         @endforeach
     </ul>

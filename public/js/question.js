@@ -43,34 +43,6 @@ function questionListHandler() {
     }
 }
 
-/*
-function deleteQuestion(questionId){
-    if (confirm('Are you sure you want to delete this question?')) {
-        sendAjaxRequest('DELETE', '/api/questions/' + questionId + '/delete', null, function () {
-            questionDeletedHandler(questionId).apply(this);
-        });
-    }
-}
-
-function questionDeletedHandler(questionId){
-    return function () {
-        console.log('Response:', this.responseText);
-
-        if (this.status === 200) {
-            console.log('Question deleted successfully');
-            createNotificationBox('Successfully saved!', 'Question deleted successfully!');
-            const questionElement = document.getElementById(questionId);
-            if (questionElement) {
-                questionElement.remove();
-            }
-        } else {
-            console.error('Question delete failed:', this.statusText);
-        }
-    };
-}
-*/
-
-
 /* Question detail page */
 
 const questionContainer = document.querySelector('.question-detail-section');
@@ -288,7 +260,15 @@ if (newPage) {
         const content = document.getElementById('content').value;
         const chosenGame = document.getElementById('game_id').value;
         const cTags = tags.join(',');
-        sendAjaxRequest('post', '/api/questions', {title: title, content: content, tags: (cTags.length == 0 ? '0' : cTags), game: chosenGame}, createHandler);
+        if (title === '') {
+            createNotificationBox('Empty question title', 'Please enter your question title!', 'warning');
+            document.getElementById('title').focus();
+        } else if (content === '') {
+            createNotificationBox('Empty question content', 'Please enter your question content!', 'warning');
+            document.getElementById('content').focus();
+        } else {
+            sendAjaxRequest('post', '/api/questions', {title: title, content: content, tags: (cTags.length == 0 ? '0' : cTags), game: chosenGame}, createHandler);
+        }
     });
 }
 

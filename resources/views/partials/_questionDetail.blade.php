@@ -26,6 +26,14 @@
                             <ion-icon name="trash"></ion-icon>
                             <span>Delete</span>
                         </div>
+                        <div id="question-visibility">
+                            <ion-icon name="eye"></ion-icon>
+                            <span>Visibility</span>
+                            <label class="switch">
+                                <input type="checkbox">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
                     </div>
                 </div>
             @else
