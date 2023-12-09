@@ -1,16 +1,98 @@
-const questionsBtns = document.querySelectorAll('.questions-sort button');
+let tags = [];
+let games = [];
+let selectHtml = '';
+let rTags = '';
+let rGames = '';
+let validFiles = [];
+let fileNames = [];
+let count = 0;
+let deletedFiles = [];
+let currentPage = 1;
+
+const questionsBtns = document.querySelectorAll('.questions-sort>button');
 
 if (questionsBtns) {
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const selects = document.querySelectorAll('.filter-content select');
+        for (const select of selects) select.value = 0;
+    });
+
     questionsBtns.forEach(button => {
         button.addEventListener('click', function () {
             questionsBtns.forEach(btn => btn.classList.remove('selected'));
             this.classList.add('selected');
         });
     });
+
+    function removeFilterTag() {
+        if (event.target.tagName === 'ION-ICON') {
+            const tagDiv = event.target.parentElement;
+            const tagId = tagDiv.getAttribute('data-tagid');
+
+            const index = tags.indexOf(tagId);
+            if (index !== -1) {
+                tags.splice(index, 1);
+            }
+
+            tagDiv.remove();
+        }
+    }
+
+    function removeFilterGame() {
+        if (event.target.tagName === 'ION-ICON') {
+            const gameDiv = event.target.parentElement;
+            const gameId = gameDiv.getAttribute('data-gameid');
+
+            const index = games.indexOf(gameId);
+            if (index !== -1) {
+                games.splice(index, 1);
+            }
+
+            gameDiv.remove();
+        }
+    }
+
+    function addFilterTag() {
+        const tagId = event.target.value;
+        const selectedOption = event.target.options[event.target.selectedIndex];
+        const tagName = selectedOption.textContent;
+        filterTagsDiv = document.querySelector('.filter-tags');
+        if (tagId != 0) {
+            if (!tags.includes(tagId)) {
+                tags.push(tagId);
+                filterTagsDiv.innerHTML += ` <div class="filter-tag" data-tagid=${tagId}><span>${tagName}</span><ion-icon name="close-circle"></ion-icon></div>`;
+            }
+        }
+    }
+
+    function addFilterGame() {
+        const gameId = event.target.value;
+        const selectedOption = event.target.options[event.target.selectedIndex];
+        const gameName = selectedOption.textContent;
+        filterGamesDiv = document.querySelector('.filter-games');
+        if (gameId != 0) {
+            if (!games.includes(gameId)) {
+                games.push(gameId);
+                filterGamesDiv.innerHTML += ` <div class="filter-tag" data-gameid=${gameId}><span>${gameName}</span><ion-icon name="close-circle"></ion-icon></div>`;
+            }
+        }
+    }
+
+    function applyFilters() {
+        rTags = tags.join(',');
+        rGames = games.join(',');
+        const criteria = document.querySelector('.questions-sort .selected').id;
+        currentPage = 1;
+        sendAjaxRequest('get', '/api/questions?' + encodeForAjax({criteria: criteria, page: currentPage, tags: rTags, games: rGames}), {}, questionListHandler);
+        document.querySelector('.filter-content').style.display = 'none';
+        createNotificationBox('Filter applied!', 'Filters applied to questions!');
+        document.querySelector('#filter-questions').classList.add('filtered');
+    }
 }
 
 const questions_section = document.querySelector('.questions-sec');
-let currentPage = 1;
+
 
 if (questions_section) {
 
@@ -20,15 +102,15 @@ if (questions_section) {
     
     recent_btn.addEventListener('click', function(){
         currentPage = 1;
-        sendAjaxRequest('get', '/api/questions?' + encodeForAjax({criteria: 'recent', page: currentPage}), {}, questionListHandler);
+        sendAjaxRequest('get', '/api/questions?' + encodeForAjax({criteria: 'recent', page: currentPage, tags: rTags, games: rGames}), {}, questionListHandler);
     })
     popular_btn.addEventListener('click', function(){
         currentPage = 1;
-        sendAjaxRequest('get', '/api/questions?' + encodeForAjax({criteria: 'popular', page: currentPage}), {}, questionListHandler);
+        sendAjaxRequest('get', '/api/questions?' + encodeForAjax({criteria: 'popular', page: currentPage, tags: rTags, games: rGames}), {}, questionListHandler);
     })
     unanswered_btn.addEventListener('click', function(){
         currentPage = 1;
-        sendAjaxRequest('get', '/api/questions?' + encodeForAjax({criteria: 'unanswered', page: currentPage}), {}, questionListHandler);
+        sendAjaxRequest('get', '/api/questions?' + encodeForAjax({criteria: 'unanswered', page: currentPage, tags: rTags, games: rGames}), {}, questionListHandler);
     })
 
     document.addEventListener('scroll', infiniteScroll);
@@ -37,7 +119,7 @@ if (questions_section) {
         if (window.scrollY >= scrollableHeight) {
             const criteria = document.querySelector('.questions-sort .selected').id;
             currentPage++;
-            sendAjaxRequest('get', '/api/questions?' + encodeForAjax({criteria: criteria, page: currentPage}), {}, questionListHandler);
+            sendAjaxRequest('get', '/api/questions?' + encodeForAjax({criteria: criteria, page: currentPage, tags: rTags, games: rGames}), {}, questionListHandler);
         }
     }
     
@@ -50,13 +132,25 @@ function questionListHandler() {
         tmp.innerHTML = this.response;
         const lastPage = tmp.querySelector('.no-questions');
         if (currentPage == 1) {
-            const newQuestions = tmp.querySelector('ul').innerHTML;
-            table.innerHTML = newQuestions;
-            console.log(currentPage);
-            document.addEventListener('scroll', infiniteScroll);
+            const noQ = document.querySelector('.no-questions');
+            if (lastPage && table) {
+                table.outerHTML = tmp.innerHTML;
+            } else if (!lastPage && !table) {
+                const newQuestions = tmp.querySelector('ul').innerHTML;
+                noQ.outerHTML = `<ul class="questions">${newQuestions}</ul>`;
+                console.log(currentPage);
+                document.addEventListener('scroll', infiniteScroll);
+            }
+            else if (table){
+                const newQuestions = tmp.querySelector('ul').innerHTML;
+                table.innerHTML = newQuestions;
+                console.log(currentPage);
+                document.addEventListener('scroll', infiniteScroll);
+            }
+            
             return;
         }
-        if (lastPage) {
+        if (lastPage && currentPage > 1) {
             currentPage--;
         } else {
             const newQuestions = tmp.querySelector('ul').innerHTML;
@@ -189,18 +283,10 @@ function downVoteHandler(){
     }
 }
 
-
-
 /* Create question page */
 
 const newPage = document.querySelector('.new-question-form form');
 
-let tags = [];
-let selectHtml = '';
-let validFiles = [];
-let fileNames = [];
-let count = 0;
-let deletedFiles = [];
 
 if (newPage) {
     
@@ -384,6 +470,7 @@ function removeTag(event) {
         tagDiv.remove();
     }
 }
+
 
 function removeImage(event) {
     if (event.target.tagName === 'ION-ICON') {
@@ -645,5 +732,21 @@ function visibilityHandler() {
             createNotificationBox('Sucessfully updated!', 'Question visibility set to private!');
         }
 
+    }
+}
+
+
+
+function removeFilterTag() {
+    if (event.target.tagName === 'ION-ICON') {
+        const tagDiv = event.target.parentElement;
+        const tagId = tagDiv.getAttribute('data-tagid');
+
+        const index = tags.indexOf(tagId);
+        if (index !== -1) {
+            tags.splice(index, 1);
+        }
+
+        tagDiv.remove();
     }
 }

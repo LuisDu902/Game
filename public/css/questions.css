@@ -209,14 +209,14 @@
   align-items: center;
 }
 
-.new-tags {
+.new-tags, .filter-tags, .filter-games, .apply-btn {
   grid-column: span 2;
   display: flex;
   column-gap: 20px;
   flex-wrap: wrap;
 }
 
-.new-tag {
+.new-tag, .filter-tag {
   display: flex;
   gap: 10px;
   align-items: center;
@@ -273,7 +273,7 @@
   color: white;
 }
 
-.new-tag {
+.new-tag, .filter-tag {
   position: relative;
 }
 
@@ -353,7 +353,7 @@
 .question-files .close,
 .new-tag ion-icon,
 .answer-files .close,
-.edit-a-file .close {
+.edit-a-file .close, .filter-tag ion-icon {
   position: absolute;
   top: -10px;
   right: -10px;
@@ -506,4 +506,77 @@
     background-color: #00BF57;
     padding: 3px 10px;
     border-radius: 5px;
+}
+
+#filter-questions {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: white;
+  border-radius: 5px;
+  padding: 0 25px;
+  border: 2px solid #7c5bf0;
+  color: #7c5bf0;
+  transition: all 400ms ease;
+}
+
+#filter-questions ion-icon {
+  transition: all 400ms ease;
+}
+
+#filter-questions:hover {
+  color: white;
+  background-color: #7c5bf0;
+  cursor: pointer;
+}
+
+#filter-questions:hover ion-icon {
+  color: white;
+}
+
+.filter-content {
+    position: absolute;
+    min-width: 200px;
+    display: none;
+    grid-template-columns: 80px 400px;
+    grid-template-rows: repeat(4, auto);
+    margin-top: 10px;
+    z-index: 1;
+    background-color: white;
+    box-shadow: 0 8px 30px 0 #32358214;
+    border: 1px solid #E6E7F3;
+    border-radius: 5px;
+    padding: 20px;
+    row-gap: 20px;
+    column-gap: 0;
+    align-items: center;
+}
+
+.filter-content select {
+  background-color: #fafafa;
+}
+
+.apply-btn {
+  margin: 0 auto;
+  text-align: center;
+  display: block;
+}
+
+.filter-tag {
+  color: deeppink;
+  background-color: rgba(218, 112, 214, 0.563);
+  border: 1px solid deeppink;
+}
+
+.filter-tags, .filter-games {
+  row-gap: 10px;
+}
+
+.filtered {
+  background-color: #7c5bf0 !important;
+}
+
+.filtered * {
+  color: white !important;
 }

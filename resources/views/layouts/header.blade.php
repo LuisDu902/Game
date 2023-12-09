@@ -6,8 +6,7 @@
         </a>
         <ul class="nav-links">
             <li><a href="{{ route('questions') }}">Questions</a></li>
-            <li><a href="{{ route('categories') }}">Game
-                    Categories</a></li>
+            <li><a href="{{ route('categories') }}">Game Categories</a></li>
         </ul>
 
         <form class="search-box" method="GET" action="{{ route('questions.search') }}">
