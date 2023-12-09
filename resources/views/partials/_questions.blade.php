@@ -33,7 +33,6 @@
             </li>
         @endforeach
     </ul>
-    {{ $questions->links() }}
 @else
     <div class="no-questions">
         <img class="no-questions-image" src="{{ asset('images/pikachuConfused.png') }}" alt="Psyduck Image">

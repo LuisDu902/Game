@@ -10,34 +10,61 @@ if (questionsBtns) {
 }
 
 const questions_section = document.querySelector('.questions-sec');
+let currentPage = 1;
 
 if (questions_section) {
+
     const recent_btn = document.querySelector('#recent');
     const popular_btn = document.querySelector('#popular');
     const unanswered_btn = document.querySelector('#unanswered');
-
+    
     recent_btn.addEventListener('click', function(){
-        sendAjaxRequest('get', '/api/questions?' + encodeForAjax({criteria: 'recent'}), {}, questionListHandler);
+        currentPage = 1;
+        sendAjaxRequest('get', '/api/questions?' + encodeForAjax({criteria: 'recent', page: currentPage}), {}, questionListHandler);
     })
     popular_btn.addEventListener('click', function(){
-        sendAjaxRequest('get', '/api/questions?' + encodeForAjax({criteria: 'popular'}), {}, questionListHandler);
+        currentPage = 1;
+        sendAjaxRequest('get', '/api/questions?' + encodeForAjax({criteria: 'popular', page: currentPage}), {}, questionListHandler);
     })
     unanswered_btn.addEventListener('click', function(){
-        sendAjaxRequest('get', '/api/questions?' + encodeForAjax({criteria: 'unanswered'}), {}, questionListHandler);
+        currentPage = 1;
+        sendAjaxRequest('get', '/api/questions?' + encodeForAjax({criteria: 'unanswered', page: currentPage}), {}, questionListHandler);
     })
+
+    document.addEventListener('scroll', infiniteScroll);
+    function infiniteScroll(){
+        const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
+        if (window.scrollY >= scrollableHeight) {
+            const criteria = document.querySelector('.questions-sort .selected').id;
+            currentPage++;
+            sendAjaxRequest('get', '/api/questions?' + encodeForAjax({criteria: criteria, page: currentPage}), {}, questionListHandler);
+        }
+    }
+    
 }
 
 function questionListHandler() {
     if (this.status === 200) {
-        const table = document.querySelector('.questions-list');
-        table.innerHTML = this.response;
-        const links = document.querySelectorAll('.custom-pagination a');
-        for (const link of links){
-            link.addEventListener('click', function(){
-                event.preventDefault();
-                sendAjaxRequest('get', link.href, {}, questionListHandler);
-            });
+        const table = document.querySelector('.questions');
+        var tmp = document.createElement('div');
+        tmp.innerHTML = this.response;
+        const lastPage = tmp.querySelector('.no-questions');
+        if (currentPage == 1) {
+            const newQuestions = tmp.querySelector('ul').innerHTML;
+            table.innerHTML = newQuestions;
+            console.log(currentPage);
+            document.addEventListener('scroll', infiniteScroll);
+            return;
         }
+        if (lastPage) {
+            currentPage--;
+        } else {
+            const newQuestions = tmp.querySelector('ul').innerHTML;
+            table.innerHTML += newQuestions;
+            console.log(currentPage);
+            document.addEventListener('scroll', infiniteScroll);
+        }
+        
     } else {
         console.error('Question list failed:', this.statusText);
     }
