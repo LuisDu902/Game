@@ -1,10 +1,14 @@
 @if ($questions->count() > 0)
     <ul class="questions">
         @foreach($questions as $question)
-            <li class="question-card"  id={{ $question->id }}>
+            <li class="question-card"  id="{{ $question->id }}">
                 <div class="q-stats">
                     <span>{{ $question->votes }} votes</span>
-                    <span>{{ $question->answers->count() }} answers</span>
+                    @if ($question->is_solved)
+                        <span class="solved-question"> <strong>✔{{ $question->answers->count() }} answers </strong></span>
+                    @else
+                        <span> {{ $question->answers->count() }} answers</span>
+                    @endif
                     <span>{{ $question->nr_views }} views</span>
                 </div>
                 <div class="q-content">

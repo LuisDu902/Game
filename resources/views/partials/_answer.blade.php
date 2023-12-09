@@ -61,6 +61,19 @@
                                 <ion-icon name="flag"></ion-icon>
                                 <span>Report</span>
                             </div>
+                            @if (Auth::user()->id === $answer->question->user_id)
+                                @if ($answer->is_correct)
+                                    <div id="mark-answer" onclick="markAsWrong()">
+                                        <ion-icon name="close-circle"></ion-icon>
+                                        <span>Wrong</span>
+                                    </div>
+                                @else 
+                                    <div id="mark-answer" onclick="markAsCorrect()">
+                                        <ion-icon name="checkmark-circle"></ion-icon>
+                                        <span>Correct</span>
+                                    </div>
+                                @endif
+                            @endif
                         </div>
                     </div>
                 @endif
@@ -85,6 +98,9 @@
             <li> <a href="{{ route('profile', ['id' => $answer->creator->id ]) }}" class="purple">{{ $answer->creator->name }}</a> answered {{ $answer->timeDifference() }} ago</li>
             <li class="a-modi"> Modified {{ $answer->lastModification() }} ago </li>
             <li class="comment-count"> {{ $answer->comments->count() }} comments </li>
+            @if ($answer->is_correct)
+                <li class="correct-answer">CORRECT ANSWER ✔</li>
+            @endif
         </ul>
         <div class="answer-comments">
             <ul class="answer-comment-list">

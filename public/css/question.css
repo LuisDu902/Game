@@ -715,3 +715,9 @@ svg {
   height: auto;
   resize: none;
 }
+
+
+.correct-answer {
+    color: #7c5bf0;
+    font-weight: 600;
+}

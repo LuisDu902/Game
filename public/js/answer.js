@@ -505,3 +505,41 @@ function editedAnswerHandler() {
     createNotificationBox('Answer edited!', 'Answer was edited successfully!');
 
 }
+
+function markAsCorrect() {
+    const id = event.target.closest('.answer-details').getAttribute('data-id');
+    sendAjaxRequest('post', '/api/answers/' + id + '/status', {status: 'correct'}, correctAnswerHander);
+}
+
+
+function markAsWrong() {
+    const id = event.target.closest('.answer-details').getAttribute('data-id');
+    sendAjaxRequest('post', '/api/answers/' + id + '/status', {status: 'wrong'}, correctAnswerHander);
+}
+
+function correctAnswerHander() {
+    if (this.status === 200) {
+        const status = JSON.parse(this.responseText).status;
+        const id = JSON.parse(this.responseText).id;
+        const answer = document.querySelector(`#answer` + id);
+        const btn = answer.querySelector('#mark-answer');
+        if (status == 'correct') {
+            const list = answer.querySelector('.answer-content ul');
+            list.innerHTML += `<li class="correct-answer">CORRECT ANSWER ✔</li>`;
+            btn.outerHTML = `<div id="mark-answer" onclick="markAsWrong()">
+                    <ion-icon name="close-circle"></ion-icon>
+                    <span>Wrong</span>
+                </div>`;
+            createNotificationBox('Correct answer!', 'The answer was marked as correct!');
+        } else {
+            const elem = answer.querySelector('.answer-content .correct-answer');
+            elem.remove();
+            btn.outerHTML = `<div id="mark-answer" onclick="markAsCorrect()">
+                    <ion-icon name="checkmark-circle"></ion-icon>
+                    <span>Correct</span>
+                </div>`;
+            createNotificationBox('Wrong answer!', 'The answer was marked as incorrect!');
+
+        }
+    }
+}
