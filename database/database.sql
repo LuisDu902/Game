@@ -507,6 +507,26 @@ BEFORE INSERT ON report
 FOR EACH ROW
 EXECUTE FUNCTION prevent_self_reporting_trigger_function();
 
+-- trigger to change the deleted user username to anonymous
+
+CREATE OR REPLACE FUNCTION anonymous_user()
+RETURNS TRIGGER AS $$
+BEGIN
+        UPDATE question SET user_id=101 WHERE user_id = OLD.id;
+        UPDATE answer SET user_id=101 WHERE user_id = OLD.id;
+        UPDATE comment SET user_id=101 WHERE user_id = OLD.id;
+
+        DELETE FROM users WHERE id = OLD.id;
+
+        RETURN NULL;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER anonymous_user
+BEFORE DELETE ON users
+FOR EACH ROW
+EXECUTE FUNCTION anonymous_user();
+
 -----------
 -- Create transactions
 -----------
@@ -832,7 +852,8 @@ INSERT INTO users(name, username, email, password, description, rank, is_admin, 
 ('Brooklyn Lewis', 'brooklynlewis', 'brooklynlewis@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
 ('Jacob Green', 'jacobgreen', 'jacobgreen@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
 ('Chloe Hall', 'chloehall', 'chloehall@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, 'nOdv16qJWwW4sTvMP4eJxeKLmshoNwwf5MDhrTLk.jpg'),
-('Miala Davis', 'mialadavis', 'mialadavis@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Gold', False, False, NULL);
+('Miala Davis', 'mialadavis', 'mialadavis@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Gold', False, False, NULL),
+('Null', 'Anonymous', 'Null', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Null', 'Bronze', False, False, NULL);
 
 INSERT INTO badge(name) VALUES
 ('Best_comment'),
