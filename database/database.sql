@@ -507,18 +507,20 @@ BEFORE INSERT ON report
 FOR EACH ROW
 EXECUTE FUNCTION prevent_self_reporting_trigger_function();
 
+--Trigger 13
+
 -- trigger to change the deleted user username to anonymous
 
 CREATE OR REPLACE FUNCTION anonymous_user()
 RETURNS TRIGGER AS $$
 BEGIN
-        UPDATE question SET user_id=101 WHERE user_id = OLD.id;
-        UPDATE answer SET user_id=101 WHERE user_id = OLD.id;
-        UPDATE comment SET user_id=101 WHERE user_id = OLD.id;
+        UPDATE question SET user_id=1 WHERE user_id = OLD.id;
+        UPDATE answer SET user_id=1 WHERE user_id = OLD.id;
+        UPDATE comment SET user_id=1 WHERE user_id = OLD.id;
+        UPDATE vote SET user_id=1 WHERE user_id = OLD.id;
+        UPDATE report SET reporter_id=1 WHERE reporter_id = OLD.id;
 
-        DELETE FROM users WHERE id = OLD.id;
-
-        RETURN NULL;
+        RETURN OLD;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -753,6 +755,7 @@ CREATE INDEX search_user ON users USING GIN (tsvectors);
 
 ---POPULATE
 INSERT INTO users(name, username, email, password, description, rank, is_admin, is_banned, profile_image) VALUES
+('Anonymous', 'Anonymous', 'Null', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Null', 'Bronze', False, False, NULL),
 ('John Doe', 'johndoe', 'johndoe@example.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Some description', 'Bronze', True, False, '090PJ3bfsG7io3zBEURDsdxYNbIjrsdXoyUbMNgz.jpg'),
 ('Alice Johnson', 'alicej', 'alicejohnson@example.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Another description', 'Bronze', False, True, NULL),
 ('Michael Smith', 'mikesmith', 'mikesmith@example.com', '5d41402abc4b2a76b9719d911017c592', 'Description for Michael', 'Gold', True, False, NULL),
@@ -852,8 +855,7 @@ INSERT INTO users(name, username, email, password, description, rank, is_admin, 
 ('Brooklyn Lewis', 'brooklynlewis', 'brooklynlewis@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
 ('Jacob Green', 'jacobgreen', 'jacobgreen@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
 ('Chloe Hall', 'chloehall', 'chloehall@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, 'nOdv16qJWwW4sTvMP4eJxeKLmshoNwwf5MDhrTLk.jpg'),
-('Miala Davis', 'mialadavis', 'mialadavis@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Gold', False, False, NULL),
-('Null', 'Anonymous', 'Null', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Null', 'Bronze', False, False, NULL);
+('Miala Davis', 'mialadavis', 'mialadavis@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Gold', False, False, NULL);
 
 INSERT INTO badge(name) VALUES
 ('Best_comment'),
@@ -1059,7 +1061,7 @@ INSERT INTO question(user_id, create_date, title, is_solved, is_public, nr_views
 
 
 INSERT INTO answer(user_id, question_id, is_public) VALUES
-(1, 1, TRUE),
+(2, 1, TRUE),
 (2, 1, TRUE),
 (3, 3, TRUE),
 (4, 4, TRUE),
@@ -1313,16 +1315,16 @@ INSERT INTO notification(date, viewed, user_id, notification_type, question_id, 
 ('2023-03-01 16:00:00', FALSE, 90, 'Report_notification', NULL, NULL, NULL, NULL, 10, NULL, NULL),
 ('2023-03-01 16:10:00', FALSE, 89, 'Report_notification', NULL, NULL, NULL, NULL, 11, NULL, NULL),
 ('2023-03-01 16:20:00', TRUE, 88, 'Report_notification', NULL, NULL, NULL, NULL, 12, NULL, NULL),
-('2023-03-01 16:30:00', TRUE, 1, 'Report_notification', NULL, NULL, NULL, NULL, 13, NULL, NULL),
-('2023-03-01 16:40:00', TRUE, 2, 'Report_notification', NULL, NULL, NULL, NULL, 14, NULL, NULL),
+('2023-03-01 16:30:00', TRUE, 2, 'Report_notification', NULL, NULL, NULL, NULL, 13, NULL, NULL),
+('2023-03-01 16:40:00', TRUE, 3, 'Report_notification', NULL, NULL, NULL, NULL, 14, NULL, NULL),
 ('2023-03-01 16:50:00', FALSE, 3, 'Report_notification', NULL, NULL, NULL, NULL, 15, NULL, NULL),
 ('2023-03-01 17:00:00', TRUE, 4, 'Report_notification', NULL, NULL, NULL, NULL, 16, NULL, NULL),
 ('2023-03-01 17:10:00', TRUE, 5, 'Report_notification', NULL, NULL, NULL, NULL, 17, NULL, NULL),
 ('2023-03-01 17:20:00', TRUE, 99, 'Report_notification', NULL, NULL, NULL, NULL, 18, NULL, NULL),
 ('2023-03-01 17:30:00', TRUE, 98, 'Report_notification', NULL, NULL, NULL, NULL, 19, NULL, NULL),
 ('2023-03-01 17:40:00', TRUE, 97, 'Report_notification', NULL, NULL, NULL, NULL, 20, NULL, NULL),
-('2023-03-02 17:50:00', TRUE, 1, 'Question_notification', 60, NULL, NULL, NULL, NULL, NULL, NULL),
-('2023-03-02 18:00:00', FALSE, 2, 'Question_notification', 61, NULL, NULL, NULL, NULL, NULL, NULL),
+('2023-03-02 17:50:00', TRUE, 2, 'Question_notification', 60, NULL, NULL, NULL, NULL, NULL, NULL),
+('2023-03-02 18:00:00', FALSE, 3, 'Question_notification', 61, NULL, NULL, NULL, NULL, NULL, NULL),
 ('2023-03-02 18:10:00', TRUE, 3, 'Question_notification', 62, NULL, NULL, NULL, NULL, NULL, NULL),
 ('2023-03-02 18:20:00', TRUE, 4, 'Question_notification', 63, NULL, NULL, NULL, NULL, NULL, NULL),
 ('2023-03-02 18:30:00', FALSE, 5, 'Question_notification', 64, NULL, NULL, NULL, NULL, NULL, NULL),
@@ -1373,8 +1375,8 @@ INSERT INTO notification(date, viewed, user_id, notification_type, question_id, 
 ('2023-02-01 14:30:17', FALSE, 73, 'Vote_notification', NULL, NULL, NULL, 18, NULL, NULL, NULL),
 ('2023-02-01 14:30:18', TRUE, 72, 'Vote_notification', NULL, NULL, NULL, 19, NULL, NULL, NULL),
 ('2023-02-01 14:30:19', FALSE, 71, 'Vote_notification', NULL, NULL, NULL, 20, NULL, NULL, NULL),
-('2023-02-02 14:30:00', TRUE, 1, 'Vote_notification', NULL, NULL, NULL, 21, NULL, NULL, NULL),
-('2023-02-02 14:30:01', FALSE, 2, 'Vote_notification', NULL, NULL, NULL, 22, NULL, NULL, NULL),
+('2023-02-02 14:30:00', TRUE, 2, 'Vote_notification', NULL, NULL, NULL, 21, NULL, NULL, NULL),
+('2023-02-02 14:30:01', FALSE, 3, 'Vote_notification', NULL, NULL, NULL, 22, NULL, NULL, NULL),
 ('2023-02-02 14:30:02', TRUE, 3, 'Vote_notification', NULL, NULL, NULL, 23, NULL, NULL, NULL),
 ('2023-02-02 14:30:03', FALSE, 4, 'Vote_notification', NULL, NULL, NULL, 24, NULL, NULL, NULL),
 ('2023-02-02 14:30:04', TRUE, 5, 'Vote_notification', NULL, NULL, NULL, 25, NULL, NULL, NULL),
@@ -1418,9 +1420,9 @@ INSERT INTO notification(date, viewed, user_id, notification_type, question_id, 
 ('2023-03-02 18:10:00', FALSE, 92, 'Rank_notification', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 ('2023-03-02 18:20:00', FALSE, 96, 'Rank_notification', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 ('2023-03-02 18:30:00', FALSE, 100, 'Rank_notification', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-('2023-03-03 18:40:00', FALSE, 1, 'Badge_notification', NULL, NULL, NULL, NULL, NULL, 1, NULL),
-('2023-03-03 19:50:00', FALSE, 2, 'Badge_notification', NULL, NULL, NULL, NULL, NULL, 2, NULL),
-('2023-03-03 20:00:00', FALSE, 2, 'Badge_notification', NULL, NULL, NULL, NULL, NULL, 3, NULL),
+('2023-03-03 18:40:00', FALSE, 2, 'Badge_notification', NULL, NULL, NULL, NULL, NULL, 1, NULL),
+('2023-03-03 19:50:00', FALSE, 3, 'Badge_notification', NULL, NULL, NULL, NULL, NULL, 2, NULL),
+('2023-03-03 20:00:00', FALSE, 3, 'Badge_notification', NULL, NULL, NULL, NULL, NULL, 3, NULL),
 ('2023-03-04 15:10:00', FALSE, 5, 'Badge_notification', NULL, NULL, NULL, NULL, NULL, 4, NULL),
 ('2023-03-04 19:30:00', FALSE, 10, 'Badge_notification', NULL, NULL, NULL, NULL, NULL, 5, NULL),
 ('2023-03-05 17:50:00', FALSE, 20, 'Badge_notification', NULL, NULL, NULL, NULL, NULL, 1, NULL),
@@ -1435,9 +1437,9 @@ INSERT INTO notification(date, viewed, user_id, notification_type, question_id, 
 ('2023-04-06 22:10:00', FALSE, 92, 'Badge_notification', NULL, NULL, NULL, NULL, NULL, 2, NULL);
 
 INSERT INTO user_badge(user_id, badge_id) VALUES
-(1, 1),
-(1, 2),
 (2, 1),
+(2, 2),
+(3, 1),
 (5, 2),
 (10, 1),
 (10, 3),
@@ -1452,22 +1454,22 @@ INSERT INTO user_badge(user_id, badge_id) VALUES
 (92, 2);
 
 INSERT INTO game_member(user_id, game_id) VALUES
-(1, 1),
-(1, 2),
-(1, 5),
-(1, 6),
-(1, 10),
-(1, 46),
-(1, 17),
-(1, 18),
+(2, 1),
+(2, 2),
+(2, 5),
+(2, 6),
 (2, 10),
-(2, 20),
-(2, 52),
-(2, 65),
-(2, 11),
-(2, 4),
+(2, 46),
 (2, 17),
-(2, 19),
+(2, 18),
+(15, 10),
+(15, 20),
+(15, 52),
+(15, 65),
+(15, 11),
+(15, 4),
+(15, 17),
+(15, 19),
 (3, 45),
 (3, 87),
 (3, 54),
