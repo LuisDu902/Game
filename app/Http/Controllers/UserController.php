@@ -121,4 +121,20 @@ class UserController extends Controller
         return view('pages.userAnswers', ['user' => $user, 'answers' => $answers]);
     }
 
+    public function delete(Request $request, $id) {
+
+        $user = User::find($id);
+        
+        if (!$user) {
+            abort(404);
+        }
+
+        $this->authorize('delete', [auth()->user(), $user]);
+
+        $user->delete();
+
+
+        return response()->json(['id' => $user->id ]); 
+    }
+
 }
