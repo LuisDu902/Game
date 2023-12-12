@@ -108,6 +108,27 @@
     padding-top: 30px;
 }
 
+.categories-group .categories-action{
+    display: flex;
+    justify-content: space-between;
+    gap: 20px; /* Adjust the gap between the title and the button */
+}
+
+.categories-section .categories-group .categories-action #newQuestion {
+    font-size: 18px;
+    text-align: center;
+    background-color: #d2cfff;
+    width: 300px;
+    padding: 10px 0;
+    color: #7c5bf0;
+    border-radius: 5px;
+    transition: all 400ms ease;
+}
+
+.categories-section .categories-group .categories-action #newQuestion:hover {
+    background-color: #7c5bf0;
+    color: white;
+}
 
 @media (max-width: 1200px) {
     .category-card, .game-card {
