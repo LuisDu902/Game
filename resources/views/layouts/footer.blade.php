@@ -35,9 +35,9 @@
             <li> <ion-icon name="chevron-forward-outline"></ion-icon>
                 <a href="{{ route('faq') }}">FAQ</a> </li>
             <li> <ion-icon name="chevron-forward-outline"></ion-icon>
-                <a href="{{ route('users') }}">About us</a> </li>
+                <a href="{{ route('about') }}">About us</a> </li>
             <li> <ion-icon name="chevron-forward-outline"></ion-icon>
-                <a href="{{ route('categories') }}">Contact us</a> </li>
+                <a href="{{ route('contact') }}">Contact us</a> </li>
         </ul>
     </div>
     <div class="footer-col follow">
