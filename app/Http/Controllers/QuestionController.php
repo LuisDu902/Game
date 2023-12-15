@@ -22,29 +22,14 @@ class QuestionController extends Controller
         $questions = Question::where('is_public', true)
             ->orderBy('create_date', 'desc')
             ->paginate(10);
-        $categories = GameCategory::all();
-        $tags = Tag::all();
-        return view('pages.questions', ['questions' => $questions, 'categories' => $categories, 'tags' => $tags]);
+        return view('pages.questions', ['questions' => $questions]);
     }
 
     public function list(Request $request) 
     {
         $criteria = $request->input('criteria', '');
-        $tags = explode(',', $request->tags);
-        $games = explode(',', $request->games);
-
         $query = Question::where('is_public', true);
-        
-        if (!empty($request->games)) {
-            $query->whereIn('game_id', $games);
-        }
-        
-        if (!empty($request->tags)) {
-            $query->whereHas('tags', function ($q) use ($tags) {
-                $q->whereIn('tag_id', $tags);
-            });
-        }
-
+    
         switch ($criteria) {
             case 'popular':
                 $query->orderBy('votes', 'desc');
@@ -59,6 +44,18 @@ class QuestionController extends Controller
         }
         
         $questions = $query->paginate(10);
+        
+        $questions->getCollection()->transform(function ($question) {
+            $question['time'] = $question->timeDifference();
+            $question['answers'] = $question->answers; 
+            $question['content'] = $question->latestContent(); 
+            $question['creator'] = $question->creator; 
+            return $question;
+        });
+
+        $questions->appends([
+           'criteria' => $criteria
+        ]);
 
         return view('partials._questions', compact('questions'))->render();
     }
@@ -134,7 +131,6 @@ class QuestionController extends Controller
     public function show($id)
     {
         $question = Question::findOrFail($id);
-        $question->increment('nr_views');
         return view('pages.question', ['question' => $question]);
     }
 
@@ -198,6 +194,12 @@ class QuestionController extends Controller
         $question = Question::find($id);
         $this->authorize('delete', $question);
 
+        $answers = $question->answers;
+
+        for($i=0; $i<count($answers); $i++){
+            $answers[$i]->delete();
+        }
+
         $question->delete();
 
         return redirect('/questions')->with('delete', 'Question successfully deleted!');
@@ -236,67 +238,67 @@ class QuestionController extends Controller
         return response()->json(['action' => 'unvote']);
     }
 
-    public function activity(Request $request, $id) {
+    public function activity($id) {
         $question = Question::findOrFail($id);
-        $page = $request->page ?? 1;
-        $questionContents = $question->versionContent()
-            ->select('content', 'date')
-            ->get()
-            ->map(function ($content) use ($question) {
-                return [
-                    'content' => $content->content,
-                    'date' => $content->date,
-                    'user' => $question->creator->name,
-                    'type' => 'Question_content',
-                    'action' => ($content->date == $question->versionContent()->orderBy('date')->first()->date) ? 'created' : 'edited',
-                    'span' => 'Question',
-                    'user_id' => $question->user_id
-                ];
-            });
-    
-        $answerContents = [];
-        $answers = $question->answers()->with('versionContent')->get();
-        foreach ($answers as $answer) {
-            foreach ($answer->versionContent as $content) {
-                $answerContents[] = [
+        
+        $answers = $question->answers;
+        
+        $all_contents = [];
+
+        $question_content = $question->versionContent;
+
+        $first_content = $question->versionContent()
+                ->orderBy('date')
+                ->first()->date;
+        foreach($question_content as $content) {
+            $all_contents[] = [
+                'content' => $content->content,
+                'date' => $content->date,
+                'user' => $question->creator->name,
+                'type' => 'Question_content',
+                'action' => ($content->date == $first_content) ? 'Created' : 'Edited'    
+            ];
+        }
+
+        foreach($answers as $answer) {
+            $answer_content = $answer->versionContent;
+            $first_content = $answer->versionContent()
+                ->orderBy('date')
+                ->first()->date;
+            foreach($answer_content as $content) {
+                $all_contents[] = [
                     'content' => $content->content,
                     'date' => $content->date,
                     'user' => $answer->creator->name,
                     'type' => 'Answer_content',
-                    'action' => ($content->date == $answer->versionContent()->orderBy('date')->first()->date) ? 'created' : 'edited',
-                    'span' => 'Answer #' . $answer->id,
-                    'user_id' => $answer->user_id
+                    'action' => ($content->date == $first_content) ? 'Created' : 'Edited'  
                 ];
             }
-            foreach ($answer->comments as $comment) {
-                foreach ($comment->versionContent as $content) {
-                    $answerContents[] = [
+            $comments = $answer->comments;
+            foreach($comments as $comment) {
+                $comment_content = $comment->versionContent;
+                $first_content = $comment->versionContent()
+                    ->orderBy('date')
+                    ->first()->date;
+                foreach($comment_content as $content) {
+                    $all_contents[] = [
                         'content' => $content->content,
                         'date' => $content->date,
                         'user' => $comment->creator->name,
                         'type' => 'Comment_content',
-                        'action' => ($content->date == $comment->versionContent()->orderBy('date')->first()->date) ? 'created' : 'edited',
-                        'span' => 'Comment #' . $comment->id,
-                        'user_id' => $comment->user_id
+                        'action' => ($content->date == $first_content) ? 'Created' : 'Edited' 
                     ];
                 }
+                $comments = $answer->comments;
+                
             }
         }
-    
-        $allContents = collect($questionContents)->merge($answerContents)->sortByDesc('date');
-    
-        $paginatedContents = $allContents->forPage($page, 5); 
-    
-        return view('pages.activity', ['question' => $question, 'contents' => $paginatedContents]);
-    }
-    
 
-    function visibility(Request $request, $id) {
-        $question = Question::findOrFail($id);
-        $visibility = $request->visibility == 'public' ? TRUE : FALSE;
-        $question->is_public = $visibility; 
-        $question->save();
-        return response()->json(['visibility' => $request->visibility]);
+        usort($all_contents, function ($a, $b) {
+            return strtotime($b['date']) - strtotime($a['date']);
+        });
+        
+        return view('pages.activity', ['question'=> $question, 'contents' => $all_contents]);
     }
 
 }

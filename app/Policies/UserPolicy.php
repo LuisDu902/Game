@@ -9,8 +9,6 @@ use Illuminate\Support\Facades\Auth;
 
 class UserPolicy {
 
-    use HandlesAuthorization;
-
     public function edit(User $user, User $targetUser)
     {
         return $user->id === $targetUser->id;
@@ -21,10 +19,4 @@ class UserPolicy {
         return $user->is_admin && !$user->is_banned;
     }
 
-    public function delete(User $user_logged, User $user)
-    {
-
-        if($user_logged->is_admin) return true;
-        return $user_logged->id === $user->id;
-    }
 }

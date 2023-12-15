@@ -130,4 +130,9 @@ class Question extends Model
         $modifiedAt = $this->lastDate();
         return $now->diffForHumans($modifiedAt, true);
     }
+
+    public function history() {
+
+    }
+
 }

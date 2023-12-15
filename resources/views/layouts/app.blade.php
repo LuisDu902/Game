@@ -47,8 +47,6 @@
             src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
             defer></script>
         </script>
-
-        <script src="https://kit.fontawesome.com/730d8297d1.js" crossorigin="anonymous"></script>
        
     </head>
     <body>

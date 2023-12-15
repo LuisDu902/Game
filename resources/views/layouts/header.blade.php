@@ -6,7 +6,8 @@
         </a>
         <ul class="nav-links">
             <li><a href="{{ route('questions') }}">Questions</a></li>
-            <li><a href="{{ route('categories') }}">Game Categories</a></li>
+            <li><a href="{{ route('categories') }}">Game
+                    Categories</a></li>
         </ul>
 
         <form class="search-box" method="GET" action="{{ route('questions.search') }}">
@@ -44,8 +45,12 @@
                         <span> My Questions</span>
                     </a>
                     <a href="{{ route('users_answers', ['id' => Auth::user()->id]) }}">
-                    <ion-icon name="book"></ion-icon>
+                        <ion-icon name="book"></ion-icon>
                         <span> My Answers</span>
+                    </a>
+                    <a href="{{ route('users_notifications', ['id' => Auth::user()->id]) }}">
+                        <ion-icon name="notifications"></ion-icon>
+                        <span> Notifications</span>
                     </a>
                     <a href="{{ url('/logout') }}">
                         <ion-icon name="log-out"></ion-icon>

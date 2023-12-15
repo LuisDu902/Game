@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Question;
+use App\Models\Notification;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -121,7 +122,7 @@ class UserController extends Controller
         return view('pages.userAnswers', ['user' => $user, 'answers' => $answers]);
     }
 
-    public function delete(Request $request, $id) {
+    public function showUserNotifications($id) {
 
         $user = User::find($id);
         
@@ -129,12 +130,7 @@ class UserController extends Controller
             abort(404);
         }
 
-        $this->authorize('delete', [auth()->user(), $user]);
-
-        $user->delete();
-
-
-        return response()->json(['id' => $user->id ]); 
+        $notifications = $user->notifications; 
+        return view('pages.userNotifications', ['user' => $user, 'notifications' => $notifications]);
     }
-
 }

@@ -12,7 +12,6 @@ class Game extends Model
     public $timestamps  = false;
 
     protected $table = 'game';
-
     public function members()
     {
         return $this->belongsToMany(User::class, 'game_member', 'game_id', 'user_id');

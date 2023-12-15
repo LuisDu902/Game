@@ -73,8 +73,8 @@ class User extends Authenticatable
         return $this->hasMany(Answer::class);
     }
 
-    public function comments() : HasMany {
-        return $this->hasMany(Comment::class);
+    public function notifications() : HasMany {
+        return $this->hasMany(Notification::class);
     }
 
     public function badges(): BelongsToMany

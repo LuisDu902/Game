@@ -79,10 +79,12 @@ p, .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6  {
   color: var(--dark-purple);
 }
 
+
+
 .notification-box {
-    position: fixed;
+    position: absolute;
     right: 3rem;
-    top: 2rem;
+    top: 100px;
     display: flex;
     background-color: white;
     box-shadow: 0 8px 30px 0 rgba(50,53, 130, 0.08);

@@ -128,48 +128,5 @@ function userListHandler() {
         console.error('User list failed:', this.statusText);
     }
 }
-
-
-function showUserDelete() {
-    const modal = document.querySelector('#userDeleteModal');
-    modal.style.display = 'block';
-
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = 'none';
-        }
-    };
-
-    const cancel = document.getElementById('ad-cancel');
-
-    cancel.addEventListener('click', function(){
-        modal.style.display = 'none';
-    });
-
-    const id = event.target.closest('.user-info').getAttribute('data-id');
-
-    console.log('User ID:', id);
-    
-    const confirm = document.getElementById('ad-confirm');
-    
-    confirm.addEventListener('click', function(){
-        event.preventDefault();
-        sendAjaxRequest('delete', '/api/users/' + id, {}, userDeleteHandler);
-    });
-    
-}
-
-
-function userDeleteHandler() {
-    if (this.status === 200) {
-        const response = JSON.parse(this.responseText);
-        const id = response.id;
-        const user = document.querySelector(`#user${id}`);
-        const modal = document.querySelector('#userDeleteModal');
-        modal.style.display = 'none';
-        user.remove();
-        createNotificationBox('Successfully deleted!', 'User deleted successfully!');
-    }
-}
  
 

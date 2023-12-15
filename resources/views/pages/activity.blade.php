@@ -23,10 +23,9 @@
                 <div class="activity-wrap {{ $content['type'] }}">
                     <span class="circle">{{ $content['type'][0]  }}</span>
                     <div class="activity">
-                        <span class="action">{{ $content['span'] }} </span>
+                        <span class="action">{{ $content['action'] }} </span>
                         <p class="version-content"> {{ $content['content'] }}</p>
-                        <span class="date">
-                            <a href="{{ route('profile', ['id' => $content['user_id']] ) }}">{{ $content['user'] }}</a> {{ $content['action'] }} at {{ $content['date']}}</span>
+                        <span class="date">{{ $content['user']}} at {{ $content['date']}}</span>
                     </div>
                 </div>
             @endforeach

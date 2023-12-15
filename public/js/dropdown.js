@@ -93,16 +93,3 @@ function toggleCommentDropDown() {
         dropdown.classList.add('isOpen');
     }
 }
-
-
-function toggleFilterDropDown() {
-    const dropdown = event.target;
-    const dropdownContent = document.querySelector('.filter-content');
-    if (dropdown.classList.contains('isOpen')) {
-        dropdownContent.style.display = 'none';
-        dropdown.classList.remove('isOpen');
-    } else {
-        dropdownContent.style.display = 'grid';
-        dropdown.classList.add('isOpen');
-    }
-}

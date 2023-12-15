@@ -20,38 +20,6 @@
                 <button class="selected" id="recent">Recent</button>
                 <button id="popular">Popular</button>
                 <button id="unanswered">Unanswered</button>
-                <div class="filter-dropdown">
-                    <div id="filter-questions" onclick="toggleFilterDropDown()">
-                        <ion-icon name="funnel"></ion-icon>
-                        <span>Filter</span>
-                    </div>
-                    
-                    <div class="filter-content">
-                        <label for="tags">Tags: </label>
-                        <div class="tag-con">
-                            <select name="tag_id" id="tag_id" class="form-control" required onchange="addFilterTag()">
-                                <option value="0" selected>None</option>
-                                @foreach($tags as $tag)
-                                    <option value="{{ $tag->id }}">{{ $tag->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="filter-tags" onclick="removeFilterTag()"></div>
-                        <label for="game">Games: </label>
-                        <select name="game_id" id="game_id" class="form-control" required onchange="addFilterGame()">
-                            <option value="0">None</option>
-                            @foreach($categories as $category)
-                                <optgroup label="{{ $category->name }}">
-                                    @foreach($category->games as $game)
-                                        <option value="{{ $game->id }}">{{ $game->name }}</option>
-                                    @endforeach
-                                </optgroup>
-                            @endforeach
-                        </select>
-                        <div class="filter-games" onclick="removeFilterGame()"></div>
-                        <button class="apply-btn" onclick="applyFilters()">Apply</button>
-                    </div>
-                </div>
             </div>
             @if (Auth::check())
                 <a href="{{ route('questions.create') }}" id="newQuestion">Ask Question</a>

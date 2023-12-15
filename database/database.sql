@@ -118,7 +118,6 @@ CREATE TABLE answer (
   user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   question_id INTEGER NOT NULL REFERENCES question(id) ON DELETE CASCADE,
   is_public BOOLEAN NOT NULL DEFAULT True,
-  is_correct BOOLEAN NOT NULL DEFAULT False,
   votes INTEGER NOT NULL DEFAULT 0
 );
 
@@ -508,28 +507,6 @@ BEFORE INSERT ON report
 FOR EACH ROW
 EXECUTE FUNCTION prevent_self_reporting_trigger_function();
 
---Trigger 13
-
--- trigger to change the deleted user username to anonymous
-
-CREATE OR REPLACE FUNCTION anonymous_user()
-RETURNS TRIGGER AS $$
-BEGIN
-        UPDATE question SET user_id=1 WHERE user_id = OLD.id;
-        UPDATE answer SET user_id=1 WHERE user_id = OLD.id;
-        UPDATE comment SET user_id=1 WHERE user_id = OLD.id;
-        UPDATE vote SET user_id=1 WHERE user_id = OLD.id;
-        UPDATE report SET reporter_id=1 WHERE reporter_id = OLD.id;
-
-        RETURN OLD;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER anonymous_user
-BEFORE DELETE ON users
-FOR EACH ROW
-EXECUTE FUNCTION anonymous_user();
-
 -----------
 -- Create transactions
 -----------
@@ -615,22 +592,7 @@ FOR EACH ROW
 EXECUTE FUNCTION update_question_on_insert();
 
 
-CREATE OR REPLACE FUNCTION mark_question_solved()
-RETURNS TRIGGER AS $$
-BEGIN
-    UPDATE question
-    SET is_solved = TRUE
-    WHERE id = NEW.question_id;
 
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER update_question_solved
-AFTER UPDATE OF is_correct ON answer
-FOR EACH ROW
-WHEN (NEW.is_correct = TRUE)
-EXECUTE FUNCTION mark_question_solved();
 
 
 -----------
@@ -771,7 +733,6 @@ CREATE INDEX search_user ON users USING GIN (tsvectors);
 
 ---POPULATE
 INSERT INTO users(name, username, email, password, description, rank, is_admin, is_banned, profile_image) VALUES
-('Anonymous', 'Anonymous', 'Null', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Null', 'Bronze', False, False, NULL),
 ('John Doe', 'johndoe', 'johndoe@example.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Some description', 'Bronze', True, False, '090PJ3bfsG7io3zBEURDsdxYNbIjrsdXoyUbMNgz.jpg'),
 ('Alice Johnson', 'alicej', 'alicejohnson@example.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Another description', 'Bronze', False, True, NULL),
 ('Michael Smith', 'mikesmith', 'mikesmith@example.com', '5d41402abc4b2a76b9719d911017c592', 'Description for Michael', 'Gold', True, False, NULL),
@@ -995,45 +956,45 @@ INSERT INTO game(name, description, nr_members, game_category_id) VALUES
 ('The Division 2', 'Developed by Ubisoft Massive, Tom Clancys The Division 2 is an online action RPG set in a post-apocalyptic Washington D.C. Players can team up with others to explore the open world, complete missions, engage in PvP combat, and participate in endgame content, including raids and strongholds.', 0, 10);
 
 INSERT INTO question(user_id, create_date, title, is_solved, is_public, nr_views, game_id) VALUES
-(99, '2022-10-01 14:30:00', 'Pokemon GO connection issue', FALSE, TRUE, 100, 1),
-(98, '2022-10-02 14:30:00', 'Game client not launching', FALSE, TRUE, 120, 1),
-(97, '2022-10-03 14:30:00', 'CS:GO frame rate drop', FALSE, TRUE, 90, 1),
+(99, '2022-10-01 14:30:00', 'Pokemon GO connection issue', TRUE, TRUE, 100, 1),
+(98, '2022-10-02 14:30:00', 'Game client not launching', TRUE, TRUE, 120, 1),
+(97, '2022-10-03 14:30:00', 'CS:GO frame rate drop', TRUE, TRUE, 90, 1),
 (96, '2022-10-04 14:30:00', 'Connection issues', FALSE, TRUE, 60, 1),
-(95, '2022-10-05 14:30:00', 'Fortnite multiplayer problem', FALSE, TRUE, 110, 1),
+(95, '2022-10-05 14:30:00', 'Fortnite multiplayer problem', TRUE, TRUE, 110, 1),
 (94, '2022-10-06 14:30:00', 'Super Mario not loading', FALSE, TRUE, 80, 1),
-(93, '2022-10-07 14:30:00', 'Overwatch lagging', FALSE, TRUE, 95, 1),
+(93, '2022-10-07 14:30:00', 'Overwatch lagging', TRUE, TRUE, 95, 1),
 (92, '2022-10-08 14:30:00', 'Crash when starting game', FALSE, TRUE, 70, 1),
-(91, '2022-10-09 14:30:00', 'Overwatch server down', FALSE, TRUE, 85, 1),
-(90, '2022-10-10 14:30:00', 'Super Mario Bros. level bug', FALSE, TRUE, 105, 1),
+(91, '2022-10-09 14:30:00', 'Overwatch server down', TRUE, TRUE, 85, 1),
+(90, '2022-10-10 14:30:00', 'Super Mario Bros. level bug', TRUE, TRUE, 105, 1),
 (89, '2022-10-11 14:30:00', 'Need help with game controls', FALSE, TRUE, 65, 2),
-(88, '2022-10-12 14:30:00', 'Overwatch character balance issue', FALSE, TRUE, 88, 2),
+(88, '2022-10-12 14:30:00', 'Overwatch character balance issue', TRUE, TRUE, 88, 2),
 (87, '2022-10-13 14:30:00', 'Unable to complete a quest', FALSE, TRUE, 72, 2),
-(86, '2022-10-14 14:30:00', 'Pokemon Go gym bug', FALSE, TRUE, 93, 2),
+(86, '2022-10-14 14:30:00', 'Pokemon Go gym bug', TRUE, TRUE, 93, 2),
 (85, '2022-10-15 14:30:00', 'CS:GO matchmaking issue', FALSE, TRUE, 78, 2),
-(84, '2022-10-16 14:30:00', 'Super Smash Bros. bug', FALSE, TRUE, 115, 2),
+(84, '2022-10-16 14:30:00', 'Super Smash Bros. bug', TRUE, TRUE, 115, 2),
 (83, '2022-10-17 14:30:00', 'Need help with a gameplay strategy', FALSE, TRUE, 82, 2),
-(82, '2022-10-18 14:30:00', 'League of Legends champion bug', FALSE, TRUE, 97, 2),
-(81, '2022-10-19 14:30:00', 'Game of Thrones quest not working', FALSE, TRUE, 68, 2),
+(82, '2022-10-18 14:30:00', 'League of Legends champion bug', TRUE, TRUE, 97, 2),
+(81, '2022-10-19 14:30:00', 'Game of Thrones quest not working', TRUE, TRUE, 68, 2),
 (80, '2022-10-20 14:30:00', 'League of Legends login issue', FALSE, TRUE, 89, 2),
-(79, '2022-10-20 14:30:00', 'Error purchasing in-game currency', FALSE, TRUE, 100, 3),
-(78, '2022-10-20 14:30:00', 'Billing issue', FALSE, TRUE, 120, 3),
-(77, '2022-10-21 14:30:00', 'Gamer tag change', FALSE, TRUE, 90, 3),
+(79, '2022-10-20 14:30:00', 'Error purchasing in-game currency', TRUE, TRUE, 100, 3),
+(78, '2022-10-20 14:30:00', 'Billing issue', TRUE, TRUE, 120, 3),
+(77, '2022-10-21 14:30:00', 'Gamer tag change', TRUE, TRUE, 90, 3),
 (76, '2022-10-22 14:30:00', 'Payment not going through', FALSE, TRUE, 60, 3),
-(75, '2022-10-23 14:30:00', 'In-game item missing', FALSE, TRUE, 110, 3),
+(75, '2022-10-23 14:30:00', 'In-game item missing', TRUE, TRUE, 110, 3),
 (74, '2022-10-24 14:30:00', 'Subscription renewal error', FALSE, TRUE, 80, 3),
-(73, '2022-10-25 14:30:00', 'Cannot link payment method to account', FALSE, TRUE, 95, 3),
+(73, '2022-10-25 14:30:00', 'Cannot link payment method to account', TRUE, TRUE, 95, 3),
 (72, '2022-10-26 14:30:00', 'Refund request for accidental purchase', FALSE, TRUE, 70, 3),
-(71, '2022-10-27 14:30:00', 'Account suspension or ban', FALSE, TRUE, 85, 3),
-(70, '2022-10-28 14:30:00', 'Missing rewards from game event', FALSE, TRUE, 105, 3),
+(71, '2022-10-27 14:30:00', 'Account suspension or ban', TRUE, TRUE, 85, 3),
+(70, '2022-10-28 14:30:00', 'Missing rewards from game event', TRUE, TRUE, 105, 3),
 (69, '2022-10-30 14:30:00', 'Request to remove inappropriate player username', FALSE, TRUE, 65, 4),
-(68, '2022-10-30 14:30:00', 'Toxic player in chat', FALSE, TRUE, 88, 4),
+(68, '2022-10-30 14:30:00', 'Toxic player in chat', TRUE, TRUE, 88, 4),
 (67, '2022-10-31 14:30:00', 'Community event suggestion', FALSE, TRUE, 72, 4),
-(66, '2022-11-01 14:30:00', 'Reporting inappropriate forum post', FALSE, TRUE, 93, 4),
+(66, '2022-11-01 14:30:00', 'Reporting inappropriate forum post', TRUE, TRUE, 93, 4),
 (65, '2022-11-02 14:30:00', 'Abusive in-game chat behavior', FALSE, TRUE, 78, 4),
-(64, '2022-11-03 14:30:00', 'Reporting a player for cheating', FALSE, TRUE, 115, 4),
+(64, '2022-11-03 14:30:00', 'Reporting a player for cheating', TRUE, TRUE, 115, 4),
 (63, '2022-11-03 14:30:00', 'Community event feedback', FALSE, TRUE, 82, 4),
-(62, '2022-11-04 14:30:00', 'Inappropriate forum post', FALSE, TRUE, 97, 4),
-(61, '2022-11-05 14:30:00', 'Incorrect information on website', FALSE, TRUE, 68, 4),
+(62, '2022-11-04 14:30:00', 'Inappropriate forum post', TRUE, TRUE, 97, 4),
+(61, '2022-11-05 14:30:00', 'Incorrect information on website', TRUE, TRUE, 68, 4),
 (60, '2022-11-06 14:30:00', 'Esports tournament registration issue', FALSE, TRUE, 89, 4),
 (59, '2022-11-07 14:30:00', 'Setting up team for tournament', FALSE, TRUE, 89, 5),
 (58, '2022-11-08 14:30:00', 'Unable to register for upcoming tournament', FALSE, TRUE, 89, 5),
@@ -1044,7 +1005,7 @@ INSERT INTO question(user_id, create_date, title, is_solved, is_public, nr_views
 (53, '2022-11-13 14:30:00', 'Issue with prize distribution', FALSE, TRUE, 89, 5),
 (52, '2022-11-14 14:30:00', 'Team disqualification from tournament', FALSE, TRUE, 89, 5),
 (51, '2022-11-15 14:30:00', 'Streaming issues during tournamen', FALSE, TRUE, 89, 5),
-(50, '2022-11-16 14:30:00', 'Game crashes every time I try to load it', FALSE, TRUE, 89, 5),
+(50, '2022-11-16 14:30:00', 'Game crashes every time I try to load it', TRUE, TRUE, 89, 5),
 (49, '2022-11-17 14:30:00', 'Game freezes during gameplay', FALSE, TRUE, 89, 6),
 (48, '2022-11-18 14:30:00', 'Game lags frequently', FALSE, TRUE, 89, 6),
 (47, '2022-11-19 14:30:00', 'Audio issue in game', FALSE, TRUE, 89, 6),
@@ -1062,7 +1023,7 @@ INSERT INTO question(user_id, create_date, title, is_solved, is_public, nr_views
 (35, '2022-12-10 14:30:00', 'Need more diverse character designs', FALSE, TRUE, 89, 7),
 (34, '2022-12-11 14:30:00', 'Tutorial is confusing and unclear', FALSE, TRUE, 89, 7),
 (33, '2022-12-12 14:30:00', 'Map design is too simple', FALSE, TRUE, 89, 7),
-(32, '2022-12-13 14:30:00', 'Game character balance issue', FALSE, TRUE, 89, 7),
+(32, '2022-12-13 14:30:00', 'Game character balance issue', TRUE, TRUE, 89, 7),
 (31, '2022-12-14 14:30:00', 'Request for a new item', FALSE, TRUE, 89, 7),
 (30, '2022-12-15 14:30:00', 'Promotion not applying at checkout', FALSE, TRUE, 89, 7),
 (29, '2022-12-17 14:30:00', 'Event page not loading', FALSE, TRUE, 89,  8),
@@ -1077,7 +1038,7 @@ INSERT INTO question(user_id, create_date, title, is_solved, is_public, nr_views
 
 
 INSERT INTO answer(user_id, question_id, is_public) VALUES
-(2, 1, TRUE),
+(1, 1, TRUE),
 (2, 1, TRUE),
 (3, 3, TRUE),
 (4, 4, TRUE),
@@ -1121,26 +1082,27 @@ INSERT INTO comment(user_id, answer_id, is_public) VALUES
 (80, 19, TRUE);
 
 INSERT INTO vote(user_id, date, reaction, vote_type, answer_id, question_id) VALUES 
-(99, '2023-02-01 14:30:00', TRUE, 'Question_vote', NULL, 10),
-(98, '2023-02-01 14:30:01', FALSE, 'Question_vote', NULL, 11),
-(97, '2023-02-01 14:30:02', TRUE, 'Question_vote', NULL, 12),
-(96, '2023-02-01 14:30:03', FALSE, 'Question_vote', NULL, 13),
-(95, '2023-02-01 14:30:04', TRUE, 'Question_vote', NULL, 14),
+(80, '2023-02-01 14:30:19', FALSE, 'Question_vote', NULL, 1),
+(81, '2023-02-01 14:30:18', TRUE, 'Question_vote', NULL, 2),
+(82, '2023-02-01 14:30:17', FALSE, 'Question_vote', NULL, 3),
+(83, '2023-02-01 14:30:16', TRUE, 'Question_vote', NULL, 4),
+(84, '2023-02-01 14:30:15', FALSE, 'Question_vote', NULL, 5),
+(85, '2023-02-01 14:30:14', TRUE, 'Question_vote', NULL, 6),
+(86, '2023-02-01 14:30:13', FALSE, 'Question_vote', NULL, 7),
+(87, '2023-02-01 14:30:12', TRUE, 'Question_vote', NULL, 8),
+(88, '2023-02-01 14:30:11', FALSE, 'Question_vote', NULL, 9),
+(89, '2023-02-01 14:30:10', TRUE, 'Question_vote', NULL, 10),
+(90, '2023-02-01 14:30:09', FALSE, 'Question_vote', NULL, 11),
+(91, '2023-02-01 14:30:08', TRUE, 'Question_vote', NULL, 12),
+(92, '2023-02-01 14:30:07', FALSE, 'Question_vote', NULL, 13),
+(93, '2023-02-01 14:30:06', TRUE, 'Question_vote', NULL, 14),
 (94, '2023-02-01 14:30:05', FALSE, 'Question_vote', NULL, 15),
-(93, '2023-02-01 14:30:06', TRUE, 'Question_vote', NULL, 16),
-(92, '2023-02-01 14:30:07', FALSE, 'Question_vote', NULL, 17),
-(91, '2023-02-01 14:30:08', TRUE, 'Question_vote', NULL, 18),
-(90, '2023-02-01 14:30:09', FALSE, 'Question_vote', NULL, 19),
-(89, '2023-02-01 14:30:10', TRUE, 'Question_vote', NULL, 20),
-(88, '2023-02-01 14:30:11', FALSE, 'Question_vote', NULL, 21),
-(87, '2023-02-01 14:30:12', TRUE, 'Question_vote', NULL, 22),
-(86, '2023-02-01 14:30:13', FALSE, 'Question_vote', NULL, 23),
-(85, '2023-02-01 14:30:14', TRUE, 'Question_vote', NULL, 24),
-(84, '2023-02-01 14:30:15', FALSE, 'Question_vote', NULL, 25),
-(83, '2023-02-01 14:30:16', TRUE, 'Question_vote', NULL, 26),
-(82, '2023-02-01 14:30:17', FALSE, 'Question_vote', NULL, 27),
-(81, '2023-02-01 14:30:18', TRUE, 'Question_vote', NULL, 28),
-(80, '2023-02-01 14:30:19', FALSE, 'Question_vote', NULL, 29),
+(95, '2023-02-01 14:30:04', TRUE, 'Question_vote', NULL, 16),
+(96, '2023-02-01 14:30:03', FALSE, 'Question_vote', NULL, 17),
+(97, '2023-02-01 14:30:02', TRUE, 'Question_vote', NULL, 18),
+(98, '2023-02-01 14:30:01', FALSE, 'Question_vote', NULL, 19),
+(99, '2023-02-01 14:30:00', TRUE, 'Question_vote', NULL, 20),
+
 (79, '2023-02-02 14:30:00', TRUE, 'Answer_vote', 1, NULL),
 (78, '2023-02-02 14:30:01', FALSE, 'Answer_vote', 2, NULL),
 (77, '2023-02-02 14:30:02', TRUE, 'Answer_vote', 3, NULL),
@@ -1331,16 +1293,17 @@ INSERT INTO notification(date, viewed, user_id, notification_type, question_id, 
 ('2023-03-01 16:00:00', FALSE, 90, 'Report_notification', NULL, NULL, NULL, NULL, 10, NULL, NULL),
 ('2023-03-01 16:10:00', FALSE, 89, 'Report_notification', NULL, NULL, NULL, NULL, 11, NULL, NULL),
 ('2023-03-01 16:20:00', TRUE, 88, 'Report_notification', NULL, NULL, NULL, NULL, 12, NULL, NULL),
-('2023-03-01 16:30:00', TRUE, 2, 'Report_notification', NULL, NULL, NULL, NULL, 13, NULL, NULL),
-('2023-03-01 16:40:00', TRUE, 3, 'Report_notification', NULL, NULL, NULL, NULL, 14, NULL, NULL),
+('2023-03-01 16:30:00', TRUE, 1, 'Report_notification', NULL, NULL, NULL, NULL, 13, NULL, NULL),
+('2023-03-01 16:40:00', TRUE, 2, 'Report_notification', NULL, NULL, NULL, NULL, 14, NULL, NULL),
 ('2023-03-01 16:50:00', FALSE, 3, 'Report_notification', NULL, NULL, NULL, NULL, 15, NULL, NULL),
 ('2023-03-01 17:00:00', TRUE, 4, 'Report_notification', NULL, NULL, NULL, NULL, 16, NULL, NULL),
 ('2023-03-01 17:10:00', TRUE, 5, 'Report_notification', NULL, NULL, NULL, NULL, 17, NULL, NULL),
 ('2023-03-01 17:20:00', TRUE, 99, 'Report_notification', NULL, NULL, NULL, NULL, 18, NULL, NULL),
 ('2023-03-01 17:30:00', TRUE, 98, 'Report_notification', NULL, NULL, NULL, NULL, 19, NULL, NULL),
 ('2023-03-01 17:40:00', TRUE, 97, 'Report_notification', NULL, NULL, NULL, NULL, 20, NULL, NULL),
-('2023-03-02 17:50:00', TRUE, 2, 'Question_notification', 60, NULL, NULL, NULL, NULL, NULL, NULL),
-('2023-03-02 18:00:00', FALSE, 3, 'Question_notification', 61, NULL, NULL, NULL, NULL, NULL, NULL),
+
+('2023-03-02 17:50:00', TRUE, 1, 'Question_notification', 60, NULL, NULL, NULL, NULL, NULL, NULL),
+('2023-03-02 18:00:00', FALSE, 2, 'Question_notification', 61, NULL, NULL, NULL, NULL, NULL, NULL),
 ('2023-03-02 18:10:00', TRUE, 3, 'Question_notification', 62, NULL, NULL, NULL, NULL, NULL, NULL),
 ('2023-03-02 18:20:00', TRUE, 4, 'Question_notification', 63, NULL, NULL, NULL, NULL, NULL, NULL),
 ('2023-03-02 18:30:00', FALSE, 5, 'Question_notification', 64, NULL, NULL, NULL, NULL, NULL, NULL),
@@ -1349,6 +1312,7 @@ INSERT INTO notification(date, viewed, user_id, notification_type, question_id, 
 ('2023-03-02 19:00:00', TRUE, 8, 'Question_notification', 67, NULL, NULL, NULL, NULL, NULL, NULL),
 ('2023-03-02 19:10:00', TRUE, 9, 'Question_notification', 68, NULL, NULL, NULL, NULL, NULL, NULL),
 ('2023-03-02 19:20:00', FALSE, 10, 'Question_notification', 69, NULL, NULL, NULL, NULL, NULL, NULL),
+
 ('2023-03-02 19:30:00', TRUE, 50, 'Answer_notification', NULL, 1, NULL, NULL, NULL, NULL, NULL),
 ('2023-03-02 19:40:00', TRUE, 51, 'Answer_notification', NULL, 2, NULL, NULL, NULL, NULL, NULL),
 ('2023-03-02 19:50:00', TRUE, 52, 'Answer_notification', NULL, 3, NULL, NULL, NULL, NULL, NULL),
@@ -1359,6 +1323,7 @@ INSERT INTO notification(date, viewed, user_id, notification_type, question_id, 
 ('2023-03-02 20:40:00', TRUE, 55, 'Answer_notification', NULL, 8, NULL, NULL, NULL, NULL, NULL),
 ('2023-03-02 20:50:00', TRUE, 55, 'Answer_notification', NULL, 9, NULL, NULL, NULL, NULL, NULL),
 ('2023-03-02 21:00:00', TRUE, 60, 'Answer_notification', NULL, 10, NULL, NULL, NULL, NULL, NULL),
+
 ('2023-03-02 21:10:00', FALSE, 19, 'Comment_notification', NULL, NULL, 20, NULL, NULL, NULL, NULL),
 ('2023-03-02 21:20:00', TRUE, 18, 'Comment_notification', NULL, NULL, 19, NULL, NULL, NULL, NULL),
 ('2023-03-02 21:30:00', TRUE, 17, 'Comment_notification', NULL, NULL, 18, NULL, NULL, NULL, NULL),
@@ -1371,46 +1336,28 @@ INSERT INTO notification(date, viewed, user_id, notification_type, question_id, 
 ('2023-03-02 22:40:00', TRUE, 10, 'Comment_notification', NULL, NULL, 11, NULL, NULL, NULL, NULL),
 
 
-('2023-02-01 14:30:00', TRUE, 90, 'Vote_notification', NULL, NULL, NULL, 1, NULL, NULL, NULL),
-('2023-02-01 14:30:01', FALSE, 89, 'Vote_notification', NULL, NULL, NULL, 2, NULL, NULL, NULL),
-('2023-02-01 14:30:02', TRUE, 88, 'Vote_notification', NULL, NULL, NULL, 3, NULL, NULL, NULL),
-('2023-02-01 14:30:03', FALSE, 87, 'Vote_notification', NULL, NULL, NULL, 4, NULL, NULL, NULL),
-('2023-02-01 14:30:04', TRUE, 86, 'Vote_notification', NULL, NULL, NULL, 5, NULL, NULL, NULL),
-('2023-02-01 14:30:05', FALSE, 85, 'Vote_notification', NULL, NULL, NULL, 6, NULL, NULL, NULL),
-('2023-02-01 14:30:06', TRUE, 84, 'Vote_notification', NULL, NULL, NULL, 7, NULL, NULL, NULL),
-('2023-02-01 14:30:07', FALSE, 83, 'Vote_notification', NULL, NULL, NULL, 8, NULL, NULL, NULL),
-('2023-02-01 14:30:08', TRUE, 82, 'Vote_notification', NULL, NULL, NULL, 9, NULL, NULL, NULL),
-('2023-02-01 14:30:09', FALSE, 81, 'Vote_notification', NULL, NULL, NULL, 10, NULL, NULL, NULL),
-('2023-02-01 14:30:10', TRUE, 80, 'Vote_notification', NULL, NULL, NULL, 11, NULL, NULL, NULL),
-('2023-02-01 14:30:11', FALSE, 79, 'Vote_notification', NULL, NULL, NULL, 12, NULL, NULL, NULL),
-('2023-02-01 14:30:12', TRUE, 78, 'Vote_notification', NULL, NULL, NULL, 13, NULL, NULL, NULL),
-('2023-02-01 14:30:13', FALSE, 77, 'Vote_notification', NULL, NULL, NULL, 14, NULL, NULL, NULL),
-('2023-02-01 14:30:14', TRUE, 76, 'Vote_notification', NULL, NULL, NULL, 15, NULL, NULL, NULL),
-('2023-02-01 14:30:15', FALSE, 75, 'Vote_notification', NULL, NULL, NULL, 16, NULL, NULL, NULL),
-('2023-02-01 14:30:16', TRUE, 74, 'Vote_notification', NULL, NULL, NULL, 17, NULL, NULL, NULL),
-('2023-02-01 14:30:17', FALSE, 73, 'Vote_notification', NULL, NULL, NULL, 18, NULL, NULL, NULL),
-('2023-02-01 14:30:18', TRUE, 72, 'Vote_notification', NULL, NULL, NULL, 19, NULL, NULL, NULL),
-('2023-02-01 14:30:19', FALSE, 71, 'Vote_notification', NULL, NULL, NULL, 20, NULL, NULL, NULL),
-('2023-02-02 14:30:00', TRUE, 2, 'Vote_notification', NULL, NULL, NULL, 21, NULL, NULL, NULL),
-('2023-02-02 14:30:01', FALSE, 3, 'Vote_notification', NULL, NULL, NULL, 22, NULL, NULL, NULL),
-('2023-02-02 14:30:02', TRUE, 3, 'Vote_notification', NULL, NULL, NULL, 23, NULL, NULL, NULL),
-('2023-02-02 14:30:03', FALSE, 4, 'Vote_notification', NULL, NULL, NULL, 24, NULL, NULL, NULL),
-('2023-02-02 14:30:04', TRUE, 5, 'Vote_notification', NULL, NULL, NULL, 25, NULL, NULL, NULL),
-('2023-02-02 14:30:05', FALSE, 6, 'Vote_notification', NULL, NULL, NULL, 26, NULL, NULL, NULL),
-('2023-02-02 14:30:06', TRUE, 7, 'Vote_notification', NULL, NULL, NULL, 27, NULL, NULL, NULL),
-('2023-02-02 14:30:07', FALSE, 8, 'Vote_notification', NULL, NULL, NULL, 28, NULL, NULL, NULL),
-('2023-02-02 14:30:08', TRUE, 9, 'Vote_notification', NULL, NULL, NULL, 29, NULL, NULL, NULL),
-('2023-02-02 14:30:09', FALSE, 10, 'Vote_notification', NULL, NULL, NULL, 30, NULL, NULL, NULL),
-('2023-02-02 14:30:10', TRUE, 11, 'Vote_notification', NULL, NULL, NULL, 31, NULL, NULL, NULL),
-('2023-02-02 14:30:11', FALSE, 12, 'Vote_notification', NULL, NULL, NULL, 32, NULL, NULL, NULL),
-('2023-02-02 14:30:12', TRUE, 13, 'Vote_notification', NULL, NULL, NULL, 33, NULL, NULL, NULL),
-('2023-02-02 14:30:13', FALSE, 14, 'Vote_notification', NULL, NULL, NULL, 34, NULL, NULL, NULL),
-('2023-02-02 14:30:14', TRUE, 15, 'Vote_notification', NULL, NULL, NULL, 35, NULL, NULL, NULL),
-('2023-02-02 14:30:15', FALSE, 16, 'Vote_notification', NULL, NULL, NULL, 36, NULL, NULL, NULL),
-('2023-02-02 14:30:16', TRUE, 17, 'Vote_notification', NULL, NULL, NULL, 37, NULL, NULL, NULL),
-('2023-02-02 14:30:17', FALSE, 18, 'Vote_notification', NULL, NULL, NULL, 38, NULL, NULL, NULL),
-('2023-02-02 14:30:18', TRUE, 19, 'Vote_notification', NULL, NULL, NULL, 39, NULL, NULL, NULL),
-('2023-02-02 14:30:19', FALSE, 20, 'Vote_notification', NULL, NULL, NULL, 40, NULL, NULL, NULL),
+('2023-02-01 14:30:00', TRUE, 99, 'Vote_notification', NULL, NULL, NULL, 1, NULL, NULL, NULL),
+('2023-02-01 14:30:01', FALSE, 98, 'Vote_notification', NULL, NULL, NULL, 2, NULL, NULL, NULL),
+('2023-02-01 14:30:02', TRUE, 97, 'Vote_notification', NULL, NULL, NULL, 3, NULL, NULL, NULL),
+('2023-02-01 14:30:03', FALSE, 96, 'Vote_notification', NULL, NULL, NULL, 4, NULL, NULL, NULL),
+('2023-02-01 14:30:04', TRUE, 95, 'Vote_notification', NULL, NULL, NULL, 5, NULL, NULL, NULL),
+('2023-02-01 14:30:05', FALSE, 94, 'Vote_notification', NULL, NULL, NULL, 6, NULL, NULL, NULL),
+('2023-02-01 14:30:06', TRUE, 93, 'Vote_notification', NULL, NULL, NULL, 7, NULL, NULL, NULL),
+('2023-02-01 14:30:07', FALSE, 92, 'Vote_notification', NULL, NULL, NULL, 8, NULL, NULL, NULL),
+('2023-02-01 14:30:08', TRUE, 91, 'Vote_notification', NULL, NULL, NULL, 9, NULL, NULL, NULL),
+('2023-02-01 14:30:09', FALSE, 90, 'Vote_notification', NULL, NULL, NULL, 10, NULL, NULL, NULL),
+('2023-02-01 14:30:10', TRUE, 89, 'Vote_notification', NULL, NULL, NULL, 11, NULL, NULL, NULL),
+('2023-02-01 14:30:11', FALSE, 88, 'Vote_notification', NULL, NULL, NULL, 12, NULL, NULL, NULL),
+('2023-02-01 14:30:12', TRUE, 87, 'Vote_notification', NULL, NULL, NULL, 13, NULL, NULL, NULL),
+('2023-02-01 14:30:13', FALSE, 86, 'Vote_notification', NULL, NULL, NULL, 14, NULL, NULL, NULL),
+('2023-02-01 14:30:14', TRUE, 85, 'Vote_notification', NULL, NULL, NULL, 15, NULL, NULL, NULL),
+('2023-02-01 14:30:10', TRUE, 84, 'Vote_notification', NULL, NULL, NULL, 11, NULL, NULL, NULL),
+('2023-02-01 14:30:11', FALSE, 83, 'Vote_notification', NULL, NULL, NULL, 12, NULL, NULL, NULL),
+('2023-02-01 14:30:12', TRUE, 82, 'Vote_notification', NULL, NULL, NULL, 13, NULL, NULL, NULL),
+('2023-02-01 14:30:13', FALSE, 81, 'Vote_notification', NULL, NULL, NULL, 14, NULL, NULL, NULL),
+('2023-02-01 14:30:14', TRUE, 80, 'Vote_notification', NULL, NULL, NULL, 15, NULL, NULL, NULL),
+
+
 ('2023-03-02 14:30:00', FALSE, 3, 'Rank_notification', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 ('2023-03-02 14:40:00', FALSE, 6, 'Rank_notification', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 ('2023-03-02 14:50:00', FALSE, 9, 'Rank_notification', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
@@ -1436,9 +1383,10 @@ INSERT INTO notification(date, viewed, user_id, notification_type, question_id, 
 ('2023-03-02 18:10:00', FALSE, 92, 'Rank_notification', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 ('2023-03-02 18:20:00', FALSE, 96, 'Rank_notification', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 ('2023-03-02 18:30:00', FALSE, 100, 'Rank_notification', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-('2023-03-03 18:40:00', FALSE, 2, 'Badge_notification', NULL, NULL, NULL, NULL, NULL, 1, NULL),
-('2023-03-03 19:50:00', FALSE, 3, 'Badge_notification', NULL, NULL, NULL, NULL, NULL, 2, NULL),
-('2023-03-03 20:00:00', FALSE, 3, 'Badge_notification', NULL, NULL, NULL, NULL, NULL, 3, NULL),
+
+('2023-03-03 18:40:00', FALSE, 1, 'Badge_notification', NULL, NULL, NULL, NULL, NULL, 1, NULL),
+('2023-03-03 19:50:00', FALSE, 2, 'Badge_notification', NULL, NULL, NULL, NULL, NULL, 2, NULL),
+('2023-03-03 20:00:00', FALSE, 2, 'Badge_notification', NULL, NULL, NULL, NULL, NULL, 3, NULL),
 ('2023-03-04 15:10:00', FALSE, 5, 'Badge_notification', NULL, NULL, NULL, NULL, NULL, 4, NULL),
 ('2023-03-04 19:30:00', FALSE, 10, 'Badge_notification', NULL, NULL, NULL, NULL, NULL, 5, NULL),
 ('2023-03-05 17:50:00', FALSE, 20, 'Badge_notification', NULL, NULL, NULL, NULL, NULL, 1, NULL),
@@ -1450,12 +1398,19 @@ INSERT INTO notification(date, viewed, user_id, notification_type, question_id, 
 ('2023-03-05 12:40:00', FALSE, 46, 'Badge_notification', NULL, NULL, NULL, NULL, NULL, 4, NULL),
 ('2023-04-05 20:00:00', FALSE, 55, 'Badge_notification', NULL, NULL, NULL, NULL, NULL, 3, NULL),
 ('2023-04-06 14:20:00', FALSE, 88, 'Badge_notification', NULL, NULL, NULL, NULL, NULL, 1, NULL),
-('2023-04-06 22:10:00', FALSE, 92, 'Badge_notification', NULL, NULL, NULL, NULL, NULL, 2, NULL);
+('2023-04-06 22:10:00', FALSE, 92, 'Badge_notification', NULL, NULL, NULL, NULL, NULL, 2, NULL),
+
+('2023-03-03 18:40:00', FALSE, 1, 'Game_notification', NULL, NULL, NULL, NULL, NULL, NULL, 1),
+('2023-03-03 19:50:00', FALSE, 2, 'Game_notification', NULL, NULL, NULL, NULL, NULL, NULL, 2),
+('2023-03-03 20:00:00', FALSE, 2, 'Game_notification', NULL, NULL, NULL, NULL, NULL, NULL, 3),
+('2023-03-04 15:10:00', FALSE, 5, 'Game_notification', NULL, NULL, NULL, NULL, NULL, NULL, 3),
+('2023-03-04 19:30:00', FALSE, 10, 'Game_notification', NULL, NULL, NULL, NULL, NULL, NULL, 1),
+('2023-03-05 17:50:00', FALSE, 20, 'Game_notification', NULL, NULL, NULL, NULL, NULL, NULL, 1);
 
 INSERT INTO user_badge(user_id, badge_id) VALUES
+(1, 1),
+(1, 2),
 (2, 1),
-(2, 2),
-(3, 1),
 (5, 2),
 (10, 1),
 (10, 3),
@@ -1470,22 +1425,22 @@ INSERT INTO user_badge(user_id, badge_id) VALUES
 (92, 2);
 
 INSERT INTO game_member(user_id, game_id) VALUES
-(2, 1),
-(2, 2),
-(2, 5),
-(2, 6),
+(1, 1),
+(1, 2),
+(1, 5),
+(1, 6),
+(1, 10),
+(1, 46),
+(1, 17),
+(1, 18),
 (2, 10),
-(2, 46),
+(2, 20),
+(2, 52),
+(2, 65),
+(2, 11),
+(2, 4),
 (2, 17),
-(2, 18),
-(15, 10),
-(15, 20),
-(15, 52),
-(15, 65),
-(15, 11),
-(15, 4),
-(15, 17),
-(15, 19),
+(2, 19),
 (3, 45),
 (3, 87),
 (3, 54),

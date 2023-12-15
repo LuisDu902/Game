@@ -76,6 +76,13 @@ class AnswerController extends Controller
         $answer = Answer::find($id);
         $this->authorize('delete', $answer);
 
+        $comments = $answer->comments;
+
+
+        for($i=0; $i<count($comments); $i++){
+            $comments[$i]->delete();
+        }
+
         $answer->delete();
 
         return response()->json(["success" => true, 'id' => $id], 200);
@@ -106,14 +113,5 @@ class AnswerController extends Controller
             ->delete();
     
         return response()->json(['action' => 'unvote', 'id' => $answer_id]);
-    }
-
-    public function status(Request $request, $answer_id)
-    {
-        $answer = Answer::findOrFail($answer_id);
-        $status = $request->status == 'correct' ? TRUE : FALSE;
-        $answer->is_correct = $status;
-        $answer->save();
-        return response()->json(['status' => $request->status, 'id' => $answer->id]);
     }
 }

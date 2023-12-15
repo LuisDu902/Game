@@ -26,15 +26,6 @@
                             <ion-icon name="trash"></ion-icon>
                             <span>Delete</span>
                         </div>
-                        <div id="question-visibility" onclick="showVisibilityToggle()">
-                            @if ($question->is_public)
-                                <ion-icon name="eye"></ion-icon>
-                            @else
-                                <ion-icon name="eye-off"></ion-icon>
-                            @endif
-                            <span>Visibility</span>
-                        </div>
-                       
                     </div>
                 </div>
             @else
