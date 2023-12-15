@@ -19,7 +19,7 @@
         <h1>About us</h1>
         <div class="about-us">
             <h2>We are a team of professional people who loves what they do</h2>
-            <p>Lorem Ipsum is een the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more  Lorem Ipsum.</p>
+            <p>GameOn is committed to revolutionizing the online gaming landscape by creating a dynamic, unified platform that fosters collaboration, encourages knowledge-sharing, and celebrates gamers' contributions. In a world where information fragmentation and community engagement challenges persist, GameOn aims to be the go-to destination for gamers seeking connection and recognition within the gaming ecosystem.</p>
         </div>
         <div class="team">
             <h1>Meet our team</h1>
