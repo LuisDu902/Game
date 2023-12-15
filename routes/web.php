@@ -3,6 +3,8 @@
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\GameCategoryController;
 use App\Http\Controllers\GameController;
+use App\Http\Controllers\MailController;
+use App\Http\Controllers\StaticController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\TagController;
@@ -36,6 +38,10 @@ Route::controller(LoginController::class)->group(function () {
     Route::get('/login', 'showLoginForm')->name('login');
     Route::post('/login', 'authenticate');
     Route::get('/logout', 'logout')->name('logout');
+    Route::get('/recover', 'recover')->name('recover');
+    Route::post('/newPassword', 'resetPassword')->name('resetPassword');
+    Route::get('/newPassword', 'newPassword')->name('newPassword');
+    Route::get('/emailSent', 'emailSent')->name('emailSent');
 });
 
 Route::controller(RegisterController::class)->group(function () {
@@ -43,14 +49,17 @@ Route::controller(RegisterController::class)->group(function () {
     Route::post('/register', 'register');
 });
 
-Route::get('/home', function () {
-    return view('pages.home');
-})->name('home');
+Route::controller(MailController::class)->group(function(){
+    Route::post('/recoverPassword', 'send')->name('recoverPassword');
+});
 
-Route::get('/faq', function () {
-    return view('pages.faq');
-})->name('faq');
-
+// Static pages
+Route::controller(StaticController::class)->group(function () {
+    Route::get('/home', 'home')->name('home');
+    Route::get('/faq', 'faq')->name('faq');
+    Route::get('/about', 'about')->name('about');
+    Route::get('/contact', 'contact')->name('contact');
+});
 
 // User
 Route::controller(UserController::class)->group(function () {

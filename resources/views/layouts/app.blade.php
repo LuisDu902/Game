@@ -28,7 +28,8 @@
         <link href="{{ url('css/question.css') }}" rel="stylesheet">
         <link href="{{ url('css/faq.css') }}" rel="stylesheet">
         <link href="{{ url('css/activity.css') }}" rel="stylesheet">
-    
+        <link href="{{ url('css/static.css') }}" rel="stylesheet">
+
         <script type="text/javascript">
             // Fix for Firefox autofocus CSS bug
             // See: http://stackoverflow.com/questions/18943276/html-5-autofocus-messes-up-css-loading/18945951#18945951
@@ -52,7 +53,7 @@
        
     </head>
     <body>
-        @if(in_array(request()->route()->getName(), ['login', 'register']))
+        @if(in_array(request()->route()->getName(), ['login', 'register', 'recover', 'newPassword', 'emailSent']))
             @yield('authentication')
         @else
             @include('layouts.header')

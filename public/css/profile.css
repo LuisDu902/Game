@@ -74,13 +74,13 @@
     grid-template-rows: auto;
 }
 
-.profile-input .field-label {
+.profile-input .field-label, .contact-input .field-label {
     color: black;
     font-size: 22px;
     display: block;
 }
 
-.profile-input input, .profile-input textarea {
+.profile-input input, .profile-input textarea , .contact-input input, .contact-input textarea{
     display: block;
     padding: 10px;
     margin-top: 20px;
