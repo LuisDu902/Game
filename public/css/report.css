@@ -49,9 +49,15 @@
     margin-bottom: 50px;
 }
 
+.report-popup-content{
+    padding: 30px !important;
+}
+
 #reportPopup button{
     position: relative;
-    top: -35px;
+    top: -20px;
+    font-size: 20px;
+    left: 34%;
     text-align: center;
     color: #684fe3;
 }

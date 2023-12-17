@@ -133,7 +133,8 @@
         <span class="close-btn" onclick="closePopup()">&times;</span>
         <h2>Report</h2>
         <p>Select a reason for reporting:</p>
-        <form>
+        <form method="POST" action="{{ route('report.store') }}">
+            @csrf
             <div>
                 <input type="radio" id="personal_info" name="report_reason" value="personal_info">
                 <label for="personal_info">Sharing Personal Information</label>
@@ -167,8 +168,10 @@
                 <label for="sexual_content">Sexual Content</label>
             </div>
 
+            <input type="hidden" name="question_id" value="{{ $question->id }}">
+
             <p id="elaborate">Elaborate on the issue:</p>
-            <textarea name="report_details"></textarea>
+            <textarea name="reason" ></textarea>
             <button type="submit">Submit Report</button>
         </form>
     </div>
