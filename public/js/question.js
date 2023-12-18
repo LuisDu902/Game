@@ -750,3 +750,30 @@ function removeFilterTag() {
         tagDiv.remove();
     }
 }
+
+const upA = document.getElementById('answer-up-f')
+const fileInfoA = document.getElementById('a-file-info');
+
+const upB = document.getElementById('up-f');
+const fileInfoB = document.getElementById('file-info');
+
+if (upB) {
+    upB.addEventListener('mouseover', function() {
+        fileInfoB.style.display = 'block';
+    });
+    
+    upB.addEventListener('mouseout', function() {
+        fileInfoB.style.display = 'none';
+    });
+}
+
+
+if (upA) {
+    upA.addEventListener('mouseover', function() {
+        fileInfoA.style.display = 'block';
+    });
+    
+    upA.addEventListener('mouseout', function() {
+        fileInfoA.style.display = 'none';
+    });
+}

@@ -1,6 +1,16 @@
 @extends('layouts.app')
 
 @section('content')
+    @if (session()->has('sent'))
+        <div class="notification-box" id="delete-noti"> 
+            <ion-icon name="checkmark-circle" id="noti-icon"></ion-icon>
+            <div>
+                <span> Email sent!</span>
+                <span> Thanks for contacting us! </span>
+            </div>
+            <ion-icon name="close" id="close-notification" onclick="closeNotification()"></ion-icon>
+        </div>
+    @endif
     <x-sidebar></x-sidebar>
 
     <div class="headers">
@@ -25,25 +35,25 @@
                 <img src="{{ asset('images/contact.png') }}" alt="contact-image">
             </div>
             
-            <form id="contactForm" method="POST">
+            <form id="contactForm" method="POST" action="{{ route('contact') }}">
                 {{ csrf_field() }}
-                <div class="contact-input contact-name">
-                    <label class="field-label" for="name"> Name <span
+                <div class="contact-input">
+                    <label class="field-label" for="contact-name"> Name <span
                             class="purple">*</span> </label>
-                    <input id="contact-name" type="text" name="name" placeholder="your name"
+                    <input id="contact-name" type="text" name="name" placeholder="Your name"
                         required>
                 </div>
     
-                <div class="contact-input contact-email">
-                    <label class="field-label" for="email"> Email Address
+                <div class="contact-input">
+                    <label class="field-label" for="contact-email"> Email Address
                         <span class="purple">*</span> </label>
-                    <input id="profile-email" type="email" name="email"
-                        placeholder="email@example.com" required>
+                    <input id="contact-email" type="email" name="email"
+                        placeholder="Your email address" required>
                 </div>
-                <div class="contact-input contact-description">
-                    <label class="field-label" for="description">
+                <div class="contact-input">
+                    <label class="field-label" for="content">
                         Message </label>
-                        <textarea id="profile-description" name="description" placeholder="Your description"></textarea>
+                        <textarea id="content" name="content" placeholder="Your message"></textarea>
                 </div>
                 <button type="submit">Submit</button>
             </form>

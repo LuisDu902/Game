@@ -329,16 +329,16 @@ function showEditAnswer() {
 
     const docFiles = answer.querySelectorAll('.a-file span');
     const imageFiles = answer.querySelectorAll('.a-img img');
-
+    console.log(imageFiles);
     for (const document of docFiles) {
         fileNames.push(document.textContent);
     }
     for (const image of imageFiles) {
-        fileNames.push(image.alt);
+        fileNames.push(image.getAttribute('data-name'));
     }
 
     oldAnswerFiles = fileNames;
-    
+    console.log(fileNames);
     sendAjaxRequest('get', '/api/answers/' + id + '/edit', {}, toggleEditAnswer);
 
 }
