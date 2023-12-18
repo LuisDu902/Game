@@ -47,9 +47,7 @@
                     <option value="rank"> rank </option>
                 </select>
             </div>
-            @if (Auth::check() && Auth::user()->is_admin && !Auth::user()->is_banned) 
-                <button id="edit-status-btn">Edit</button>
-            @endif
+            
         </nav>
         <div class="users">
             @include('partials._users')

@@ -1,39 +1,38 @@
-
-@if ($users->count() > 0)
-    <table class="users-table">
-        <thead>
-            <tr>
-                <th></th> <th>Username</th>
-                <th>Name</th> <th>Email Address</th>
-                <th>Rank</th> <th>Status</th>
-                <th>Delete User</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($users as $user)
-                <x-userinfo :user="$user"/>           
-            @endforeach
-        </tbody>
-    </table>
-    {{ $users->links() }}
-    <div id="userDeleteModal" class="modal">
-        <div class="delete-modal">
-            <div class="modal-c">
-                <ion-icon name="warning-outline"></ion-icon>
-                <div>
-                <h2>Delete user</h2>
-                <p>Are you sure you want to delete this user? All of its questions, answers and comments will also be permanently removed. This action cannot be undone.</p>
-                </div>
-            </div>
-            <div class="d-buttons">
-                <button id="ad-cancel">Cancel</button>
-                <button id="ad-confirm">Delete</button>
-            </div>
+<section class="user-manage-section">
+    <nav class="search-bar">
+        <div class="filter-condition">
+            <ion-icon name="funnel-outline" class="purple"></ion-icon>
+            <label> Filter by </label>
+            <select name="" class="filter-select" id="filter-user">
+                <option value="">None</option>
+                <optgroup label="Rank">
+                    <option value="Bronze">Bronze</option>
+                    <option value="Gold">Gold</option>
+                    <option value="Master">Master</option>
+                </optgroup>
+                <optgroup label="Status">
+                    <option value="Active">Active</option>
+                    <option value="Banned">Banned</option>
+                </optgroup>
+            </select>
         </div>
+        <div class="user-search">
+            <ion-icon name="search" class="purple"></ion-icon>
+            <input id="search-user" type="text" placeholder="Search...">
+        </div>
+
+        <div class="order-condition">
+            <ion-icon name="swap-vertical" class="purple"></ion-icon>
+            <label> Order by </label>
+            <select name="" class="order-select" id="order-user">
+                <option value="username"> username </option>
+                <option value="name"> name </option>
+                <option value="rank"> rank </option>
+            </select>
+        </div>
+    </nav>
+    <div class="users">
+        @include('partials._usersTable')
     </div>
-@else
-    <div class="no-records">
-        <img src="{{ asset('images/nothing.png') }}" alt="nothing">
-        <span>No matching users</span>
-    </div>
-@endif    
+</section>
+

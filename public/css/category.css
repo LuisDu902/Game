@@ -2,7 +2,7 @@
     margin: 20px 40px 20px 0px;
 }
 
-.categories-section h1, .category-section h2, .game h1, .user-manage-section h1, .activity-section h1, .game .q, .title-user-questions-auth h1, .title-user-questions h1, .title-user-answers-auth h1, .title-user-answers h1, .questions-sec h1, .faq-sec h1, .contact-section h1, .about-section h1 {
+.categories-section h1, .category-section h2, .game h1, .activity-section h1, .game .q, .title-user-questions-auth h1, .title-user-questions h1, .title-user-answers-auth h1, .title-user-answers h1, .questions-sec h1, .faq-sec h1, .contact-section h1, .about-section h1 {
     background-image: url('../images/tick.png'); 
     background-size: 35px 35px;
     background-repeat: no-repeat; 

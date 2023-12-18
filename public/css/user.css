@@ -135,12 +135,6 @@
     padding-right: 5px;
 }
 
-.users-table .hidden {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-}
-
 .users-table .active {
     border: 1px solid #00BF57;
     background-color: #CFEBC4;
@@ -183,6 +177,10 @@
 .no-records img {
     height: 400px;
     width: 400px;
+}
+
+.delete-user-button ion-icon {
+    color: #c52b2b;
 }
 
 @media (max-width: 1020px) {
