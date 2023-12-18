@@ -10,6 +10,7 @@ use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\AnswerController;
+use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\LoginController;
@@ -80,6 +81,13 @@ Route::controller(QuestionController::class)->group(function () {
     Route::delete('/questions/{id}', 'delete')->name('questions.destroy');
 });
 
+Route::controller(ReportController::class)->group(function () {
+    Route::post('/report', [ReportController::class, 'store'])->name('report.store');
+    Route::post('/report2', [ReportController::class, 'store2'])->name('report.store2');
+    Route::post('/report3', [ReportController::class, 'store3'])->name('report.store3');
+});
+
+
 // File Storage
 Route::controller(FileController::class)->group(function () {
     Route::post('/api/file/upload', 'upload');
@@ -114,6 +122,7 @@ Route::controller(QuestionController::class)->group(function () {
     Route::post('/api/questions/{id}/visibility', 'visibility'); 
     Route::post('/api/questions', 'store');
     Route::put('/api/questions/{id}', 'update');
+    
 });
 
 // Answer API

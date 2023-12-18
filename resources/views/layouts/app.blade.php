@@ -23,6 +23,7 @@
         <link href="{{ url('css/pagination.css') }}" rel="stylesheet">
         <link href="{{ url('css/user.css') }}" rel="stylesheet">
         <link href="{{ url('css/category.css') }}" rel="stylesheet">
+        <link href="{{ url('css/report.css') }}" rel="stylesheet">
         <link href="{{ url('css/game.css') }}" rel="stylesheet">
         <link href="{{ url('css/home.css') }}" rel="stylesheet">
         <link href="{{ url('css/question.css') }}" rel="stylesheet">
@@ -39,6 +40,7 @@
         <script type="text/javascript" src="{{ url('js/editprofile.js') }}" defer></script>
         <script type="text/javascript" src="{{ url('js/question.js') }}" defer></script>
         <script type="text/javascript" src="{{ url('js/answer.js') }}" defer></script>
+        <script type="text/javascript" src="{{ url('js/report.js') }}" defer></script>
         <script type="text/javascript" src="{{ url('js/comment.js') }}" defer></script>
         <script type="text/javascript" src="{{ url('js/carousel.js') }}" defer></script>
         <script type="text/javascript" src="{{ url('js/dropdown.js') }}" defer></script>

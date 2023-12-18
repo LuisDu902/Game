@@ -55,10 +55,11 @@
                             <ion-icon name="time"></ion-icon>
                             <span>Post activity</span>
                         </a>
-                        <div>
+                        <div onclick="openPopup(1)">
                             <ion-icon name="flag"></ion-icon>
                             <span>Report</span>
                         </div>
+
                     </div>
                 </div>
             @endif
@@ -123,5 +124,55 @@
                 @endforeach
             </div>
         </div>
+    </div>
+</div>
+
+<!-- Report Popup -->
+<div id="reportPopup" class="report-popup">
+    <div class="report-popup-content">
+        <span class="close-btn" onclick="closePopup()">&times;</span>
+        <h2>Report</h2>
+        <p>Select a reason for reporting:</p>
+        <form method="POST" action="{{ route('report.store') }}">
+            @csrf
+            <div>
+                <input type="radio" id="personal_info" name="reason" value="personal_info">
+                <label for="personal_info">Sharing Personal Information</label>
+            </div>
+            <div>
+                <input type="radio" id="copyright" name="reason" value="copyright">
+                <label for="copyright">Copyright Violation</label>
+            </div>
+            <div>
+                <input type="radio" id="spam" name="reason" value="spam">
+                <label for="spam">Spam</label>
+            </div>
+            <div>
+                <input type="radio" id="self_harm" name="reason" value="self_harm">
+                <label for="self_harm">Self Harm or Suicide</label>
+            </div>
+            <div>
+                <input type="radio" id="impersonation" name="reason" value="impersonation">
+                <label for="impersonation">Impersonation</label>
+            </div>
+            <div>
+                <input type="radio" id="harassment" name="reason" value="harassment">
+                <label for="harassment">Harassment</label>
+            </div>
+            <div>
+                <input type="radio" id="hate" name="reason" value="hate">
+                <label for="hate">Hate</label>
+            </div>
+            <div>
+                <input type="radio" id="sexual_content" name="reason" value="sexual_content">
+                <label for="sexual_content">Sexual Content</label>
+            </div>
+
+            <input type="hidden" name="question_id" value="{{ $question->id }}">
+
+            <p id="elaborate">Elaborate on the issue:</p>
+            <textarea name="explanation" ></textarea>
+            <button type="submit">Submit Report</button>
+        </form>
     </div>
 </div>
