@@ -49,10 +49,8 @@
                 <span> Or Login Using </span> 
                 <hr class="line-after">
             </div>
-            <button class="google-btn">
-                <ion-icon class="opt-icon google" name="logo-google"></ion-icon>
-                <span class="option google">Google</span>
-            </button>
+            <a href="{{ route('google.redirect') }}" class="btn btn-primary"> Login with Google </a>
+
             <div class="toggle-login">
                 <span> Don't have an account?
                     <a href="{{ route('register') }}" class="toggle-register">Register </a>
@@ -61,5 +59,6 @@
         </form>
     </div>
 </div>
+
 
 @endsection
