@@ -13,6 +13,13 @@ class Game extends Model
 
     protected $table = 'game';
 
+    protected $fillable = [
+        'name',
+        'description',
+        'nr_members',
+        'game_category_id',
+    ];
+
     public function members()
     {
         return $this->belongsToMany(User::class, 'game_member', 'game_id', 'user_id');

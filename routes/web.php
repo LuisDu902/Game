@@ -91,8 +91,12 @@ Route::controller(GameCategoryController::class)->group(function () {
 
 // Game
 Route::controller(GameController::class)->group(function () {
+    Route::post('/api/game/{category_id}', 'store')->name('games.store');
+    Route::get('/game/create/{category_id}', 'create')->name('games.create');
     Route::get('/game/{id}', 'show')->name('game');
 });
+
+
 
 // User API
 Route::controller(UserController::class)->group(function () {
