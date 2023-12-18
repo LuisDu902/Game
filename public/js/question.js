@@ -750,3 +750,14 @@ function removeFilterTag() {
         tagDiv.remove();
     }
 }
+
+const upB = document.querySelector('.upload-files');
+const fileInfo = document.getElementById('file-info');
+
+upB.addEventListener('mouseover', function() {
+    fileInfo.style.display = 'block';
+});
+
+upB.addEventListener('mouseout', function() {
+    fileInfo.style.display = 'none';
+});
