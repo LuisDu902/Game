@@ -19,8 +19,10 @@
         <div class="categories-group d-flex flex-row justify-content-between pe-4">
             <h1>Game Categories</h1>
             <div class="categories-action">
-                @if (Auth::user()->is_admin && !Auth::user()->is_banned)
-                    <a href="{{ route('categories.create') }}" id="newQuestion">Create New Category</a>
+                @if (Auth::check())
+                    @if (Auth::user()->is_admin && !Auth::user()->is_banned)
+                        <a href="{{ route('categories.create') }}" id="newQuestion">Create New Category</a>
+                    @endif
                 @endif
             </div>
         </div>

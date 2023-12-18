@@ -28,8 +28,10 @@
                 <div class="games-group d-flex flex-row justify-content-between pe-4">
                     <h2> Games </h2>
                     <div class="games-action">
-                        @if (Auth::user()->is_admin && !Auth::user()->is_banned)
-                            <a href="{{ route('games.create', ['category_id' => $category->id]) }}" id="newQuestion">Create New Game</a>
+                        @if (Auth::check())
+                            @if (Auth::user()->is_admin && !Auth::user()->is_banned)
+                                <a href="{{ route('games.create', ['category_id' => $category->id]) }}" id="newQuestion">Create New Game</a>
+                            @endif
                         @endif
                     </div>
                 </div>
