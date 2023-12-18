@@ -42,6 +42,7 @@
         <script type="text/javascript" src="{{ url('js/carousel.js') }}" defer></script>
         <script type="text/javascript" src="{{ url('js/dropdown.js') }}" defer></script>
         <script type="text/javascript" src="{{ url('js/faq.js') }}" defer></script>
+        <script type="text/javascript" src="{{ url('js/gamecategory.js') }}" defer></script>
     
         <script nomodule
             src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
