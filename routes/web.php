@@ -11,6 +11,7 @@ use App\Http\Controllers\TagController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\Auth\GoogleController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\LoginController;
@@ -151,7 +152,5 @@ Route::controller(TagController::class)->group(function () {
     Route::post('/api/tags', 'store');
 });
 
-
-
-
-
+Route::get('/google/redirect', [App\Http\Controllers\Auth\GoogleController::class, 'redirectToGoogle'])->name('google.redirect');
+Route::get('/google/callback', [App\Http\Controllers\Auth\GoogleController::class, 'handleGoogleCallback'])->name('google.callback');
