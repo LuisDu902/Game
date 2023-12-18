@@ -77,12 +77,17 @@ Route::controller(FileController::class)->group(function () {
     Route::delete('/api/file/delete', 'clear');
 });
 
+Route::controller(GameCategoryController::class)->group(function () {
+    Route::post('/api/gamecategories', 'store')->name('categories.store');
+});
 
 // Game Category
 Route::controller(GameCategoryController::class)->group(function () {
     Route::get('/categories', 'index')->name('categories');
+    Route::get('/categories/create', 'create')->name('categories.create');
     Route::get('/categories/{id}', 'show')->name('category');
 });
+
 
 // Game
 Route::controller(GameController::class)->group(function () {
