@@ -91,7 +91,7 @@
         </div>
         <div class="a-img">
             @foreach($answer->images() as $image)
-                <img src="{{ asset('answer/' . $image->file_name) }}" alt="{{ $image->f_name }}">
+                <img src="{{ asset('answer/' . $image->file_name) }}" alt="{{ $image->f_name }}" data-name="{{ $image->f_name }}">
             @endforeach
         </div>
         <ul>

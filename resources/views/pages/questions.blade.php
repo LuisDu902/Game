@@ -1,6 +1,16 @@
 @extends('layouts.app')
 
 @section('content')
+    @if (session()->has('delete'))
+        <div class="notification-box" id="delete-noti"> 
+            <ion-icon name="checkmark-circle" id="noti-icon"></ion-icon>
+            <div>
+                <span> Question deleted!</span>
+                <span> {{ session('delete') }} </span>
+            </div>
+            <ion-icon name="close" id="close-notification" onclick="closeNotification()"></ion-icon>
+        </div>
+    @endif
     <x-sidebar></x-sidebar>
 
     <div class="headers">

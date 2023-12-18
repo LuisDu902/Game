@@ -51,10 +51,11 @@
                     <textarea name="content" id="content" class="form-control" placeholder="Enter your answer here..." required></textarea>
                 </div>
                 <div class="upload-files">
-                    <label for="file">Upload Files:</label>
+                    <label for="file">Select Files:</label>
                     <input type='file' name='files[]' id="file" multiple hidden onchange="fileInputChange()">
-                    <button id="answer-up-f" onclick="uploadAFiles()">Upload</button>
+                    <button id="answer-up-f" onclick="uploadAFiles()">Select</button>
                 </div>
+                <div id="a-file-info">Valid file types: .jpg, .png, .pdf, .gif, .doc, .docx</div>
                 <div class="answer-files"></div>
                 <div class="answer-images"></div>
                 <button id="create-answer" onclick="createAnswer()">Post Answer</button>

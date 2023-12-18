@@ -33,10 +33,17 @@ class MailModel extends Mailable
      */
     public function envelope()
     {
-        return new Envelope(
-            from: new Address(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME')),
-            subject: 'Recover password',
-        );
+        if ($this->mailData['type'] === 'recover'){
+            return new Envelope(
+                from: new Address(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME')),
+                subject: 'Recover password',
+            );
+        } else {
+            return new Envelope(
+                from: new Address($this->mailData['email'], $this->mailData['name']),
+                subject: 'Contact',
+            );
+        }  
     }
     
     /**
@@ -46,8 +53,15 @@ class MailModel extends Mailable
      */
     public function content()
     {
-        return new Content(
-            view: 'emails.recoverEmail',
-        );
+        if ($this->mailData['type'] === 'recover'){
+            return new Content(
+                view: 'emails.recoverEmail',
+            );
+        } else {
+            return new Content(
+                view: 'emails.contact',
+            );
+        }  
+        
     }
 }

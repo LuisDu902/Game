@@ -52,6 +52,7 @@ Route::controller(RegisterController::class)->group(function () {
 
 Route::controller(MailController::class)->group(function(){
     Route::post('/recoverPassword', 'send')->name('recoverPassword');
+    Route::post('/contact', 'contact')->name('contact');
 });
 
 // Static pages
