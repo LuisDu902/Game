@@ -13,6 +13,8 @@
                     <ion-icon name="home-outline"></ion-icon> Home
                 </a>
             </li>
+            <li><a href="{{ route('categories') }}">Game Categories</a></li>
+            <li>Create Game Category</li>
         </ul>
     </div>
     <div class="new-gamecategory-form">
