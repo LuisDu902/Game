@@ -135,35 +135,35 @@
         <form method="POST" action="{{ route('report.store2') }}">
             @csrf
             <div>
-                <input type="radio" id="personal_info" name="report_reason" value="personal_info">
+                <input type="radio" id="personal_info" name="reason" value="personal_info">
                 <label for="personal_info">Sharing Personal Information</label>
             </div>
             <div>
-                <input type="radio" id="copyright" name="report_reason" value="copyright">
+                <input type="radio" id="copyright" name="reason" value="copyright">
                 <label for="copyright">Copyright Violation</label>
             </div>
             <div>
-                <input type="radio" id="spam" name="report_reason" value="spam">
+                <input type="radio" id="spam" name="reason" value="spam">
                 <label for="spam">Spam</label>
             </div>
             <div>
-                <input type="radio" id="self_harm" name="report_reason" value="self_harm">
+                <input type="radio" id="self_harm" name="reason" value="self_harm">
                 <label for="self_harm">Self Harm or Suicide</label>
             </div>
             <div>
-                <input type="radio" id="impersonation" name="report_reason" value="impersonation">
+                <input type="radio" id="impersonation" name="reason" value="impersonation">
                 <label for="impersonation">Impersonation</label>
             </div>
             <div>
-                <input type="radio" id="harassment" name="report_reason" value="harassment">
+                <input type="radio" id="harassment" name="reason" value="harassment">
                 <label for="harassment">Harassment</label>
             </div>
             <div>
-                <input type="radio" id="hate" name="report_reason" value="hate">
+                <input type="radio" id="hate" name="reason" value="hate">
                 <label for="hate">Hate</label>
             </div>
             <div>
-                <input type="radio" id="sexual_content" name="report_reason" value="sexual_content">
+                <input type="radio" id="sexual_content" name="reason" value="sexual_content">
                 <label for="sexual_content">Sexual Content</label>
             </div>
 
@@ -172,7 +172,7 @@
 
 
             <p id="elaborate">Elaborate on the issue:</p>
-            <textarea name="reason" ></textarea>
+            <textarea name="explanation" ></textarea>
             <button type="submit">Submit Report</button>
         </form>
     </div>

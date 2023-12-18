@@ -12,6 +12,7 @@ class ReportController extends Controller
     {
         $data = $request->validate([
             'reason' => 'required|string',
+            'explanation' => 'required|string',
             'question_id' => 'required|integer',
             // Add validation for other fields if needed
         ]);
@@ -36,6 +37,7 @@ class ReportController extends Controller
     {
         $data = $request->validate([
             'reason' => 'required|string',
+            'explanation' => 'required|string',
             'reported_id' => 'required|string',
             'answer_id' => 'required|string',
             // Add validation for other fields if needed
@@ -58,6 +60,7 @@ class ReportController extends Controller
     {
         $data = $request->validate([
             'reason' => 'required|string',
+            'explanation' => 'required|string',
             'reported_id' => 'required|string',
             'comment_id' => 'required|string',
             // Add validation for other fields if needed
