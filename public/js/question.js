@@ -750,3 +750,4 @@ function removeFilterTag() {
         tagDiv.remove();
     }
 }
+

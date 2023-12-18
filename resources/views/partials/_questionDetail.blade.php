@@ -55,7 +55,7 @@
                             <ion-icon name="time"></ion-icon>
                             <span>Post activity</span>
                         </a>
-                        <div onclick="openPopup()">
+                        <div onclick="openPopup(1)">
                             <ion-icon name="flag"></ion-icon>
                             <span>Report</span>
                         </div>

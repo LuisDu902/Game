@@ -74,6 +74,8 @@ Route::controller(QuestionController::class)->group(function () {
 
 Route::controller(ReportController::class)->group(function () {
     Route::post('/report', [ReportController::class, 'store'])->name('report.store');
+    Route::post('/report2', [ReportController::class, 'store2'])->name('report.store2');
+    Route::post('/report3', [ReportController::class, 'store3'])->name('report.store3');
 });
 
 
