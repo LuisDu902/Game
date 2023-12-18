@@ -127,7 +127,7 @@
 
 
 <!-- Report Popup -->
-<div id="reportPopup2" class="report-popup">
+<div id="reportPopup2" class="report-popup2">
     <div class="report-popup-content">
         <span class="close-btn" onclick="closePopup2()">&times;</span>
         <h2>Report</h2>
