@@ -140,4 +140,20 @@ class AdminController extends Controller
 
         return $gameChartData;
     }
+
+    public function updateReportStatus(Request $request){
+    $reportId = $request->input('reportId');
+    $status = $request->input('status');
+
+    $report = Report::find($reportId);
+    if($report) {
+        $report->is_solved = $status;
+        $report->save();
+
+        return response()->json(['success' => true]);
+    }
+
+    return response()->json(['success' => false]);
+}
+
 }

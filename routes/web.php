@@ -104,7 +104,11 @@ Route::controller(AdminController::class)->group(function () {
     Route::get('/api/admin/tags', 'tags');
     Route::get('/api/admin/charts', 'chart');
     Route::get('/api/admin/reports', 'reports');
+    Route::post('/admin/reports/update-status', 'AdminController@updateReportStatus');
 });
+
+Route::post('/admin/reports/update-status', [AdminController::class, 'updateReportStatus']);
+    
 
 // Game Category
 Route::controller(GameCategoryController::class)->group(function () {

@@ -3,8 +3,8 @@
         <thead>
             <tr>
                 <th></th> <th>Reporter</th>
-                <th>Reported</th> <th>Reason</th>
-                <th>Explanation</th> <th>Status</th>
+                <th>Reported</th> <th>Explanation</th>
+                <th>Reason</th> <th>Status</th>
             </tr>
         </thead>
         <tbody>
