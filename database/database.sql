@@ -427,8 +427,33 @@ FOR EACH ROW
 EXECUTE FUNCTION update_question_privacy_on_ban();
 
       
+-- Trigger function to update nr_members after an insert or delete in game_member
+CREATE OR REPLACE FUNCTION update_nr_members()
+RETURNS TRIGGER AS $$
+BEGIN
+  IF TG_OP = 'INSERT' THEN
+    UPDATE game
+    SET nr_members = nr_members + 1
+    WHERE id = NEW.game_id;
+  ELSIF TG_OP = 'DELETE' THEN
+    UPDATE game
+    SET nr_members = nr_members - 1
+    WHERE id = OLD.game_id;
+  END IF;
+  RETURN NULL;
+END;
+$$ LANGUAGE plpgsql;
 
---Trigger 6
+-- Create triggers to call the trigger function after an insert or delete in game_member
+CREATE TRIGGER update_nr_members_insert
+AFTER INSERT ON game_member
+FOR EACH ROW
+EXECUTE FUNCTION update_nr_members();
+
+CREATE TRIGGER update_nr_members_delete
+AFTER DELETE ON game_member
+FOR EACH ROW
+EXECUTE FUNCTION update_nr_members();
 
 
 --Trigger 8

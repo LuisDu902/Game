@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\GameCategoryController;
 use App\Http\Controllers\GameController;
@@ -94,6 +95,14 @@ Route::controller(ReportController::class)->group(function () {
 Route::controller(FileController::class)->group(function () {
     Route::post('/api/file/upload', 'upload');
     Route::delete('/api/file/delete', 'clear');
+});
+
+// Admin Section
+Route::controller(AdminController::class)->group(function () {
+    Route::get('/statistics', 'stats')->name('stats');
+    Route::get('/api/admin/users', 'users');
+    Route::get('/api/admin/tags', 'tags');
+    Route::get('/api/admin/charts', 'chart');
 });
 
 // Game Category

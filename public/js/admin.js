@@ -1,12 +1,56 @@
-const selectElements = document.querySelectorAll('.status');
-let changedSelects = [];
+function showUserStatus() {
+    const modal = document.querySelector('#userDeleteModal');
+    modal.style.display = 'block';
+    const status = event.target.value;
+    const sel = event.target;
 
-function sendUpdateStatusRequest() {
-    changedSelects.forEach(item => {
-        const { id, selectedValue } = item;
-        sendAjaxRequest('post', '/api/users/' + id, { status: selectedValue }, statusUpdatedHandler);
+    if (status == 'banned') {
+        sel.classList.remove('active');
+        sel.classList.add('banned');
+    } else {
+        sel.classList.remove('banned');
+        sel.classList.add('active');
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    };
+    modal.querySelector('#ad-confirm').textContent = 'Confirm';
+
+    if (event.target.value == 'active'){
+        modal.querySelector('h2').textContent = 'Activate account';
+        modal.querySelector('p').textContent = 'Are you sure you want to activate this account? All its activity will become public and visible.'
+    } else {
+        modal.querySelector('h2').textContent = 'Ban account';
+        modal.querySelector('p').textContent = 'Are you sure you want to ban this account? All its activity will become private.'
+    }
+    const cancel = document.getElementById('ad-cancel');
+   
+    cancel.addEventListener('click', function(){
+        modal.style.display = 'none';
+        if (status == 'active') {
+            sel.classList.remove('active');
+            sel.classList.add('banned');
+            sel.value = 'banned';
+        } else {
+            sel.classList.remove('banned');
+            sel.classList.add('active');
+            sel.value = 'active';
+        }
     });
-    changedSelects = [];
+
+    const id = event.target.closest('.user-info').getAttribute('data-id');
+
+    console.log('User ID:', id);
+    const confirm = document.getElementById('ad-confirm');
+    confirm.addEventListener('click', function(){
+        event.preventDefault();
+        sendAjaxRequest('post', '/api/users/' + id, { status: status }, statusUpdatedHandler);
+        modal.style.display = 'none';
+    });
+    
 }
 
 function statusUpdatedHandler() {
@@ -18,68 +62,6 @@ function statusUpdatedHandler() {
         console.error('Status update failed:', this.statusText);
     }
 }
-
-if (selectElements) {
-    selectElements.forEach(function(selectElement) {
-        selectElement.addEventListener('change', function() {
-            handleSelectChange(this);
-        });
-    });
-}
-
-function handleSelectChange(selectElement) {
-    const selectedValue = selectElement.value;
-    const id = selectElement.getAttribute('data-user');
-    
-    if (selectedValue === 'banned') {
-        selectElement.classList.remove('active');
-        selectElement.classList.add('banned');
-    } else {
-        selectElement.classList.remove('banned');
-        selectElement.classList.add('active');
-    }
-
-    const existingIndex = changedSelects.findIndex(item => item.id === id);
-    if (existingIndex === -1) {
-        changedSelects.push({ id, selectedValue });
-    } else {
-        changedSelects.splice(existingIndex, 1);
-    }
-}
-
-const edit_status_btn = document.querySelector('#edit-status-btn');
-
-if (edit_status_btn){ 
-    edit_status_btn.addEventListener('click', function() {
-        const selects = document.querySelectorAll('.users-table select');
-        if (edit_status_btn.textContent == 'Edit') { 
-            selects.forEach(select => {
-                select.removeAttribute('disabled');
-                select.classList.remove('hidden');
-            });
-            edit_status_btn.textContent = 'Save';
-        } else {
-            selects.forEach(select => {
-                select.setAttribute('disabled', 'true');
-                select.classList.add('hidden');
-            });
-            edit_status_btn.textContent = 'Edit';
-
-            if (changedSelects.length > 0) {
-                sendUpdateStatusRequest();
-            }
-        }
-    });
-}
-
-function sendUserListRequest() {
-    changedSelects.forEach(item => {
-        const { id, selectedValue } = item;
-        sendAjaxRequest('post', '/api/users/' + id, { status: selectedValue }, statusUpdatedHandler);
-    });
-    changedSelects = [];
-}
-
 
 const order_user = document.querySelector('#order-user');
 const search_user = document.querySelector('#search-user');
@@ -95,35 +77,19 @@ if (document.querySelector('.user-manage-section')) {
     filter_user.addEventListener('change', function() {
         sendAjaxRequest('get', '/api/users?' + encodeForAjax({search: search_user.value, filter: filter_user.value, order: order_user.value}), {}, userListHandler);
     });
-
-    document.addEventListener("DOMContentLoaded", function() {
-        search_user.value = '';
-        order_user.value = 'username';
-        filter_user.value = '';
-    });
 }
-
-
 
 function userListHandler() {
     if (this.status === 200) {
         const table = document.querySelector('.users');
         table.innerHTML = this.response;
-        console.log(this);
         const links = document.querySelectorAll('.custom-pagination a');
         for (const link of links){
             link.addEventListener('click', function(){
                 event.preventDefault();
-                sendAjaxRequest('get', link.href, {}, questionListHandler);
+                sendAjaxRequest('get', link.href, {}, userListHandler);
             });
         }
-        const selects = document.querySelectorAll('.status');
-        selects.forEach(function(selectElement) {
-            selectElement.addEventListener('change', function() {
-                handleSelectChange(this);
-            });
-        });
-        
     } else {
         console.error('User list failed:', this.statusText);
     }
@@ -173,3 +139,150 @@ function userDeleteHandler() {
 }
  
 
+const adminActions = document.querySelectorAll('.admin-actions button');
+
+if (adminActions) {
+    adminActions.forEach(button => {
+        button.addEventListener('click', function () {
+            adminActions.forEach(btn => btn.classList.remove('selected'));
+            this.classList.add('selected');
+            if (this.textContent !== 'Statistics')
+                sendAjaxRequest('get', '/api/admin/' + this.textContent.toLowerCase(), {}, toggleAdminSection);
+            else {
+                window.location.href = '/statistics';
+            }
+        });
+    });
+}
+
+function toggleAdminSection() {
+    const article = document.querySelector('.admin-sec article');
+    article.innerHTML = this.responseText;
+}
+
+
+const questionChart = document.getElementById('question-chart');
+const userChart = document.getElementById('user-chart');
+const categoryChart = document.getElementById('categories-chart')
+const gameChart = document.getElementById('game-chart');
+
+if (questionChart) {
+   createCharts();
+}
+
+function createCharts(){
+    sendAjaxRequest('get', 'api/admin/charts?' + encodeForAjax({type: 'questions'}), {}, createQuestionChart);
+    sendAjaxRequest('get', 'api/admin/charts?' + encodeForAjax({type: 'users'}), {}, createUserChart);
+    sendAjaxRequest('get', 'api/admin/charts?' + encodeForAjax({type: 'categories'}), {}, createCategoryChart);
+    sendAjaxRequest('get', 'api/admin/charts?' + encodeForAjax({type: 'games'}), {}, createGameChart);
+}
+
+function createQuestionChart() {
+    if (this.status == 200) {
+        const response = JSON.parse(this.responseText);
+       
+        new Chart(questionChart, {
+            type: 'line',
+            data: {
+                labels: response.labels,
+                datasets: [{
+                    label: 'Questions',
+                    data: response.data,
+                    fill: false,
+                    borderColor: 'rgba(124,91,240,255)',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        display: false 
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false
+                    }
+                }
+            }
+        });
+    } 
+}
+
+function createUserChart() {
+    if (this.status == 200) {
+        const response = JSON.parse(this.responseText);
+        new Chart(userChart, {
+            type: 'doughnut',
+            data: {
+                labels: response.labels,
+                datasets: [{
+                  label: 'Users',
+                  data: response.data,
+                  backgroundColor: [
+                    'rgb(159, 71, 71)', 
+                    'rgb(251, 165, 34)', 
+                    'rgb(124,91,240)'  
+                ],
+                }]
+            },
+            options: {
+                cutout: '70%',
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    },
+                },
+            }
+          });
+    }
+   
+}
+
+function createCategoryChart() {
+    if (this.status == 200) {
+        const response = JSON.parse(this.responseText);
+        new Chart(categoryChart, {
+            type: 'bar',
+            data: {
+                labels: response.labels,
+                datasets: [{
+                  label: 'Number of games in each category',
+                  data: response.data,
+                  backgroundColor: ['rgb(210, 207, 255)']
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    },
+                },
+            }
+          });
+    }
+}
+
+function createGameChart() {
+    if (this.status == 200) {
+        const response = JSON.parse(this.responseText);
+        new Chart(gameChart, {
+            type: 'bar',
+            data: {
+                labels: response.labels,
+                datasets: [{
+                  data: response.data,
+                  backgroundColor: ['rgb(210, 207, 255)']
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                },
+            }
+          });
+    }
+}
