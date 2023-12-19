@@ -18,13 +18,23 @@
         </ul>
     </div>
    <article class="category-section">
+        @if(session()->has('update'))
+            <div class="notification-box" id="delete-noti"> 
+                <ion-icon name="checkmark-circle" id="noti-icon"></ion-icon>
+                <div>
+                    <span> Category updated!</span>
+                    <span> {{ session('update') }} </span>
+                </div>
+                <ion-icon name="close" id="close-notification" onclick="closeNotification()"></ion-icon>
+            </div>
+        @endif
         <div class="category-section-total" data-cat="{{$category->id}}">
             <h1 class="category-title white">{{ $category->name }}</h1>
             <div class="category-description">
                 <div class="category-drop">
                     <h2> Description </h2>   
                     <div class="c-drop-content">
-                        <a href="" id="edit-category">
+                        <a href="{{ route('categories.edit', ['id' => $category->id]) }}" id="edit-category">
                             <ion-icon name="create"></ion-icon>
                             <span>Edit</span>
                         </a>

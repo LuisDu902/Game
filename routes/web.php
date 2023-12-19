@@ -113,7 +113,9 @@ Route::controller(GameCategoryController::class)->group(function () {
     Route::post('/categories', 'store')->name('categories.store');
     Route::get('/categories/create', 'create')->name('categories.create');
     Route::get('/categories/{id}', 'show')->name('category');
+    Route::get('/categories/{id}/edit', 'edit')->name('categories.edit');
     Route::delete('/categories/{id}', 'delete')->name('categories.destroy');
+    Route::put('/categories/{id}', 'update')->name('categories.update');
 });
 
 // Game
