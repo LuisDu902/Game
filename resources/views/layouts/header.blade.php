@@ -21,7 +21,7 @@
         @if (Auth::check())
         <div class="left">
             @if (Auth::user()->is_admin && !Auth::user()->is_banned)
-                <a href="{{ route('users') }}" class="admin">
+                <a href="{{ route('stats') }}" class="admin">
                     Admin Section
                 </a>
             @endif

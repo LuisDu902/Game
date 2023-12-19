@@ -36,11 +36,6 @@ class UserController extends Controller
         return view('pages.profile', ['user' => $user]);
     }
 
-    public function index(){
-        $users = User::orderBy('username')->paginate(10);
-        return view('pages.users', ['users' => $users]);
-    }
-
     public function search(Request $request){
         $order = $request->input('order', 'username');
         $filter = $request->input('filter', '');
@@ -57,7 +52,7 @@ class UserController extends Controller
         elseif ($filter === 'Banned') $query->where('is_banned', true);
 
         
-        $users = $query->orderBy($order)->paginate(10);
+        $users = $query->where('id', '!=', 1)->orderBy($order)->paginate(10);
 
         $users->appends([
             'order' => $order,
@@ -65,7 +60,7 @@ class UserController extends Controller
             'search' => $search,
         ]);
 
-        return view('partials._users', compact('users'))->render();
+        return view('partials._usersTable', compact('users'))->render();
     }
 
     public function updateStatus(Request $request, $id) {

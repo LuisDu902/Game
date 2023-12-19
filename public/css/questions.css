@@ -1,7 +1,7 @@
 .questions-sec,
-.user-manage-section,
+.user-manage-section, .stats-section
 .faq-sec,.contact-section, .about-section,
-.activity-section {
+.activity-section, .admin-sec {
   margin: 20px;
   margin-left: 0;
 }
@@ -11,7 +11,7 @@
   justify-content: space-between;
 }
 
-.questions-sec .questions-actions .questions-sort {
+.questions-sec .questions-actions .questions-sort, .admin-actions {
   display: flex;
   gap: 30px;
 }
@@ -33,7 +33,7 @@
   color: white;
 }
 
-.questions-sec .questions-actions .questions-sort button {
+.questions-sec .questions-actions .questions-sort button, .admin-actions button {
   font-size: 18px;
   background-color: #d2cfff;
   width: 130px;
@@ -44,7 +44,7 @@
 }
 
 .questions-sec .questions-actions .questions-sort .selected,
-.questions-sec .questions-sort button:hover {
+.questions-sec .questions-sort button:hover, .admin-actions button:hover, .admin-actions .selected {
   background-color: #7c5bf0;
   color: white;
 }
