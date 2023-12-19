@@ -183,6 +183,20 @@
   border-radius: 20px;
 }
 
+.games-table th:nth-child(1),
+.game-info td:nth-child(1) {
+  padding-left: 20px;
+}
+
+.games-table th:nth-child(3),
+.game-info td:nth-child(3),
+.games-table th:nth-child(4),
+.game-info td:nth-child(4),
+.games-table th:nth-child(5),
+.game-info td:nth-child(5) {
+  text-align: center;
+}
+
 @media (max-width: 1200px) {
   .game {
     margin: 20px auto;

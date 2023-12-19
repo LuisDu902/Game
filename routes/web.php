@@ -68,7 +68,6 @@ Route::controller(StaticController::class)->group(function () {
 // User
 Route::controller(UserController::class)->group(function () {
     Route::get('/users/{id}', 'showUserProfile')->name('profile');
-    Route::get('/users', 'index')->name('users');
     Route::get('/users/questions/{id}', 'showUserQuestions')->name('users_questions');
     Route::get('/users/answers/{id}', 'showUserAnswers')->name('users_answers');
 });
@@ -102,7 +101,8 @@ Route::controller(AdminController::class)->group(function () {
     Route::get('/statistics', 'stats')->name('stats');
     Route::get('/api/admin/users', 'users');
     Route::get('/api/admin/tags', 'tags');
-    Route::get('/api/admin/categories', 'categories');
+    Route::get('/api/admin/games', 'games');
+    Route::get('/api/admin/reports', 'reports');
 
     Route::get('/api/admin/charts', 'chart');
 });
@@ -145,7 +145,6 @@ Route::controller(QuestionController::class)->group(function () {
     Route::post('/api/questions/{id}/visibility', 'visibility'); 
     Route::post('/api/questions', 'store');
     Route::put('/api/questions/{id}', 'update');
-    
 });
 
 // Answer API
@@ -157,7 +156,6 @@ Route::controller(AnswerController::class)->group(function () {
     Route::post('/api/answers/{id}/vote', 'vote');
     Route::post('/api/answers/{id}/unvote', 'unvote'); 
     Route::post('/api/answers/{id}/status', 'status'); 
-
 });
 
 // Comment API

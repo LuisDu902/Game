@@ -32,6 +32,13 @@ class AdminController extends Controller
         return view('partials._users', compact('users'))->render();
     }
 
+    public function games() {
+        $games = Game::orderBy('name')->paginate(10);
+        $categories = GameCategory::all();
+        return view('partials._games', compact('games', 'categories'))->render();
+    }
+
+
     public function chart(Request $request) {
         switch ($request->type) {
             case 'questions':
@@ -133,4 +140,6 @@ class AdminController extends Controller
 
         return $gameChartData;
     }
+
+    
 }

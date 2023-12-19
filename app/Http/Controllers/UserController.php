@@ -22,9 +22,7 @@ use HasFactory, Notifiable;
 class UserController extends Controller
 {
 
-    /**
-     * Display a login form.
-     */
+  
     public function showUserProfile($id) {
 
         $user = User::find($id);
