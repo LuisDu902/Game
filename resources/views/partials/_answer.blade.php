@@ -51,6 +51,33 @@
                             </div>
                         </div>
                     </div>
+                @elseif (Auth::user()->is_admin)
+                    <div class="answer-dropdown">
+                        <button class="drop-btn">
+                            <ion-icon name="ellipsis-vertical" onclick="toggleAnswerDropDown()"></ion-icon>
+                        </button>
+                        <div class="q-drop-content">
+                            <div id="edit-answer" onclick="showEditAnswer()">
+                                <ion-icon name="create"></ion-icon>
+                                <span>Edit</span>
+                            </div>
+                            <div onclick="showAnswerDelete()">
+                                <ion-icon name="trash"></ion-icon>
+                                <span>Delete</span>
+                            </div>
+                            @if ($answer->is_correct)
+                                <div id="mark-answer" onclick="markAsWrong()">
+                                    <ion-icon name="close-circle"></ion-icon>
+                                    <span>Wrong</span>
+                                </div>
+                            @else 
+                                <div id="mark-answer" onclick="markAsCorrect()">
+                                    <ion-icon name="checkmark-circle"></ion-icon>
+                                    <span>Correct</span>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
                 @else
                     <div class="answer-dropdown">
                         <button>

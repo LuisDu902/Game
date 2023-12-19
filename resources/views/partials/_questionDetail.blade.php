@@ -37,6 +37,39 @@
                        
                     </div>
                 </div>
+            @elseif (Auth::user()->is_admin)
+                <div class="question-dropdown">
+                    <button>
+                        <ion-icon name="ellipsis-vertical" class="purple"></ion-icon>
+                    </button>
+                    <div class="q-drop-content">
+                        <a href="#answerFormContainer">
+                            <ion-icon name="pencil"></ion-icon>
+                            <span>Answer</span>
+                        </a>
+                        <a href="{{ route('questions.edit', ['id' => $question->id]) }}" id="edit-question">
+                            <ion-icon name="create"></ion-icon>
+                            <span>Edit</span>
+                        </a>
+                        <a href="{{ route('questions.activity', ['id' => $question->id]) }}">
+                            <ion-icon name="time"></ion-icon>
+                            <span>Post activity</span>
+                        </a>
+                        <div id="delete-question">
+                            <ion-icon name="trash"></ion-icon>
+                            <span>Delete</span>
+                        </div>
+                        <div id="question-visibility" onclick="showVisibilityToggle()">
+                            @if ($question->is_public)
+                                <ion-icon name="eye"></ion-icon>
+                            @else
+                                <ion-icon name="eye-off"></ion-icon>
+                            @endif
+                            <span>Visibility</span>
+                        </div>
+                    
+                    </div>
+                </div>
             @else
                 <div class="question-dropdown">
                     <button>
