@@ -47,6 +47,11 @@ class GameCategoryController extends Controller
         return view('pages.newCategory');
     }
 
-
+    public function delete(Request $request, $id)
+    {
+        $category = GameCategory::findOrFail($id);
+        $category->delete();
+        return redirect('/categories')->with('delete', 'Category successfully deleted!');
+    }
 
 }

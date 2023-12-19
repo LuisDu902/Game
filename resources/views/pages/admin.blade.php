@@ -19,7 +19,6 @@
                 <button class="selected" id="stats">Statistics</button>
                 <button id="admin-users">Users</button>
                 <button id="admin-games">Games</button>
-                <button id="admin-categories">Categories</button>
                 <button id="admin-tags">Tags</button>
                 <button id="admin-reports">Reports</button>
         </div>

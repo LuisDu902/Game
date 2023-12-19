@@ -31,7 +31,7 @@ class AdminController extends Controller
         
         return view('partials._users', compact('users'))->render();
     }
-    
+
     public function chart(Request $request) {
         switch ($request->type) {
             case 'questions':

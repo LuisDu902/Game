@@ -102,6 +102,8 @@ Route::controller(AdminController::class)->group(function () {
     Route::get('/statistics', 'stats')->name('stats');
     Route::get('/api/admin/users', 'users');
     Route::get('/api/admin/tags', 'tags');
+    Route::get('/api/admin/categories', 'categories');
+
     Route::get('/api/admin/charts', 'chart');
 });
 
@@ -111,6 +113,7 @@ Route::controller(GameCategoryController::class)->group(function () {
     Route::post('/categories', 'store')->name('categories.store');
     Route::get('/categories/create', 'create')->name('categories.create');
     Route::get('/categories/{id}', 'show')->name('category');
+    Route::delete('/categories/{id}', 'delete')->name('categories.destroy');
 });
 
 // Game

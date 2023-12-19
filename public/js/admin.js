@@ -63,22 +63,6 @@ function statusUpdatedHandler() {
     }
 }
 
-const order_user = document.querySelector('#order-user');
-const search_user = document.querySelector('#search-user');
-const filter_user = document.querySelector('#filter-user');
-
-if (document.querySelector('.user-manage-section')) {
-    order_user.addEventListener('change', function() {
-        sendAjaxRequest('get', '/api/users?' + encodeForAjax({search: search_user.value, filter: filter_user.value, order: order_user.value}), {}, userListHandler);
-    });
-    search_user.addEventListener('input', function() {
-        sendAjaxRequest('get', '/api/users?' + encodeForAjax({search: search_user.value, filter: filter_user.value, order: order_user.value}), {}, userListHandler);
-    });
-    filter_user.addEventListener('change', function() {
-        sendAjaxRequest('get', '/api/users?' + encodeForAjax({search: search_user.value, filter: filter_user.value, order: order_user.value}), {}, userListHandler);
-    });
-}
-
 function userListHandler() {
     if (this.status === 200) {
         const table = document.querySelector('.users');
@@ -155,9 +139,28 @@ if (adminActions) {
     });
 }
 
+let order_user;
+let search_user;
+let filter_user;
+
 function toggleAdminSection() {
     const article = document.querySelector('.admin-sec article');
     article.innerHTML = this.responseText;
+   
+    if (document.querySelector('.user-manage-section')) {
+        order_user = document.querySelector('#order-user');
+        search_user = document.querySelector('#search-user');
+        filter_user = document.querySelector('#filter-user');
+        order_user.addEventListener('change', function() {
+            sendAjaxRequest('get', '/api/users?' + encodeForAjax({search: search_user.value, filter: filter_user.value, order: order_user.value}), {}, userListHandler);
+        });
+        search_user.addEventListener('input', function() {
+            sendAjaxRequest('get', '/api/users?' + encodeForAjax({search: search_user.value, filter: filter_user.value, order: order_user.value}), {}, userListHandler);
+        });
+        filter_user.addEventListener('change', function() {
+            sendAjaxRequest('get', '/api/users?' + encodeForAjax({search: search_user.value, filter: filter_user.value, order: order_user.value}), {}, userListHandler);
+        });
+    }
 }
 
 
@@ -285,4 +288,21 @@ function createGameChart() {
             }
           });
     }
+}
+
+function showDeleteCategory() {
+    const modal = document.getElementById('deleteModal');
+    modal.style.display = 'block';
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    };
+
+    const cancel = document.getElementById('d-cancel');
+
+    cancel.addEventListener('click', function(){
+        modal.style.display = 'none';
+    });
 }
