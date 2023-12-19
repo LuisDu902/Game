@@ -90,10 +90,11 @@ Route::controller(FileController::class)->group(function () {
 
 // Admin Section
 Route::controller(AdminController::class)->group(function () {
-    Route::get('/statistics', 'statistics')->name('stats');
+    Route::get('/statistics', 'stats')->name('stats');
     Route::get('/api/admin/users', 'users');
     Route::get('/api/admin/tags', 'tags');
-
+    Route::get('/api/admin/statistics', 'statistics');
+    Route::get('/api/admin/charts', 'chart');
 });
 
 // Game Category

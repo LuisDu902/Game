@@ -23,6 +23,8 @@
                 <button id="admin-tags">Tags</button>
                 <button id="admin-reports">Reports</button>
         </div>
-            @include('partials._users')
+        <article>
+            @include('partials._stats')
+        </article>
     </section>
 @endsection

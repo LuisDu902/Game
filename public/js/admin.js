@@ -65,9 +65,6 @@ function statusUpdatedHandler() {
     }
 }
 
-
-
-
 const order_user = document.querySelector('#order-user');
 const search_user = document.querySelector('#search-user');
 const filter_user = document.querySelector('#filter-user');
@@ -82,15 +79,7 @@ if (document.querySelector('.user-manage-section')) {
     filter_user.addEventListener('change', function() {
         sendAjaxRequest('get', '/api/users?' + encodeForAjax({search: search_user.value, filter: filter_user.value, order: order_user.value}), {}, userListHandler);
     });
-
-    document.addEventListener("DOMContentLoaded", function() {
-        search_user.value = '';
-        order_user.value = 'username';
-        filter_user.value = '';
-    });
 }
-
-
 
 function userListHandler() {
     if (this.status === 200) {
@@ -159,11 +148,138 @@ if (adminActions) {
         button.addEventListener('click', function () {
             adminActions.forEach(btn => btn.classList.remove('selected'));
             this.classList.add('selected');
-            sendAjaxRequest('get', '/api/admin/' + this.textContent, {}, toggleAdminSection);
+            sendAjaxRequest('get', '/api/admin/' + this.textContent.toLowerCase(), {}, toggleAdminSection);
         });
     });
 }
 
 function toggleAdminSection() {
+    const article = document.querySelector('.admin-sec article');
+    article.innerHTML = this.responseText;
+}
 
+
+const questionChart = document.getElementById('question-chart');
+const userChart = document.getElementById('user-chart');
+const categoryChart = document.getElementById('categories-chart')
+const gameChart = document.getElementById('game-chart');
+
+if (questionChart) {
+   createCharts();
+}
+
+function createCharts(){
+    sendAjaxRequest('get', 'api/admin/charts?' + encodeForAjax({type: 'questions'}), {}, createQuestionChart);
+    sendAjaxRequest('get', 'api/admin/charts?' + encodeForAjax({type: 'users'}), {}, createUserChart);
+    sendAjaxRequest('get', 'api/admin/charts?' + encodeForAjax({type: 'categories'}), {}, createCategoryChart);
+    sendAjaxRequest('get', 'api/admin/charts?' + encodeForAjax({type: 'games'}), {}, createGameChart);
+}
+
+function createQuestionChart() {
+    if (this.status == 200) {
+        const response = JSON.parse(this.responseText);
+        new Chart(questionChart, {
+            type: 'line',
+            data: {
+                labels: response.labels,
+                datasets: [{
+                  label: 'Questions',
+                  data: response.data,
+                  fill: false,
+                  borderColor: 'rgba(124,91,240,255)',
+                  tension: 0.1
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        display: false 
+                    }
+                },
+                scales: {
+                    y: {
+                    beginAtZero: false
+                    }
+              }
+            }
+          });
+    }
+}
+
+function createUserChart() {
+    if (this.status == 200) {
+        const response = JSON.parse(this.responseText);
+        new Chart(userChart, {
+            type: 'doughnut',
+            data: {
+                labels: response.labels,
+                datasets: [{
+                  label: 'Users',
+                  data: response.data,
+                  backgroundColor: [
+                    'rgb(159, 71, 71)', 
+                    'rgb(251, 165, 34)', 
+                    'rgb(124,91,240)'  
+                ],
+                }]
+            },
+            options: {
+                cutout: '70%',
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    },
+                },
+            }
+          });
+    }
+   
+}
+
+function createCategoryChart() {
+    if (this.status == 200) {
+        const response = JSON.parse(this.responseText);
+        new Chart(categoryChart, {
+            type: 'bar',
+            data: {
+                labels: response.labels,
+                datasets: [{
+                  label: 'Number of games in each category',
+                  data: response.data,
+                  backgroundColor: ['rgb(210, 207, 255)']
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    },
+                },
+            }
+          });
+    }
+}
+
+function createGameChart() {
+    if (this.status == 200) {
+        const response = JSON.parse(this.responseText);
+        new Chart(gameChart, {
+            type: 'bar',
+            data: {
+                labels: response.labels,
+                datasets: [{
+                  data: response.data,
+                  backgroundColor: ['rgb(210, 207, 255)']
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                },
+            }
+          });
+    }
 }
