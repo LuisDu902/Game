@@ -147,6 +147,16 @@ class UserController extends Controller
         
         return response()->json(['success' => false, 'message' => 'Notification not found']);
     }
+
+    public function viewed(Request $request, $notification_id)
+    {        
+
+        DB::table('notification')
+        ->where('id', $notification_id)
+        ->update(['viewed' => true]);
+
+    return response()->json(['action' => 'viewed', 'id' => $notification_id]);
+    }
     
 
 }

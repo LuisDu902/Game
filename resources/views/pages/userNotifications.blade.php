@@ -31,7 +31,7 @@
                     <div class="notification-wrap Question_content">
                 @endif
                         <span class="circle">{{ $notification->notification_type[0] }}</span>
-                        <div id="notification-{{ $notification->id }}" class="notification" data-notification-id="{{ $notification->id }}">
+                        <div id="notification-{{ $notification->id }}" class="notification" data-id="{{ $notification->id }}">
                             @if ($notification->notification_type === 'Question_notification')
                                 <a class="notification" href="{{ route('question', ['id' => $notification->answer->question->id]) }}">
                                     <h2>Question notification: "{{ $notification->answer->question->title }}"</h2>
@@ -96,6 +96,34 @@
         @endforeach
         </div>
     </section>
+
+    
+    <script>
+
+    const viewedNotification = document.querySelectorAll('.notification');
+
+    if (viewedNotification) {
+        for (const notification of viewedNotification) {
+            notification.addEventListener('click', function() {
+                const id = notification.getAttribute('data-id');
+                sendAjaxRequest('post', '/api/users/notifications/' + id + "/viewed", {}, ViwedHandler);
+            });
+        }
+    }
+
+    function ViwedHandler(){
+        if (this.status === 200) {
+            const response = JSON.parse(this.responseText);
+            const id = response.id;
+            const viewedNotification = document.querySelector(`#notification${id}`);
+            
+            if (response.action === 'viewed') {
+                viewedNotification.classList.add('viewed');
+                viewedNotification.classList.remove('not-viewed');
+            }
+        }
+    }
+    </script>
 
 @endsection
 

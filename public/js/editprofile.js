@@ -143,3 +143,17 @@ function imageHandler(){
         console.error('Profile update failed:', this.statusText);
     }
 }
+
+
+function editedAnswerHandler() {
+    const updatedAnswer = this.responseText;
+    var tmp = document.createElement('div');
+    tmp.innerHTML = updatedAnswer;
+    const id = tmp.querySelector('.answer-details').getAttribute('data-id');
+
+    const answer = document.querySelector('#answer' + id);
+
+    answer.outerHTML = updatedAnswer;
+    createNotificationBox('Notification!', 'You have a new notification!');
+
+}

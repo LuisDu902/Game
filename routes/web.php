@@ -94,6 +94,8 @@ Route::controller(UserController::class)->group(function () {
     Route::get('/api/users', 'search');
     Route::post('/api/users/{id}', 'updateStatus');
     Route::post('/api/users/{id}/edit', 'edit');
+    Route::post('/api/users/notifications/{id}/viewed', 'viewed');
+    Route::post('/api/users/notifications/{notification_id}/viewed', 'UserController@viewed');
 });
 
 // Question API
