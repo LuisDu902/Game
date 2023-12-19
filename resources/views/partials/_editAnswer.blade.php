@@ -18,10 +18,11 @@
             </div>
         </div>
         <div class="edit-upload-files">
-            <label for="file">Upload Files:</label>
+            <label for="file">Select Files:</label>
             <input type='file' name='files[]' id="answer-file" multiple hidden onchange="uploadAnswerFile()">
-            <button id="answer-up-f" onclick="uploadAnswerFiles()">Upload</button>
+            <button id="answer-up-f" onclick="uploadAnswerFiles()">Select</button>
         </div>
+        <div id="edit-a-file-info">Valid file types: .jpg, .png, .pdf, .gif, .doc, .docx</div>
         <div class="edit-a-files" onclick="removeAnswerDocs()">
             @foreach($answer->documents() as $document)
                 <div class="edit-a-file">
@@ -36,7 +37,7 @@
         <div class="edit-a-img" onclick="removeAnswerImages()">
             @foreach($answer->images() as $image)
             <div class="edit-img">
-                <img src="{{ asset('answer/' . $image->file_name) }}" alt="{{ $image->f_name }}">
+                <img src="{{ asset('answer/' . $image->file_name) }}" alt="{{ $image->f_name }}" data-name="{{ $image->f_name }}">
                 <ion-icon name="close-circle" class="close"></ion-icon>
             </div>     
             @endforeach

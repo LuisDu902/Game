@@ -3,12 +3,15 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Hash;
+
 
 class LoginController extends Controller
 {
@@ -57,4 +60,32 @@ class LoginController extends Controller
         return redirect()->route('home')
             ->withSuccess('You have logged out successfully!');
     } 
+
+    public function recover() {
+        return view('auth.recover');
+    }
+
+    public function newPassword(Request $request) {
+        $email = $request->input('email');
+        return view('auth.newPassword', ['email' => $email]);
+    }
+
+    public function emailSent() {
+        return view('auth.emailSent');
+    }
+
+    public function resetPassword(Request $request) {
+
+        $request->validate([
+            'password' => 'required|min:8|confirmed', 
+        ]);
+        
+        $user = User::where('email', $request->email)->first();
+
+        $user->password = Hash::make($request->password);
+
+        $user->save();
+        
+        return redirect()->route('login')->with('success', 'Password reset successful!');
+    }   
 }

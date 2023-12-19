@@ -39,14 +39,7 @@ function sendAjaxRequest(method, url, data, handler) {
     request.send(encodeForAjax(data));
 }
 
-
-const close = document.querySelector('#close-notification');
-    
-if (close) {
-   const notificationBox = document.querySelector('.notification-box');
-
-    close.addEventListener('click', function(){
-        notificationBox.style.display = 'none';
-    });
+function closeNotification() {
+    event.target.closest('.notification-box').style.display = 'none';
 }
 

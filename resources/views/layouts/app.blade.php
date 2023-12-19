@@ -8,7 +8,7 @@
         <!-- CSRF Token -->
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>{{ config('app.name', 'Laravel') }} - {{ request()->route()->getName() }}Page</title>
         <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
         <!-- Styles -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
@@ -23,12 +23,14 @@
         <link href="{{ url('css/pagination.css') }}" rel="stylesheet">
         <link href="{{ url('css/user.css') }}" rel="stylesheet">
         <link href="{{ url('css/category.css') }}" rel="stylesheet">
+        <link href="{{ url('css/report.css') }}" rel="stylesheet">
         <link href="{{ url('css/game.css') }}" rel="stylesheet">
         <link href="{{ url('css/home.css') }}" rel="stylesheet">
         <link href="{{ url('css/question.css') }}" rel="stylesheet">
         <link href="{{ url('css/faq.css') }}" rel="stylesheet">
         <link href="{{ url('css/activity.css') }}" rel="stylesheet">
-    
+        <link href="{{ url('css/static.css') }}" rel="stylesheet">
+
         <script type="text/javascript">
             // Fix for Firefox autofocus CSS bug
             // See: http://stackoverflow.com/questions/18943276/html-5-autofocus-messes-up-css-loading/18945951#18945951
@@ -44,6 +46,7 @@
         <script type="text/javascript" src="{{ url('js/faq.js') }}" defer></script>
         <script type="text/javascript" src="{{ url('js/gamecategory.js') }}" defer></script>
         <script type="text/javascript" src="{{ url('js/game.js') }}" defer></script>
+        <script type="text/javascript" src="{{ url('js/report.js') }}" defer></script>
     
         <script nomodule
             src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
@@ -54,20 +57,10 @@
        
     </head>
     <body>
-        @if(in_array(request()->route()->getName(), ['login', 'register']))
+        @if(in_array(request()->route()->getName(), ['login', 'register', 'recover', 'newPassword', 'emailSent']))
             @yield('authentication')
         @else
             @include('layouts.header')
-            @if (session()->has('delete'))
-                <div class="notification-box" id="delete-noti"> 
-                    <ion-icon name="checkmark-circle" id="noti-icon"></ion-icon>
-                    <div>
-                        <span> Question deleted!</span>
-                        <span> {{ session('delete') }} </span>
-                    </div>
-                    <ion-icon name="close" id="close-notification"></ion-icon>
-                </div>
-            @endif
             <div class="notification-box"> 
                 <ion-icon name="checkmark-circle" id="noti-icon" ></ion-icon>
                 <div>
@@ -77,7 +70,7 @@
                 <ion-icon name="close" id="close-notification"></ion-icon>
             </div>
             @if(in_array(request()->route()->getName(), ['category', 'game']))
-            <div class="purple-section"></div>
+                <div class="purple-section"></div>
             @endif
             <main>
                 @yield('content')

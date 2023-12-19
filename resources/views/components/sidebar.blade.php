@@ -5,9 +5,9 @@
         <li><a href="#"> Questions</a></li>
         <li><a href="#"> Users</a></li>
         <li><a href="#"> Game Categories</a></li>
-        <li><a href="#"> About us</a></li>
+        <li><a href="{{ route('about') }}"> About us</a></li>
         <li><a href="{{ route('faq') }}"> FAQ</a></li>
-        <li><a href="#"> Contact us</a></li>
+        <li><a href="{{ route('contact') }}"> Contact us</a></li>
     </ul>
 </div>
 

@@ -58,10 +58,11 @@
             </div>
 
             <div class="upload-files">
-                <label for="file">Upload Files:</label>
+                <label for="file">Select Files:</label>
                 <input type='file' name='files[]' id="file" multiple hidden>
-                <button id="up-f">Upload</button>
+                <button id="up-f">Select</button>
             </div>
+            <div id="file-info">Valid file types: .jpg, .png, .pdf, .gif, .doc, .docx</div>
             <div class="question-files"></div>
             <div class="question-img"></div>
 

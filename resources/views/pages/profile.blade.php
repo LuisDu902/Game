@@ -19,7 +19,7 @@
         <div class="profile-left">
             <img class="profile-big-pic" src="{{ $user->getProfileImage() }}" alt="User's Image" id="profile-preview">
             <form method="POST" enctype="multipart/form-data">
-                <label for="profile-image-input" class="upload-button">Upload image</label>
+                <label for="profile-image-input" class="upload-button">Select image</label>
                 <input name="file" type="file" id="profile-image-input" accept="image/*">
             </form>
         

@@ -121,21 +121,25 @@ function answerDeleteHandler() {
         createNotificationBox('Successfully saved!', 'Answer deleted successfully!');
 
         const other = document.querySelector('.other-answers');
-        
 
         const top = document.querySelector('.top-answer');
 
         const hasTopAnswer = top.querySelector('.answer-details');
         if (!hasTopAnswer) {
             const nextAnswer = other.querySelector('.answer-details');
-            top.innerHTML += nextAnswer.outerHTML;
-            nextAnswer.remove();
-        }
-
-        const hasMoreAnswers = other.querySelector('.answer-details');
+            if (nextAnswer) {
+                top.innerHTML += nextAnswer.outerHTML;
+                nextAnswer.remove();
+            } else {
+                top.remove();
+            }
+            
+        } else {
+            const hasMoreAnswers = other.querySelector('.answer-details');
         
-        if (!hasMoreAnswers) {
-            other.querySelector('h2').remove();
+            if (!hasMoreAnswers) {
+                other.querySelector('h2').remove();
+            }
         }
     }
 }
@@ -325,16 +329,16 @@ function showEditAnswer() {
 
     const docFiles = answer.querySelectorAll('.a-file span');
     const imageFiles = answer.querySelectorAll('.a-img img');
-
+    console.log(imageFiles);
     for (const document of docFiles) {
         fileNames.push(document.textContent);
     }
     for (const image of imageFiles) {
-        fileNames.push(image.alt);
+        fileNames.push(image.getAttribute('data-name'));
     }
 
     oldAnswerFiles = fileNames;
-    
+    console.log(fileNames);
     sendAjaxRequest('get', '/api/answers/' + id + '/edit', {}, toggleEditAnswer);
 
 }

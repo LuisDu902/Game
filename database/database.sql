@@ -164,6 +164,7 @@ CREATE TABLE report (
   id SERIAL PRIMARY KEY,
   date TIMESTAMP NOT NULL CHECK (date <= now()),
   reason TEXT NOT NULL,
+  explanation TEXT,
   is_solved BOOLEAN NOT NULL DEFAULT False,
   reporter_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   reported_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,

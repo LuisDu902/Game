@@ -3,11 +3,15 @@
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\GameCategoryController;
 use App\Http\Controllers\GameController;
+use App\Http\Controllers\MailController;
+use App\Http\Controllers\StaticController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\AnswerController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\Auth\GoogleController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\LoginController;
@@ -36,6 +40,10 @@ Route::controller(LoginController::class)->group(function () {
     Route::get('/login', 'showLoginForm')->name('login');
     Route::post('/login', 'authenticate');
     Route::get('/logout', 'logout')->name('logout');
+    Route::get('/recover', 'recover')->name('recover');
+    Route::post('/newPassword', 'resetPassword')->name('resetPassword');
+    Route::get('/newPassword', 'newPassword')->name('newPassword');
+    Route::get('/emailSent', 'emailSent')->name('emailSent');
 });
 
 Route::controller(RegisterController::class)->group(function () {
@@ -43,14 +51,18 @@ Route::controller(RegisterController::class)->group(function () {
     Route::post('/register', 'register');
 });
 
-Route::get('/home', function () {
-    return view('pages.home');
-})->name('home');
+Route::controller(MailController::class)->group(function(){
+    Route::post('/recoverPassword', 'send')->name('recoverPassword');
+    Route::post('/contact', 'contact')->name('contact');
+});
 
-Route::get('/faq', function () {
-    return view('pages.faq');
-})->name('faq');
-
+// Static pages
+Route::controller(StaticController::class)->group(function () {
+    Route::get('/home', 'home')->name('home');
+    Route::get('/faq', 'faq')->name('faq');
+    Route::get('/about', 'about')->name('about');
+    Route::get('/contact', 'contact')->name('contact');
+});
 
 // User
 Route::controller(UserController::class)->group(function () {
@@ -70,6 +82,13 @@ Route::controller(QuestionController::class)->group(function () {
     Route::get('/questions/{id}/activity', 'activity')->name('questions.activity');
     Route::delete('/questions/{id}', 'delete')->name('questions.destroy');
 });
+
+Route::controller(ReportController::class)->group(function () {
+    Route::post('/report', [ReportController::class, 'store'])->name('report.store');
+    Route::post('/report2', [ReportController::class, 'store2'])->name('report.store2');
+    Route::post('/report3', [ReportController::class, 'store3'])->name('report.store3');
+});
+
 
 // File Storage
 Route::controller(FileController::class)->group(function () {
@@ -114,6 +133,7 @@ Route::controller(QuestionController::class)->group(function () {
     Route::post('/api/questions/{id}/visibility', 'visibility'); 
     Route::post('/api/questions', 'store');
     Route::put('/api/questions/{id}', 'update');
+    
 });
 
 // Answer API
@@ -141,7 +161,5 @@ Route::controller(TagController::class)->group(function () {
     Route::post('/api/tags', 'store');
 });
 
-
-
-
-
+Route::get('/google/redirect', [App\Http\Controllers\Auth\GoogleController::class, 'redirectToGoogle'])->name('google.redirect');
+Route::get('/google/callback', [App\Http\Controllers\Auth\GoogleController::class, 'handleGoogleCallback'])->name('google.callback');
