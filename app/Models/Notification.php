@@ -9,6 +9,9 @@ class Notification extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
+
     protected $table = 'notification';
     protected $fillable = [
         'date',
@@ -51,6 +54,12 @@ class Notification extends Model
 
     public function game()
     {
-        return $this->belongsTo(Question::class, 'game_id');
+        return $this->belongsTo(Game::class, 'game_id');
+    }
+
+    public function markAsViewed()
+    {
+        $this->viewed = true;
+        $this->save();
     }
 }

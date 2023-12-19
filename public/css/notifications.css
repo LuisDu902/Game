@@ -1,11 +1,11 @@
-.activities {
+.notifications {
     display: flex;
     flex-direction: column;
     margin-top: 50px;
     gap: 30px;
 }
 
-.activity {
+.notification {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -14,13 +14,35 @@
     width: 100%;
 }
 
-.activity p {
+.Viewd_content .notification h2{
+    padding: 20px 30px;
+    text-align: justify;
+    color: #4D4D4D;
+    font-weight: 600;
+    font-size: 1rem;
+}
+.notification h2 {
+    padding: 20px 30px;
+    text-align: justify;
+    color: #7C5BF0;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.Viewd_content .notification .type {
+    text-align: end;
+    color: #4D4D4D;
+    margin-top: 0;
+    font-weight: 600;
+}
+
+.notification p {
     padding: 0 30px;
     text-align: justify;
     color: #4D4D4D;
 }
 
-.activity .action {
+.notification .action {
     width: fit-content;
     padding: 2px 20px;
     border-radius: 5px;
@@ -29,14 +51,27 @@
     margin-bottom: 0;
 }
 
-.activity .date {
+.notification .date {
     text-align: end;
     color: #4D4D4D;
     margin: 20px 30px;
     margin-top: 0;
 }
 
-.Question_content .activity {
+.notification .type {
+    text-align: end;
+    color: #7C5BF0;
+    margin-top: 0;
+    font-weight: 600;
+}
+
+.notification:hover {
+    transform: scale(0.97);
+    border: 1px !important;
+    border-color: #7C5BF0 !important;
+}
+
+.Question_content .notification {
     background-color: #F8F7FE;
 }
 
@@ -44,7 +79,7 @@
     background-color: #7C5BF0;
 }
 
-.Answer_content .activity{
+.Answer_content .notification{
     background-color: #FEF7F7;
 }
 
@@ -52,7 +87,7 @@
     background-color: #FF5757;
 }
 
-.Comment_content .activity{
+.Comment_content .notification{
     background-color: #F2FBEE;
 }
 
@@ -63,6 +98,15 @@
 .Question_content .circle {
     background-color: #D2CFFF;
     color: #7C5BF0;
+}
+
+.Viewd_content .circle {
+    background-color: #E8E7E7;
+    color: #8A8A8A;
+}
+
+.Viewd_content .notification {
+    background-color: #F7F7F7;
 }
 
 .Answer_content .circle {
@@ -76,7 +120,7 @@
 }
 
 
-.activity-wrap {
+.notification-wrap {
     padding-left: 60px;
     display: flex;
     gap: 40px;
@@ -84,7 +128,7 @@
 }
 
 
-.activity-wrap .circle {
+.notification-wrap .circle {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -95,7 +139,7 @@
     margin-top: 20px;
 }
 
-.activity-wrap::before {
+.notification-wrap::before {
     content: '';
     position: absolute;
     height: calc(100% + 40px); 

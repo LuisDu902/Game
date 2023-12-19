@@ -28,6 +28,8 @@
         <link href="{{ url('css/question.css') }}" rel="stylesheet">
         <link href="{{ url('css/faq.css') }}" rel="stylesheet">
         <link href="{{ url('css/activity.css') }}" rel="stylesheet">
+        <link href="{{ url('css/notifications.css') }}" rel="stylesheet">
+    
     
         <script type="text/javascript">
             // Fix for Firefox autofocus CSS bug

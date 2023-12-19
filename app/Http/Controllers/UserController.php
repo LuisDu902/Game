@@ -130,7 +130,23 @@ class UserController extends Controller
             abort(404);
         }
 
-        $notifications = $user->notifications; 
+        $notifications = $user->notifications()->orderByDesc('date')->get();
         return view('pages.userNotifications', ['user' => $user, 'notifications' => $notifications]);
     }
+
+    public function markAsViewed($id)
+    {
+        $notification = Notification::find($id);
+
+        if ($notification) {
+            $notification->viewed = true;
+            $notification->save();
+
+            return response()->json(['success' => true]);
+        }
+        
+        return response()->json(['success' => false, 'message' => 'Notification not found']);
+    }
+    
+
 }

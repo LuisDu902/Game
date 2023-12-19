@@ -19,6 +19,7 @@ DROP TABLE IF EXISTS vote;
 DROP TABLE IF EXISTS comment;
 DROP TABLE IF EXISTS answer;
 DROP TABLE IF EXISTS question;
+DROP TABLE IF EXISTS question_followers;
 DROP TABLE IF EXISTS game;
 DROP TABLE IF EXISTS game_category;
 DROP TABLE IF EXISTS badge;
@@ -174,6 +175,18 @@ CREATE TABLE report (
   OR (report_type = 'Comment_report' AND comment_id IS NOT NULL AND question_id IS NULL AND answer_id IS NULL))
 );
 
+CREATE TABLE question_followers (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  question_id INTEGER NOT NULL REFERENCES question(id) ON DELETE CASCADE
+);
+
+CREATE TABLE game_followers (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  game_id INTEGER NOT NULL REFERENCES game(id) ON DELETE CASCADE
+);
+
 CREATE TABLE notification (
   id SERIAL PRIMARY KEY,
   date TIMESTAMP NOT NULL CHECK (date <= now()),
@@ -188,13 +201,13 @@ CREATE TABLE notification (
   badge_id INTEGER REFERENCES badge(id) ON DELETE CASCADE,
   game_id INTEGER REFERENCES game(id) ON DELETE CASCADE,
   CHECK ((notification_type = 'Report_notification' AND report_id IS NOT NULL AND question_id IS NULL AND answer_id IS NULL AND comment_id IS NULL AND vote_id IS NULL AND badge_id IS NULL AND game_id IS NULL)
-  OR (notification_type = 'Question_notification' AND question_id IS NOT NULL AND report_id IS NULL AND answer_id IS NULL AND comment_id IS NULL AND vote_id IS NULL AND badge_id IS NULL AND game_id IS NULL)
+  OR (notification_type = 'Question_notification' AND answer_id IS NOT NULL AND report_id IS NULL AND question_id IS NULL AND comment_id IS NULL AND vote_id IS NULL AND badge_id IS NULL AND game_id IS NULL)
   OR (notification_type = 'Answer_notification' AND answer_id IS NOT NULL AND report_id IS NULL AND question_id IS NULL AND comment_id IS NULL AND vote_id IS NULL AND badge_id IS NULL AND game_id IS NULL)
   OR (notification_type = 'Comment_notification' AND comment_id IS NOT NULL AND report_id IS NULL AND answer_id IS NULL AND question_id IS NULL AND vote_id IS NULL AND badge_id IS NULL AND game_id IS NULL)
-  OR (notification_type = 'Vote_notification' AND vote_id IS NOT NULL AND report_id IS NULL AND answer_id IS NULL AND comment_id IS NULL AND question_id IS NULL AND badge_id IS NULL AND game_id IS NULL)
+  OR (notification_type = 'Vote_notification' AND vote_id IS NOT NULL AND report_id IS NULL AND question_id IS NULL AND answer_id IS NULL AND comment_id IS NULL AND badge_id IS NULL AND game_id IS NULL)
   OR (notification_type = 'Rank_notification' AND question_id IS NULL AND report_id IS NULL AND answer_id IS NULL AND comment_id IS NULL AND vote_id IS NULL AND badge_id IS NULL AND game_id IS NULL)
   OR (notification_type = 'Badge_notification' AND badge_id IS NOT NULL AND question_id IS NULL AND report_id IS NULL AND answer_id IS NULL AND comment_id IS NULL AND vote_id IS NULL AND game_id IS NULL)
-  OR (notification_type = 'Game_notification' AND game_id IS NOT NULL AND question_id IS NULL AND report_id IS NULL AND answer_id IS NULL AND comment_id IS NULL AND vote_id IS NULL AND badge_id IS NULL))
+  OR (notification_type = 'Game_notification' AND question_id IS NOT NULL AND game_id IS NULL AND report_id IS NULL AND answer_id IS NULL AND comment_id IS NULL AND vote_id IS NULL AND badge_id IS NULL))
 );
 
 CREATE TABLE user_badge (
@@ -445,6 +458,120 @@ FOR EACH ROW
 EXECUTE FUNCTION send_answer_notification();
 
 
+CREATE OR REPLACE FUNCTION send_comment_notification()
+RETURNS TRIGGER AS $$
+BEGIN
+    INSERT INTO notification (date, viewed, user_id, notification_type, question_id, answer_id, comment_id, vote_id,report_id, badge_id, game_id)
+    VALUES (NOW(), FALSE, (SELECT user_id FROM answer WHERE id = NEW.answer_id), 'Comment_notification', NULL, NULL,  NEW.id, NULL, NULL, NULL, NULL);
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER comment_notification_trigger
+AFTER INSERT ON comment
+FOR EACH ROW
+EXECUTE FUNCTION send_comment_notification();
+
+
+CREATE OR REPLACE FUNCTION send_question_notification()
+RETURNS TRIGGER AS $$
+BEGIN
+  INSERT INTO notification (date, viewed, user_id, notification_type, question_id, answer_id, comment_id, vote_id, report_id, badge_id, game_id)
+  SELECT NOW(), FALSE, qf.user_id, 'Question_notification', NULL, NEW.id, NULL, NULL, NULL, NULL, NULL
+  FROM question_followers qf
+  WHERE qf.question_id = NEW.question_id;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER question_answer_notification_trigger
+AFTER INSERT ON answer
+FOR EACH ROW
+EXECUTE FUNCTION send_question_notification();
+
+
+CREATE OR REPLACE FUNCTION send_vote_notification()
+RETURNS TRIGGER AS $$
+BEGIN
+  IF NEW.vote_type = 'Question_vote' THEN
+    INSERT INTO notification (date, viewed, user_id, notification_type, question_id, answer_id, comment_id, vote_id, report_id, badge_id, game_id)
+    VALUES (NOW(), FALSE, (SELECT user_id FROM question WHERE id = NEW.question_id), 'Vote_notification', NULL, NULL, NULL, NEW.id, NULL, NULL, NULL);
+
+  ELSIF NEW.vote_type = 'Answer_vote' THEN
+    INSERT INTO notification (date, viewed, user_id, notification_type, question_id, answer_id, comment_id, vote_id, report_id, badge_id, game_id)
+    VALUES (NOW(), FALSE, (SELECT user_id FROM answer WHERE id = NEW.answer_id), 'Vote_notification', NULL, NULL, NULL, NEW.id, NULL, NULL, NULL);
+
+  END IF;
+
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER vote_notification_trigger
+AFTER INSERT ON vote
+FOR EACH ROW
+EXECUTE FUNCTION send_vote_notification();
+
+
+CREATE OR REPLACE FUNCTION send_game_notification()
+RETURNS TRIGGER AS $$
+BEGIN
+  INSERT INTO notification (date, viewed, user_id, notification_type, question_id, answer_id, comment_id, vote_id, report_id, badge_id, game_id)
+  SELECT NOW(), FALSE, gf.user_id, 'Game_notification', NEW.id, NULL, NULL, NULL, NULL, NULL, NULL
+  FROM game_followers gf
+  WHERE gf.game_id = NEW.game_id;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER game_notification_trigger
+AFTER INSERT ON question
+FOR EACH ROW
+EXECUTE FUNCTION send_game_notification();
+
+
+CREATE OR REPLACE FUNCTION send_rank_notification()
+RETURNS TRIGGER AS $$
+BEGIN
+  -- Insert a new row into the 'notification' table when the rank is changed
+  IF NEW.rank <> OLD.rank THEN
+    INSERT INTO notification (date, viewed, user_id, notification_type, question_id, answer_id, comment_id, vote_id, report_id, badge_id, game_id)
+    VALUES (NOW(), FALSE, NEW.id, 'Rank_notification', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+  END IF;
+
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER rank_notification_trigger
+AFTER UPDATE ON users
+FOR EACH ROW
+EXECUTE FUNCTION send_rank_notification();
+
+
+CREATE OR REPLACE FUNCTION send_badge_notification()
+RETURNS TRIGGER AS $$
+BEGIN
+  -- Insert a new row into the 'notification' table when a new badge is added
+  IF TG_OP = 'INSERT' THEN
+    INSERT INTO notification (date, viewed, user_id, notification_type, question_id, answer_id, comment_id, vote_id, report_id, badge_id, game_id)
+    VALUES (NOW(), FALSE, NEW.user_id, 'Badge_notification', NULL, NULL, NULL, NULL, NULL, NEW.badge_id, NULL);
+
+  -- Insert a new row into the 'notification' table when a badge is removed
+  ELSIF TG_OP = 'DELETE' THEN
+    INSERT INTO notification (date, viewed, user_id, notification_type, question_id, answer_id, comment_id, vote_id, report_id, badge_id, game_id)
+    VALUES (NOW(), FALSE, OLD.user_id, 'Badge_notification', NULL, NULL, NULL, NULL, NULL, OLD.badge_id, NULL);
+
+  END IF;
+
+  RETURN NULL;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER badge_notification_trigger
+AFTER INSERT OR DELETE ON user_badge
+FOR EACH ROW
+EXECUTE FUNCTION send_badge_notification();
 --Trigger 9
 
 --A user cannot vote, answer nor comment on posts that are not public.
@@ -1036,6 +1163,27 @@ INSERT INTO question(user_id, create_date, title, is_solved, is_public, nr_views
 (22, '2022-12-25 14:30:00', 'Request for a new game trailer', FALSE, TRUE, 89,  8),
 (21, '2022-12-29 14:30:00', 'Complaint about misleading advertisement', FALSE, TRUE, 89, 8);
 
+INSERT INTO question_followers (user_id, question_id) VALUES
+(30, 1), 
+(29, 1), 
+(28, 1), 
+(27, 1), 
+(26, 4), 
+(25, 4), 
+(24, 4), 
+(23, 4), 
+(22, 4), 
+(21, 3), 
+(20, 3), 
+(19, 3);
+
+INSERT INTO game_followers (user_id, game_id) VALUES
+(1, 1), 
+(2, 2), 
+(2, 3), 
+(5, 3), 
+(10, 1), 
+(20, 1);
 
 INSERT INTO answer(user_id, question_id, is_public) VALUES
 (1, 1, TRUE),
@@ -1280,6 +1428,9 @@ INSERT INTO report(date, reason, is_solved, reporter_id, reported_id, report_typ
 ('2023-03-01 17:30:00', 'They kept harassing me with unwanted messages, so I reported their behavior.', FALSE, 69, 98, 'Comment_report', NULL, NULL, 2),
 ('2023-03-01 17:40:00', 'I felt offended by their language, so I reported their inappropriate comments.', FALSE, 70, 97, 'Comment_report', NULL, NULL, 3);
 
+-- Simulating question followers
+
+
 INSERT INTO notification(date, viewed, user_id, notification_type, question_id, answer_id, comment_id, vote_id, report_id, badge_id, game_id) VALUES
 ('2023-03-01 14:30:00', TRUE, 99, 'Report_notification', NULL, NULL, NULL, NULL, 1, NULL, NULL),
 ('2023-03-01 14:40:00', FALSE, 98, 'Report_notification', NULL, NULL, NULL, NULL, 2, NULL, NULL),
@@ -1302,16 +1453,6 @@ INSERT INTO notification(date, viewed, user_id, notification_type, question_id, 
 ('2023-03-01 17:30:00', TRUE, 98, 'Report_notification', NULL, NULL, NULL, NULL, 19, NULL, NULL),
 ('2023-03-01 17:40:00', TRUE, 97, 'Report_notification', NULL, NULL, NULL, NULL, 20, NULL, NULL),
 
-('2023-03-02 17:50:00', TRUE, 1, 'Question_notification', 60, NULL, NULL, NULL, NULL, NULL, NULL),
-('2023-03-02 18:00:00', FALSE, 2, 'Question_notification', 61, NULL, NULL, NULL, NULL, NULL, NULL),
-('2023-03-02 18:10:00', TRUE, 3, 'Question_notification', 62, NULL, NULL, NULL, NULL, NULL, NULL),
-('2023-03-02 18:20:00', TRUE, 4, 'Question_notification', 63, NULL, NULL, NULL, NULL, NULL, NULL),
-('2023-03-02 18:30:00', FALSE, 5, 'Question_notification', 64, NULL, NULL, NULL, NULL, NULL, NULL),
-('2023-03-02 18:40:00', TRUE, 6, 'Question_notification', 65, NULL, NULL, NULL, NULL, NULL, NULL),
-('2023-03-02 18:50:00', FALSE, 7, 'Question_notification', 66, NULL, NULL, NULL, NULL, NULL, NULL),
-('2023-03-02 19:00:00', TRUE, 8, 'Question_notification', 67, NULL, NULL, NULL, NULL, NULL, NULL),
-('2023-03-02 19:10:00', TRUE, 9, 'Question_notification', 68, NULL, NULL, NULL, NULL, NULL, NULL),
-('2023-03-02 19:20:00', FALSE, 10, 'Question_notification', 69, NULL, NULL, NULL, NULL, NULL, NULL),
 
 ('2023-03-02 19:30:00', TRUE, 50, 'Answer_notification', NULL, 1, NULL, NULL, NULL, NULL, NULL),
 ('2023-03-02 19:40:00', TRUE, 51, 'Answer_notification', NULL, 2, NULL, NULL, NULL, NULL, NULL),
@@ -1335,27 +1476,6 @@ INSERT INTO notification(date, viewed, user_id, notification_type, question_id, 
 ('2023-03-02 22:30:00', TRUE, 11, 'Comment_notification', NULL, NULL, 12, NULL, NULL, NULL, NULL),
 ('2023-03-02 22:40:00', TRUE, 10, 'Comment_notification', NULL, NULL, 11, NULL, NULL, NULL, NULL),
 
-
-('2023-02-01 14:30:00', TRUE, 99, 'Vote_notification', NULL, NULL, NULL, 1, NULL, NULL, NULL),
-('2023-02-01 14:30:01', FALSE, 98, 'Vote_notification', NULL, NULL, NULL, 2, NULL, NULL, NULL),
-('2023-02-01 14:30:02', TRUE, 97, 'Vote_notification', NULL, NULL, NULL, 3, NULL, NULL, NULL),
-('2023-02-01 14:30:03', FALSE, 96, 'Vote_notification', NULL, NULL, NULL, 4, NULL, NULL, NULL),
-('2023-02-01 14:30:04', TRUE, 95, 'Vote_notification', NULL, NULL, NULL, 5, NULL, NULL, NULL),
-('2023-02-01 14:30:05', FALSE, 94, 'Vote_notification', NULL, NULL, NULL, 6, NULL, NULL, NULL),
-('2023-02-01 14:30:06', TRUE, 93, 'Vote_notification', NULL, NULL, NULL, 7, NULL, NULL, NULL),
-('2023-02-01 14:30:07', FALSE, 92, 'Vote_notification', NULL, NULL, NULL, 8, NULL, NULL, NULL),
-('2023-02-01 14:30:08', TRUE, 91, 'Vote_notification', NULL, NULL, NULL, 9, NULL, NULL, NULL),
-('2023-02-01 14:30:09', FALSE, 90, 'Vote_notification', NULL, NULL, NULL, 10, NULL, NULL, NULL),
-('2023-02-01 14:30:10', TRUE, 89, 'Vote_notification', NULL, NULL, NULL, 11, NULL, NULL, NULL),
-('2023-02-01 14:30:11', FALSE, 88, 'Vote_notification', NULL, NULL, NULL, 12, NULL, NULL, NULL),
-('2023-02-01 14:30:12', TRUE, 87, 'Vote_notification', NULL, NULL, NULL, 13, NULL, NULL, NULL),
-('2023-02-01 14:30:13', FALSE, 86, 'Vote_notification', NULL, NULL, NULL, 14, NULL, NULL, NULL),
-('2023-02-01 14:30:14', TRUE, 85, 'Vote_notification', NULL, NULL, NULL, 15, NULL, NULL, NULL),
-('2023-02-01 14:30:10', TRUE, 84, 'Vote_notification', NULL, NULL, NULL, 11, NULL, NULL, NULL),
-('2023-02-01 14:30:11', FALSE, 83, 'Vote_notification', NULL, NULL, NULL, 12, NULL, NULL, NULL),
-('2023-02-01 14:30:12', TRUE, 82, 'Vote_notification', NULL, NULL, NULL, 13, NULL, NULL, NULL),
-('2023-02-01 14:30:13', FALSE, 81, 'Vote_notification', NULL, NULL, NULL, 14, NULL, NULL, NULL),
-('2023-02-01 14:30:14', TRUE, 80, 'Vote_notification', NULL, NULL, NULL, 15, NULL, NULL, NULL),
 
 
 ('2023-03-02 14:30:00', FALSE, 3, 'Rank_notification', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
@@ -1384,28 +1504,12 @@ INSERT INTO notification(date, viewed, user_id, notification_type, question_id, 
 ('2023-03-02 18:20:00', FALSE, 96, 'Rank_notification', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 ('2023-03-02 18:30:00', FALSE, 100, 'Rank_notification', NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 
-('2023-03-03 18:40:00', FALSE, 1, 'Badge_notification', NULL, NULL, NULL, NULL, NULL, 1, NULL),
-('2023-03-03 19:50:00', FALSE, 2, 'Badge_notification', NULL, NULL, NULL, NULL, NULL, 2, NULL),
-('2023-03-03 20:00:00', FALSE, 2, 'Badge_notification', NULL, NULL, NULL, NULL, NULL, 3, NULL),
-('2023-03-04 15:10:00', FALSE, 5, 'Badge_notification', NULL, NULL, NULL, NULL, NULL, 4, NULL),
-('2023-03-04 19:30:00', FALSE, 10, 'Badge_notification', NULL, NULL, NULL, NULL, NULL, 5, NULL),
-('2023-03-05 17:50:00', FALSE, 20, 'Badge_notification', NULL, NULL, NULL, NULL, NULL, 1, NULL),
-('2023-03-05 12:50:00', FALSE, 20, 'Badge_notification', NULL, NULL, NULL, NULL, NULL, 2, NULL),
-('2023-03-05 21:00:00', FALSE, 20, 'Badge_notification', NULL, NULL, NULL, NULL, NULL, 3, NULL),
-('2023-03-05 14:10:00', FALSE, 21, 'Badge_notification', NULL, NULL, NULL, NULL, NULL, 4, NULL),
-('2023-03-05 19:10:00', FALSE, 30, 'Badge_notification', NULL, NULL, NULL, NULL, NULL, 5, NULL),
-('2023-03-05 16:50:00', FALSE, 45, 'Badge_notification', NULL, NULL, NULL, NULL, NULL, 5, NULL),
-('2023-03-05 12:40:00', FALSE, 46, 'Badge_notification', NULL, NULL, NULL, NULL, NULL, 4, NULL),
-('2023-04-05 20:00:00', FALSE, 55, 'Badge_notification', NULL, NULL, NULL, NULL, NULL, 3, NULL),
-('2023-04-06 14:20:00', FALSE, 88, 'Badge_notification', NULL, NULL, NULL, NULL, NULL, 1, NULL),
-('2023-04-06 22:10:00', FALSE, 92, 'Badge_notification', NULL, NULL, NULL, NULL, NULL, 2, NULL),
-
-('2023-03-03 18:40:00', FALSE, 1, 'Game_notification', NULL, NULL, NULL, NULL, NULL, NULL, 1),
-('2023-03-03 19:50:00', FALSE, 2, 'Game_notification', NULL, NULL, NULL, NULL, NULL, NULL, 2),
-('2023-03-03 20:00:00', FALSE, 2, 'Game_notification', NULL, NULL, NULL, NULL, NULL, NULL, 3),
-('2023-03-04 15:10:00', FALSE, 5, 'Game_notification', NULL, NULL, NULL, NULL, NULL, NULL, 3),
-('2023-03-04 19:30:00', FALSE, 10, 'Game_notification', NULL, NULL, NULL, NULL, NULL, NULL, 1),
-('2023-03-05 17:50:00', FALSE, 20, 'Game_notification', NULL, NULL, NULL, NULL, NULL, NULL, 1);
+('2023-03-03 18:40:00', FALSE, 1, 'Game_notification', 1, NULL, NULL, NULL, NULL, NULL, NULL),
+('2023-03-03 19:50:00', FALSE, 2, 'Game_notification', 12, NULL, NULL, NULL, NULL, NULL, NULL),
+('2023-03-03 20:00:00', FALSE, 2, 'Game_notification', 33, NULL, NULL, NULL, NULL, NULL, NULL),
+('2023-03-04 15:10:00', FALSE, 5, 'Game_notification', 34, NULL, NULL, NULL, NULL, NULL, NULL),
+('2023-03-04 19:30:00', FALSE, 10, 'Game_notification', 2, NULL, NULL, NULL, NULL, NULL, NULL),
+('2023-03-05 17:50:00', FALSE, 20, 'Game_notification', 3, NULL, NULL, NULL, NULL, NULL, NULL);
 
 INSERT INTO user_badge(user_id, badge_id) VALUES
 (1, 1),
