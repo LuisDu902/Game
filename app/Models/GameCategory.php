@@ -13,6 +13,11 @@ class GameCategory extends Model
 
     protected $table = 'game_category';
 
+    protected $fillable = [
+        'name',
+        'description',
+    ];
+
     public function games()
     {
         return $this->hasMany(Game::class);

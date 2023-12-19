@@ -15,15 +15,24 @@
         </ul>
    </div>
 
-   <div class="categories-section">
-        <h1>Game Categories</h1>
+   <section class="categories-section">
+        <div class="categories-group d-flex flex-row justify-content-between pe-4">
+            <h1>Game Categories</h1>
+            <div class="categories-action">
+                @if (Auth::check())
+                    @if (Auth::user()->is_admin && !Auth::user()->is_banned)
+                        <a href="{{ route('categories.create') }}" id="newQuestion">Create New Category</a>
+                    @endif
+                @endif
+            </div>
+        </div>
         <section class="categories-grid">
             @foreach($categories as $category)
-                <a href="{{ route('category', ['id' => $category->id]) }}" class="category-card">
+                <a href="{{ route('category', ['id' => $category->id]) }}" class="category-card" id="{{ $category->name }}">
                     <h2><span class="purple">{{ $category->name }}</span> games</h2>
-                    <p>{{ $category->description }}</p>
+                    <p class="text-break">{{ $category->description }}</p>
                 </a>
             @endforeach
         </section>
-    </div>
+   </section>
 @endsection
