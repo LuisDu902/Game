@@ -2,7 +2,7 @@
 <td><img src="{{ $report->reported->getProfileImage() }}" alt="User Image"></td>    
 <td><a href="{{ route('profile', ['id' => $report->reporter->id]) }}">{{ $report->reporter->name }}</td> <!-- assuming 'name' is the attribute -->
     <td><a href="{{ route('profile', ['id' => $report->reported->id]) }}">{{ $report->reported->name }}</td> <!-- replace 'name' with the actual attribute -->
-    <td>{{ $report->explanation }}</td>
+    <td class="explanation-text"> {{ $report->explanation }}</td>
     <td id="reason">{{ $report->reason }}</td>
     <td>
         <select name="status" class="status-dropdown" data-report="{{ $report->id }}" onchange="changeReportStatus(this)">
@@ -13,4 +13,5 @@
 
 
 </tr>
+
 

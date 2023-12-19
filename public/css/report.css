@@ -155,3 +155,12 @@
 #reason{
     color: red;
 }
+
+.explanation-text {
+    max-width: 350px;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    white-space: normal;
+    box-sizing: border-box;
+    display: inline-block; 
+}
