@@ -16,6 +16,16 @@
    </div>
 
    <section class="categories-section">
+        @if (session()->has('create'))
+            <div class="notification-box" id="delete-noti"> 
+                <ion-icon name="checkmark-circle" id="noti-icon"></ion-icon>
+                <div>
+                    <span> Category created!</span>
+                    <span> {{ session('create') }} </span>
+                </div>
+                <ion-icon name="close" id="close-notification" onclick="closeNotification()"></ion-icon>
+            </div>
+        @endif
         <div class="categories-group d-flex flex-row justify-content-between pe-4">
             <h1>Game Categories</h1>
             <div class="categories-action">

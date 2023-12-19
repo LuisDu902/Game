@@ -8,11 +8,6 @@ use Illuminate\Http\Request;
 
 class GameController extends Controller
 {
-    public function index()
-    {
-        $games = Game::all();
-        return view('pages.newQuestion', compact('games'));
-    }
 
     public function create($category_id)
     {
@@ -45,8 +40,6 @@ class GameController extends Controller
             'nr_members' => 0,
             'game_category_id' => $category_id
         ]);
-
-      
 
         return response()->json(['id' => $game->id]);
     }

@@ -20,9 +20,7 @@ class GameCategoryController extends Controller
             'description' => trim($request->input('description'))
         ]);
 
-      
-
-        return response()->json(['id' => $gameCategory->id]);
+        return redirect('/categories')->with('create', 'Category successfully created!');
     }
     /**
      * Display a listing of the resource.
@@ -46,7 +44,6 @@ class GameCategoryController extends Controller
 
     public function create()
     {
-
         return view('pages.newCategory');
     }
 

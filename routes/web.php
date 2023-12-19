@@ -96,13 +96,10 @@ Route::controller(FileController::class)->group(function () {
     Route::delete('/api/file/delete', 'clear');
 });
 
-Route::controller(GameCategoryController::class)->group(function () {
-    Route::post('/api/gamecategories', 'store')->name('categories.store');
-});
-
 // Game Category
 Route::controller(GameCategoryController::class)->group(function () {
     Route::get('/categories', 'index')->name('categories');
+    Route::post('/categories', 'store')->name('categories.store');
     Route::get('/categories/create', 'create')->name('categories.create');
     Route::get('/categories/{id}', 'show')->name('category');
 });
@@ -110,7 +107,7 @@ Route::controller(GameCategoryController::class)->group(function () {
 
 // Game
 Route::controller(GameController::class)->group(function () {
-    Route::post('/api/game/{category_id}', 'store')->name('games.store');
+    Route::post('/game', 'store')->name('games.store');
     Route::get('/game/create/{category_id}', 'create')->name('games.create');
     Route::get('/game/{id}', 'show')->name('game');
 });

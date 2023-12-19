@@ -18,7 +18,7 @@
         </ul>
     </div>
     <div class="new-gamecategory-form">
-        <form action="{{ route('categories.store') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('categories.store') }}" method="POST">
             @csrf
             <div class="form-group">
                 <label for="name">Game Category Title <span>*</span></label>
