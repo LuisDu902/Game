@@ -11,6 +11,8 @@ use App\Models\Question;
 use App\Models\Answer;
 use App\Models\Comment;
 
+use App\Models\Tag;
+
 class AdminController extends Controller
 {
     public function stats() {
@@ -30,6 +32,13 @@ class AdminController extends Controller
         $users = User::where('id', '!=', 1)->orderBy('username')->paginate(10);
         
         return view('partials._users', compact('users'))->render();
+    }
+
+    public function tags() {
+
+        $tags = Tag::all()->paginate(10);
+        
+        return view('partials._tags', compact('tags'))->render();
     }
     
     public function chart(Request $request) {

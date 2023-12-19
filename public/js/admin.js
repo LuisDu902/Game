@@ -165,6 +165,7 @@ const questionChart = document.getElementById('question-chart');
 const userChart = document.getElementById('user-chart');
 const categoryChart = document.getElementById('categories-chart')
 const gameChart = document.getElementById('game-chart');
+const tagsChart = document.getElementById('game-chart');
 
 if (questionChart) {
    createCharts();
