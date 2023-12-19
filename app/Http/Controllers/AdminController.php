@@ -8,6 +8,7 @@ use App\Models\Vote;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Question;
+use App\Models\Report;
 use App\Models\Answer;
 use App\Models\Comment;
 
@@ -30,6 +31,12 @@ class AdminController extends Controller
         $users = User::where('id', '!=', 1)->orderBy('username')->paginate(10);
         
         return view('partials._users', compact('users'))->render();
+    }
+
+    public function reports() {
+        $reports = Report::orderBy('date', 'desc')->paginate(10);
+    
+        return view('partials._reports', compact('reports'))->render();
     }
     
     public function chart(Request $request) {
