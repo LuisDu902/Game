@@ -58,6 +58,7 @@ Route::controller(UserController::class)->group(function () {
     Route::get('/users/questions/{id}', 'showUserQuestions')->name('users_questions');
     Route::get('/users/answers/{id}', 'showUserAnswers')->name('users_answers');
     Route::get('/users/notifications/{id}', 'showUserNotifications')->name('users_notifications');
+    Route::get('/users/notifications/reports/{id}', 'showUserReportsNotifications')->name('users_reports_notifications');
 });
 
 // Question

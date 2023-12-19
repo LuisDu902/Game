@@ -79,22 +79,6 @@
     background-color: #7C5BF0;
 }
 
-.Answer_content .notification{
-    background-color: #FEF7F7;
-}
-
-.Answer_content .action{
-    background-color: #FF5757;
-}
-
-.Comment_content .notification{
-    background-color: #F2FBEE;
-}
-
-.Comment_content .action{
-    background-color: #00BF57;
-}
-
 .Question_content .circle {
     background-color: #D2CFFF;
     color: #7C5BF0;
@@ -107,16 +91,6 @@
 
 .Viewd_content .notification {
     background-color: #F7F7F7;
-}
-
-.Answer_content .circle {
-    background-color: #FFCBCB;
-    color: #FF5757;
-}
-
-.Comment_content .circle {
-    background-color: #D8F4CD;
-    color: #00BF57;
 }
 
 
@@ -148,4 +122,27 @@
     top: -20px; 
     left: 80px; 
     z-index: -1; 
+}
+
+.notifications-section #userReportNotification {
+    font-size: 18px;
+    text-align: center;
+    background-color: #D2CFFF;
+    width: 300px;
+    padding: 5px 0;
+    color: #7C5BF0;
+    border-radius: 5px;
+    transition: all 400ms ease;
+    left: 4rem;
+}
+
+.notifications-section #userReportNotification:hover {
+    background-color: #7C5BF0;
+    color: white;
+}
+
+.user-notifications {
+    display: flex;
+    justify-content: space-between;
+    padding: 2rem 4rem;
 }

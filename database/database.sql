@@ -572,6 +572,27 @@ CREATE TRIGGER badge_notification_trigger
 AFTER INSERT OR DELETE ON user_badge
 FOR EACH ROW
 EXECUTE FUNCTION send_badge_notification();
+
+
+CREATE OR REPLACE FUNCTION send_report_notification()
+RETURNS TRIGGER AS $$
+BEGIN
+  INSERT INTO notification (date, viewed, user_id, notification_type, question_id, answer_id, comment_id, vote_id, report_id, badge_id, game_id)
+  SELECT NOW(), FALSE, us.id, 'Report_notification', NULL, NULL, NULL, NULL, NEW.id, NULL, NULL
+  FROM users us
+  WHERE us.is_admin;
+
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Attach the trigger to the 'report' table
+CREATE TRIGGER report_notification_trigger
+AFTER INSERT ON report
+FOR EACH ROW
+EXECUTE FUNCTION send_report_notification();
+
+
 --Trigger 9
 
 --A user cannot vote, answer nor comment on posts that are not public.
@@ -1432,28 +1453,6 @@ INSERT INTO report(date, reason, is_solved, reporter_id, reported_id, report_typ
 
 
 INSERT INTO notification(date, viewed, user_id, notification_type, question_id, answer_id, comment_id, vote_id, report_id, badge_id, game_id) VALUES
-('2023-03-01 14:30:00', TRUE, 99, 'Report_notification', NULL, NULL, NULL, NULL, 1, NULL, NULL),
-('2023-03-01 14:40:00', FALSE, 98, 'Report_notification', NULL, NULL, NULL, NULL, 2, NULL, NULL),
-('2023-03-01 14:50:00', TRUE, 97, 'Report_notification', NULL, NULL, NULL, NULL, 3, NULL, NULL),
-('2023-03-01 15:00:00', TRUE, 96, 'Report_notification', NULL, NULL, NULL, NULL, 4, NULL, NULL),
-('2023-03-01 15:10:00', TRUE, 95, 'Report_notification', NULL, NULL, NULL, NULL, 5, NULL, NULL),
-('2023-03-01 15:20:00', TRUE, 94, 'Report_notification', NULL, NULL, NULL, NULL, 6, NULL, NULL),
-('2023-03-01 15:30:00', TRUE, 93, 'Report_notification', NULL, NULL, NULL, NULL, 7, NULL, NULL),
-('2023-03-01 15:40:00', TRUE, 92, 'Report_notification', NULL, NULL, NULL, NULL, 8, NULL, NULL),
-('2023-03-01 15:50:00', FALSE, 91, 'Report_notification', NULL, NULL, NULL, NULL, 9, NULL, NULL),
-('2023-03-01 16:00:00', FALSE, 90, 'Report_notification', NULL, NULL, NULL, NULL, 10, NULL, NULL),
-('2023-03-01 16:10:00', FALSE, 89, 'Report_notification', NULL, NULL, NULL, NULL, 11, NULL, NULL),
-('2023-03-01 16:20:00', TRUE, 88, 'Report_notification', NULL, NULL, NULL, NULL, 12, NULL, NULL),
-('2023-03-01 16:30:00', TRUE, 1, 'Report_notification', NULL, NULL, NULL, NULL, 13, NULL, NULL),
-('2023-03-01 16:40:00', TRUE, 2, 'Report_notification', NULL, NULL, NULL, NULL, 14, NULL, NULL),
-('2023-03-01 16:50:00', FALSE, 3, 'Report_notification', NULL, NULL, NULL, NULL, 15, NULL, NULL),
-('2023-03-01 17:00:00', TRUE, 4, 'Report_notification', NULL, NULL, NULL, NULL, 16, NULL, NULL),
-('2023-03-01 17:10:00', TRUE, 5, 'Report_notification', NULL, NULL, NULL, NULL, 17, NULL, NULL),
-('2023-03-01 17:20:00', TRUE, 99, 'Report_notification', NULL, NULL, NULL, NULL, 18, NULL, NULL),
-('2023-03-01 17:30:00', TRUE, 98, 'Report_notification', NULL, NULL, NULL, NULL, 19, NULL, NULL),
-('2023-03-01 17:40:00', TRUE, 97, 'Report_notification', NULL, NULL, NULL, NULL, 20, NULL, NULL),
-
-
 ('2023-03-02 19:30:00', TRUE, 50, 'Answer_notification', NULL, 1, NULL, NULL, NULL, NULL, NULL),
 ('2023-03-02 19:40:00', TRUE, 51, 'Answer_notification', NULL, 2, NULL, NULL, NULL, NULL, NULL),
 ('2023-03-02 19:50:00', TRUE, 52, 'Answer_notification', NULL, 3, NULL, NULL, NULL, NULL, NULL),

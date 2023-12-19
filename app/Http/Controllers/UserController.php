@@ -134,6 +134,17 @@ class UserController extends Controller
         return view('pages.userNotifications', ['user' => $user, 'notifications' => $notifications]);
     }
 
+    public function showUserReportsNotifications($id) {
+        $user = User::find($id);
+        
+        if (!$user) {
+            abort(404);
+        }
+
+        $notifications = $user->notifications()->orderByDesc('date')->get();
+        return view('pages.userReportsNotifications', ['user' => $user, 'notifications' => $notifications]);
+    }
+
     public function markAsViewed($id)
     {
         $notification = Notification::find($id);

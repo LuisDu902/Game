@@ -21,6 +21,9 @@
             <div class="title-user-notifications-auth">
                 <h1>Notifications </h1>
             </div>
+            @if (Auth::user()->is_admin && !Auth::user()->is_banned)
+            <a href="{{ route('users_reports_notifications', ['id' => Auth::user()->id]) }}" id="userReportNotification">Users Reports Notifications</a>
+        @endif
         </div>
         <div class="notifications">
         @foreach ($notifications as $notification) 
@@ -93,6 +96,7 @@
                         </div>
                     </div>
             @endif
+
         @endforeach
         </div>
     </section>
