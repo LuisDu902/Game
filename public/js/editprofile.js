@@ -144,16 +144,31 @@ function imageHandler(){
     }
 }
 
+const viewedNotification = document.querySelectorAll('.notification');
 
-function editedAnswerHandler() {
-    const updatedAnswer = this.responseText;
-    var tmp = document.createElement('div');
-    tmp.innerHTML = updatedAnswer;
-    const id = tmp.querySelector('.answer-details').getAttribute('data-id');
+if (viewedNotification) {
+    for (const notification of viewedNotification) {
+        notification.addEventListener('click', function() {
+            const id = notification.getAttribute('data-id');
+            sendAjaxRequest('post', '/api/users/notifications/' + id + "/viewed", {}, ViwedHandler);
+        });
+    }
+}
 
-    const answer = document.querySelector('#answer' + id);
+function ViwedHandler(){
+    if (this.status === 200) {
+        const response = JSON.parse(this.responseText);
+        const id = response.id;
+        
+        const viewedNotification = document.querySelector(`#notification${id}`);
+        viewedNotification.classList.add('true');
+        viewedNotification.classList.remove('false');
 
-    answer.outerHTML = updatedAnswer;
-    createNotificationBox('Notification!', 'You have a new notification!');
-
+        // Update the count in the little circle
+        const notificationCount = document.querySelector('.notification-count');
+        const currentCount = parseInt(notificationCount.textContent, 10);
+        if (!isNaN(currentCount) && currentCount > 0) {
+            notificationCount.textContent = currentCount - 1;
+        }
+    }
 }

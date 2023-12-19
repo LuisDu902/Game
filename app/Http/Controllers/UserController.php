@@ -150,7 +150,6 @@ class UserController extends Controller
 
     public function viewed(Request $request, $notification_id)
     {        
-
         DB::table('notification')
         ->where('id', $notification_id)
         ->update(['viewed' => true]);
@@ -158,5 +157,12 @@ class UserController extends Controller
     return response()->json(['action' => 'viewed', 'id' => $notification_id]);
     }
     
+    public function getUnreadNotificationCount()
+    {
+        $unreadCount = Notification::where('user_id', Auth::id())
+            ->where('viewed', false)
+            ->count();
 
+        return $unreadCount;
+    }
 }

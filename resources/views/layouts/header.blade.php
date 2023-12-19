@@ -26,6 +26,19 @@
                     Admin Section
                 </a>
             @endif
+
+            <a href="{{ route('users_notifications', ['id' => Auth::user()->id]) }}"class="notifications">
+                <ion-icon name="notifications"></ion-icon>
+                @php
+                    $unreadCount = (new \App\Http\Controllers\UserController())->getUnreadNotificationCount();
+                @endphp
+            </a>
+            @if ($unreadCount > 0)
+                <span class="notification-count">
+                    {{ $unreadCount }}
+                </span>
+            @endif
+
             <div class="dropdown">
                 
                 <div class="user">
@@ -51,6 +64,14 @@
                     <a href="{{ route('users_notifications', ['id' => Auth::user()->id]) }}">
                         <ion-icon name="notifications"></ion-icon>
                         <span> Notifications</span>
+                        @php
+                            $unreadCount = (new \App\Http\Controllers\UserController())->getUnreadNotificationCount();
+                        @endphp
+                        @if ($unreadCount > 0)
+                        <span class="notification-count">
+                            {{ $unreadCount }}
+                        </span>
+                        @endif
                     </a>
                     <a href="{{ url('/logout') }}">
                         <ion-icon name="log-out"></ion-icon>

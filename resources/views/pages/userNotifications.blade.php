@@ -96,35 +96,6 @@
         @endforeach
         </div>
     </section>
-
-    
-    <script>
-
-    const viewedNotification = document.querySelectorAll('.notification');
-
-    if (viewedNotification) {
-        for (const notification of viewedNotification) {
-            notification.addEventListener('click', function() {
-                const id = notification.getAttribute('data-id');
-                sendAjaxRequest('post', '/api/users/notifications/' + id + "/viewed", {}, ViwedHandler);
-            });
-        }
-    }
-
-    function ViwedHandler(){
-        if (this.status === 200) {
-            const response = JSON.parse(this.responseText);
-            const id = response.id;
-            const viewedNotification = document.querySelector(`#notification${id}`);
-            
-            if (response.action === 'viewed') {
-                viewedNotification.classList.add('viewed');
-                viewedNotification.classList.remove('not-viewed');
-            }
-        }
-    }
-    </script>
-
 @endsection
 
 
