@@ -1,5 +1,3 @@
-const selectElements = document.querySelectorAll('.status');
-
 function showUserStatus() {
     const modal = document.querySelector('#userDeleteModal');
     modal.style.display = 'block';
@@ -148,7 +146,11 @@ if (adminActions) {
         button.addEventListener('click', function () {
             adminActions.forEach(btn => btn.classList.remove('selected'));
             this.classList.add('selected');
-            sendAjaxRequest('get', '/api/admin/' + this.textContent.toLowerCase(), {}, toggleAdminSection);
+            if (this.textContent !== 'Statistics')
+                sendAjaxRequest('get', '/api/admin/' + this.textContent.toLowerCase(), {}, toggleAdminSection);
+            else {
+                window.location.href = '/statistics';
+            }
         });
     });
 }
@@ -178,16 +180,17 @@ function createCharts(){
 function createQuestionChart() {
     if (this.status == 200) {
         const response = JSON.parse(this.responseText);
+       
         new Chart(questionChart, {
             type: 'line',
             data: {
                 labels: response.labels,
                 datasets: [{
-                  label: 'Questions',
-                  data: response.data,
-                  fill: false,
-                  borderColor: 'rgba(124,91,240,255)',
-                  tension: 0.1
+                    label: 'Questions',
+                    data: response.data,
+                    fill: false,
+                    borderColor: 'rgba(124,91,240,255)',
+                    tension: 0.1
                 }]
             },
             options: {
@@ -198,12 +201,12 @@ function createQuestionChart() {
                 },
                 scales: {
                     y: {
-                    beginAtZero: false
+                        beginAtZero: false
                     }
-              }
+                }
             }
-          });
-    }
+        });
+    } 
 }
 
 function createUserChart() {

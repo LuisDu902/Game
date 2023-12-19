@@ -31,18 +31,7 @@ class AdminController extends Controller
         
         return view('partials._users', compact('users'))->render();
     }
-
-    public function statistics() {
-        $stats = [
-            'num_questions' => Question::count(),
-            'num_answers' => Answer::count(),
-            'num_comments' => Comment::count(),
-            'num_users' => User::count(),
-        ];
-
-        return view('partials._stats', compact('stats'))->render();
-    }
-
+    
     public function chart(Request $request) {
         switch ($request->type) {
             case 'questions':
