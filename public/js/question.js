@@ -750,7 +750,6 @@ function removeFilterTag() {
         tagDiv.remove();
     }
 }
-
 const upA = document.getElementById('answer-up-f')
 const fileInfoA = document.getElementById('a-file-info');
 

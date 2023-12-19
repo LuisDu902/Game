@@ -11,6 +11,8 @@ use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\AnswerController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\Auth\GoogleController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\LoginController;
@@ -82,6 +84,13 @@ Route::controller(QuestionController::class)->group(function () {
     Route::delete('/questions/{id}', 'delete')->name('questions.destroy');
 });
 
+Route::controller(ReportController::class)->group(function () {
+    Route::post('/report', [ReportController::class, 'store'])->name('report.store');
+    Route::post('/report2', [ReportController::class, 'store2'])->name('report.store2');
+    Route::post('/report3', [ReportController::class, 'store3'])->name('report.store3');
+});
+
+
 // File Storage
 Route::controller(FileController::class)->group(function () {
     Route::post('/api/file/upload', 'upload');
@@ -99,13 +108,19 @@ Route::controller(AdminController::class)->group(function () {
 // Game Category
 Route::controller(GameCategoryController::class)->group(function () {
     Route::get('/categories', 'index')->name('categories');
+    Route::get('/categories/create', 'create')->name('categories.create');
     Route::get('/categories/{id}', 'show')->name('category');
 });
 
+
 // Game
 Route::controller(GameController::class)->group(function () {
+    Route::post('/api/game/{category_id}', 'store')->name('games.store');
+    Route::get('/game/create/{category_id}', 'create')->name('games.create');
     Route::get('/game/{id}', 'show')->name('game');
 });
+
+
 
 // User API
 Route::controller(UserController::class)->group(function () {
@@ -123,6 +138,7 @@ Route::controller(QuestionController::class)->group(function () {
     Route::post('/api/questions/{id}/visibility', 'visibility'); 
     Route::post('/api/questions', 'store');
     Route::put('/api/questions/{id}', 'update');
+    
 });
 
 // Answer API
@@ -150,7 +166,5 @@ Route::controller(TagController::class)->group(function () {
     Route::post('/api/tags', 'store');
 });
 
-
-
-
-
+Route::get('/google/redirect', [App\Http\Controllers\Auth\GoogleController::class, 'redirectToGoogle'])->name('google.redirect');
+Route::get('/google/callback', [App\Http\Controllers\Auth\GoogleController::class, 'handleGoogleCallback'])->name('google.callback');

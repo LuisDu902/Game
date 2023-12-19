@@ -5,22 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class GameCategory extends Model
+class Report extends Model
 {
     use HasFactory;
 
     public $timestamps  = false;
 
-    protected $table = 'game_category';
+    protected $table = 'report';
 
     protected $fillable = [
-        'name',
-        'description',
+        'date', 'reason', 'explanation', 'is_solved', 'reporter_id', 'reported_id', 'report_type', 'question_id', 'answer_id', 'comment_id'
     ];
 
-    public function games()
-    {
-        return $this->hasMany(Game::class);
-    }
-
+    
 }
+
+

@@ -3,16 +3,34 @@
 namespace App\Http\Controllers;
 
 use App\Models\GameCategory;
+use App\Models\Game;
 use Illuminate\Http\Request;
 
 class GameCategoryController extends Controller
 {
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|max:256',
+            'description' => 'required'
+        ]);
+        
+        $gameCategory = GameCategory::create([
+            'name' => $request->input('name'),
+            'description' => trim($request->input('description'))
+        ]);
+
+      
+
+        return response()->json(['id' => $gameCategory->id]);
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $categories = GameCategory::paginate(10);
+        //$categories = GameCategory::paginate(10);
+        $categories = GameCategory::all();
         return view('pages.categories', ['categories' => $categories]);
     }
 
@@ -25,5 +43,13 @@ class GameCategoryController extends Controller
         $gameCategory = GameCategory::findOrFail($id);
         return view('pages.category', ['category' => $gameCategory]);
     }
+
+    public function create()
+    {
+
+        return view('pages.newCategory');
+    }
+
+
 
 }
