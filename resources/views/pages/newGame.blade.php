@@ -18,8 +18,8 @@
             <li>Create Game</li>
         </ul>
     </div>
-    <section class="game-section" data-id="{{$category->id}}">
-        <div class="new-game-form">
+    <section class="game-section">
+        <div class="new-game-form" data-id="{{$category->id}}">
             <form action="{{ route('games.store', ['category_id' => $category->id]) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="form-group">
@@ -31,8 +31,13 @@
                     <label for="description">Description <span>*</span></label>
                     <textarea name="description" id="description" class="form-control" placeholder="Game description..." required></textarea>
                 </div>
-    
-                <button type="submit" id="create-game">Create Game</button>
+                <div class="upload-files">
+                    <label for="file">Select image:</label>
+                    <input type='file' id="file" accept="image/*" hidden>
+                    <button id="up-image">Select</button>
+                </div>
+                <img src="{{ asset('/game/default.png') }}" alt="default game">
+                <button type="submit" id="create-game" onclick="createGame()">Create Game</button>
             </form>
         </div>
     </section>

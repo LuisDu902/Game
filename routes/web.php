@@ -104,15 +104,16 @@ Route::controller(GameCategoryController::class)->group(function () {
     Route::get('/categories/{id}', 'show')->name('category');
 });
 
-
 // Game
 Route::controller(GameController::class)->group(function () {
-    Route::post('/game', 'store')->name('games.store');
-    Route::get('/game/create/{category_id}', 'create')->name('games.create');
+    Route::get('/game/{category_id}/create', 'create')->name('games.create');
     Route::get('/game/{id}', 'show')->name('game');
 });
 
 
+Route::controller(GameController::class)->group(function () {
+    Route::post('/api/game', 'store')->name('games.store');
+});
 
 // User API
 Route::controller(UserController::class)->group(function () {

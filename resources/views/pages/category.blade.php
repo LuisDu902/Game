@@ -39,7 +39,7 @@
                     @if ($category->games->count() > 0)
                         @foreach($category->games as $game)
                             <a href="{{ route('game', ['id' => $game->id]) }}" class="game-card">
-                                <img src="../images/roblox.jpg" alt="game-image"></img>
+                                <img src="{{ $game->getImage() }}" alt="game-image"></img>
                             </a>
                         @endforeach
                     @else

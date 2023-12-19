@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Game;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
@@ -57,6 +58,8 @@ class FileController extends Controller
                         ->pluck('file_name')
                         ->toArray();
                 return $fileNames;
+            case 'game':
+                return Game::find($id)->game_image;
             default:
                 return null;
         }
@@ -69,6 +72,10 @@ class FileController extends Controller
                 case 'profile':
                     Storage::disk(self::$diskName)->delete($type . '/' . $existingFileName);
                     User::find($id)->profile_image = null;
+                    break;
+                case 'game':
+                    Storage::disk(self::$diskName)->delete($type . '/' . $existingFileName);
+                    User::find($id)->game_image = null;
                     break;
                 case 'question':
                     foreach ($existingFileName as $fileName) {
@@ -118,7 +125,7 @@ class FileController extends Controller
             return response()->json(['error' => 'Unsupported upload extension'], 400);
         }
 
-        if ($type == 'profile') {
+        if ($type == 'profile' || $type == 'game') {
             $this->delete($type, $request->id);
         }
 
@@ -134,7 +141,15 @@ class FileController extends Controller
                     $error = "unknown user";
                 }
                 break;
-
+            case 'game':
+                $game = Game::findOrFail($request->id);
+                if ($game) {
+                    $game->game_image = $fileName;
+                    $game->save();
+                } else {
+                    $error = "unknown game";
+                }
+                break;
             case 'question':
                 $question = Question::findOrFail($request->id);
                 if ($question) {

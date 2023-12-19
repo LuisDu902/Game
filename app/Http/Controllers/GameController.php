@@ -11,11 +11,9 @@ class GameController extends Controller
 
     public function create($category_id)
     {
-
         $category = GameCategory::find($category_id);
         return view('pages.newGame', ['category' => $category]);
     }
-
 
     /**
      * Display the specified resource.
@@ -27,10 +25,10 @@ class GameController extends Controller
         return view('pages.game', ['game' => $game, 'questions' => $questions]);
     }
 
-    public function store(Request $request, $category_id)
+    public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|max:256',
+            'name' => 'required|max:256|unique:game',
             'description' => 'required'
         ]);
         
@@ -38,7 +36,7 @@ class GameController extends Controller
             'name' => $request->input('name'),
             'description' => trim($request->input('description')),
             'nr_members' => 0,
-            'game_category_id' => $category_id
+            'game_category_id' => $request->category_id
         ]);
 
         return response()->json(['id' => $game->id]);
