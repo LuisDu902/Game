@@ -75,3 +75,43 @@ if (gamePage) {
         }
     }
 }
+
+
+
+function showGameDelete() {
+    const modal = document.querySelector('#gameDeleteModal');
+    modal.style.display = 'block';
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    };
+
+    const cancel = document.getElementById('ad-cancel');
+
+    cancel.addEventListener('click', function(){
+        modal.style.display = 'none';
+    });
+
+    const id = event.target.closest('.game-info').getAttribute('data-id');
+
+    const confirm = document.getElementById('ad-confirm');
+    
+    confirm.addEventListener('click', function(){
+        event.preventDefault();
+        sendAjaxRequest('delete', '/api/game/' + id, {}, gameDeleteHandler);
+        modal.style.display = 'none';
+    });
+    
+}
+
+
+function gameDeleteHandler() {
+    if (this.status === 200) {
+        const id = JSON.parse(this.responseText).id;
+        const game = document.querySelector(`#game${id}`);
+        game.remove(); 
+        createNotificationBox('Successfully deleted!', 'Game deleted successfully!');
+    }
+}

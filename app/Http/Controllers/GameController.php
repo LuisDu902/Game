@@ -43,5 +43,17 @@ class GameController extends Controller
     }
 
 
+    public function delete(Request $request, $id) {
+
+        $game = Game::find($id);
+        
+        if (!$game) {
+            abort(404);
+        }
+       
+        $game->delete();
+
+        return response()->json(['id' => $game->id ]); 
+    }
 
 }

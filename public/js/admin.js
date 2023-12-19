@@ -308,31 +308,3 @@ function showDeleteCategory() {
 }
 
 
-
-function showGameDelete() {
-    const modal = document.querySelector('#gameDeleteModal');
-    modal.style.display = 'block';
-
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = 'none';
-        }
-    };
-
-    const cancel = document.getElementById('ad-cancel');
-
-    cancel.addEventListener('click', function(){
-        modal.style.display = 'none';
-    });
-
-    const id = event.target.closest('.game-info').getAttribute('data-id');
-
-    const confirm = document.getElementById('ad-confirm');
-    
-    confirm.addEventListener('click', function(){
-        event.preventDefault();
-        console.log(id);
-        //sendAjaxRequest('delete', '/api/users/' + id, {}, userDeleteHandler);
-    });
-    
-}
