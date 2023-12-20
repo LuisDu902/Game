@@ -190,6 +190,26 @@
   text-align: center;
 }
 
+.games-table th:nth-child(1) {
+  width: 30%;
+}
+
+.games-table th:nth-child(2) {
+  width: 30%;
+}
+
+.games-table th:nth-child(3) {
+  width: 12%;
+}
+
+.games-table th:nth-child(4) {
+  width: 12%;
+}
+
+.games-table th:nth-child(5) {
+  width: 12%;
+}
+
 #cre-game {
   color: #525252;
 }
