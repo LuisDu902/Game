@@ -178,6 +178,16 @@ function toggleAdminSection() {
         filter_user.addEventListener('change', function() {
             sendAjaxRequest('get', '/api/users?' + encodeForAjax({search: search_user.value, filter: filter_user.value, order: order_user.value}), {}, userListHandler);
         });
+
+        const links = document.querySelectorAll('.custom-pagination a');
+        for (const link of links){
+            link.addEventListener('click', function(){
+                event.preventDefault()
+                const url = new URL(link.href);
+                sendAjaxRequest('get', '/api/users' + url.search + '&' + encodeForAjax({search: search_user.value, filter: filter_user.value, order: order_user.value}), {}, userListHandler);
+            });
+        }
+
     } else if (document.querySelector('.game-manage-section')) {
         order_game = document.querySelector('#order-game');
         search_game = document.querySelector('#search-game');
@@ -191,6 +201,16 @@ function toggleAdminSection() {
         filter_game.addEventListener('change', function() {
             sendAjaxRequest('get', '/api/game?' + encodeForAjax({search: search_game.value, filter: filter_game.value, order: order_game.value}), {}, gameListHandler);
         });
+
+        const links = document.querySelectorAll('.custom-pagination a');
+        for (const link of links){
+            link.addEventListener('click', function(){
+                event.preventDefault(); 
+                const url = new URL(link.href);
+                sendAjaxRequest('get', '/api/game' + url.search + '&' + encodeForAjax({search: search_game.value, filter: filter_game.value, order: order_game.value}), {}, gameListHandler);
+            
+            });
+        }
     }
 }
 
