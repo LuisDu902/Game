@@ -9,6 +9,24 @@ use Illuminate\Http\Request;
 class GameController extends Controller
 {
 
+    public function search(Request $request){
+        $order = $request->input('order', 'name');
+        $filter = $request->input('filter', 0);
+        $search = $request->input('search', '');
+
+        $query = Game::where(function ($query) use ($search) {
+            $query->where('name', 'ilike', "%$search%");
+        });
+
+        if ($filter != 0) {
+            $query->where('game_category_id', $filter);
+        }
+
+        $games = $query->orderBy($order)->paginate(10);
+
+        return view('partials._gamesTable', compact('games'))->render();
+    }
+
     public function create($category_id)
     {
         $category = GameCategory::find($category_id);

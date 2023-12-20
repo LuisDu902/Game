@@ -20,9 +20,7 @@ use App\Policies\UserPolicy;
 use HasFactory, Notifiable;
 
 class UserController extends Controller
-{
-
-  
+{ 
     public function showUserProfile($id) {
 
         $user = User::find($id);
@@ -51,12 +49,6 @@ class UserController extends Controller
 
         
         $users = $query->where('id', '!=', 1)->orderBy($order)->paginate(10);
-
-        $users->appends([
-            'order' => $order,
-            'filter' => $filter,
-            'search' => $search,
-        ]);
 
         return view('partials._usersTable', compact('users'))->render();
     }
@@ -125,7 +117,6 @@ class UserController extends Controller
         $this->authorize('delete', [auth()->user(), $user]);
 
         $user->delete();
-
 
         return response()->json(['id' => $user->id ]); 
     }

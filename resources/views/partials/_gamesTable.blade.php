@@ -14,6 +14,7 @@
             @endforeach
         </tbody>
     </table>
+    {{ $games->links() }}
     <div id="gameDeleteModal" class="modal">
         <div class="delete-modal">
             <div class="modal-c">

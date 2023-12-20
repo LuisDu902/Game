@@ -4,7 +4,7 @@
     <td>{{ $game->nr_members }}</td>
     <td>
     <a href="{{ route('game.edit', ['id' => $game->id]) }}">        
-        <ion-icon name="create"></ion-icon>
+        <ion-icon name="create" id="cre-game"></ion-icon>
     </a></td>
     </td>
     <td class="delete-game"><button class="delete-game-button" onclick="showGameDelete()">

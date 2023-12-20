@@ -190,6 +190,10 @@
   text-align: center;
 }
 
+#cre-game {
+  color: #525252;
+}
+
 @media (max-width: 1200px) {
   .game {
     margin: 20px auto;

@@ -127,10 +127,10 @@ Route::controller(GameController::class)->group(function () {
 
 
 Route::controller(GameController::class)->group(function () {
+    Route::get('/api/game', 'search');
     Route::post('/api/game', 'store')->name('games.store');
     Route::delete('/api/game/{id}', 'delete');
     Route::put('/api/game/{id}', 'update');
-
 });
 
 // User API

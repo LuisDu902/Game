@@ -163,9 +163,6 @@ if (editGamePage) {
             description.focus();
             createNotificationBox('Empty game description', 'Please enter your game description!', 'warning');
         } else {
-            console.log(title.value)
-            console.log(description.value)
-            console.log(id)
             sendAjaxRequest('put', '/api/game/' + id, {name: title.value, description: description.value}, editGameHandler);
         }
     }

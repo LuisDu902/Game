@@ -2,9 +2,9 @@
     <nav class="search-bar">
         <div class="filter-condition">
             <ion-icon name="funnel-outline" class="purple"></ion-icon>
-            <label> Filter by </label>
+            <label> Category: </label>
             <select name="" class="filter-select" id="filter-game">
-                <option value="">None</option>
+                <option value="0">None</option>
                 @foreach($categories as $category)
                     <option value="{{ $category->id }}">{{ $category->name }}</option>
                 @endforeach
@@ -20,8 +20,8 @@
             <label> Order by </label>
             <select name="" class="order-select" id="order-game">
                 <option value="name"> name </option>
-                <option value="category"> category </option>
-                <option value="members"> members </option>
+                <option value="game_category_id"> category </option>
+                <option value="nr_members"> members </option>
             </select>
         </div>
     </nav>
