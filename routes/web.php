@@ -68,7 +68,6 @@ Route::controller(StaticController::class)->group(function () {
 // User
 Route::controller(UserController::class)->group(function () {
     Route::get('/users/{id}', 'showUserProfile')->name('profile');
-    Route::get('/users', 'index')->name('users');
     Route::get('/users/questions/{id}', 'showUserQuestions')->name('users_questions');
     Route::get('/users/answers/{id}', 'showUserAnswers')->name('users_answers');
 });
@@ -102,25 +101,37 @@ Route::controller(AdminController::class)->group(function () {
     Route::get('/statistics', 'stats')->name('stats');
     Route::get('/api/admin/users', 'users');
     Route::get('/api/admin/tags', 'tags');
+    Route::get('/api/admin/games', 'games');
+    Route::get('/api/admin/reports', 'reports');
+
     Route::get('/api/admin/charts', 'chart');
 });
 
 // Game Category
 Route::controller(GameCategoryController::class)->group(function () {
     Route::get('/categories', 'index')->name('categories');
+    Route::post('/categories', 'store')->name('categories.store');
     Route::get('/categories/create', 'create')->name('categories.create');
     Route::get('/categories/{id}', 'show')->name('category');
+    Route::get('/categories/{id}/edit', 'edit')->name('categories.edit');
+    Route::delete('/categories/{id}', 'delete')->name('categories.destroy');
+    Route::put('/categories/{id}', 'update')->name('categories.update');
 });
-
 
 // Game
 Route::controller(GameController::class)->group(function () {
-    Route::post('/api/game/{category_id}', 'store')->name('games.store');
-    Route::get('/game/create/{category_id}', 'create')->name('games.create');
+    Route::get('/game/{category_id}/create', 'create')->name('games.create');
     Route::get('/game/{id}', 'show')->name('game');
+    Route::get('/game/{id}/edit', 'edit')->name('game.edit');
 });
 
 
+Route::controller(GameController::class)->group(function () {
+    Route::get('/api/game', 'search');
+    Route::post('/api/game', 'store')->name('games.store');
+    Route::delete('/api/game/{id}', 'delete');
+    Route::put('/api/game/{id}', 'update');
+});
 
 // User API
 Route::controller(UserController::class)->group(function () {
@@ -138,7 +149,6 @@ Route::controller(QuestionController::class)->group(function () {
     Route::post('/api/questions/{id}/visibility', 'visibility'); 
     Route::post('/api/questions', 'store');
     Route::put('/api/questions/{id}', 'update');
-    
 });
 
 // Answer API
@@ -150,7 +160,6 @@ Route::controller(AnswerController::class)->group(function () {
     Route::post('/api/answers/{id}/vote', 'vote');
     Route::post('/api/answers/{id}/unvote', 'unvote'); 
     Route::post('/api/answers/{id}/status', 'status'); 
-
 });
 
 // Comment API
