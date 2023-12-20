@@ -98,11 +98,9 @@
     transform: translate(-50%, -50%);
 }
 
-.manage-tags p{
-    margin: 1.5rem 0;
+.manage-tags .tags-actions input{
     color: #7c5bf0;
     background-color: #d2cfff;
-    padding: 5px 15px;
     border-radius: 5px;
     font-size: 16px;
     text-align: center;
@@ -118,4 +116,26 @@
     border-radius: 10px;
     border: 1px solid #E6E7F3;
     padding: 3rem 0;
+}
+
+.manage-tags .tags-actions {
+    margin: 1.5rem 0;
+    color: #7c5bf0;
+    background-color: #d2cfff;
+    padding: 5px 15px;
+    border-radius: 5px;
+    font-size: 16px;
+    text-align: center;
+}
+
+.edit_or_cancel, .delete_or_confirm {
+    justify-content: center;
+    align-items: center;
+}
+
+.tags-actions{
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    align-items: center;
 }

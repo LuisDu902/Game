@@ -164,6 +164,9 @@ Route::controller(CommentController::class)->group(function () {
 // Tag API
 Route::controller(TagController::class)->group(function () {
     Route::post('/api/tags', 'store');
+    Route::get('/api/tags/{id}/edit', 'edit');
+    Route::put('/api/tags/{id}', 'update');
+    Route::delete('/api/tags/{id}', 'delete');
 });
 
 Route::get('/google/redirect', [App\Http\Controllers\Auth\GoogleController::class, 'redirectToGoogle'])->name('google.redirect');
