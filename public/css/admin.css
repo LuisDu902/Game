@@ -97,3 +97,25 @@
     left: 50%; 
     transform: translate(-50%, -50%);
 }
+
+.manage-tags p{
+    margin: 1.5rem 0;
+    color: #7c5bf0;
+    background-color: #d2cfff;
+    padding: 5px 15px;
+    border-radius: 5px;
+    font-size: 16px;
+    text-align: center;
+}
+
+.manage-tags {
+    margin-top: 3rem;
+    align-items: center;
+    gap: 30px;
+    justify-content: center;
+    background-color: white;
+    box-shadow: 0 8px 30px 0 rgba(50,53, 130, 0.08);
+    border-radius: 10px;
+    border: 1px solid #E6E7F3;
+    padding: 3rem 0;
+}

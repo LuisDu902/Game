@@ -36,7 +36,7 @@ class AdminController extends Controller
 
     public function tags() {
 
-        $tags = Tag::all()->paginate(10);
+        $tags = Tag::paginate(10);
         
         return view('partials._tags', compact('tags'))->render();
     }
