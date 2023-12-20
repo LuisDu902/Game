@@ -3,7 +3,7 @@
     <td><a href="{{ route('category', ['id' => $game->game_category_id]) }}">{{ $game->category->name }}</a></td>
     <td>{{ $game->nr_members }}</td>
     <td>
-    <a href="{{ route('game', ['id' => $game->id]) }}">        
+    <a href="{{ route('game.edit', ['id' => $game->id]) }}">        
         <ion-icon name="create"></ion-icon>
     </a></td>
     </td>

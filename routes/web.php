@@ -122,12 +122,15 @@ Route::controller(GameCategoryController::class)->group(function () {
 Route::controller(GameController::class)->group(function () {
     Route::get('/game/{category_id}/create', 'create')->name('games.create');
     Route::get('/game/{id}', 'show')->name('game');
+    Route::get('/game/{id}/edit', 'edit')->name('game.edit');
 });
 
 
 Route::controller(GameController::class)->group(function () {
     Route::post('/api/game', 'store')->name('games.store');
     Route::delete('/api/game/{id}', 'delete');
+    Route::put('/api/game/{id}', 'update');
+
 });
 
 // User API
