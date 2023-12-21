@@ -243,6 +243,42 @@ public function envelope() {
 }
 ```
 
+
+
+#### 8.1.5. OAuth
+
+[OAuth](https://developers.google.com/identity/protocols/oauth2/javascript-implicit-flow?hl=pt-br) was used for authenticating users through with acccounts
+[Example of use](../app/Http/Controllers/Auth/GoogleController.php):
+
+```php
+  public function handleGoogleCallback()
+    {
+        try {
+            $googleUser = Socialite::driver('google')->user();
+            $user = User::where('email', $googleUser->email)->first();
+
+            if ($user) {
+                Auth::login($user);
+                return redirect('/home');
+            } else {
+                $newUser = User::create([
+                    'name' => $googleUser->name,
+                    'username' => explode('@', $googleUser->email)[0],
+                    'email' => $googleUser->email,
+                    'password' => Hash::make('your-random-password'), // Replace with a better random password logic
+                    'description' => 'Google user',
+                    // other default values
+                ]);
+
+                Auth::login($newUser);
+                return redirect('/home');
+            }
+        } catch (Exception $e) {
+            dd($e->getMessage());
+        }
+    }
+```
+
 ### 8.2 User Stories
 
 
