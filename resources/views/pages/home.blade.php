@@ -28,12 +28,9 @@
             <div class="carousel-view">
                <ion-icon name="chevron-back" id="prev-game"></ion-icon>
                <div class="games-list">
-                  <a href="{{ route('game', ['id' => 1]) }}" class="game"><img src="../images/roblox.jpg" alt="game"></a>
-                  <a href="{{ route('game', ['id' => 1]) }}" class="game"><img src="../images/roblox.jpg" alt="game"></a>
-                  <a href="{{ route('game', ['id' => 1]) }}" class="game"><img src="../images/roblox.jpg" alt="game"></a>
-                  <a href="{{ route('game', ['id' => 1]) }}" class="game"><img src="../images/roblox.jpg" alt="game"></a>
-                  <a href="{{ route('game', ['id' => 1]) }}" class="game"><img src="../images/roblox.jpg" alt="game"></a>
-                  <a href="{{ route('game', ['id' => 1]) }}" class="game"><img src="../images/roblox.jpg" alt="game"></a>
+                  @foreach($games as $game)
+                     <a href="{{ route('game', ['id' => $game->id]) }}" class="game"><img src="{{ $game->getImage() }}" alt="game"></a>
+                  @endforeach
                </div>
                <ion-icon name="chevron-forward" id="next-game"></ion-icon>
             </div>

@@ -43,7 +43,7 @@
             </div>
         @endif
         
-        @if (Auth::check() && Auth::user()->id !== $question->user_id)  
+        @if (Auth::check() && Auth::user()->id !== $question->user_id && !Auth::user()->is_banned)  
         <div id="answerFormContainer" class="answerFormContainer">
             <form>
                 <div class="form-group">

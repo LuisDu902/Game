@@ -37,6 +37,7 @@
         </div>
         <div class="questions-list">
             @include('partials._questions', ['questions' => $questions])
+            {{ $questions->links() }}
         <div>
     </article>
    

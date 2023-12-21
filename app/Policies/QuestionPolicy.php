@@ -4,13 +4,13 @@ namespace App\Policies;
 
 use App\Models\Question;
 use App\Models\User;
+use Illuminate\Auth\Access\Response;
 
-use Illuminate\Auth\Access\HandlesAuthorization;
-use Illuminate\Support\Facades\Auth;
-
-class QuestionPolicy {
-
-    use HandlesAuthorization;
+class QuestionPolicy
+{
+    public function create(User $user) {
+        return !$user->is_banned;
+    }
 
     public function delete(User $user, Question $question)
     {
@@ -19,8 +19,7 @@ class QuestionPolicy {
     }
 
     public function view(User $user, Question $question) {
-        if ($question->is_public) return true;
-        if ($user->is_admin) return true;
+        if ($question->is_public || $user->is_admin) return true;
         return $user->id == $question->user_id;
     }
 
