@@ -153,7 +153,7 @@
 <div id="reportPopup2" class="report-popup2" style="display: none;">
     <div class="report-popup-content">
         <span class="close-btn" onclick="closePopup2()">&times;</span>
-        <h2>Answer report</h2>
+        <h2>Report2</h2>
         <p>Select a reason for reporting:</p>
         <form method="POST" action="{{ route('report.store2') }}">
             @csrf
@@ -193,8 +193,9 @@
             <input type="hidden" name="reported_id" value="{{ $answer->user_id }}">
             <input type="hidden" name="answer_id" value="{{ $answer->id }}">
 
+
             <p id="elaborate">Elaborate on the issue:</p>
-            <textarea name="explanation"></textarea>
+            <textarea name="explanation" ></textarea>
             <button type="submit">Submit Report</button>
         </form>
     </div>

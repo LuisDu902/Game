@@ -14,7 +14,7 @@
             <li><a href="{{ route('profile', ['id' => $user->id]) }}">{{ $user->username }}</a></li>
             @if(Auth::check() and (Auth::id() == $user->id))
             <li><a href="{{ route('users_notifications', ['id' => $user->id]) }}">notifications</a></li>
-                <li>reports</li>
+                <li>notifications</li>
             @endif
         </ul>
     </div>
@@ -37,15 +37,14 @@
                         <div id="notification-{{ $notification->id }}" class="notification" data-id="{{ $notification->id }}">
                             <a class="notification" href="{{ route('stats') }}">
                                 <h2>Report notification</h2>
-                                <p class="version-content">A report was made by some user. <span class="type">Check it out</span>!</p>
-                                <span class="date">{{ $notification->report->reporter->name }} <span class="type">reported</span> {{ $notification->report->reported->name }} {{ $notification->elapsedTime() }} ago</span> 
+                                <p class="version-content">A report was made by some user.<span class="type">Check it out</span>!</p>
+                                <span class="date">{{ $notification->report->reporter->name }} <span class="type">reported</span> {{ $notification->report->reported->name }} at {{ $notification->date }}</span> 
                             </a>
                         </div>
                     </div>
             @endif
         @endforeach
         </div>
-        {{ $notifications->links() }}
     </section>
 @endsection
 

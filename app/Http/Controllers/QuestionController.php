@@ -10,6 +10,7 @@ use App\Models\Comment;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\GameCategory;
+use App\Models\QuestionFollower;
 use App\Models\Tag;
 use Illuminate\Support\Facades\Auth;
 
@@ -31,7 +32,7 @@ class QuestionController extends Controller
        
         $categories = GameCategory::all();
         $tags = Tag::all();
-        return view('pages.questions', ['title' => 'Questions Page', 'questions' => $questions, 'categories' => $categories, 'tags' => $tags]);
+        return view('pages.questions', ['questions' => $questions, 'categories' => $categories, 'tags' => $tags]);
     }
 
     public function list(Request $request) 
@@ -88,7 +89,7 @@ class QuestionController extends Controller
                 ->paginate(10);
         }
 
-        return view('pages.search', ['title' => 'Search Questions Page', 'questions' => $questions]);
+        return view('pages.search', ['questions' => $questions]);
     }
 
     /**
@@ -103,7 +104,7 @@ class QuestionController extends Controller
 
         $categories = GameCategory::all();
         $tags = Tag::all();
-        return view('pages.newQuestion', ['title' => 'Create New Question Page', 'categories' => $categories, 'tags' => $tags]);
+        return view('pages.newQuestion', ['categories' => $categories, 'tags' => $tags]);
     }
 
     /**
@@ -165,7 +166,7 @@ class QuestionController extends Controller
 
         $question->increment('nr_views');
         
-        return view('pages.question', ['title' => 'Question: ' . $question->title, 'question' => $question]);
+        return view('pages.question', ['question' => $question]);
     }
 
     /**
@@ -181,7 +182,7 @@ class QuestionController extends Controller
         
         $tags = Tag::all();
         
-        return view('pages.editQuestion', ['title' => 'Edit ' . $question->title , 'question'=> $question, 'categories' => $categories, 'tags' => $tags]);
+        return view('pages.editQuestion', ['question'=> $question, 'categories' => $categories, 'tags' => $tags]);
     }
 
     public function update(Request $request, $id) {
@@ -333,7 +334,7 @@ class QuestionController extends Controller
     
         $paginatedContents = $allContents->forPage($page, 5); 
     
-        return view('pages.activity', ['title' => $question->title . ' activity', 'question' => $question, 'contents' => $paginatedContents]);
+        return view('pages.activity', ['question' => $question, 'contents' => $paginatedContents]);
     }
     
 
@@ -343,6 +344,30 @@ class QuestionController extends Controller
         $question->is_public = $visibility; 
         $question->save();
         return response()->json(['visibility' => $request->visibility]);
+    }
+
+    public function followquestion($questionId)
+    {
+        $userId = Auth::id();
+
+        $questionFollower = QuestionFollower::where(['user_id' => $userId, 'question_id' => $questionId])->first();
+
+        if ($questionFollower) {
+            QuestionFollower::where(['user_id' => $userId, 'question_id' => $questionId])->delete();
+            $userFollows = false;
+            session()->flash('status', 'You unfollowed the question!');
+        } else {
+            QuestionFollower::create([
+                'user_id' => $userId,
+                'question_id' => $questionId,
+            ]);
+            $questionFollower = true;
+            session()->flash('status', 'You are following the question!');
+        }
+
+        session()->put('user_follows', $userFollows);
+
+        return back();
     }
 
 }

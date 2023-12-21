@@ -138,15 +138,13 @@ if (!documentExtentions.includes(fileExtension)) {
 
 ### 5. Check Accessibility and Usability
 
-[Accessibility Checklist](accessibility.pdf): 18/18
-
-[Usability Checklist](usability.pdf): 26/28
+Accessibility: https://ux.sapo.pt/checklists/acessibilidade/
+Usability: https://ux.sapo.pt/checklists/usabilidade/
 
 ### 6. HTML & CSS Validation
 
 HTML: https://validator.w3.org/nu/
-
-[CSS Validation](css_validation.pdf)
+CSS: https://jigsaw.w3.org/css-validator/
 
 ### 7. Revisions to the Project
 
@@ -208,7 +206,7 @@ new Chart(gameChart, {
 
 #### 8.1.4. Mailtrap
 
-[Mailtrap](https://mailtrap.io) was used for managing and testing email workflows during development.
+[Mailtrap]](https://mailtrap.io) was used for managing and testing email workflows during development.
 
 [Example of use](../app/Mail/MailModel.php):
 

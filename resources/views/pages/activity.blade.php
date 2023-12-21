@@ -20,7 +20,7 @@
             <li>Activity</li>
         </ul>
     </div>
-    <section class="activity-section" data-id="{{ $question->id }}">
+    <section class="activity-section">
         <h1>Post activity</h1>
         <div class="activities">
             @foreach ($contents as $content) 

@@ -68,10 +68,10 @@ Route::controller(StaticController::class)->group(function () {
 // User
 Route::controller(UserController::class)->group(function () {
     Route::get('/users/{id}', 'showUserProfile')->name('profile');
-    Route::get('/users/{id}/questions', 'showUserQuestions')->name('users_questions');
-    Route::get('/users/{id}/answers', 'showUserAnswers')->name('users_answers');
-    Route::get('/users/{id}/notifications', 'showUserNotifications')->name('users_notifications');
-    Route::get('/users/{id}/notifications/reports', 'showUserReportsNotifications')->name('users_reports_notifications');
+    Route::get('/users/questions/{id}', 'showUserQuestions')->name('users_questions');
+    Route::get('/users/answers/{id}', 'showUserAnswers')->name('users_answers');
+    Route::get('/users/notifications/{id}', 'showUserNotifications')->name('users_notifications');
+    Route::get('/users/notifications/reports/{id}', 'showUserReportsNotifications')->name('users_reports_notifications');
 });
 
 // Question
@@ -83,6 +83,7 @@ Route::controller(QuestionController::class)->group(function () {
     Route::get('/questions/{id}/edit', 'edit')->name('questions.edit');
     Route::get('/questions/{id}/activity', 'activity')->name('questions.activity');
     Route::delete('/questions/{id}', 'delete')->name('questions.destroy');
+    Route::post('/questions/{question}', 'followquestion')->name('question.follow');
 });
 
 Route::controller(ReportController::class)->group(function () {
@@ -130,6 +131,7 @@ Route::controller(GameController::class)->group(function () {
     Route::get('/game/{category_id}/create', 'create')->name('games.create');
     Route::get('/game/{id}', 'show')->name('game');
     Route::get('/game/{id}/edit', 'edit')->name('game.edit');
+    Route::get('/join-game/{game}', 'joinGame')->name('join.game');
 });
 
 

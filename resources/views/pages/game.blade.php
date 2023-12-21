@@ -21,9 +21,45 @@
 
    <article class="game">
         <img src="{{ $game->getImage() }}" alt="game image" class="game-img">
+        @if(session('status'))
+            <div id="myModal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeModal()">&times;</span>
+                    <p id="popup-message"></p>
+                </div>
+            </div>
+            <script>
+                var userJoined = @json(session('user_joined'));
+                function showModal(message) {
+                    var modal = document.getElementById('myModal');
+                    document.getElementById('popup-message').innerText = message;
+                    modal.style.display = 'block';
+                }
+
+                function closeModal() {
+                    var modal = document.getElementById('myModal');
+                    modal.style.display = 'none';
+                }
+
+                if (userJoined) {
+                    showModal("You have joined the game!");
+                    document.getElementById('joinGame').innerText = "Leave Game";
+                } else {
+                    showModal("You have left the game!");
+                    document.getElementById('joinGame').innerText = "Join Game";
+                }
+            </script>
+        @endif
 
         <div class="flex">
             <h1>{{ $game->name }}</h1>
+            @auth
+                @if(session('user_joined'))
+                    <a href="{{ route('join.game', ['game' => $game->id]) }}" id="joinGame">Leave Game</a>
+                @else
+                    <a href="{{ route('join.game', ['game' => $game->id]) }}" id="joinGame">Join Game</a>
+                @endif
+            @endauth
         </div>
         <p class="g-desc">{{ $game->description }}</p>
         <ul class="g-stats">

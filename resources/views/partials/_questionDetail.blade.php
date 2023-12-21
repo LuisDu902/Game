@@ -76,9 +76,17 @@
                             <ion-icon name="pencil"></ion-icon>
                             <span>Answer</span>
                         </a>
-                        <div>
+                        <div onclick="toggleQuestionFollow({{ $question->id }})">
                             <ion-icon name="bookmark"></ion-icon>
-                            <span>Follow</span>
+                            <span id="followButtonText">
+                                <a href="{{ route('question.follow', ['question' => $question->id]) }}" id="followButtonText">
+                                    @if(session('user_follows'))
+                                        Unfollow
+                                    @else
+                                        Follow
+                                    @endif
+                                </a>
+                            </span>
                         </div>
                         <a href="{{ route('questions.activity', ['id' => $question->id]) }}">
                             <ion-icon name="time"></ion-icon>
@@ -93,6 +101,35 @@
                 </div>
             @endif
         @endauth
+        @if(session('status'))
+            <div id="myModal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeModal()">&times;</span>
+                    <p id="popup-message"></p>
+                </div>
+            </div>
+            <script>
+                var user_follows = @json(session('user_follows'));
+                function showModal(message) {
+                    var modal = document.getElementById('myModal');
+                    document.getElementById('popup-message').innerText = message;
+                    modal.style.display = 'block';
+                }
+
+                function closeModal() {
+                    var modal = document.getElementById('myModal');
+                    modal.style.display = 'none';
+                }
+
+                if (user_follows) {
+                    showModal("You are following the question!");
+                    document.getElementById('followButtonText').innerText = "Unfollow";
+                } else {
+                    showModal("You unfollowed the question!");
+                    document.getElementById('followButtonText').innerText = "Follow";
+                }
+            </script>
+        @endif
     </div> 
 
     <div class="question-t">
@@ -156,6 +193,7 @@
     </div>
 </div>
 
+<!-- Report Popup -->
 <div id="reportPopup" class="report-popup">
     <div class="report-popup-content">
         <span class="close-btn" onclick="closePopup()">&times;</span>
@@ -199,7 +237,7 @@
             <input type="hidden" name="question_id" value="{{ $question->id }}">
 
             <p id="elaborate">Elaborate on the issue:</p>
-            <textarea name="explanation"></textarea>
+            <textarea name="explanation" ></textarea>
             <button type="submit">Submit Report</button>
         </form>
     </div>

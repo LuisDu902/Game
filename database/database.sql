@@ -18,12 +18,11 @@ DROP TABLE IF EXISTS tag;
 DROP TABLE IF EXISTS vote;
 DROP TABLE IF EXISTS comment;
 DROP TABLE IF EXISTS answer;
-DROP TABLE IF EXISTS question_followers;
-DROP TABLE IF EXISTS badge;
 DROP TABLE IF EXISTS question;
+DROP TABLE IF EXISTS question_followers;
 DROP TABLE IF EXISTS game;
 DROP TABLE IF EXISTS game_category;
-
+DROP TABLE IF EXISTS badge;
 DROP TABLE IF EXISTS users;
 
 -----------
@@ -180,9 +179,9 @@ CREATE TABLE report (
 );
 
 CREATE TABLE question_followers (
-  id SERIAL PRIMARY KEY,
   user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-  question_id INTEGER NOT NULL REFERENCES question(id) ON DELETE CASCADE
+  question_id INTEGER NOT NULL REFERENCES question(id) ON DELETE CASCADE,
+  PRIMARY KEY (user_id, question_id)
 );
 
 CREATE TABLE notification (

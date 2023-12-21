@@ -1,91 +1,78 @@
-@import url("https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --dark-purple: #6d49eb;
-  --purple: #7c5bf0;
-  --light-purple: #e7e1fc;
-  --gray: #808194;
+    --dark-purple: #6D49EB;
+    --purple: #7C5BF0;
+    --light-purple: #E7E1FC;
+    --gray: #808194;
 }
 
 * {
-  margin: 0px;
-  padding: 0px;
-  box-sizing: border-box;
-  font-family: "Fredoka", sans-serif;
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+    font-family: 'Fredoka', sans-serif;
 }
 
-body,
-html {
-  height: 100%;
-  margin: 0 auto;
+body, html {
+    height: 100%;  
+    margin: 0 auto;
 }
 
 main {
-  padding: 2rem 3rem;
-  min-height: 100vh;
+    padding: 2rem 3rem;
+    min-height: 100vh;
 }
 
 a:focus {
-  outline: none !important;
+    outline: none !important;
 }
 
 a:hover {
-  text-decoration: none;
-  color: var(--dark-purple);
+    text-decoration: none;
+    color: var(--dark-purple);
 }
 
 a {
-  text-decoration: none;
-  color: black;
+    text-decoration: none;
+    color: black;
 }
 
 input {
-  outline: none;
-  border: none;
+    outline: none;
+    border: none;
 }
 
 button {
-  outline: none !important;
-  border: none;
-  background: transparent;
+    outline: none !important;
+    border: none;
+    background: transparent;
 }
 
 button:hover {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 ul {
-  list-style: none;
-  padding-left: 0;
+    list-style: none;
+    padding-left: 0;
 }
 
-p,
-.h1,
-.h2,
-.h3,
-.h4,
-.h5,
-.h6,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  margin-bottom: 0;
+p, .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6  {
+    margin-bottom: 0;
 }
 
 .purple-section {
-  position: absolute;
-  top: 90px;
-  background-color: var(--purple);
-  height: 250px;
-  width: 100%;
-  z-index: -1;
+    position: absolute;
+    top: 90px;
+    background-color: var(--purple);
+    height: 250px;
+    width: 100%;
+    z-index: -1;
 }
 
 .white {
-  color: white !important;
+    color: white !important;
 }
 
 .purple {
@@ -93,51 +80,51 @@ h6 {
 }
 
 .notification-box {
-  position: fixed;
-  right: 3rem;
-  top: 2rem;
-  display: flex;
-  background-color: white;
-  box-shadow: 0 8px 30px 0 rgba(50, 53, 130, 0.08);
-  border-radius: 15px;
-  border: 1px solid #e6e7f3;
-  padding: 20px;
-  gap: 15px;
-  display: none;
-  z-index: 99;
+    position: fixed;
+    right: 3rem;
+    top: 2rem;
+    display: flex;
+    background-color: white;
+    box-shadow: 0 8px 30px 0 rgba(50,53, 130, 0.08);
+    border-radius: 15px;
+    border: 1px solid #E6E7F3;
+    padding: 20px;
+    gap: 15px;
+    display: none;
+    z-index: 99;
 }
 
 .notification-box div {
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
 }
 
 .notification-box div span:first-child {
-  font-weight: 500;
+    font-weight: 500;
 }
 
 .notification-box div span:nth-child(2) {
-  color: #525252;
+    color: #525252;
 }
 
 .notification-box ion-icon:first-child {
-  font-size: 30px;
-  color: rgb(74 222 128);
+    font-size: 30px;
+    color: rgb(74 222 128);
 }
 
 #close-notification {
-  color: rgb(107 114 128);
+    color: rgb(107 114 128);
 }
 
 #close-notification:hover {
-  cursor: pointer;
-  color: #ff5757;
+    cursor: pointer;
+    color: #ff5757;
 }
 
 .red {
-  color: #ff5757 !important;
+    color: #ff5757 !important;
 }
 
 .yellow {
-  color: rgb(250 204 21) !important;
+    color: rgb(250 204 21) !important;
 }

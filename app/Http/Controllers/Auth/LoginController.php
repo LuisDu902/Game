@@ -24,7 +24,7 @@ class LoginController extends Controller
         if (Auth::check()) {
             return redirect('/home');
         } else {
-            return view('auth.login', ['title' => 'Login Page']);
+            return view('auth.login');
         }
     }
 
@@ -62,16 +62,16 @@ class LoginController extends Controller
     } 
 
     public function recover() {
-        return view('auth.recover', ['title' => 'Recover password']);
+        return view('auth.recover');
     }
 
     public function newPassword(Request $request) {
         $email = $request->input('email');
-        return view('auth.newPassword', ['title' => 'New password', 'email' => $email]);
+        return view('auth.newPassword', ['email' => $email]);
     }
 
     public function emailSent() {
-        return view('auth.emailSent', ['title' => 'Email sent']);
+        return view('auth.emailSent');
     }
 
     public function resetPassword(Request $request) {

@@ -9,18 +9,18 @@ class StaticController extends Controller
 {
     public function home(){
         $games = Game::inRandomOrder()->limit(5)->get();
-        return view('pages.home', ['title' => 'Home Page', 'games' => $games]);
+        return view('pages.home', ['games' => $games]);
     }
     
     public function faq(){
-        return view('pages.faq', ['title' => 'FAQ Page', ]);
+        return view('pages.faq');
     }
 
     public function about(){
-        return view('pages.about', ['title' => 'About us Page', ]);
+        return view('pages.about');
     }
 
     public function contact(){
-        return view('pages.contact', ['title' => 'Contact us Page'] );
+        return view('pages.contact');
     }
 }
