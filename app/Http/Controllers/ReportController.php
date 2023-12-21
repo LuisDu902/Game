@@ -14,19 +14,16 @@ class ReportController extends Controller
             'reason' => 'required|string',
             'explanation' => 'required|string',
             'question_id' => 'required|integer',
-            // Add validation for other fields if needed
+        
         ]);
 
-        // Assuming 'reported_id' is the ID of the user being reported and needs to be included
-        // You should add 'reported_id' to the form or handle it differently based on your application logic
         $question = Question::findOrFail($data['question_id']);
 
-        // Set the reported_id to the user_id of the question
         $data['reported_id'] = $question->user_id;
-        $data['date'] = now(); // Set current time
-        $data['reporter_id'] = auth()->id(); // Set the ID of the reporter (logged-in user)
-        $data['is_solved'] = false; // Default value for is_solved
-        $data['report_type'] = 'Question_report'; // Assuming this is a report related to a question
+        $data['date'] = now(); 
+        $data['reporter_id'] = auth()->id();
+        $data['is_solved'] = false;
+        $data['report_type'] = 'Question_report'; 
 
         Report::create($data);
 
@@ -40,16 +37,14 @@ class ReportController extends Controller
             'explanation' => 'required|string',
             'reported_id' => 'required|string',
             'answer_id' => 'required|string',
-            // Add validation for other fields if needed
+           
         ]);
 
-        // Assuming 'reported_id' is the ID of the user being reported and needs to be included
-        // You should add 'reported_id' to the form or handle it differently based on your application logic
-
-        $data['date'] = now(); // Set current time
-        $data['reporter_id'] = auth()->id(); // Set the ID of the reporter (logged-in user)
-        $data['is_solved'] = false; // Default value for is_solved
-        $data['report_type'] = 'Answer_report'; // Assuming this is a report related to a question
+     
+        $data['date'] = now(); 
+        $data['reporter_id'] = auth()->id(); 
+        $data['is_solved'] = false;
+        $data['report_type'] = 'Answer_report';
 
         Report::create($data);
 
@@ -63,16 +58,14 @@ class ReportController extends Controller
             'explanation' => 'required|string',
             'reported_id' => 'required|string',
             'comment_id' => 'required|string',
-            // Add validation for other fields if needed
+          
         ]);
 
-        // Assuming 'reported_id' is the ID of the user being reported and needs to be included
-        // You should add 'reported_id' to the form or handle it differently based on your application logic
-
-        $data['date'] = now(); // Set current time
-        $data['reporter_id'] = auth()->id(); // Set the ID of the reporter (logged-in user)
-        $data['is_solved'] = false; // Default value for is_solved
-        $data['report_type'] = 'Comment_report'; // Assuming this is a report related to a question
+        
+        $data['date'] = now(); 
+        $data['reporter_id'] = auth()->id(); 
+        $data['is_solved'] = false; 
+        $data['report_type'] = 'Comment_report'; 
 
         Report::create($data);
 
