@@ -12,7 +12,7 @@ class ReportController extends Controller
     {
         $data = $request->validate([
             'reason' => 'required|string',
-            'explanation' => 'required|string',
+            'explanation' => 'string',
             'question_id' => 'required|integer',
            
         ]);
@@ -33,7 +33,7 @@ class ReportController extends Controller
     {
         $data = $request->validate([
             'reason' => 'required|string',
-            'explanation' => 'required|string',
+            'explanation' => 'string',
             'reported_id' => 'required|string',
             'answer_id' => 'required|string',
            
@@ -54,7 +54,7 @@ class ReportController extends Controller
     {
         $data = $request->validate([
             'reason' => 'required|string',
-            'explanation' => 'required|string',
+            'explanation' => 'string',
             'reported_id' => 'required|string',
             'comment_id' => 'required|string',
           

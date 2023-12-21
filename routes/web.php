@@ -68,10 +68,10 @@ Route::controller(StaticController::class)->group(function () {
 // User
 Route::controller(UserController::class)->group(function () {
     Route::get('/users/{id}', 'showUserProfile')->name('profile');
-    Route::get('/users/questions/{id}', 'showUserQuestions')->name('users_questions');
-    Route::get('/users/answers/{id}', 'showUserAnswers')->name('users_answers');
-    Route::get('/users/notifications/{id}', 'showUserNotifications')->name('users_notifications');
-    Route::get('/users/notifications/reports/{id}', 'showUserReportsNotifications')->name('users_reports_notifications');
+    Route::get('/users/{id}/questions', 'showUserQuestions')->name('users_questions');
+    Route::get('/users/{id}/answers', 'showUserAnswers')->name('users_answers');
+    Route::get('/users/{id}/notifications', 'showUserNotifications')->name('users_notifications');
+    Route::get('/users/{id}/notifications/reports', 'showUserReportsNotifications')->name('users_reports_notifications');
 });
 
 // Question

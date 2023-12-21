@@ -132,6 +132,14 @@ class UserController extends Controller
 
     public function showUserNotifications($id) {
 
+        if (!Auth::check()) {
+            return redirect('/home');
+        }
+
+        if (Auth()->user()->id != $id) {
+            return redirect('/home');
+        }
+
         $user = User::find($id);
         
         if (!$user) {
@@ -143,13 +151,23 @@ class UserController extends Controller
     }
 
     public function showUserReportsNotifications($id) {
+
+        if (!Auth::check()) {
+            return redirect('/home');
+        }
+
+        if (Auth()->user()->id != $id) {
+            return redirect('/home');
+        }
+
         $user = User::find($id);
         
         if (!$user) {
             abort(404);
         }
 
-        $notifications = $user->notifications()->orderByDesc('date')->get();
+        $notifications = $user->notifications()->orderByDesc('date')->paginate(10);
+
         return view('pages.userReportsNotifications', ['user' => $user, 'notifications' => $notifications]);
     }
 

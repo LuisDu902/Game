@@ -91,7 +91,7 @@
 
 
             <p id="elaborate">Elaborate on the issue:</p>
-            <textarea name="explanation" ></textarea>
+            <textarea name="explanation"></textarea>
             <button type="submit">Submit Report</button>
         </form>
     </div>
