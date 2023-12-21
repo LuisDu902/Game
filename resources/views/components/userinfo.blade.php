@@ -1,4 +1,4 @@
-<tr class="user-info">
+<tr class="user-info" id="user{{ $user->id }}" data-id="{{ $user->id }}">
     <td><img src="{{ $user->getProfileImage() }}" alt="User Image"></td>
     <td><a href="{{ route('profile', ['id' => $user->id]) }}">{{ $user->username }}</a></td>
     <td>{{ $user->name }}</td>

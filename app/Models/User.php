@@ -77,6 +77,10 @@ class User extends Authenticatable
         return $this->hasMany(Notification::class);
     }
 
+    public function comments() : HasMany {
+        return $this->hasMany(Comment::class);
+    }
+
     public function badges(): BelongsToMany
     {
         return $this->belongsToMany(Badge::class, 'user_badge', 'user_id', 'badge_id');

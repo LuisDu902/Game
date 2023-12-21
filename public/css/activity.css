@@ -105,3 +105,8 @@
     left: 80px; 
     z-index: -1; 
 }
+
+.activity a {
+    color: #7C5BF0;
+    font-weight: 500;
+}

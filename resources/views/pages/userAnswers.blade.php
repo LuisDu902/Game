@@ -43,11 +43,6 @@
                     <li> {{ $answer->comments->count() }} Comments </li>
                     <li> {{ $answer->votes }} votes </li>
                 </ul>
-                @if(Auth::check() and (Auth::id() == $user->id))
-                    <div class="a-delete">
-                        <button class="delete-button" onclick="deleteAnswer({{ $answer->id }})">Delete</button>
-                    </div>
-                @endif
             </li>
             @endforeach
         @else

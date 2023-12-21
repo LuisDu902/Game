@@ -25,5 +25,4 @@ class UserPolicy {
     {
         return $user->is_admin && !$user->is_banned;
     }
-
 }

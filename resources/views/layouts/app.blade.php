@@ -53,9 +53,8 @@
             src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
             defer>
         </script>
-
-        <script src="https://kit.fontawesome.com/730d8297d1.js" crossorigin="anonymous"></script>
-       
+        
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>    
     </head>
     <body>
         @if(in_array(request()->route()->getName(), ['login', 'register', 'recover', 'newPassword', 'emailSent']))

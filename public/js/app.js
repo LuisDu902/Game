@@ -6,9 +6,7 @@ function createNotificationBox(title, content, type='success') {
         document.querySelector('#noti-icon').outerHTML = '<ion-icon name="close-circle" id="noti-icon" class="red"></ion-icon>';
     } else if (type == 'warning') {
       document.querySelector('#noti-icon').outerHTML = '<ion-icon name="alert-circle" id="noti-icon" class="yellow"></ion-icon>';
-    } else if (type == 'notification') {
-        document.querySelector('#noti-icon').outerHTML = '<ion-icon name="notifications-circle" id="noti-icon"></ion-icon>';
-    }
+    } 
     else {
         document.querySelector('#noti-icon').outerHTML = '<ion-icon name="checkmark-circle" id="noti-icon" ></ion-icon>';
     }

@@ -1,10 +1,14 @@
 @if ($questions->count() > 0)
     <ul class="questions">
         @foreach($questions as $question)
-            <li class="question-card"  id={{ $question->id }}>
+            <li class="question-card"  id="{{ $question->id }}">
                 <div class="q-stats">
                     <span>{{ $question->votes }} votes</span>
-                    <span>{{ $question->answers->count() }} answers</span>
+                    @if ($question->is_solved)
+                        <span class="solved-question"> <strong>✔{{ $question->answers->count() }} answers </strong></span>
+                    @else
+                        <span> {{ $question->answers->count() }} answers</span>
+                    @endif
                     <span>{{ $question->nr_views }} views</span>
                 </div>
                 <div class="q-content">
@@ -17,17 +21,18 @@
                     @else
                         <p>{{ $question->latestContent() }}</p>
                     @endif
-                    <span><a href="{{ route('profile', ['id' => $question->creator->id ]) }}" class="purple">{{ $question->creator->username }}</a> asked {{ $question->timeDifference() }} ago</span>
-                </div>
-                @if(Auth::check() and (Auth::id() == $question->creator->id))
-                    <div class="q-delete">
-                        <button class="delete-button" onclick="deleteQuestion({{ $question->id }})">Delete</button>
+                    <div class="q-lline">
+                        <div class="q-ltags">
+                            @foreach ($question->tags as $tag)
+                             <span>{{ $tag->name }}</span>
+                            @endforeach
+                        </div>
+                        <span><a href="{{ route('profile', ['id' => $question->creator->id ]) }}" class="purple">{{ $question->creator->username }}</a> asked {{ $question->timeDifference() }} ago</span>
                     </div>
-                @endif
+                </div>
             </li>
         @endforeach
     </ul>
-    {{ $questions->links() }}
 @else
     <div class="no-questions">
         <img class="no-questions-image" src="{{ asset('images/pikachuConfused.png') }}" alt="Psyduck Image">

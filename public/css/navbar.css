@@ -138,37 +138,36 @@ body > header {
 }
 
 .navbar .notifications {
-    display: block;
-    border: 1px solid #D2CFFF;
-    padding: 5px 15px;
-    border-radius: 5px;
-    margin: 0 !important;
+  display: block;
+  border: 1px solid #D2CFFF;
+  padding: 5px 15px;
+  border-radius: 5px;
+  margin: 0 !important;
 }
 
 .navbar .notifications:hover {
-    transform: scale(1.1);
+  transform: scale(1.1);
 }
 
 .navbar .notifications ion-icon{
-    color:#D2CFFF !important;
-    align-self: center;
+  color:#D2CFFF !important;
+  align-self: center;
 }
 
 .navbar .notification-count{
-    color: #E6E7F3;
-  width: 20px;
-  flex-direction: column;
-  z-index: 1;
-  background-color: #ab9bf8;
-  border-radius: 50%;
-  height: 20px;
-  text-align: center;
-  font-size: 13px;
-  left: -40px;
-  position: relative;
-  top: -5px;
+  color: #E6E7F3;
+width: 20px;
+flex-direction: column;
+z-index: 1;
+background-color: #ab9bf8;
+border-radius: 50%;
+height: 20px;
+text-align: center;
+font-size: 13px;
+left: -40px;
+position: relative;
+top: -5px;
 }
-
 
 .dropdown .user {
   display: flex;
@@ -212,38 +211,24 @@ body > header {
   border-radius: 5px;
 }
 
+.dropdown .notification-count {
+  color: #E6E7F3;
+  width: 25px;
+  flex-direction: column;
+  z-index: 1;
+  background-color: #ab9bf8;
+  border-radius: 50%;
+  height: 25px;
+  text-align: center;
+  font-size: 15px;
+  position: static;
+}
+
 .c-drop-content div,
 .c-drop-content a {
     box-shadow: 0 8px 30px 0 #32358214;
     border: 1px solid #e6e7f3;
     border-radius: 5px;
-}
-
-.q-drop-content div,
-.q-drop-content a,
-.c-drop-content div,
-.c-drop-content a,
-.dropdown-content a {
-  width: 100%;
-  display: flex;
-  justify-content: start;
-  padding: 10px 25px;
-  align-items: center;
-  gap: 10px;
-  color: black;
-}
-
-.dropdown .notification-count {
-    color: #E6E7F3;
-    width: 25px;
-    flex-direction: column;
-    z-index: 1;
-    background-color: #ab9bf8;
-    border-radius: 50%;
-    height: 25px;
-    text-align: center;
-    font-size: 15px;
-    position: static;
 }
 
 .q-drop-content div,

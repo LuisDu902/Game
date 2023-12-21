@@ -121,6 +121,9 @@
             <li> <a href="{{ route('profile', ['id' => $answer->creator->id ]) }}" class="purple">{{ $answer->creator->name }}</a> answered {{ $answer->timeDifference() }} ago</li>
             <li class="a-modi"> Modified {{ $answer->lastModification() }} ago </li>
             <li class="comment-count"> {{ $answer->comments->count() }} comments </li>
+            @if ($answer->is_correct)
+                <li class="correct-answer">CORRECT ANSWER ✔</li>
+            @endif
         </ul>
         <div class="answer-comments">
             <ul class="answer-comment-list">

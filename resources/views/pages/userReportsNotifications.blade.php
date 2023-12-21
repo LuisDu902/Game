@@ -11,12 +11,14 @@
             <li><a href="{{ route('home') }}">
                 <ion-icon name="home-outline"></ion-icon> Home</a>
             </li>
-            <li><a href="{{ route('users') }}">Users</a></li>
             <li><a href="{{ route('profile', ['id' => $user->id]) }}">{{ $user->username }}</a></li>
             <li><a href="{{ route('users_notifications', ['id' => Auth::user()->id]) }}">notifications</a></li>
-            <li>report notifications</li>
+            @if(Auth::check() and (Auth::id() == $user->id))
+                <li>notifications</li>
+            @endif
         </ul>
     </div>
+
     <section class="notifications-section">
         <div class="user-notifications">
             <div class="title-user-notifications-auth">

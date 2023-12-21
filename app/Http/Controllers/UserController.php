@@ -128,6 +128,8 @@ class UserController extends Controller
         return response()->json(['id' => $user->id ]); 
     }
 
+
+
     public function showUserNotifications($id) {
 
         $user = User::find($id);
@@ -182,4 +184,5 @@ class UserController extends Controller
 
         return $unreadCount;
     }
+
 }

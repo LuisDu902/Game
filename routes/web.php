@@ -19,6 +19,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 
 use App\Models\User;
+use App\Models\Comment;
 use Illuminate\Http\Request;
 
 /*
@@ -139,6 +140,7 @@ Route::controller(UserController::class)->group(function () {
     Route::get('/api/users', 'search');
     Route::post('/api/users/{id}', 'updateStatus');
     Route::post('/api/users/{id}/edit', 'edit');
+    Route::delete('/api/users/{id}', 'delete')->name('users.destroy');
     Route::post('/api/users/notifications/{id}/viewed', 'viewed');
     Route::post('/api/users/notifications/{notification_id}/viewed', 'UserController@viewed');
 });
@@ -148,6 +150,7 @@ Route::controller(QuestionController::class)->group(function () {
     Route::get('/api/questions', 'list');
     Route::post('/api/questions/{id}/vote', 'vote');
     Route::post('/api/questions/{id}/unvote', 'unvote'); 
+    Route::post('/api/questions/{id}/visibility', 'visibility'); 
     Route::post('/api/questions', 'store');
     Route::put('/api/questions/{id}', 'update');
 });

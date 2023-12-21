@@ -107,8 +107,8 @@
                 <div class="modal-c">
                     <ion-icon name="warning-outline"></ion-icon>
                     <div>
-                    <h2>Delete answer</h2>
-                    <p>Are you sure you want to delete this answer? All of its comments will be permanently removed. This action cannot be undone.</p>
+                    <h2></h2>
+                    <p></p>
                     </div>
                 </div>
                 <div class="d-buttons">
@@ -116,7 +116,7 @@
                     <form method="POST">
                         @csrf
                         @method('DELETE')
-                        <button id="ad-confirm">Delete</button>
+                        <button id="ad-confirm"></button>
                     </form>
                 </div>
             </div>

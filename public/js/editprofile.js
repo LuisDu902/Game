@@ -164,7 +164,6 @@ function ViwedHandler(){
         viewedNotification.classList.add('true');
         viewedNotification.classList.remove('false');
 
-        // Update the count in the little circle
         const notificationCount = document.querySelector('.notification-count');
         const currentCount = parseInt(notificationCount.textContent, 10);
         if (!isNaN(currentCount) && currentCount > 0) {
