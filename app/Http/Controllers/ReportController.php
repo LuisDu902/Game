@@ -12,9 +12,9 @@ class ReportController extends Controller
     {
         $data = $request->validate([
             'reason' => 'required|string',
-            'explanation' => 'required|string',
+            'explanation' => 'string',
             'question_id' => 'required|integer',
-        
+           
         ]);
 
         $question = Question::findOrFail($data['question_id']);
@@ -24,7 +24,6 @@ class ReportController extends Controller
         $data['reporter_id'] = auth()->id();
         $data['is_solved'] = false;
         $data['report_type'] = 'Question_report'; 
-
         Report::create($data);
 
         return back()->with('success', 'Report submitted successfully.');
@@ -34,16 +33,16 @@ class ReportController extends Controller
     {
         $data = $request->validate([
             'reason' => 'required|string',
-            'explanation' => 'required|string',
+            'explanation' => 'string',
             'reported_id' => 'required|string',
             'answer_id' => 'required|string',
            
         ]);
 
-     
+        
         $data['date'] = now(); 
         $data['reporter_id'] = auth()->id(); 
-        $data['is_solved'] = false;
+        $data['is_solved'] = false; 
         $data['report_type'] = 'Answer_report';
 
         Report::create($data);
@@ -55,14 +54,14 @@ class ReportController extends Controller
     {
         $data = $request->validate([
             'reason' => 'required|string',
-            'explanation' => 'required|string',
+            'explanation' => 'string',
             'reported_id' => 'required|string',
             'comment_id' => 'required|string',
           
         ]);
 
         
-        $data['date'] = now(); 
+        $data['date'] = now();
         $data['reporter_id'] = auth()->id(); 
         $data['is_solved'] = false; 
         $data['report_type'] = 'Comment_report'; 

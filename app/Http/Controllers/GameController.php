@@ -3,12 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Game;
-use App\Models\GameMember;
 use App\Models\GameCategory;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-
-use Illuminate\Support\Facades\Auth;
 
 class GameController extends Controller
 {
@@ -45,7 +41,7 @@ class GameController extends Controller
     {
         $game = Game::findOrFail($id);
         $questions = $game->questions()->paginate(5);
-        return view('pages.game', ['game' => $game, 'questions' => $questions]);
+        return view('pages.game', ['title' => 'Game: ' . $game->name, 'game' => $game, 'questions' => $questions]);
     }
 
     public function store(Request $request)
@@ -82,7 +78,7 @@ class GameController extends Controller
     public function edit($id){
         $this->authorize('edit', Game::class);
         $game = Game::findOrFail($id);
-        return view('pages.editGame', ['game' => $game]);
+        return view('pages.editGame', ['title' => 'Edit' . $game->name, 'game' => $game]);
     }
 
     public function update(Request $request, $id) {

@@ -241,6 +241,7 @@ const questionChart = document.getElementById('question-chart');
 const userChart = document.getElementById('user-chart');
 const categoryChart = document.getElementById('categories-chart')
 const gameChart = document.getElementById('game-chart');
+const tagsChart = document.getElementById('game-chart');
 
 if (questionChart) {
    createCharts();
@@ -469,7 +470,7 @@ function tagUpdateHandler() {
         const id = response.id;
         const name = response.name;
         const tag = document.querySelector(`#tag${id}`);
-        tag.outerHTML = `               <div id="tag${id}" class="tags-actions col-2 d-flex flex-row text-center" data-id="${id}">
+        tag.outerHTML = `               <div id="tag${id}" class="tags-actions" data-id="${id}">
             <ion-icon name="create" onclick="editChanges()"></ion-icon>
             <span>${name}</span>  
             <ion-icon name="trash" onclick="deleteTag()"> </ion-icon>    
@@ -480,6 +481,4 @@ function tagUpdateHandler() {
         createNotificationBox('Something went wrong!', errorResponse.error.name, 'error');
     }
 }
-
-
 

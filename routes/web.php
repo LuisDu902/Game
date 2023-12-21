@@ -68,11 +68,12 @@ Route::controller(StaticController::class)->group(function () {
 // User
 Route::controller(UserController::class)->group(function () {
     Route::get('/users/{id}', 'showUserProfile')->name('profile');
-    Route::get('/users/questions/{id}', 'showUserQuestions')->name('users_questions');
-    Route::get('/users/answers/{id}', 'showUserAnswers')->name('users_answers');
-    Route::get('/users/notifications/{id}', 'showUserNotifications')->name('users_notifications');
-    Route::get('/users/notifications/reports/{id}', 'showUserReportsNotifications')->name('users_reports_notifications');
+    Route::get('/users/{id}/questions', 'showUserQuestions')->name('users_questions');
+    Route::get('/users/{id}/answers', 'showUserAnswers')->name('users_answers');
+    Route::get('/users/{id}/notifications', 'showUserNotifications')->name('users_notifications');
+    Route::get('/users/{id}/notifications/reports', 'showUserReportsNotifications')->name('users_reports_notifications');
 });
+
 
 // Question
 Route::controller(QuestionController::class)->group(function () {
@@ -142,6 +143,7 @@ Route::controller(GameController::class)->group(function () {
     Route::put('/api/game/{id}', 'update');
 });
 
+
 // User API
 Route::controller(UserController::class)->group(function () {
     Route::get('/api/users', 'search');
@@ -151,6 +153,7 @@ Route::controller(UserController::class)->group(function () {
     Route::post('/api/users/notifications/{id}/viewed', 'viewed');
     Route::post('/api/users/notifications/{notification_id}/viewed', 'UserController@viewed');
 });
+
 
 // Question API
 Route::controller(QuestionController::class)->group(function () {
@@ -172,6 +175,7 @@ Route::controller(AnswerController::class)->group(function () {
     Route::post('/api/answers/{id}/unvote', 'unvote'); 
     Route::post('/api/answers/{id}/status', 'status'); 
 });
+
 
 // Comment API
 Route::controller(CommentController::class)->group(function () {

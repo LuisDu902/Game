@@ -107,7 +107,8 @@
   padding-top: 8rem;
 }
 
-.new-game-form, .edit-game-form {
+.new-game-form,
+.edit-game-form {
   margin: 30px auto;
   width: 1200px;
   height: fit-content;
@@ -118,27 +119,32 @@
   border: 1px solid #e6e7f3;
 }
 
-.new-game-form form, .edit-game-form form {
+.new-game-form form,
+.edit-game-form form {
   display: flex;
   flex-direction: column;
   gap: 50px;
 }
 
-.new-game-form label, .edit-game-form label {
+.new-game-form label,
+.edit-game-form label {
   display: block;
   font-weight: 500;
   font-size: 1.2rem;
 }
 
-.new-game-form #description, .edit-game-form #description {
+.new-game-form #description,
+.edit-game-form #description {
   height: 200px;
 }
 
-.new-game-form #name, .edit-game-form #name {
+.new-game-form #name,
+.edit-game-form #name {
   height: auto;
 }
 
-#create-game, #save-game {
+#create-game,
+#save-game {
   width: fit-content;
   margin: 0 auto;
   padding: 10px 30px;
@@ -149,7 +155,8 @@
   transition: all 400ms ease;
 }
 
-.new-game-form textarea, .edit-game-form textarea {
+.new-game-form textarea,
+.edit-game-form textarea {
   margin-bottom: 20px;
   font-size: 18px;
   padding: 5px 0;
@@ -163,16 +170,18 @@
   padding: 20px;
 }
 
-
-.new-game-form label span, .edit-game-form label span {
+.new-game-form label span,
+.edit-game-form label span {
   color: #7c5bf0;
 }
 
-#create-game:hover, #save-game:hover {
+#create-game:hover,
+#save-game:hover {
   transform: scale(0.95);
 }
 
-.new-game-form img, .edit-game-form img {
+.new-game-form img,
+.edit-game-form img {
   width: 70%;
   margin: 0 auto;
   border-radius: 20px;
@@ -220,23 +229,4 @@
   .game {
     margin: 20px auto;
   }
-}
-
-
-
-#joinGame {
-  font-size: 18px;
-  text-align: center;
-  background-color: #d2cfff;
-  width: 300px;
-  padding: 5px 0;
-  color: #7c5bf0;
-  border-radius: 5px;
-  transition: all 400ms ease;
-  left: 4rem;
-}
-
-#joinGame:hover {
-  background-color: #7c5bf0;
-  color: white;
 }
