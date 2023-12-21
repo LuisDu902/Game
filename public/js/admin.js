@@ -219,6 +219,7 @@ const questionChart = document.getElementById('question-chart');
 const userChart = document.getElementById('user-chart');
 const categoryChart = document.getElementById('categories-chart')
 const gameChart = document.getElementById('game-chart');
+const tagsChart = document.getElementById('game-chart');
 
 if (questionChart) {
    createCharts();
@@ -341,6 +342,36 @@ function createGameChart() {
     }
 }
 
+let oldTag = "";
+
+function editChanges(){
+    event.preventDefault();
+    const tagContainer = event.target.closest('.tags-actions');
+    oldTag = tagContainer.outerHTML; 
+    const id = tagContainer.getAttribute('data-id');
+    console.log(id);
+    sendAjaxRequest('get', '/api/tags/' + id + "/edit", {}, showEditTag);
+}
+
+function showEditTag() {
+    if (this.status == 200) {
+        let tmp = document.createElement('div');
+        tmp.innerHTML = this.responseText;
+        const id = tmp.querySelector('.edit-tag').getAttribute('data-id');
+
+        const container = document.querySelector('#tag' + id);
+        if (container) {
+            container.innerHTML = this.responseText;
+        }
+    }
+}
+
+function deleteTag() {
+    const tagContainer = event.target.closest('.tags-actions');
+    const id = tagContainer.getAttribute('data-id');
+
+    const modal = document.querySelector('#tagDeleteModal');
+
 function showDeleteCategory() {
     const modal = document.getElementById('deleteModal');
     modal.style.display = 'block';
@@ -351,11 +382,68 @@ function showDeleteCategory() {
         }
     };
 
+    const cancel = document.getElementById('ad-cancel');
     const cancel = document.getElementById('d-cancel');
 
     cancel.addEventListener('click', function(){
         modal.style.display = 'none';
     });
+
+    
+    const confirm = document.getElementById('ad-confirm');
+    
+    confirm.addEventListener('click', function(){
+        event.preventDefault();
+        sendAjaxRequest('delete', '/api/tags/' + id, {}, tagDeleteHandler);
+        modal.style.display = 'none';
+    });
+
+}
+
+
+function tagDeleteHandler() {
+    if (this.status === 200) {
+        const response = JSON.parse(this.responseText);
+        const id = response.id;
+        const tag = document.querySelector(`#tag${id}`);
+        tag.remove();
+        createNotificationBox('Successfully deleted!', 'Tag deleted successfully!');
+    }
+}
+
+function restoreTag() {
+    const tagContainer = event.target.closest('.tags-actions');
+    tagContainer.outerHTML = oldTag;
+}
+
+function updateTag() {
+    const id = document.querySelector('.edit-tag').getAttribute('data-id');
+    const name = document.querySelector('.edit-tag input').value;
+    if (name != '') {
+        sendAjaxRequest('put', '/api/tags/' + id, {name: name}, tagUpdateHandler);
+    } else {
+        createNotificationBox('Empty tag name', 'Please enter your tag name before saving!', 'warning');
+    }
+}
+
+
+function tagUpdateHandler() {
+    if (this.status === 200) {
+        const response = JSON.parse(this.responseText);
+        const id = response.id;
+        const name = response.name;
+        const tag = document.querySelector(`#tag${id}`);
+        tag.outerHTML = `               <div id="tag${id}" class="tags-actions col-2 d-flex flex-row text-center" data-id="${id}">
+            <ion-icon name="create" onclick="editChanges()"></ion-icon>
+            <span>${name}</span>  
+            <ion-icon name="trash" onclick="deleteTag()"> </ion-icon>    
+        </div>`;
+        createNotificationBox('Successfully saved!', 'Tag successfully saved!');
+    } else {
+        const errorResponse = JSON.parse(this.responseText);
+        createNotificationBox('Something went wrong!', errorResponse.error.name, 'error');
+    }
+}
 }
 
 

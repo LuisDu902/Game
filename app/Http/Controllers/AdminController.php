@@ -11,6 +11,8 @@ use App\Models\Question;
 use App\Models\Answer;
 use App\Models\Comment;
 
+use App\Models\Tag;
+
 class AdminController extends Controller
 {
     public function stats() {
@@ -32,6 +34,13 @@ class AdminController extends Controller
         return view('partials._users', compact('users'))->render();
     }
 
+    public function tags() {
+
+        $tags = Tag::paginate(10);
+        
+        return view('partials._tags', compact('tags'))->render();
+    }
+    
     public function games() {
         $games = Game::orderBy('name')->paginate(10);
         $categories = GameCategory::all();
