@@ -11,7 +11,6 @@
             <li><a href="{{ route('home') }}">
                 <ion-icon name="home-outline"></ion-icon> Home</a>
             </li>
-            <li><a href="{{ route('users') }}">Users</a></li>
             <li><a href="{{ route('profile', ['id' => $user->id]) }}">{{ $user->username }}</a></li>
             @if(Auth::check() and (Auth::id() == $user->id))
                 <li>my questions</li>

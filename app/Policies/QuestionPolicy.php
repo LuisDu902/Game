@@ -18,9 +18,9 @@ class QuestionPolicy
       return $user->id == $question->user_id;
     }
 
-    public function view(User $user, Question $question) {
-        if ($question->is_public || $user->is_admin) return true;
-        return $user->id == $question->user_id;
+    public function view(?User $user, Question $question) {
+        if ($question->is_public) return true;
+        return $user->id == $question->user_id || $user->is_admin;
     }
 
     public function edit(User $user, Question $targetQuestion)

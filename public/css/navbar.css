@@ -232,21 +232,28 @@ body > header {
   color: #6d49eb;
 }
 
-@media (max-width: 1180px) {
+@media (max-width: 1250px) {
   .search-box {
     display: none;
   }
 }
 
-@media (max-width: 920px) {
+@media (max-width: 980px) {
   .navbar .buttons,
   .navbar .dropdown {
     display: none;
   }
 }
 
-@media (max-width: 705px) {
+@media (max-width: 760px) {
   .logo {
     display: none;
+  }
+}
+
+
+@media (max-width: 615px) {
+  .admin {
+    background-color: aqua;
   }
 }

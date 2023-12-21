@@ -16,7 +16,7 @@ class AnswerPolicy {
       return !$user->is_banned;
     }
 
-    public function view(User $user, Answer $answer) {
+    public function view(?User $user, Answer $answer) {
       if ($answer->is_public || $user->is_admin) return true;
       return $user->id == $answer->user_id;
     }
