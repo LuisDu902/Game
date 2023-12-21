@@ -11,7 +11,6 @@
             <li><a href="{{ route('home') }}">
                 <ion-icon name="home-outline"></ion-icon> Home</a>
             </li>
-            <li><a href="{{ route('users') }}">Users</a></li>
             <li> {{ $user->username }} </li>
         </ul>
     </div>
@@ -57,13 +56,16 @@
                 <input id="profile-username" type="text" name="username" value="{{ $user->username }}" placeholder="your username"
                     required disabled>
             </div>
-
-            <div class="profile-input email">
-                <label class="field-label" for="email"> Email Address
-                    <span class="purple">*</span> </label>
-                <input id="profile-email" type="email" name="email" value="{{ $user->email }}"
-                    placeholder="email@example.com" required disabled>
-            </div>
+            @auth
+                @if ((Auth::user()->is_admin && !Auth::user()->is_banned) || Auth::user()->id == $user->id)
+                    <div class="profile-input email">
+                        <label class="field-label" for="email"> Email Address
+                            <span class="purple">*</span> </label>
+                        <input id="profile-email" type="email" name="email" value="{{ $user->email }}"
+                            placeholder="email@example.com" required disabled>
+                    </div>
+                @endif
+            @endauth
             <div class="profile-input description">
                 <label class="field-label" for="description">
                     Description </label>

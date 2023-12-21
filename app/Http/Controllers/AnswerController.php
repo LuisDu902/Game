@@ -17,6 +17,8 @@ class AnswerController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Answer::class);
+
         $request->validate([
             'content' => 'required|string',
             'question_id' => 'required'
@@ -46,6 +48,9 @@ class AnswerController extends Controller
     public function edit(Request $request, $id)
     {
         $answer = Answer::findOrFail($id);
+
+        $this->authorize('edit', $answer);
+
         return view('partials._editAnswer', compact('answer'))->render();
     }
 
@@ -55,6 +60,8 @@ class AnswerController extends Controller
         ]);
 
         $answer = Answer::findOrFail($id);
+
+        $this->authorize('edit', $answer);
 
         VersionContent::create([
             'date' => now(),
@@ -74,6 +81,7 @@ class AnswerController extends Controller
     {
 
         $answer = Answer::find($id);
+        
         $this->authorize('delete', $answer);
 
         $answer->delete();
@@ -84,6 +92,10 @@ class AnswerController extends Controller
     public function vote(Request $request, $answer_id)
     {        
         $reaction = $request->input('reaction');
+
+        $answer = Answer::find($answer_id);
+        
+        $this->authorize('vote', $answer);
 
         DB::table('vote')->insert([
             'date' => now(),
@@ -100,6 +112,11 @@ class AnswerController extends Controller
     public function unvote(Request $request, $answer_id)
     {
         $user_id = Auth::user()->id;
+
+        $answer = Answer::find($answer_id);
+        
+        $this->authorize('vote', $answer);
+        
         DB::table('vote')
             ->where('user_id', $user_id)
             ->where('answer_id', $answer_id)

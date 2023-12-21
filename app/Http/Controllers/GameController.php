@@ -29,6 +29,7 @@ class GameController extends Controller
 
     public function create($category_id)
     {
+        $this->authorize('create', Game::class);
         $category = GameCategory::find($category_id);
         return view('pages.newGame', ['category' => $category]);
     }
@@ -45,6 +46,8 @@ class GameController extends Controller
 
     public function store(Request $request)
     {
+        $this->authorize('create', Game::class);
+
         $request->validate([
             'name' => 'required|max:256|unique:game',
             'description' => 'required'
@@ -63,6 +66,8 @@ class GameController extends Controller
 
     public function delete(Request $request, $id) {
 
+        $this->authorize('delete', Game::class);
+
         $game = Game::findOrFail($id);
        
         $game->delete();
@@ -71,11 +76,13 @@ class GameController extends Controller
     }
 
     public function edit($id){
+        $this->authorize('edit', Game::class);
         $game = Game::findOrFail($id);
         return view('pages.editGame', ['game' => $game]);
     }
 
     public function update(Request $request, $id) {
+        $this->authorize('edit', Game::class);
 
         $request->validate([
             'name' => 'required|max:256',

@@ -33,17 +33,20 @@
             <div class="category-description">
                 <div class="category-drop">
                     <h2> Description </h2>   
-                    <div class="c-drop-content">
-                        <a href="{{ route('categories.edit', ['id' => $category->id]) }}" id="edit-category">
-                            <ion-icon name="create"></ion-icon>
-                            <span>Edit</span>
-                        </a>
-                        <div id="delete-category" onclick="showDeleteCategory()">
-                            <ion-icon name="trash"></ion-icon>
-                            <span>Delete</span>
-                        </div>
-                    
-                    </div>
+                    @auth
+                        @if (Auth::user()->is_admin && !Auth::user()->is_banned)
+                            <div class="c-drop-content">
+                                <a href="{{ route('categories.edit', ['id' => $category->id]) }}" id="edit-category">
+                                    <ion-icon name="create"></ion-icon>
+                                    <span>Edit</span>
+                                </a>
+                                <div id="delete-category" onclick="showDeleteCategory()">
+                                    <ion-icon name="trash"></ion-icon>
+                                    <span>Delete</span>
+                                </div>
+                            </div>
+                        @endif
+                    @endauth
                 </div>
                 <p>{{ $category->description }}</p>
             </div>

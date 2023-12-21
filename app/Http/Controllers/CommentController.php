@@ -41,6 +41,7 @@ class CommentController extends Controller
     public function edit(Request $request, $id)
     {
         $comment = Comment::findOrFail($id);
+        $this->authorize('edit', $comment);
         return view('partials._editComment', compact('comment'))->render();
     }
 
@@ -54,6 +55,7 @@ class CommentController extends Controller
         ]);
 
         $comment = Comment::findOrFail($id);
+        $this->authorize('edit', $comment);
 
         VersionContent::create([
             'date' => now(),
@@ -68,6 +70,7 @@ class CommentController extends Controller
     public function delete(Request $request, $id)
     {
         $comment = Comment::findOrFail($id);
+        $this->authorize('delete', $comment);
         $comment->delete();
         return response()->json(['id' => $id]);
     }

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Auth\Authenticatable;
 use Illuminate\Support\Facades\DB;
 use App\Models\Question;
 use App\Models\Answer;
@@ -19,9 +20,15 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        $questions = Question::where('is_public', true)
+        if (!(auth()->check() && Auth::user()->is_admin)) {
+            $questions = Question::where('is_public', true)
             ->orderBy('create_date', 'desc')
             ->paginate(10);
+        } else {
+            $questions = Question::orderBy('create_date', 'desc')
+            ->paginate(10);
+        }
+       
         $categories = GameCategory::all();
         $tags = Tag::all();
         return view('pages.questions', ['questions' => $questions, 'categories' => $categories, 'tags' => $tags]);
@@ -33,8 +40,10 @@ class QuestionController extends Controller
         $tags = explode(',', $request->tags);
         $games = explode(',', $request->games);
 
-        $query = Question::where('is_public', true);
-        
+        if (!(auth()->check() && Auth::user()->is_admin)) {
+            $query = Question::where('is_public', true);
+        }
+
         if (!empty($request->games)) {
             $query->whereIn('game_id', $games);
         }
@@ -66,10 +75,17 @@ class QuestionController extends Controller
     {
         $query = $request->input('query');
       
-        $questions = Question::whereRaw('tsvectors @@ plainto_tsquery(?)', [$query])
-            ->orderByRaw('ts_rank(tsvectors, plainto_tsquery(?)) DESC', [$query])
-            ->paginate(10);
-      
+        if (!(auth()->check() && Auth::user()->is_admin)) {
+            $questions = Question::whereRaw('tsvectors @@ plainto_tsquery(?)', [$query])
+                ->orderByRaw('ts_rank(tsvectors, plainto_tsquery(?)) DESC', [$query])
+                ->where('is_public', true)
+                ->paginate(10);
+        } else {
+            $questions = Question::whereRaw('tsvectors @@ plainto_tsquery(?)', [$query])
+                ->orderByRaw('ts_rank(tsvectors, plainto_tsquery(?)) DESC', [$query])
+                ->paginate(10);
+        }
+
         return view('pages.search', ['questions' => $questions]);
     }
 
@@ -78,9 +94,11 @@ class QuestionController extends Controller
      */
     public function create()
     {
-        if (!Auth::check()) {
+        if (!Auth::check())  {
             return redirect('/questions');
         }
+        $this->authorize('create', Question::class);
+
         $categories = GameCategory::all();
         $tags = Tag::all();
         return view('pages.newQuestion', ['categories' => $categories, 'tags' => $tags]);
@@ -91,6 +109,12 @@ class QuestionController extends Controller
      */
     public function store(Request $request)
     {
+        if (!Auth::check()) {
+            return redirect('/questions');
+        }
+
+        $this->authorize('create', Question::class);
+
         $request->validate([
             'title' => 'required|max:256',
             'content' => 'required',
@@ -134,7 +158,11 @@ class QuestionController extends Controller
     public function show($id)
     {
         $question = Question::findOrFail($id);
+
+        $this->authorize('view', $question);
+
         $question->increment('nr_views');
+        
         return view('pages.question', ['question' => $question]);
     }
 
@@ -142,14 +170,20 @@ class QuestionController extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit(Request $request, $id) {
+        
         $question = Question::findOrFail($id);
+        
         $this->authorize('edit', $question);
+        
         $categories = GameCategory::all();
+        
         $tags = Tag::all();
+        
         return view('pages.editQuestion', ['question'=> $question, 'categories' => $categories, 'tags' => $tags]);
     }
 
     public function update(Request $request, $id) {
+        
         $request->validate([
             'title' => 'required|max:256',
             'content' => 'required',
@@ -159,6 +193,8 @@ class QuestionController extends Controller
         $game_id = $request->input('game');
 
         $question = Question::findOrFail($id);
+
+        $this->authorize('edit', $question);
 
         $question->update([
             'title' => $request->input('title'),
@@ -196,6 +232,7 @@ class QuestionController extends Controller
     {
 
         $question = Question::find($id);
+        
         $this->authorize('delete', $question);
 
         $question->delete();
@@ -227,7 +264,11 @@ class QuestionController extends Controller
     public function unvote(Request $request, $question_id)
     {
         $user_id = Auth::user()->id;
-    
+        
+        $question = Question::findOrFail($question_id);
+        
+        $this->authorize('vote', $question);
+        
         DB::table('vote')
             ->where('user_id', $user_id)
             ->where('question_id', $question_id)
@@ -238,6 +279,9 @@ class QuestionController extends Controller
 
     public function activity(Request $request, $id) {
         $question = Question::findOrFail($id);
+
+        $this->authorize('view', $question);
+
         $page = $request->page ?? 1;
         $questionContents = $question->versionContent()
             ->select('content', 'date')

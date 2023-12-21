@@ -54,20 +54,26 @@ class UserController extends Controller
     }
 
     public function updateStatus(Request $request, $id) {
+        
         $this->authorize('updateStatus', [Auth::user()]);
+        
         $user = User::find($id);
+        
         $user->is_banned = ($request->status == "banned"); 
+        
         $user->save();
+        
         return response()->json(['status'=> 'success']);
     }
 
     public function edit(Request $request)
     {
       $user = User::find($request->id);
-      $this->authorize('edit', [$user, Auth::user()]);
+
+      $this->authorize('update', [Auth::user(), $user]);
+     
       $user->name = $request->input('name');
       $user->username = $request->input('username');
-
 
       if($request->input('email') != ""){
         $user->email = $request->input('email');

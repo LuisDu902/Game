@@ -10,11 +10,15 @@ use App\Models\User;
 use App\Models\Question;
 use App\Models\Answer;
 use App\Models\Comment;
+use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
     public function stats() {
-    
+        if (!(Auth::check() && Auth()->user()->is_admin)) {
+            return redirect()->back()->with('error', 'Not authorized');
+        }
+        
         $stats = [
             'num_questions' => Question::count(),
             'num_answers' => Answer::count(),
@@ -37,7 +41,6 @@ class AdminController extends Controller
         $categories = GameCategory::all();
         return view('partials._games', compact('games', 'categories'))->render();
     }
-
 
     public function chart(Request $request) {
         switch ($request->type) {

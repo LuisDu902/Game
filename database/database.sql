@@ -473,47 +473,7 @@ FOR EACH ROW
 EXECUTE FUNCTION send_answer_notification();
 
 
---Trigger 9
 
---A user cannot vote, answer nor comment on posts that are not public.
-
-CREATE OR REPLACE FUNCTION prevent_vote_on_private_question_trigger_function()
-RETURNS TRIGGER AS $$
-BEGIN
-    IF NEW.vote_type = 'Question_vote' AND NEW.question_id IS NOT NULL THEN
-        IF EXISTS (SELECT 1 FROM question WHERE id = NEW.question_id AND is_public = FALSE) THEN
-            RAISE EXCEPTION 'Cannot vote on a private question.';
-        END IF;
-    END IF;
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER prevent_vote_on_private_question_trigger
-BEFORE INSERT ON vote
-FOR EACH ROW
-EXECUTE FUNCTION prevent_vote_on_private_question_trigger_function();
-
-
---Trigger 10
-
-CREATE OR REPLACE FUNCTION prevent_answer_on_private_question_trigger_function()
-RETURNS TRIGGER AS $$
-BEGIN
-  IF NEW.question_id IS NOT NULL THEN
-    -- Check if the question is private
-    IF EXISTS (SELECT 1 FROM question WHERE id = NEW.question_id AND is_public = FALSE) THEN
-      RAISE EXCEPTION 'Cannot answer a private question.';
-    END IF;
-  END IF;
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER prevent_answer_on_private_question_trigger
-BEFORE INSERT ON answer
-FOR EACH ROW
-EXECUTE FUNCTION prevent_answer_on_private_question_trigger_function();
 
 
 --Trigger 12

@@ -10,6 +10,9 @@ class GameCategoryController extends Controller
 {
     public function store(Request $request)
     {
+
+        $this->authorize('create', GameCategory::class);
+
         $request->validate([
             'name' => 'required|max:256',
             'description' => 'required'
@@ -27,7 +30,6 @@ class GameCategoryController extends Controller
      */
     public function index()
     {
-        //$categories = GameCategory::paginate(10);
         $categories = GameCategory::all();
         return view('pages.categories', ['categories' => $categories]);
     }
@@ -44,16 +46,19 @@ class GameCategoryController extends Controller
 
     public function create()
     {
+        $this->authorize('create', GameCategory::class);
         return view('pages.newCategory');
     }
 
     public function edit(Request $request, $id) {
+        $this->authorize('edit', GameCategory::class);
         $category = GameCategory::findOrFail($id);
         return view('pages.editCategory', ['category'=> $category]);
     }
 
     public function update(Request $request, $id)
     {
+        $this->authorize('edit', GameCategory::class);
         $request->validate([
             'name' => 'required|max:256',
             'description' => 'required'
@@ -72,6 +77,7 @@ class GameCategoryController extends Controller
 
     public function delete(Request $request, $id)
     {
+        $this->authorize('delete', GameCategory::class);
         $category = GameCategory::findOrFail($id);
         $category->delete();
         return redirect('/categories')->with('delete', 'Category successfully deleted!');

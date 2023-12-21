@@ -26,19 +26,19 @@
             <ul>
                 <li>
                     <img src="{{ asset('images/member1.png')}}" alt="member1">
-                    <span>Ana Sofia Azevedo</span>
-                </li>
-                <li>
-                    <img src="{{ asset('images/member2.png')}}" alt="member2">
-                    <span>Catarina Isabel Canelas</span>
-                </li>
-                <li>
-                    <img src="{{ asset('images/member3.png')}}" alt="member3">
                     <span>Gabriel Ferreira</span>
                 </li>
                 <li>
-                    <img src="{{ asset('images/member4.png')}}" alt="member4">
+                    <img src="{{ asset('images/member2.png')}}" alt="member2">
                     <span>Luís Du</span>
+                </li>
+                <li>
+                    <img src="{{ asset('images/member3.png')}}" alt="member3">
+                    <span>Catarina Isabel Canelas</span>
+                </li>
+                <li>
+                    <img src="{{ asset('images/member4.png')}}" alt="member4">
+                    <span>Ana Sofia Azevedo</span>
                 </li>
             </ul>
       </div>
