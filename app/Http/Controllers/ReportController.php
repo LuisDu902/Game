@@ -19,7 +19,7 @@ class ReportController extends Controller
 
         $question = Question::findOrFail($data['question_id']);
 
-         $data['reported_id'] = $question->user_id;
+        $data['reported_id'] = $question->user_id;
         $data['date'] = now(); 
         $data['reporter_id'] = auth()->id();
         $data['is_solved'] = false;

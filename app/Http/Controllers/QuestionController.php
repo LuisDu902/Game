@@ -31,7 +31,7 @@ class QuestionController extends Controller
        
         $categories = GameCategory::all();
         $tags = Tag::all();
-        return view('pages.questions', ['questions' => $questions, 'categories' => $categories, 'tags' => $tags]);
+        return view('pages.questions', ['title' => 'Questions Page', 'questions' => $questions, 'categories' => $categories, 'tags' => $tags]);
     }
 
     public function list(Request $request) 
@@ -88,7 +88,7 @@ class QuestionController extends Controller
                 ->paginate(10);
         }
 
-        return view('pages.search', ['questions' => $questions]);
+        return view('pages.search', ['title' => 'Search Questions Page', 'questions' => $questions]);
     }
 
     /**
@@ -103,7 +103,7 @@ class QuestionController extends Controller
 
         $categories = GameCategory::all();
         $tags = Tag::all();
-        return view('pages.newQuestion', ['categories' => $categories, 'tags' => $tags]);
+        return view('pages.newQuestion', ['title' => 'Create New Question Page', 'categories' => $categories, 'tags' => $tags]);
     }
 
     /**
@@ -165,7 +165,7 @@ class QuestionController extends Controller
 
         $question->increment('nr_views');
         
-        return view('pages.question', ['question' => $question]);
+        return view('pages.question', ['title' => 'Question: ' . $question->title, 'question' => $question]);
     }
 
     /**
@@ -181,7 +181,7 @@ class QuestionController extends Controller
         
         $tags = Tag::all();
         
-        return view('pages.editQuestion', ['question'=> $question, 'categories' => $categories, 'tags' => $tags]);
+        return view('pages.editQuestion', ['title' => 'Edit ' . $question->title , 'question'=> $question, 'categories' => $categories, 'tags' => $tags]);
     }
 
     public function update(Request $request, $id) {
@@ -333,7 +333,7 @@ class QuestionController extends Controller
     
         $paginatedContents = $allContents->forPage($page, 5); 
     
-        return view('pages.activity', ['question' => $question, 'contents' => $paginatedContents]);
+        return view('pages.activity', ['title' => $question->title . ' activity', 'question' => $question, 'contents' => $paginatedContents]);
     }
     
 
