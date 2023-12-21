@@ -146,9 +146,11 @@ The video must not exceed 2 minutes.
 Changes made to the first submission:
 
 Item 1
-..
-GROUPYYgg, DD/MM/20YY
 
-Group member 1 name, email (Editor)
-Group member 2 name, email
-...
+***
+GROUP23143, 21/12/2023
+
+* Ana Azevedo, up202108654@up.pt
+* Catarina Canelas, up202103628@up.pt
+* Gabriel Ferreira, up202108722@up.pt
+* Luís Du, up202105385@up.pt
