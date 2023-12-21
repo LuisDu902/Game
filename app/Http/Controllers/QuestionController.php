@@ -297,7 +297,7 @@ class QuestionController extends Controller
         return response()->json(['action' => 'unvote']);
     }
 
-    public function activity($id) {
+    public function activity(Request $request, $id) {
         $question = Question::findOrFail($id);
 
         $this->authorize('view', $question);
