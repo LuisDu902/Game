@@ -120,7 +120,6 @@
   margin-left: 60px;
 }
 
-
 .q-files {
   display: flex;
   flex-wrap: wrap;
@@ -210,14 +209,15 @@
 }
 
 .answer-content p {
-    font-size: 20px;
+  font-size: 20px;
   color: #525252;
   text-align: justify;
   line-height: 1.2em;
 }
 
-.answer-content p.comment-content, .comment-creator {
-    font-size: 18px;
+.answer-content p.comment-content,
+.comment-creator {
+  font-size: 18px;
 }
 
 .answer-content > ul {
@@ -724,13 +724,14 @@ svg {
   resize: none;
 }
 
-
 .correct-answer {
-    color: #7c5bf0;
-    font-weight: 600;
+  color: #7c5bf0;
+  font-weight: 600;
 }
 
-#file-info, #edit-a-file-info, #a-file-info {
+#file-info,
+#edit-a-file-info,
+#a-file-info {
   display: none;
   border: 1px solid #e6e7f3;
   width: fit-content;

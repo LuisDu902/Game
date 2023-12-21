@@ -14,30 +14,31 @@
                 </a>
             </li>
             <li><a href="{{ route('categories') }}">Game Categories</a></li>
-            <li><a href="{{ route('category', ['id' => $category->id]) }}"> {{ $category->name }}</a></li>
-            <li>Create Game</li>
+            <li><a href="{{ route('category', ['id' => $game->game_category_id]) }}"> {{ $game->category->name }}</a></li>
+            <li><a href="{{ route('game', ['id' => $game->id]) }}"> {{ $game->name }}</a></li>
+            <li>Edit</li>
         </ul>
     </div>
     <section class="game-section">
-        <div class="new-game-form" data-id="{{$category->id}}">
-            <form action="{{ route('games.store', ['category_id' => $category->id]) }}" method="POST" enctype="multipart/form-data">
+        <div class="edit-game-form" data-id="{{ $game->id }}">
+            <form action="{{ route('game', [ 'id' => $game->id ]) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="form-group">
                     <label for="name">Game Title <span>*</span></label>
-                    <textarea name="name" id="name" class="form-control" placeholder="Game title..." required></textarea>
+                    <textarea name="name" id="name" class="form-control" placeholder="Game title..." required>{{ $game->name }}</textarea>
                 </div>
                 
                 <div class="form-group">
                     <label for="description">Description <span>*</span></label>
-                    <textarea name="description" id="description" class="form-control" placeholder="Game description..." required></textarea>
+                    <textarea name="description" id="description" class="form-control" placeholder="Game description..." required>{{ $game->description }}</textarea>
                 </div>
                 <div class="upload-files">
                     <label for="file">Select image:</label>
                     <input type='file' id="file" accept="image/*" hidden>
                     <button id="up-image">Select</button>
                 </div>
-                <img src="{{ asset('/game/default.png') }}" alt="default game">
-                <button type="submit" id="create-game" onclick="createGame()">Create Game</button>
+                <img src="{{ $game->getImage() }}" alt="default game">
+                <button type="submit" id="save-game" onclick="editGame()">Save changes</button>
             </form>
         </div>
     </section>

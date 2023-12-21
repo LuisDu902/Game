@@ -18,19 +18,20 @@
         </ul>
     </div>
     <div class="new-gamecategory-form">
-        <form action="{{ route('categories.store') }}" method="POST">
+        <form action="{{ route('categories.update', ['id' => $category->id]) }}" method="POST">
             @csrf
+            @method('PUT')
             <div class="form-group">
                 <label for="name">Game Category Title <span>*</span></label>
-                <textarea name="name" id="name" class="form-control" placeholder="Game Category title..." required></textarea>
+                <textarea name="name" id="name" class="form-control" placeholder="Game Category title..." required>{{ $category->name }}</textarea>
             </div>
             
             <div class="form-group">
                 <label for="description">Description <span>*</span></label>
-                <textarea name="description" id="description" class="form-control" placeholder="Game Category description..." required></textarea>
+                <textarea name="description" id="description" class="form-control" placeholder="Game Category description..." required>{{ $category->description }}</textarea>
             </div>
 
-            <button type="submit" id="create-game-category">Create Game Category</button>
+            <button type="submit" id="create-game-category">Save changes</button>
         </form>
     </div>
 @endsection

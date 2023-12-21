@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Controllers\FileController;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -47,4 +48,8 @@ class Game extends Model
     {
         return $this->belongsTo(GameCategory::class, 'game_category_id');
     }
+
+    public function getImage() {
+        return FileController::get('game', $this->id);
+    }    
 }

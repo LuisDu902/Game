@@ -63,22 +63,6 @@ function statusUpdatedHandler() {
     }
 }
 
-const order_user = document.querySelector('#order-user');
-const search_user = document.querySelector('#search-user');
-const filter_user = document.querySelector('#filter-user');
-
-if (document.querySelector('.user-manage-section')) {
-    order_user.addEventListener('change', function() {
-        sendAjaxRequest('get', '/api/users?' + encodeForAjax({search: search_user.value, filter: filter_user.value, order: order_user.value}), {}, userListHandler);
-    });
-    search_user.addEventListener('input', function() {
-        sendAjaxRequest('get', '/api/users?' + encodeForAjax({search: search_user.value, filter: filter_user.value, order: order_user.value}), {}, userListHandler);
-    });
-    filter_user.addEventListener('change', function() {
-        sendAjaxRequest('get', '/api/users?' + encodeForAjax({search: search_user.value, filter: filter_user.value, order: order_user.value}), {}, userListHandler);
-    });
-}
-
 function userListHandler() {
     if (this.status === 200) {
         const table = document.querySelector('.users');
@@ -86,8 +70,9 @@ function userListHandler() {
         const links = document.querySelectorAll('.custom-pagination a');
         for (const link of links){
             link.addEventListener('click', function(){
-                event.preventDefault();
-                sendAjaxRequest('get', link.href, {}, userListHandler);
+                event.preventDefault()
+                const url = new URL(link.href);
+                sendAjaxRequest('get', '/api/users' + url.search + '&' + encodeForAjax({search: search_user.value, filter: filter_user.value, order: order_user.value}), {}, userListHandler);
             });
         }
     } else {
@@ -95,6 +80,24 @@ function userListHandler() {
     }
 }
 
+
+function gameListHandler() {
+    if (this.status === 200) {
+        const table = document.querySelector('.games');
+        table.innerHTML = this.response;
+        const links = document.querySelectorAll('.custom-pagination a');
+        for (const link of links){
+            link.addEventListener('click', function(){
+                event.preventDefault(); 
+                const url = new URL(link.href);
+                sendAjaxRequest('get', '/api/game' + url.search + '&' + encodeForAjax({search: search_game.value, filter: filter_game.value, order: order_game.value}), {}, gameListHandler);
+            
+            });
+        }
+    } else {
+        console.error('Game list failed:', this.statusText);
+    }
+}
 
 function showUserDelete() {
     const modal = document.querySelector('#userDeleteModal');
@@ -155,9 +158,60 @@ if (adminActions) {
     });
 }
 
+let order_user, search_user, filter_user, order_game, search_game, filter_game;
+
+
 function toggleAdminSection() {
     const article = document.querySelector('.admin-sec article');
     article.innerHTML = this.responseText;
+   
+    if (document.querySelector('.user-manage-section')) {
+        order_user = document.querySelector('#order-user');
+        search_user = document.querySelector('#search-user');
+        filter_user = document.querySelector('#filter-user');
+        order_user.addEventListener('change', function() {
+            sendAjaxRequest('get', '/api/users?' + encodeForAjax({search: search_user.value, filter: filter_user.value, order: order_user.value}), {}, userListHandler);
+        });
+        search_user.addEventListener('input', function() {
+            sendAjaxRequest('get', '/api/users?' + encodeForAjax({search: search_user.value, filter: filter_user.value, order: order_user.value}), {}, userListHandler);
+        });
+        filter_user.addEventListener('change', function() {
+            sendAjaxRequest('get', '/api/users?' + encodeForAjax({search: search_user.value, filter: filter_user.value, order: order_user.value}), {}, userListHandler);
+        });
+
+        const links = document.querySelectorAll('.custom-pagination a');
+        for (const link of links){
+            link.addEventListener('click', function(){
+                event.preventDefault()
+                const url = new URL(link.href);
+                sendAjaxRequest('get', '/api/users' + url.search + '&' + encodeForAjax({search: search_user.value, filter: filter_user.value, order: order_user.value}), {}, userListHandler);
+            });
+        }
+
+    } else if (document.querySelector('.game-manage-section')) {
+        order_game = document.querySelector('#order-game');
+        search_game = document.querySelector('#search-game');
+        filter_game = document.querySelector('#filter-game');
+        order_game.addEventListener('change', function() {
+            sendAjaxRequest('get', '/api/game?' + encodeForAjax({search: search_game.value, filter: filter_game.value, order: order_game.value}), {}, gameListHandler);
+        });
+        search_game.addEventListener('input', function() {
+            sendAjaxRequest('get', '/api/game?' + encodeForAjax({search: search_game.value, filter: filter_game.value, order: order_game.value}), {}, gameListHandler);
+        });
+        filter_game.addEventListener('change', function() {
+            sendAjaxRequest('get', '/api/game?' + encodeForAjax({search: search_game.value, filter: filter_game.value, order: order_game.value}), {}, gameListHandler);
+        });
+
+        const links = document.querySelectorAll('.custom-pagination a');
+        for (const link of links){
+            link.addEventListener('click', function(){
+                event.preventDefault(); 
+                const url = new URL(link.href);
+                sendAjaxRequest('get', '/api/game' + url.search + '&' + encodeForAjax({search: search_game.value, filter: filter_game.value, order: order_game.value}), {}, gameListHandler);
+            
+            });
+        }
+    }
 }
 
 
@@ -317,6 +371,9 @@ function deleteTag() {
     const id = tagContainer.getAttribute('data-id');
 
     const modal = document.querySelector('#tagDeleteModal');
+
+function showDeleteCategory() {
+    const modal = document.getElementById('deleteModal');
     modal.style.display = 'block';
 
     window.onclick = function(event) {
@@ -326,6 +383,7 @@ function deleteTag() {
     };
 
     const cancel = document.getElementById('ad-cancel');
+    const cancel = document.getElementById('d-cancel');
 
     cancel.addEventListener('click', function(){
         modal.style.display = 'none';
@@ -386,3 +444,6 @@ function tagUpdateHandler() {
         createNotificationBox('Something went wrong!', errorResponse.error.name, 'error');
     }
 }
+}
+
+

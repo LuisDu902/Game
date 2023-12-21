@@ -203,6 +203,20 @@
   transform: scale(0.95);
 }
 
+.category-drop {
+    display: flex;
+    align-items: center;
+}
+
+.c-drop-content  {
+    margin-left: auto;
+    min-width: 100px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin-right: 1.5rem;
+}
+
 @media (max-width: 1200px) {
     .category-card, .game-card {
         width: calc(50% - 20px);

@@ -20,7 +20,7 @@
     </div>
 
    <article class="game">
-        <img src="../images/roblox.jpg" alt="game image" class="game-img">
+        <img src="{{ $game->getImage() }}" alt="game image" class="game-img">
 
         <div class="flex">
             <h1>{{ $game->name }}</h1>
