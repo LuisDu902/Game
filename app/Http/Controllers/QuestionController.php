@@ -42,6 +42,8 @@ class QuestionController extends Controller
 
         if (!(auth()->check() && Auth::user()->is_admin)) {
             $query = Question::where('is_public', true);
+        } else {
+            $query = Question::query();
         }
 
         if (!empty($request->games)) {

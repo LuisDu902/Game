@@ -342,6 +342,25 @@ function createGameChart() {
     }
 }
 
+function showDeleteCategory() {
+    const modal = document.getElementById('deleteModal');
+    modal.style.display = 'block';
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    };
+
+    const cancel = document.getElementById('d-cancel');
+
+    cancel.addEventListener('click', function(){
+        modal.style.display = 'none';
+    });
+}
+
+
+
 let oldTag = "";
 
 function editChanges(){
@@ -366,39 +385,15 @@ function showEditTag() {
     }
 }
 
+
+
+
 function deleteTag() {
     const tagContainer = event.target.closest('.tags-actions');
     const id = tagContainer.getAttribute('data-id');
 
     const modal = document.querySelector('#tagDeleteModal');
-
-function showDeleteCategory() {
-    const modal = document.getElementById('deleteModal');
-    modal.style.display = 'block';
-
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = 'none';
-        }
-    };
-
-    const cancel = document.getElementById('d-cancel');
-
-    cancel.addEventListener('click', function(){
-        modal.style.display = 'none';
-    });
-
-    
-    const confirm = document.getElementById('ad-confirm');
-    
-    confirm.addEventListener('click', function(){
-        event.preventDefault();
-        sendAjaxRequest('delete', '/api/tags/' + id, {}, tagDeleteHandler);
-        modal.style.display = 'none';
-    });
-
 }
-
 
 function tagDeleteHandler() {
     if (this.status === 200) {
@@ -443,6 +438,6 @@ function tagUpdateHandler() {
         createNotificationBox('Something went wrong!', errorResponse.error.name, 'error');
     }
 }
-}
+
 
 

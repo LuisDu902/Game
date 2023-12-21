@@ -253,7 +253,7 @@ body > header {
 
 
 @media (max-width: 615px) {
-  .admin {
-    background-color: aqua;
+  .navbar .left {
+    display: none !important;
   }
 }

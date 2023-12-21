@@ -1,7 +1,10 @@
 .questions-sec,
-.user-manage-section, .stats-section
-.faq-sec,.contact-section, .about-section,
-.activity-section, .admin-sec {
+.user-manage-section,
+.stats-section .faq-sec,
+.contact-section,
+.about-section,
+.activity-section,
+.admin-sec {
   margin: 20px;
   margin-left: 0;
 }
@@ -11,9 +14,15 @@
   justify-content: space-between;
 }
 
-.questions-sec .questions-actions .questions-sort, .admin-actions {
+.questions-sec .questions-actions .questions-sort,
+.admin-actions {
   display: flex;
   gap: 30px;
+}
+
+.questions-actions, .questions-sort {
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .questions-sec .questions-actions #newQuestion {
@@ -33,7 +42,8 @@
   color: white;
 }
 
-.questions-sec .questions-actions .questions-sort button, .admin-actions button {
+.questions-sec .questions-actions .questions-sort button,
+.admin-actions button {
   font-size: 18px;
   background-color: #d2cfff;
   width: 130px;
@@ -44,7 +54,9 @@
 }
 
 .questions-sec .questions-actions .questions-sort .selected,
-.questions-sec .questions-sort button:hover, .admin-actions button:hover, .admin-actions .selected {
+.questions-sec .questions-sort button:hover,
+.admin-actions button:hover,
+.admin-actions .selected {
   background-color: #7c5bf0;
   color: white;
 }
@@ -209,14 +221,18 @@
   align-items: center;
 }
 
-.new-tags, .filter-tags, .filter-games, .apply-btn {
+.new-tags,
+.filter-tags,
+.filter-games,
+.apply-btn {
   grid-column: span 2;
   display: flex;
   column-gap: 20px;
   flex-wrap: wrap;
 }
 
-.new-tag, .filter-tag {
+.new-tag,
+.filter-tag {
   display: flex;
   gap: 10px;
   align-items: center;
@@ -240,16 +256,19 @@
 }
 
 .tag-btns button,
-#up-f, #up-image {
+#up-f,
+#up-image {
   transition: all 300ms ease;
   border-radius: 10px;
 }
 
-#up-f, #up-image  {
+#up-f,
+#up-image {
   padding: 5px 30px;
 }
 
-#up-f, #up-image ,
+#up-f,
+#up-image,
 #create-tag {
   font-size: 20px;
 }
@@ -260,7 +279,8 @@
 
 #create-tag,
 #conf-tag,
-#up-f, #up-image  {
+#up-f,
+#up-image {
   background-color: #d2cfff;
   color: #7c5bf0;
 }
@@ -268,12 +288,14 @@
 #create-tag:hover,
 #conf-tag:hover,
 #up-f:hover,
-#anwser-up-f:hover, #up-image:hover {
+#anwser-up-f:hover,
+#up-image:hover {
   background-color: #7c5bf0;
   color: white;
 }
 
-.new-tag, .filter-tag {
+.new-tag,
+.filter-tag {
   position: relative;
 }
 
@@ -353,7 +375,8 @@
 .question-files .close,
 .new-tag ion-icon,
 .answer-files .close,
-.edit-a-file .close, .filter-tag ion-icon {
+.edit-a-file .close,
+.filter-tag ion-icon {
   position: absolute;
   top: -10px;
   right: -10px;
@@ -499,13 +522,14 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
-.solved-question strong{
-    color: white;
-    background-color: #00BF57;
-    padding: 3px 10px;
-    border-radius: 5px;
+.solved-question strong {
+  color: white;
+  background-color: #00bf57;
+  padding: 3px 10px;
+  border-radius: 5px;
 }
 
 #filter-questions {
@@ -536,21 +560,21 @@
 }
 
 .filter-content {
-    position: absolute;
-    min-width: 200px;
-    display: none;
-    grid-template-columns: 80px 400px;
-    grid-template-rows: repeat(4, auto);
-    margin-top: 10px;
-    z-index: 1;
-    background-color: white;
-    box-shadow: 0 8px 30px 0 #32358214;
-    border: 1px solid #E6E7F3;
-    border-radius: 5px;
-    padding: 20px;
-    row-gap: 20px;
-    column-gap: 0;
-    align-items: center;
+  position: absolute;
+  min-width: 200px;
+  display: none;
+  grid-template-columns: 80px 400px;
+  grid-template-rows: repeat(4, auto);
+  margin-top: 10px;
+  z-index: 1;
+  background-color: white;
+  box-shadow: 0 8px 30px 0 #32358214;
+  border: 1px solid #e6e7f3;
+  border-radius: 5px;
+  padding: 20px;
+  row-gap: 20px;
+  column-gap: 0;
+  align-items: center;
 }
 
 .filter-content select {
@@ -569,7 +593,8 @@
   border: 1px solid deeppink;
 }
 
-.filter-tags, .filter-games {
+.filter-tags,
+.filter-games {
   row-gap: 10px;
 }
 
@@ -580,3 +605,11 @@
 .filtered * {
   color: white !important;
 }
+
+
+@media (max-width: 775px) {
+  .q-stats {
+    display: none !important;
+  }
+}
+
