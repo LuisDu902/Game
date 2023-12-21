@@ -276,8 +276,8 @@ public function envelope() {
 | US26 | View my answers | M02 | High | **Catarina Canelas** | 100% |
 | US27 | Post questions | M03 | High | **Ana Azevedo**, **Gabriel Ferreira** | 100% |
 | US28 | Post answers | M03 | High | **Ana Azevedo**, **Gabriel Ferreira** | 100% |
-| US29 | Edit question | M03 | High | **Catarina Canelas**, Luís Du | 100% |
-| US30 | Edit answer | M03 | High | **Catarina Canelas**, Luís Du | 100% |
+| US29 | Edit question | M03 | High | **Catarina Canelas**, **Luís Du** | 100% |
+| US30 | Edit answer | M03 | High | **Catarina Canelas**, **Luís Du** | 100% |
 | US31 | Delete question | M03 | High | **Catarina Canelas** | 100% |
 | US32 | Delete answer | M03 | High | **Catarina Canelas** | 100% |
 | US33 | Edit profile | M02 | High | **Catarina Canelas** | 100% |
