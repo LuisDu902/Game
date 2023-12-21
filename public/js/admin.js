@@ -96,6 +96,10 @@ function userListHandler() {
 }
 
 
+
+
+
+
 function showUserDelete() {
     const modal = document.querySelector('#userDeleteModal');
     modal.style.display = 'block';
