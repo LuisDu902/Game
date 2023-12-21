@@ -282,7 +282,7 @@ public function envelope() {
 | US32 | Delete answer | M03 | High | **Catarina Canelas** | 100% |
 | US33 | Edit profile | M02 | High | **Catarina Canelas** | 100% |
 | US34 | Vote on post | M03 | High |  **Gabriel Ferreira** | 100% |
-| US35 | Comment on post | M03 | High | Ana Azevedo, Gabriel Ferreira | 100% |
+| US35 | Comment on post | M03 | High | Ana Azevedo, **Gabriel Ferreira** | 100% |
 | US36 | Edit comment | M03 | Medium | ... | 100% |
 | US37 | Edit profile picture | M02 | Medium | **Luís Du** | 100% |
 | US38 | Manage post visibility | M03 | Medium | **Luís Du** | 100% |
@@ -296,7 +296,7 @@ public function envelope() {
 | US46 | Rank upgrade | M02 | Medium | Ana Azevedo | 100% | 
 | US47 | Recover password | M01 | Medium | **Luís Du** | 100% |
 | US48 | Notification of answers/comment | M03 | Medium | Ana Azevedo | 100% |
-| US49 | Report inappropriate content | M03 | Medium | Gabriel Ferreira | 100% |
+| US49 | Report inappropriate content | M03 | Medium | **Gabriel Ferreira** | 100% |
 | US50 | Notification of votes on content | M03 | Medium | Ana Azevedo | 100% |
 | US51 | Edit question tags | M03 | Medium | **Luís Du** | 100% |
 | US52 | Notification of badge awards | M03 | Low | Ana Azevedo | 100% |
