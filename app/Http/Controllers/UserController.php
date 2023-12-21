@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Question;
+use App\Models\Notification;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -127,4 +128,58 @@ class UserController extends Controller
         return response()->json(['id' => $user->id ]); 
     }
 
+    public function showUserNotifications($id) {
+
+        $user = User::find($id);
+        
+        if (!$user) {
+            abort(404);
+        }
+
+        $notifications = $user->notifications()->orderByDesc('date')->get();
+        return view('pages.userNotifications', ['user' => $user, 'notifications' => $notifications]);
+    }
+
+    public function showUserReportsNotifications($id) {
+        $user = User::find($id);
+        
+        if (!$user) {
+            abort(404);
+        }
+
+        $notifications = $user->notifications()->orderByDesc('date')->get();
+        return view('pages.userReportsNotifications', ['user' => $user, 'notifications' => $notifications]);
+    }
+
+    public function markAsViewed($id)
+    {
+        $notification = Notification::find($id);
+
+        if ($notification) {
+            $notification->viewed = true;
+            $notification->save();
+
+            return response()->json(['success' => true]);
+        }
+        
+        return response()->json(['success' => false, 'message' => 'Notification not found']);
+    }
+
+    public function viewed(Request $request, $notification_id)
+    {        
+        DB::table('notification')
+        ->where('id', $notification_id)
+        ->update(['viewed' => true]);
+
+    return response()->json(['action' => 'viewed', 'id' => $notification_id]);
+    }
+    
+    public function getUnreadNotificationCount()
+    {
+        $unreadCount = Notification::where('user_id', Auth::id())
+            ->where('viewed', false)
+            ->count();
+
+        return $unreadCount;
+    }
 }

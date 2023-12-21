@@ -143,3 +143,32 @@ function imageHandler(){
         console.error('Profile update failed:', this.statusText);
     }
 }
+
+const viewedNotification = document.querySelectorAll('.notification');
+
+if (viewedNotification) {
+    for (const notification of viewedNotification) {
+        notification.addEventListener('click', function() {
+            const id = notification.getAttribute('data-id');
+            sendAjaxRequest('post', '/api/users/notifications/' + id + "/viewed", {}, ViwedHandler);
+        });
+    }
+}
+
+function ViwedHandler(){
+    if (this.status === 200) {
+        const response = JSON.parse(this.responseText);
+        const id = response.id;
+        
+        const viewedNotification = document.querySelector(`#notification${id}`);
+        viewedNotification.classList.add('true');
+        viewedNotification.classList.remove('false');
+
+        // Update the count in the little circle
+        const notificationCount = document.querySelector('.notification-count');
+        const currentCount = parseInt(notificationCount.textContent, 10);
+        if (!isNaN(currentCount) && currentCount > 0) {
+            notificationCount.textContent = currentCount - 1;
+        }
+    }
+}

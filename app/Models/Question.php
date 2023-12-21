@@ -44,7 +44,7 @@ class Question extends Model
         return $this->hasMany(Answer::class);
     }
 
-    public function game(): BelongsTo
+    public function game()
     {
         return $this->belongsTo(Game::class, 'game_id');
     }
@@ -130,4 +130,9 @@ class Question extends Model
         $modifiedAt = $this->lastDate();
         return $now->diffForHumans($modifiedAt, true);
     }
+
+    public function history() {
+
+    }
+
 }

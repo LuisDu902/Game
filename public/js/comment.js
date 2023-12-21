@@ -61,14 +61,11 @@ function showCommentDelete() {
 
     const id = event.target.closest('.comment-container').getAttribute('data-id');
     const confirm = document.getElementById('ad-confirm');
-    confirm.textContent = 'Delete';
+    
     confirm.addEventListener('click', function(){
         event.preventDefault();
-        if (title.textContent == 'Delete comment') {
-            sendAjaxRequest('delete', '/api/comments/' + id, {}, commentDeleteHandler);
-            modal.style.display = 'none';
-        }
-       
+        sendAjaxRequest('delete', '/api/comments/' + id, {}, commentDeleteHandler);
+        modal.style.display = 'none';
     });
     
 }
