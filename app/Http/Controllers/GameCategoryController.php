@@ -31,7 +31,7 @@ class GameCategoryController extends Controller
     public function index()
     {
         $categories = GameCategory::all();
-        return view('pages.categories', ['categories' => $categories]);
+        return view('pages.categories', ['title' => 'Categories Page', 'categories' => $categories]);
     }
 
 
@@ -41,19 +41,19 @@ class GameCategoryController extends Controller
     public function show($id)
     {
         $gameCategory = GameCategory::findOrFail($id);
-        return view('pages.category', ['category' => $gameCategory]);
+        return view('pages.category', ['title' => 'Category: ' . $gameCategory->name, 'category' => $gameCategory]);
     }
 
     public function create()
     {
         $this->authorize('create', GameCategory::class);
-        return view('pages.newCategory');
+        return view('pages.newCategory', ['title' => 'Create New Category Page']);
     }
 
     public function edit(Request $request, $id) {
         $this->authorize('edit', GameCategory::class);
         $category = GameCategory::findOrFail($id);
-        return view('pages.editCategory', ['category'=> $category]);
+        return view('pages.editCategory', ['title' => 'Edit ' . $category->name, 'category'=> $category]);
     }
 
     public function update(Request $request, $id)

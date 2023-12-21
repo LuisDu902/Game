@@ -153,7 +153,7 @@
 <div id="reportPopup2" class="report-popup2" style="display: none;">
     <div class="report-popup-content">
         <span class="close-btn" onclick="closePopup2()">&times;</span>
-        <h2>Report2</h2>
+        <h2>Answer report</h2>
         <p>Select a reason for reporting:</p>
         <form method="POST" action="{{ route('report.store2') }}">
             @csrf

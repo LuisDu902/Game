@@ -35,7 +35,7 @@ class GameController extends Controller
     {
         $this->authorize('create', Game::class);
         $category = GameCategory::find($category_id);
-        return view('pages.newGame', ['category' => $category]);
+        return view('pages.newGame', ['title' => 'Create New Game', 'category' => $category]);
     }
 
     /**
@@ -45,7 +45,7 @@ class GameController extends Controller
     {
         $game = Game::findOrFail($id);
         $questions = $game->questions()->paginate(5);
-        return view('pages.game', ['game' => $game, 'questions' => $questions]);
+        return view('pages.game', ['title' => 'Game: ' . $game->name, 'game' => $game, 'questions' => $questions]);
     }
 
     public function store(Request $request)
@@ -82,7 +82,7 @@ class GameController extends Controller
     public function edit($id){
         $this->authorize('edit', Game::class);
         $game = Game::findOrFail($id);
-        return view('pages.editGame', ['game' => $game]);
+        return view('pages.editGame', ['title' => 'Edit' . $game->name, 'game' => $game]);
     }
 
     public function update(Request $request, $id) {

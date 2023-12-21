@@ -14,7 +14,7 @@
             <li><a href="{{ route('profile', ['id' => $user->id]) }}">{{ $user->username }}</a></li>
             @if(Auth::check() and (Auth::id() == $user->id))
             <li><a href="{{ route('users_notifications', ['id' => $user->id]) }}">notifications</a></li>
-                <li>notifications</li>
+            <li>reports</li>
             @endif
         </ul>
     </div>

@@ -11,7 +11,7 @@
             <li><a href="{{ route('home') }}">
                 <ion-icon name="home-outline"></ion-icon> Home</a>
             </li>
-            <li> Statistics</li>
+            <li> Administration</li>
         </ul>
     </div>
     <section class="admin-sec">

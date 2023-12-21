@@ -30,7 +30,7 @@ class UserController extends Controller
           abort(404, 'User not found');
         }
 
-        return view('pages.profile', ['user' => $user]);
+        return view('pages.profile', ['title' => $user->name . '\'s profile', 'user' => $user]);
     }
 
     public function search(Request $request){
@@ -98,7 +98,7 @@ class UserController extends Controller
 
         $questions = $user->questions()->paginate(10);
 
-        return view('pages.userQuestions', ['user' => $user, 'questions' => $questions]);
+        return view('pages.userQuestions', ['title' => $user->name . '\'s questions', 'user' => $user, 'questions' => $questions]);
     }
 
     public function showUserAnswers($id) {
@@ -110,7 +110,7 @@ class UserController extends Controller
         }
 
         $answers = $user->answers; 
-        return view('pages.userAnswers', ['user' => $user, 'answers' => $answers]);
+        return view('pages.userAnswers', ['title' => $user->name . '\'s answers', 'user' => $user, 'answers' => $answers]);
     }
 
     public function delete(Request $request, $id) {
@@ -131,6 +131,13 @@ class UserController extends Controller
 
 
     public function showUserNotifications($id) {
+        if (!Auth::check()) {
+            return redirect('/home');
+        }
+
+        if (Auth()->user()->id != $id) {
+            return redirect('/home');
+        }
 
         $user = User::find($id);
         
@@ -139,10 +146,19 @@ class UserController extends Controller
         }
 
         $notifications = $user->notifications()->orderByDesc('date')->get();
-        return view('pages.userNotifications', ['user' => $user, 'notifications' => $notifications]);
+        return view('pages.userNotifications', ['title' => $user->name . ' Notifications', 'user' => $user, 'notifications' => $notifications]);
     }
 
     public function showUserReportsNotifications($id) {
+        
+        if (!Auth::check()) {
+            return redirect('/home');
+        }
+
+        if (Auth()->user()->id != $id) {
+            return redirect('/home');
+        }
+
         $user = User::find($id);
         
         if (!$user) {
@@ -150,7 +166,7 @@ class UserController extends Controller
         }
 
         $notifications = $user->notifications()->orderByDesc('date')->get();
-        return view('pages.userReportsNotifications', ['user' => $user, 'notifications' => $notifications]);
+        return view('pages.userReportsNotifications', ['title' => 'Reports Page', 'user' => $user, 'notifications' => $notifications]);
     }
 
     public function markAsViewed($id)

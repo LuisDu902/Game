@@ -801,3 +801,34 @@ if (upA) {
         fileInfoA.style.display = 'none';
     });
 }
+
+
+const activity = document.querySelector('.activity-section');
+const activityList = document.querySelector('.activities');
+
+let activityPage = 1;
+
+if (activity) {
+    const question_id = activity.getAttribute('data-id'); 
+
+    document.addEventListener('scroll', scrooll);
+    function scrooll(){
+        const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
+        if (window.scrollY >= scrollableHeight) {
+            activityPage++;
+            sendAjaxRequest('get', '/questions/' + question_id + '/activity?' + encodeForAjax({page: activityPage}), {}, activityHandler);
+        }
+    }
+}
+
+function activityHandler() {
+    
+    var tempElement = document.createElement('div');
+    tempElement.innerHTML = this.responseText;
+
+    var targetSection = tempElement.querySelector('.activities');
+
+    if (targetSection) {
+        activityList.innerHTML += targetSection.innerHTML;
+    } 
+}
