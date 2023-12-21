@@ -211,9 +211,31 @@ function toggleAdminSection() {
             
             });
         }
+    } else if (document.querySelector('#report-page')) {
+        const links = document.querySelectorAll('.custom-pagination a');
+        for (const link of links){
+            link.addEventListener('click', function(){
+                event.preventDefault()
+                const url = new URL(link.href);
+                sendAjaxRequest('get', '/api/admin/reports' + url.search, {}, reportListHandler);
+            });
+        }
     }
 }
 
+function reportListHandler() {
+    if (this.status === 200) {
+        document.querySelector('.admin-sec article').innerHTML = this.responseText;
+        const links = document.querySelectorAll('.custom-pagination a');
+        for (const link of links){
+            link.addEventListener('click', function(){
+                event.preventDefault()
+                const url = new URL(link.href);
+                sendAjaxRequest('get', '/api/admin/reports' + url.search, {}, reportListHandler);
+            });
+        }
+    }
+}
 
 const questionChart = document.getElementById('question-chart');
 const userChart = document.getElementById('user-chart');

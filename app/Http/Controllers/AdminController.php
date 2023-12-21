@@ -47,7 +47,7 @@ class AdminController extends Controller
         return view('partials._tags', compact('tags'))->render();
     }
     
-    public function reports() {
+    public function reports(Request $request) {
         $reports = Report::orderBy('date', 'desc')->paginate(10);
     
         return view('partials._reports', compact('reports'))->render();

@@ -43,19 +43,17 @@ function changeReportStatus(element) {
     var reportId = element.getAttribute('data-report');
     var status = element.value;
 
-    // AJAX request to update the status in the database
     fetch('/admin/reports/update-status', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') // CSRF token
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content') 
         },
         body: JSON.stringify({ reportId: reportId, status: status })
     })
     .then(response => response.json())
 .then(data => {
         if(data.success) {
-            // Update class of the selected option
             var solvedOption = element.querySelector('.status-solved');
             var unsolvedOption = element.querySelector('.status-unsolved');
             if (status == "1") {

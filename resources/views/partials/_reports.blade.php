@@ -1,5 +1,5 @@
 @if ($reports->count() > 0)
-    <table class="users-table">
+    <table class="users-table" id="report-page">
         <thead>
             <tr>
                 <th></th> <th>Reporter</th>
@@ -13,7 +13,7 @@
             @endforeach
         </tbody>
     </table>
-
+    {{ $reports->links() }}
     <div id="userDeleteModal" class="modal">
         <div class="delete-modal">
             <div class="modal-c">
@@ -29,6 +29,8 @@
             </div>
         </div>
     </div>
+
+    
 @else
     <div class="no-records">
         <img src="{{ asset('images/nothing.png') }}" alt="nothing">
