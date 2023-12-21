@@ -17,6 +17,17 @@ class Report extends Model
         'date', 'reason', 'explanation', 'is_solved', 'reporter_id', 'reported_id', 'report_type', 'question_id', 'answer_id', 'comment_id'
     ];
 
+
+    public function reporter()
+    {
+        return $this->belongsTo(User::class, 'reporter_id');
+    }
+
+    public function reported()
+    {
+        return $this->belongsTo(User::class, 'reported_id');
+    }
+
     
 }
 

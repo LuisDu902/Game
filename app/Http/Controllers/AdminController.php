@@ -8,6 +8,7 @@ use App\Models\Vote;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Question;
+use App\Models\Report;
 use App\Models\Answer;
 use App\Models\Comment;
 use Illuminate\Support\Facades\Auth;
@@ -38,11 +39,19 @@ class AdminController extends Controller
         return view('partials._users', compact('users'))->render();
     }
 
+
     public function tags() {
 
         $tags = Tag::paginate(10);
         
         return view('partials._tags', compact('tags'))->render();
+    }
+    
+    public function reports() {
+        $reports = Report::orderBy('date', 'desc')->paginate(10);
+    
+        return view('partials._reports', compact('reports'))->render();
+
     }
     
     public function games() {
@@ -153,5 +162,20 @@ class AdminController extends Controller
         return $gameChartData;
     }
 
-    
+
+    public function updateReportStatus(Request $request){
+    $reportId = $request->input('reportId');
+    $status = $request->input('status');
+
+    $report = Report::find($reportId);
+    if($report) {
+        $report->is_solved = $status;
+        $report->save();
+
+        return response()->json(['success' => true]);
+    }
+
+    return response()->json(['success' => false]);
+    }
+
 }
