@@ -8,9 +8,6 @@
     z-index: -1;
 }
 
-.main-container {
-    padding: -2rem -3rem !important;
-}
 
 .home-intro {
     display: flex;
@@ -173,7 +170,7 @@
 }
 
 .game img:hover {
-    scale: 0.95;
+    transform: scale(0.95);
 }
 
 .features {

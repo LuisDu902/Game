@@ -105,7 +105,7 @@
 }
 
 .game-card:hover {
-    scale: 0.96;
+    transform: scale(0.96);
 }
 
 .category-section .category-games {

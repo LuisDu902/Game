@@ -6,7 +6,7 @@
         <li><a href="{{ route('categories') }}"> Game Categories</a></li>
         <li><a href="{{ route('about') }}"> About us</a></li>
         <li><a href="{{ route('faq') }}"> FAQ</a></li>
-        <li><a href="{{ route('contact') }}"> Contact us</a></li>
+        <li><a href="{{ route('contactUs') }}"> Contact us</a></li>
     </ul>
 </div>
 
