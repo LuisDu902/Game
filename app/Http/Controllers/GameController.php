@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Game;
 use App\Models\GameCategory;
+use App\Models\GameMember;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class GameController extends Controller
 {
