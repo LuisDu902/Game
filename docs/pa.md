@@ -247,7 +247,7 @@ public function envelope() {
 
 #### 8.1.5. OAuth
 
-[OAuth](https://developers.google.com/identity/protocols/oauth2/javascript-implicit-flow?hl=pt-br) was used for authenticating users through with acccounts
+[OAuth](https://developers.google.com/identity/protocols/oauth2/javascript-implicit-flow?hl=pt-br) was used for authenticating users  with acccounts
 [Example of use](../app/Http/Controllers/Auth/GoogleController.php):
 
 ```php
