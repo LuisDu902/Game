@@ -382,7 +382,6 @@ function showDeleteCategory() {
         }
     };
 
-    const cancel = document.getElementById('ad-cancel');
     const cancel = document.getElementById('d-cancel');
 
     cancel.addEventListener('click', function(){
