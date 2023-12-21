@@ -62,7 +62,7 @@ Route::controller(StaticController::class)->group(function () {
     Route::get('/home', 'home')->name('home');
     Route::get('/faq', 'faq')->name('faq');
     Route::get('/about', 'about')->name('about');
-    Route::get('/contact', 'contact')->name('contact');
+    Route::get('/contact', 'contact')->name('contactUs');
 });
 
 // User

@@ -153,7 +153,7 @@
     border-radius: 10px;
     position: relative;
     margin: 0 auto;
-    background-color: none;
+    background-color: transparent;
     border: 1px solid #C65353;
     transition: transform 0.3s, background-color 0.3s;
 }

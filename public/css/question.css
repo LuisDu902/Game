@@ -347,7 +347,7 @@ svg {
 .answerFormContainer {
   margin-top: 30px;
   margin-left: 70px;
-  width: calc(100%-70px);
+  width: calc(100% - 70px);
   border-radius: 10px;
   border: 2px dashed #7c5bf0;
   background: #f8f7fe;
