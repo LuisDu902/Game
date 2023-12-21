@@ -99,8 +99,8 @@
 }
 
 .manage-tags .tags-actions input{
-    color: #7c5bf0;
-    background-color: #d2cfff;
+    color: deeppink;
+    background-color: #EFB8E9;
     border-radius: 5px;
     font-size: 16px;
     text-align: center;
@@ -120,8 +120,9 @@
 
 .manage-tags .tags-actions {
     margin: 1.5rem 0;
-    color: #7c5bf0;
-    background-color: #d2cfff;
+    color: deeppink;
+    background-color: #EFB8E9;
+    border: 1px solid deeppink;
     padding: 5px 15px;
     border-radius: 5px;
     font-size: 16px;
@@ -133,9 +134,17 @@
     align-items: center;
 }
 
-.tags-actions{
+.tags-actions, .edit-tag{
     display: flex;
     justify-content: space-between;
     gap: 10px;
     align-items: center;
+}
+
+.edit-tag{
+    color: deeppink;
+    padding: 5px 15px;
+    border-radius: 5px;
+    font-size: 16px;
+    text-align: center;
 }
