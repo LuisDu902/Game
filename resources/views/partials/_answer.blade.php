@@ -193,9 +193,8 @@
             <input type="hidden" name="reported_id" value="{{ $answer->user_id }}">
             <input type="hidden" name="answer_id" value="{{ $answer->id }}">
 
-
             <p id="elaborate">Elaborate on the issue:</p>
-            <textarea name="explanation" ></textarea>
+            <textarea name="explanation"></textarea>
             <button type="submit">Submit Report</button>
         </form>
     </div>

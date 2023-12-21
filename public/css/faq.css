@@ -9,9 +9,9 @@
     text-align: center;
     grid-template-columns: 1fr 1fr;
     grid-row-gap: 16px;
-}
-
-.faq-dropdown {
+  }
+  
+  .faq-dropdown {
     margin-right: 1px;
     margin-bottom: 18px;
     border: 1px solid #e6e7f3;
@@ -19,36 +19,36 @@
     transition: transform 0.5s ease;
     text-align: left;
     cursor: pointer;
-}
-
-.faq-dropdown * {
+  }
+  
+  .faq-dropdown * {
     cursor: pointer;
-}
-
-.faq-title {
+  }
+  
+  .faq-title {
     display: flex;
     align-items: center;
     padding: 31px 36px;
-}
-
-.faq-dropdown ion-icon {
+  }
+  
+  .faq-dropdown ion-icon {
     margin-right: 15px;
     flex: 0 0 auto;
     width: 20px;
     height: 35px;
-    transition: transform 0.5s ease; 
-}
-
-.faq-question {
+    transition: transform 0.5s ease;
+  }
+  
+  .faq-question {
     font-size: 20px;
     line-height: 1.1em;
     font-weight: 500;
     text-align: left;
     box-sizing: border-box;
     transition: color 0.5s ease;
-}
-
-.faq-answer {
+  }
+  
+  .faq-answer {
     padding: 0 32px 0;
     display: block;
     opacity: 1;
@@ -58,9 +58,9 @@
     transition: max-height 0.5s;
     max-height: 0px;
     overflow: hidden;
-}
-
-.faq-answer p {
+  }
+  
+  .faq-answer p {
     margin-bottom: 30px;
     padding-left: 35px;
     margin-top: 0;
@@ -68,19 +68,20 @@
     line-height: 1.667em;
     font-weight: 400;
     text-align: left;
-}
-
-.faq-dropdown:hover {
+  }
+  
+  .faq-dropdown:hover {
     transform: scale(0.97);
-}
-
-.rotate {
+  }
+  
+  .rotate {
     transform: rotate(90deg);
-}
-
-@media (max-width: 900px) {
+  }
+  
+  @media (max-width: 900px) {
     .faqs-grid {
       display: flex;
       flex-direction: column;
     }
   }
+  

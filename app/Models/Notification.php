@@ -62,6 +62,12 @@ class Notification extends Model
         return $this->belongsTo(Game::class, 'game_id');
     }
 
+    public function elapsedTime() {
+        $now = now();
+        $createdAt = $this->date;
+        return $now->diffForHumans($createdAt, true);
+    }
+
     public function markAsViewed()
     {
         $this->viewed = true;

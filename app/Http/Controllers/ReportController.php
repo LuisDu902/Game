@@ -14,7 +14,7 @@ class ReportController extends Controller
             'reason' => 'required|string',
             'explanation' => 'string',
             'question_id' => 'required|integer',
-        
+           
         ]);
 
         $question = Question::findOrFail($data['question_id']);
@@ -24,7 +24,6 @@ class ReportController extends Controller
         $data['reporter_id'] = auth()->id();
         $data['is_solved'] = false;
         $data['report_type'] = 'Question_report'; 
-
         Report::create($data);
 
         return back()->with('success', 'Report submitted successfully.');
@@ -40,10 +39,10 @@ class ReportController extends Controller
            
         ]);
 
-     
+        
         $data['date'] = now(); 
         $data['reporter_id'] = auth()->id(); 
-        $data['is_solved'] = false;
+        $data['is_solved'] = false; 
         $data['report_type'] = 'Answer_report';
 
         Report::create($data);
@@ -62,7 +61,7 @@ class ReportController extends Controller
         ]);
 
         
-        $data['date'] = now(); 
+        $data['date'] = now();
         $data['reporter_id'] = auth()->id(); 
         $data['is_solved'] = false; 
         $data['report_type'] = 'Comment_report'; 

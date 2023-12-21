@@ -139,6 +139,14 @@ class UserController extends Controller
             return redirect('/home');
         }
 
+        if (!Auth::check()) {
+            return redirect('/home');
+        }
+
+        if (Auth()->user()->id != $id) {
+            return redirect('/home');
+        }
+
         $user = User::find($id);
         
         if (!$user) {

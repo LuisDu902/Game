@@ -10,7 +10,6 @@ use App\Models\Comment;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\GameCategory;
-use App\Models\QuestionFollower;
 use App\Models\Tag;
 use Illuminate\Support\Facades\Auth;
 
