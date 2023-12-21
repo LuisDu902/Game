@@ -256,15 +256,15 @@ public function envelope() {
 | US06 | Full-text search | M03 | High | **Luís Du** | 100% |
 | US07 | View recent questions | M03 | High | ... | 100% |
 | US08 | Order seach results | M03 | High | **Luís Du** | 100% |
-| US09 | View question details | M03 | High | Ana Azevedo, **Gabriel Ferreira** | 100% |
+| US09 | View question details | M03 | High | **Ana Azevedo**, **Gabriel Ferreira** | 100% |
 | US10 | View user profiles | M02 | High | **Catarina Canelas** | 100% |
-| US11 | Placeholders in Form Inputs | M02 | High | Ana Azevedo, **Catarina Canelas**, **Gabriel Ferreira**, **Luís Du** | 100% |
+| US11 | Placeholders in Form Inputs | M02 | High | **Ana Azevedo**, **Catarina Canelas**, **Gabriel Ferreira**, **Luís Du** | 100% |
 | US12 | Search filters | M03 | Medium | **Luís Du** | 100% |
 | US13 | Search by tags | M03 | Medium | ... | 100% |
 | US14 | Browse questions by tags | M03 | Medium | ... | 100% |
 | US15 | See FAQ page | M02 | Medium | **Luís Du** | 100% |
 | US16 | See contact us page | M02 | Medium | **Luís Du** | 100% |
-| US17 | Contextual Error Messages | M02 | Medium | Ana Azevedo, **Catarina Canelas**, **Gabriel Ferreira**, **Luís Du** | 100% |
+| US17 | Contextual Error Messages | M02 | Medium | **Ana Azevedo**, **Catarina Canelas**, **Gabriel Ferreira**, **Luís Du** | 100% |
 | US18 | Contextual Help | M02 | Medium | ? | 100% |
 | US19 | Sign-up | M01 | High | **Luís Du** | 100% |
 | US20 | Sign-in | M01 | High | **Luís Du** | 100% |
@@ -274,41 +274,41 @@ public function envelope() {
 | US24 | View my profile | M02 | High | **Catarina Canelas** | 100% |
 | US25 | View my questions | M02 | High | **Catarina Canelas** | 100% |
 | US26 | View my answers | M02 | High | **Catarina Canelas** | 100% |
-| US27 | Post questions | M03 | High | Ana Azevedo, **Gabriel Ferreira** | 100% |
-| US28 | Post answers | M03 | High | Ana Azevedo, **Gabriel Ferreira** | 100% |
+| US27 | Post questions | M03 | High | **Ana Azevedo**, **Gabriel Ferreira** | 100% |
+| US28 | Post answers | M03 | High | **Ana Azevedo**, **Gabriel Ferreira** | 100% |
 | US29 | Edit question | M03 | High | **Catarina Canelas**, Luís Du | 100% |
 | US30 | Edit answer | M03 | High | **Catarina Canelas**, Luís Du | 100% |
 | US31 | Delete question | M03 | High | **Catarina Canelas** | 100% |
 | US32 | Delete answer | M03 | High | **Catarina Canelas** | 100% |
 | US33 | Edit profile | M02 | High | **Catarina Canelas** | 100% |
 | US34 | Vote on post | M03 | High |  **Gabriel Ferreira** | 100% |
-| US35 | Comment on post | M03 | High | Ana Azevedo, **Gabriel Ferreira** | 100% |
+| US35 | Comment on post | M03 | High | **Ana Azevedo**, **Gabriel Ferreira** | 100% |
 | US36 | Edit comment | M03 | Medium | ... | 100% |
 | US37 | Edit profile picture | M02 | Medium | **Luís Du** | 100% |
 | US38 | Manage post visibility | M03 | Medium | **Luís Du** | 100% |
 | US39 | Mark Answer as Correct | M03 | Medium | **Luís Du** | 100% |
 | US40 | Delete comment | M03 | Medium | ... | 100% |
 | US41 | Delete account | M05 | Medium | ... | 100% |
-| US42 | Follow question | M02 | Medium | Ana Azevedo | 100% |
-| US43 | Follow tags | M02 | Medium | Ana Azevedo | 100% |
-| US44 | Join game community | M04 | Medium | Ana Azevedo | 100% |
-| US45 | Earn badge | M02 | Medium | Ana Azevedo | 100% | 
-| US46 | Rank upgrade | M02 | Medium | Ana Azevedo | 100% | 
+| US42 | Follow question | M02 | Medium | **Ana Azevedo** | 100% |
+| US43 | Follow tags | M02 | Medium | **Ana Azevedo** | 100% |
+| US44 | Join game community | M04 | Medium | **Ana Azevedo** | 100% |
+| US45 | Earn badge | M02 | Medium | **Ana Azevedo** | 100% | 
+| US46 | Rank upgrade | M02 | Medium | **Ana Azevedo** | 100% | 
 | US47 | Recover password | M01 | Medium | **Luís Du** | 100% |
-| US48 | Notification of answers/comment | M03 | Medium | Ana Azevedo | 100% |
+| US48 | Notification of answers/comment | M03 | Medium | **Ana Azevedo** | 100% |
 | US49 | Report inappropriate content | M03 | Medium | **Gabriel Ferreira** | 100% |
-| US50 | Notification of votes on content | M03 | Medium | Ana Azevedo | 100% |
+| US50 | Notification of votes on content | M03 | Medium | **Ana Azevedo** | 100% |
 | US51 | Edit question tags | M03 | Medium | **Luís Du** | 100% |
-| US52 | Notification of badge awards | M03 | Low | Ana Azevedo | 100% |
-| US53 | Notification of rank upgrades | M03 | Low | Ana Azevedo | 100% |
-| US54 | Notification of followed questions/tags | M03 | Low | Ana Azevedo | 100% |
+| US52 | Notification of badge awards | M03 | Low | **Ana Azevedo** | 100% |
+| US53 | Notification of rank upgrades | M03 | Low | **Ana Azevedo** | 100% |
+| US54 | Notification of followed questions/tags | M03 | Low | **Ana Azevedo** | 100% |
 | US55 | Block and unblock user accounts | M05 | Medium | **Luís Du** | 100% |
 | US56 | Delete content | M05 | Medium | **Catarina Canelas** | 100% |
 | US57 | Create game sections | M05 | Medium | **Catarina Canelas** | 100% |
 | US58 | Manage tags | M05 | Medium | **Catarina Canelas** | 100% |
 | US59 | Delete user account | M05 | Medium | **Catarina Canelas** | 100% |
 | US60 | Remove comments | M05 | Medium | **Catarina Canelas** | 100% |
-| US61 | Notification of inappropriate content | M05 | Low | Ana Azevedo | 100% |
+| US61 | Notification of inappropriate content | M05 | Low | ****Ana Azevedo**** | 100% |
 | US62 | User statistics | M05 | Low | **Luís Du** | 100% |
 | US63 | Create Games | M05 | Medium | **Catarina Canelas** | 100% |
 | US64 | Handle Reports | M05 | Medium | **Gabriel Ferreira** | 100% |
