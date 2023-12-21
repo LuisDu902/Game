@@ -35,10 +35,10 @@
                 @endif
                         <span class="circle">{{ $notification->notification_type[0] }}</span>
                         <div id="notification-{{ $notification->id }}" class="notification" data-id="{{ $notification->id }}">
-                            <a class="notification" href="#">
+                            <a class="notification" href="{{ route('stats') }}">
                                 <h2>Report notification</h2>
                                 <p class="version-content">A report was made by some user.<span class="type">Check it out</span>!</p>
-                                <span class="date">At {{ $notification->date }}</span>
+                                <span class="date">{{ $notification->report->reporter->name }} <span class="type">reported</span> {{ $notification->report->reported->name }} at {{ $notification->date }}</span> 
                             </a>
                         </div>
                     </div>

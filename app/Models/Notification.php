@@ -47,6 +47,11 @@ class Notification extends Model
         return $this->belongsTo(Comment::class, 'comment_id');
     }
 
+    public function report()
+    {
+        return $this->belongsTo(Report::class, 'report_id');
+    }
+
     public function vote()
     {
         return $this->belongsTo(Vote::class, 'vote_id');
