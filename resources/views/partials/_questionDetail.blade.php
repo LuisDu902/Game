@@ -156,7 +156,6 @@
     </div>
 </div>
 
-<!-- Report Popup -->
 <div id="reportPopup" class="report-popup">
     <div class="report-popup-content">
         <span class="close-btn" onclick="closePopup()">&times;</span>
