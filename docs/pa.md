@@ -1,5 +1,6 @@
 # PA: Product and Presentation
-Project vision.
+
+GameOn is committed to revolutionizing the online gaming landscape by creating a dynamic, unified platform that fosters collaboration, encourages knowledge-sharing, and celebrates gamers' contributions. In a world where information fragmentation and community engagement challenges persist, GameOn aims to be the go-to destination for gamers seeking connection and recognition within the gaming ecosystem.
 
 ## A9: Product
 Brief presentation of the product developed.
@@ -14,13 +15,13 @@ URL to the product: http://lbawYYgg.lbaw.fe.up.pt
 ### 2.1. Administration Credentials
 Administration URL: URL
 
-Username	Password
-admin	password
+| Username | Email |	Password |
+| johndoe | johndoe@example.com |	1234 |
 
 ### 2.2. User Credentials
-Type	Username	Password
-basic account	user 1	password
-news editor	user 1	password
+
+| Type	| Username	| Email | Password |
+| basic account |	chloehall	| chloehall@email.com | 1234 |
 
 ### 3. Application Help
 Describe where help has been implemented, pointing to working examples.
@@ -53,11 +54,74 @@ This subsection should include all high and medium priority user stories, sorted
 
 If there are new user stories, also include them in this table. The owner of the user story should have the name in bold. This table should be updated when a user story is completed and another one started.
 
-US Identifier	Name	Module	Priority	Team Members	State
-US01	US Name 1	Module A	High	John Silva, Ana Alice	100%
-US02	US Name 2	Module A	Medium	Ana Alice, John Silva	75%
-US03	US Name 3	Module B	Low	Francisco Alves	5%
-US04	US Name 4	Module A	Low	-	0%
+| US | Identifier |	Name |	Module	| Priority |	Team Members |	State |
+| US01	| See home page |	Module 01 |	High |	Luís Du |	100% |
+| US02	| View posted Q&A's |	Module 03 |	High |	... |	100% |
+| US03	| Exact match search |	Module 03 | High |	Luís Du |	100%
+| US04	| View top questions | Module 03 | High |	... | 100% |
+| US05 | Browse questions | Module 03 | High | Luís Du | 100% |
+| US06 | Full-text search | Module 03 | High | Luís Du | 100% |
+| US07 | View recent questions | Module 03 | High | ... | 100% |
+| US08 | Order seach results | Module 03 | High | Luís Du | 100% |
+| US09 | View question details | Module 03 | High | Ana Azevedo, Gabriel Ferreira | 100% |
+| US10 | View user profiles | Module 02 | High | Catarina Canelas | 100% |
+| US12 | Placeholders in Form Inputs | High | Ana Azevedo, Catarina Canelas, Gabriel Ferreira, Luís Du | 100% |
+| US12 | Search filters | Module 03 | Medium | Luís Du | 100% |
+| US13 | Search by tags | Module 03 | Medium | ... | ? |
+| US14 | Browse questions by tags | Module 03 | Medium | ... | ? |
+| US15 | See FAQ page | Module 03 | Medium | Luís Du | 100% |
+| US16 | See contact us page | Module 03 | Medium | Luís Du | 100% |
+| US17 | Contextual Error Messages | Module 03 | Medium | Ana Azevedo, Catarina Canelas, Gabriel Ferreira, Luís Du | 100% |
+| US18 | Contextual Help | Module 03 | Medium | ? | ? |
+| US19 | Sign-up | Module 01 | High | Luís Du | 100% |
+| US20 | Sign-in | Module 01 | High | Luís Du | 100% |
+| US21 | OAuth API Sign-up | Module 01 | Low | Gabriel Ferreira | 100% |
+| US22 | OAuth API Sign-in | Module 01 | Low | Gabriel Ferreira | 100% |
+| US23 | Logout | Module 01 | High | Luís Du | 100% |
+| US24 | View my profile | Module 02 | High | Catarina Canelas | 100% |
+| US25 | View my questions | Module 02 | High | Catarina Canelas | 100% |
+| US26 | View my answers | Module 02 | High | Catarina Canelas | 100% |
+| US27 | Post questions | Module 03 | High | Ana Azevedo, Gabriel Ferreira | 100% |
+| US28 | Post answers | Module 03 | High | Ana Azevedo, Gabriel Ferreira | 100% |
+| US29 | Edit question | Module 03 | High | Catarina Canelas, Luís Du (?) | 100% |
+| US30 | Edit answer | Module 03 | High | Catarina Canelas, Luís Du (?) | 100% |
+| US31 | Delete question | Module 03 | High | Catarina Canelas | 100% |
+| US32 | Delete answer | Module 03 | High | Catarina Canelas | 100% |
+| US33 | Edit profile | Module 02 | High | Catarina Canelas | 100% |
+| US34 | Vote on post | Module 03 | High | Ana Azevedo, Gabriel Ferreira | 100% |
+| US35 | Comment on post | Module 03 | High | Ana Azevedo, Gabriel Ferreira | 100% |
+| US36 | Edit comment | ...
+| US37 | Edit profile picture | Module 02 | Medium | Luís Du | 100% |
+| US38 | Manage post visibility | Module 03 | Medium | Luís Du | 100% |
+| US39 | Mark Answer as Correct | Module 03 | Medium | Luís Du | 100% |
+| US40 | Delete comment | Module 03 | Medium | ... |
+| US41 | Delete account | Module 01 | Medium | ... |
+| US42 | Follow question | Module 04 | Medium | Ana Azevedo | 100% |
+| US43 | Follow tags | Module 04 | Medium | Ana Azevedo | 100% |
+| US44 | Join game community | Module 04 | Medium | Ana Azevedo | 100% |
+| US45 | Earn badge | ...
+| US46 | Rank upgrade | ...
+| US47 | Recover password | Module 02 | Medium | Luís Du | 100% |
+| US48 | Notification of answers/comment | Module 03 | Medium | Ana Azevedo | 100% |
+| US49 | Report inappropriate content | Module 03 | Medium | Gabriel Ferreira | 100% |
+| US50 | Notification of votes on content | Module 03 | Medium | Ana Azevedo | 100% |
+| US51 | Edit question tags | Module 03 | Medium | ? | 100% |
+| US52 | Notification of badge awards | Module 03 | Low | Ana Azevedo | 100% |
+| US53 | Notification of rank upgrades | Module 03 | Low | Ana Azevedo | 100% |
+| US54 | Notification of followed questions/tags | Module 03 | Low | Ana Azevedo | 100% |
+| US55 | Block and unblock user accounts | Module 05 | Medium | Luís Du | 100% |
+| US56 | Delete content | Module 05 | Medium | Catarina Canelas | 100% |
+| US57 | Create game sections | Module 05 | Medium | Catarina Canelas | 100% |
+| US58 | Manage tags | Module 05 | Medium | Catarina Canelas | 100% | 
+| US59 | Delete user account | Module 05 | Medium | Catarina Canelas | 100% | 
+| US60 | Remove comments | Module 05 | Medium | Catarina Canelas | 100% | 
+| US61 | Notification of inappropriate content | Module 05 | Low | Ana Azevedo | 100% | 
+| US62 | User statistics | Module 05 | Low | Luís Du | 100% | 
+| US63 | Create Games | Module 05 | Medium | Catarina Canelas | 100% | 
+| US64 | Handle Reports | | Module 05 | Medium | Gabriel Ferreira | 100% | 
+| US65 | Manage Game Categories | Module 05 | Medium | Luís Du | 100% | 
+| US66 | Manage Games | Module 05 | Medium | Luís Du | 100% | 
+| US67 | Remember Me | Module 02 | Medium | Luís Du | 100% | 
 
 ## A10: Presentation
 This artifact corresponds to the presentation of the product.
