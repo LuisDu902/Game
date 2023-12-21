@@ -148,3 +148,28 @@
     font-size: 16px;
     text-align: center;
 }
+
+.create-tag-actions {
+    border-top: 1px solid #e6e7f3;
+    margin-top: 30px;
+    padding-top: 30px;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px; /* Adjust the gap between the title and the button */
+}
+
+.create-tag-actions #newQuestion {
+    font-size: 18px;
+    text-align: center;
+    background-color: #d2cfff;
+    width: 300px;
+    padding: 10px 0;
+    color: #7c5bf0;
+    border-radius: 5px;
+    transition: all 400ms ease;
+}
+
+.create-tag-actions #newQuestion:hover {
+    background-color: #7c5bf0;
+    color: white;
+}

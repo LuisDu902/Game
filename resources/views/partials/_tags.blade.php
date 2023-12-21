@@ -1,3 +1,8 @@
+<div class="create-tag-actions">
+    <a href="{{ route('categories.create') }}" id="newQuestion">Add New Tag</a>
+</div>
+
+
 <div class="manage-tags d-flex flex-row flex-wrap mx-auto border-end border-start rounded">
     @foreach($tags as $tag)
         <div id="tag{{ $tag->id }}" class="tags-actions col-2 d-flex flex-row text-center" data-id="{{ $tag->id }}">
