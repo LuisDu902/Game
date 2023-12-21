@@ -380,7 +380,7 @@ function showEditTag() {
 
         const container = document.querySelector('#tag' + id);
         if (container) {
-            container.innerHTML = this.responseText;
+            container.outerHTML = this.responseText;
         }
     }
 }
@@ -427,7 +427,7 @@ function tagDeleteHandler() {
 }
 
 function restoreTag() {
-    const tagContainer = event.target.closest('.tags-actions');
+    const tagContainer = event.target.closest('.edit-tag');
     tagContainer.outerHTML = oldTag;
 }
 
