@@ -12,8 +12,8 @@
                 <ion-icon name="home-outline"></ion-icon> Home</a>
             </li>
             <li><a href="{{ route('profile', ['id' => $user->id]) }}">{{ $user->username }}</a></li>
-            <li><a href="{{ route('users_notifications', ['id' => Auth::user()->id]) }}">notifications</a></li>
             @if(Auth::check() and (Auth::id() == $user->id))
+            <li><a href="{{ route('users_notifications', ['id' => $user->id]) }}">notifications</a></li>
                 <li>notifications</li>
             @endif
         </ul>
