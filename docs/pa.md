@@ -332,10 +332,7 @@ URL to the product: https://lbaw23143.lbaw.fe.up.pt
 
 ### 2. Video presentation
 
-Screenshot of the video plus the link to the lbawYYgg.mp4 file.
-
-Upload the lbawYYgg.mp4 file to Moodle.
-The video must not exceed 2 minutes.
+[Presentation Video](../docs/lbaw23143.mp4)
 
 ### Revision history
 
