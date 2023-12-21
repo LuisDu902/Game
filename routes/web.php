@@ -84,7 +84,6 @@ Route::controller(QuestionController::class)->group(function () {
     Route::get('/questions/{id}/edit', 'edit')->name('questions.edit');
     Route::get('/questions/{id}/activity', 'activity')->name('questions.activity');
     Route::delete('/questions/{id}', 'delete')->name('questions.destroy');
-    Route::post('/questions/{question}', 'followquestion')->name('question.follow');
 });
 
 Route::controller(ReportController::class)->group(function () {
@@ -106,14 +105,10 @@ Route::controller(AdminController::class)->group(function () {
     Route::get('/api/admin/users', 'users');
     Route::get('/api/admin/tags', 'tags');
     Route::get('/api/admin/games', 'games');
-    Route::get('/api/admin/reports', 'reports');
-
     Route::get('/api/admin/charts', 'chart');
     Route::get('/api/admin/reports', 'reports');
     Route::post('/admin/reports/update-status', 'AdminController@updateReportStatus');
 });
-
-Route::post('/admin/reports/update-status', [AdminController::class, 'updateReportStatus']);
     
 
 // Game Category
@@ -163,6 +158,9 @@ Route::controller(QuestionController::class)->group(function () {
     Route::post('/api/questions/{id}/visibility', 'visibility'); 
     Route::post('/api/questions', 'store');
     Route::put('/api/questions/{id}', 'update');
+    Route::post('/api/questions/{id}/follow', 'follow');
+    Route::post('/api/questions/{id}/unfollow', 'unfollow');
+
 });
 
 // Answer API

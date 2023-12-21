@@ -37,19 +37,19 @@
                     </div>
                     
                     <div class="filter-content">
-                        <label for="tags">Tags: </label>
+                        <label for="tag_id">Tags: </label>
                         <div class="tag-con">
                             <select name="tag_id" id="tag_id" class="form-control" required onchange="addFilterTag()">
-                                <option value="0" selected>None</option>
+                                <option value="" selected>None</option>
                                 @foreach($tags as $tag)
                                     <option value="{{ $tag->id }}">{{ $tag->name }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="filter-tags" onclick="removeFilterTag()"></div>
-                        <label for="game">Games: </label>
+                        <label for="game_id">Games: </label>
                         <select name="game_id" id="game_id" class="form-control" required onchange="addFilterGame()">
-                            <option value="0">None</option>
+                            <option value="">None</option>
                             @foreach($categories as $category)
                                 <optgroup label="{{ $category->name }}">
                                     @foreach($category->games as $game)

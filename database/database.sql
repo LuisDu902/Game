@@ -9,6 +9,7 @@ SET DateStyle TO European;
 DROP TABLE IF EXISTS question_file;
 DROP TABLE IF EXISTS answer_file;
 DROP TABLE IF EXISTS question_tag;
+DROP TABLE IF EXISTS question_followers;
 DROP TABLE IF EXISTS game_member;
 DROP TABLE IF EXISTS user_badge;
 DROP TABLE IF EXISTS notification;
@@ -19,7 +20,6 @@ DROP TABLE IF EXISTS vote;
 DROP TABLE IF EXISTS comment;
 DROP TABLE IF EXISTS answer;
 DROP TABLE IF EXISTS question;
-DROP TABLE IF EXISTS question_followers;
 DROP TABLE IF EXISTS game;
 DROP TABLE IF EXISTS game_category;
 DROP TABLE IF EXISTS badge;
@@ -1000,7 +1000,7 @@ INSERT INTO users(name, username, email, password, description, rank, is_admin, 
 ('Oliver Wright', 'oliverwright', 'oliverwright@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Gold', False, False, NULL),
 ('Brooklyn Lewis', 'brooklynlewis', 'brooklynlewis@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
 ('Jacob Green', 'jacobgreen', 'jacobgreen@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, NULL),
-('Chloe Hall', 'chloehall', 'chloehall@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, 'nOdv16qJWwW4sTvMP4eJxeKLmshoNwwf5MDhrTLk.jpg'),
+('Chloe Hall', 'chloehall', 'chloehall@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Bronze', False, False, 'mon1ibfltwHdUPhHBpDQGIWsyyh569SRQomxuCdK.jpg'),
 ('Miala Davis', 'mialadavis', 'mialadavis@email.com', '$2y$10$HfzIhGCCaxqyaIdGgjARSuOKAcm1Uy82YfLuNaajn6JrjLWy9Sj/W', 'Description for Noah', 'Gold', False, False, NULL);
 
 INSERT INTO badge(name) VALUES

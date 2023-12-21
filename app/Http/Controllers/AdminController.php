@@ -29,7 +29,7 @@ class AdminController extends Controller
             'num_users' => User::count(),
         ];
 
-        return view('pages.admin', ['title' => 'Administration Page', 'stats' => $stats]);
+        return view('pages.admin', ['title' => 'Administration section', 'stats' => $stats]);
     }
 
     public function users() {

@@ -175,6 +175,31 @@ if (questionContainer) {
     const userId = questionContainer.getAttribute('data-user');
     const deleteBtn = document.querySelector('#delete-question');
 
+    function followQuestion() {
+        const action = document.querySelector('#f-action');
+        if (action.textContent == 'Follow') {
+            createNotificationBox('Following question', 'You will be notified when there are updates to this question!')
+            sendAjaxRequest('post', '/api/questions/' + questionId + '/follow', {}, toggleFollowHandler);    
+        } else {
+            createNotificationBox('Unfollow question', 'You will not receive more notifications on this question!')
+            sendAjaxRequest('post', '/api/questions/' + questionId + '/unfollow', {}, toggleFollowHandler);    
+        }
+    }
+
+    function toggleFollowHandler() {
+        if (this.status == 200) {
+            const type = JSON.parse(this.response).action;
+            const followBtn = document.querySelector('#followQuestion');
+            if (type == 'follow') {
+                followBtn.innerHTML = `<ion-icon name="heart-dislike-circle"></ion-icon>
+                <span id="f-action">Unfollow</span>`;
+            } else {
+                followBtn.innerHTML = `<ion-icon name="bookmark"></ion-icon>
+                <span id="f-action">Follow</span>`;
+            }
+        }
+    }
+
     if (!userId) {
         const no_up = document.querySelectorAll('.no-up');
         const no_down = document.querySelectorAll('.no-down');
@@ -776,7 +801,6 @@ if (upA) {
         fileInfoA.style.display = 'none';
     });
 }
-
 
 
 const activity = document.querySelector('.activity-section');

@@ -131,6 +131,13 @@ class UserController extends Controller
 
 
     public function showUserNotifications($id) {
+        if (!Auth::check()) {
+            return redirect('/home');
+        }
+
+        if (Auth()->user()->id != $id) {
+            return redirect('/home');
+        }
 
         if (!Auth::check()) {
             return redirect('/home');
@@ -151,7 +158,7 @@ class UserController extends Controller
     }
 
     public function showUserReportsNotifications($id) {
-
+        
         if (!Auth::check()) {
             return redirect('/home');
         }
@@ -166,8 +173,7 @@ class UserController extends Controller
             abort(404);
         }
 
-        $notifications = $user->notifications()->orderByDesc('date')->paginate(10);
-
+        $notifications = $user->notifications()->orderByDesc('date')->get();
         return view('pages.userReportsNotifications', ['title' => 'Reports Page', 'user' => $user, 'notifications' => $notifications]);
     }
 

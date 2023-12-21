@@ -73,10 +73,10 @@
                 <p>Please sign up or sign in to continue</p>
                 <div>
                     <a href="{{ route('register') }}">
-                        <button>Sign Up</button>
+                        Sign Up
                     </a>
                     <a href="{{ route('login') }}">
-                        <button>Sign In</button>
+                        Sign In
                     </a>
                 </div>
             </div>

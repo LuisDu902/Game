@@ -76,9 +76,15 @@
                             <ion-icon name="pencil"></ion-icon>
                             <span>Answer</span>
                         </a>
-                        <div>
-                            <ion-icon name="bookmark"></ion-icon>
-                            <span>Follow</span>
+                        <div id="followQuestion" onclick="followQuestion()">
+                            @if (!Auth::user()->isFollowing($question->id))
+                                <ion-icon name="bookmark"></ion-icon>
+                                <span id="f-action">Follow</span>
+                            @else
+                                <ion-icon name="heart-dislike-circle"></ion-icon>
+                                <span id="f-action">Unfollow</span>
+                            @endif
+                            
                         </div>
                         <a href="{{ route('questions.activity', ['id' => $question->id]) }}">
                             <ion-icon name="time"></ion-icon>

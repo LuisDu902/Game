@@ -8,17 +8,14 @@ function closePopup() {
 }
 
 function openPopup2() {
-    document.getElementById("reportPopup2").style.display = "block";
-   
+    document.getElementById("reportPopup2").style.display = "block";   
 }
 
 function closePopup2() {
     document.getElementById("reportPopup2").style.display = "none";
 }
-
 function openPopup3() {
-    document.getElementById("reportPopup3").style.display = "block";
-   
+    document.getElementById("reportPopup3").style.display = "block";   
 }
 
 function closePopup3() {

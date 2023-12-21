@@ -242,6 +242,30 @@ class QuestionController extends Controller
         return redirect('/questions')->with('delete', 'Question successfully deleted!');
     }
 
+    public function follow(Request $request, $question_id)
+    {
+        $question = Question::findOrFail($question_id);
+
+        DB::table('question_followers')->insert([
+            'question_id' => $question_id,
+            'user_id' =>  Auth::user()->id,
+        ]);
+
+        return response()->json(['action'=> 'follow']);
+
+    }
+
+    public function unfollow(Request $request, $question_id)
+    {
+        $question = Question::findOrFail($question_id);
+
+        DB::table('question_followers')
+        ->where('user_id', Auth::user()->id)
+        ->where('question_id', $question_id)
+        ->delete();
+
+        return response()->json(['action'=> 'unfollow']);
+    }
     
     public function vote(Request $request, $question_id)
     {
@@ -343,30 +367,6 @@ class QuestionController extends Controller
         $question->is_public = $visibility; 
         $question->save();
         return response()->json(['visibility' => $request->visibility]);
-    }
-
-    public function followquestion($questionId)
-    {
-        $userId = Auth::id();
-
-        $questionFollower = QuestionFollower::where(['user_id' => $userId, 'question_id' => $questionId])->first();
-
-        if ($questionFollower) {
-            QuestionFollower::where(['user_id' => $userId, 'question_id' => $questionId])->delete();
-            $userFollows = false;
-            session()->flash('status', 'You unfollowed the question!');
-        } else {
-            QuestionFollower::create([
-                'user_id' => $userId,
-                'question_id' => $questionId,
-            ]);
-            $questionFollower = true;
-            session()->flash('status', 'You are following the question!');
-        }
-
-        session()->put('user_follows', $userFollows);
-
-        return back();
     }
 
 }

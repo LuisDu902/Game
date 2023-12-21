@@ -31,7 +31,7 @@ class GameController extends Controller
     {
         $this->authorize('create', Game::class);
         $category = GameCategory::find($category_id);
-        return view('pages.newGame', ['category' => $category]);
+        return view('pages.newGame', ['title' => 'Create New Game', 'category' => $category]);
     }
 
     /**

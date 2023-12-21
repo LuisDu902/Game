@@ -107,6 +107,15 @@ class User extends Authenticatable
         }
     }
 
+    public function isFollowing($questionId) {
+        $count = DB::table('question_followers')
+            ->where('user_id', $this->id)
+            ->where('question_id', $questionId)
+            ->count();
+
+        return $count > 0; 
+    }
+    
     public function voteType($type, $id)
     {
         if ($type === 'question') {
