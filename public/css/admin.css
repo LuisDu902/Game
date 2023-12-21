@@ -168,6 +168,7 @@
     color: #7c5bf0;
     border-radius: 5px;
     transition: all 400ms ease;
+    height: fit-content;
 }
 
 .create-tag-actions #newQuestion:hover {

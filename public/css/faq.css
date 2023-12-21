@@ -77,3 +77,10 @@
 .rotate {
     transform: rotate(90deg);
 }
+
+@media (max-width: 900px) {
+    .faqs-grid {
+      display: flex;
+      flex-direction: column;
+    }
+  }

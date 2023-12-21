@@ -19,8 +19,8 @@
             </div>
         </div>
         <div class="d-buttons">
-            <button id="ad-cancel">Cancel</button>
-            <button id="ad-confirm">Delete</button>
+            <button id="d-cancel">Cancel</button>
+            <button id="d-confirm">Delete</button>
         </div>
     </div>
 </div>

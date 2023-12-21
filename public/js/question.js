@@ -99,30 +99,30 @@ if (questions_section) {
     const recent_btn = document.querySelector('#recent');
     const popular_btn = document.querySelector('#popular');
     const unanswered_btn = document.querySelector('#unanswered');
+    if (recent_btn) {
+        recent_btn.addEventListener('click', function(){
+            currentPage = 1;
+            sendAjaxRequest('get', '/api/questions?' + encodeForAjax({criteria: 'recent', page: currentPage, tags: rTags, games: rGames}), {}, questionListHandler);
+        })
+        popular_btn.addEventListener('click', function(){
+            currentPage = 1;
+            sendAjaxRequest('get', '/api/questions?' + encodeForAjax({criteria: 'popular', page: currentPage, tags: rTags, games: rGames}), {}, questionListHandler);
+        })
+        unanswered_btn.addEventListener('click', function(){
+            currentPage = 1;
+            sendAjaxRequest('get', '/api/questions?' + encodeForAjax({criteria: 'unanswered', page: currentPage, tags: rTags, games: rGames}), {}, questionListHandler);
+        })
     
-    recent_btn.addEventListener('click', function(){
-        currentPage = 1;
-        sendAjaxRequest('get', '/api/questions?' + encodeForAjax({criteria: 'recent', page: currentPage, tags: rTags, games: rGames}), {}, questionListHandler);
-    })
-    popular_btn.addEventListener('click', function(){
-        currentPage = 1;
-        sendAjaxRequest('get', '/api/questions?' + encodeForAjax({criteria: 'popular', page: currentPage, tags: rTags, games: rGames}), {}, questionListHandler);
-    })
-    unanswered_btn.addEventListener('click', function(){
-        currentPage = 1;
-        sendAjaxRequest('get', '/api/questions?' + encodeForAjax({criteria: 'unanswered', page: currentPage, tags: rTags, games: rGames}), {}, questionListHandler);
-    })
-
-    document.addEventListener('scroll', infiniteScroll);
-    function infiniteScroll(){
-        const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
-        if (window.scrollY >= scrollableHeight) {
-            const criteria = document.querySelector('.questions-sort .selected').id;
-            currentPage++;
-            sendAjaxRequest('get', '/api/questions?' + encodeForAjax({criteria: criteria, page: currentPage, tags: rTags, games: rGames}), {}, questionListHandler);
+        document.addEventListener('scroll', infiniteScroll);
+        function infiniteScroll(){
+            const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
+            if (window.scrollY >= scrollableHeight) {
+                const criteria = document.querySelector('.questions-sort .selected').id;
+                currentPage++;
+                sendAjaxRequest('get', '/api/questions?' + encodeForAjax({criteria: criteria, page: currentPage, tags: rTags, games: rGames}), {}, questionListHandler);
+            }
         }
     }
-    
 }
 
 function questionListHandler() {
