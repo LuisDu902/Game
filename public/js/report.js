@@ -13,7 +13,7 @@ function openPopup() {
 
 // Function to close the popup
 function closePopup() {
-   // document.getElementById("reportPopup").style.display = "none";
+    document.getElementById("reportPopup").style.display = "none";
 }
 
 // Function to open the popup
