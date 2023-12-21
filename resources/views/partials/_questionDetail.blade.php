@@ -47,10 +47,6 @@
                             <ion-icon name="pencil"></ion-icon>
                             <span>Answer</span>
                         </a>
-                        <a href="{{ route('questions.edit', ['id' => $question->id]) }}" id="edit-question">
-                            <ion-icon name="create"></ion-icon>
-                            <span>Edit</span>
-                        </a>
                         <a href="{{ route('questions.activity', ['id' => $question->id]) }}">
                             <ion-icon name="time"></ion-icon>
                             <span>Post activity</span>

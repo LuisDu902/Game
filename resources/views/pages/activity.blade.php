@@ -12,7 +12,11 @@
                 <ion-icon name="home-outline"></ion-icon> Home</a>
             </li>
             <li><a href="{{ route('questions') }}">Questions</a></li>
-            <li><a href="{{ route('question', ['id' => $question->id]) }}">{{ $question->id }}</a></li>
+            @if (strlen($question->latestContent()) >= 300)
+                <li><a href="{{ route('question', ['id' => $question->id]) }}">{{ substr($question->title, 0, 300) }}...</a></li>
+            @else
+                <li><a href="{{ route('question', ['id' => $question->id]) }}">{{ $question->title }}</a></li>
+            @endif
             <li>Activity</li>
         </ul>
     </div>

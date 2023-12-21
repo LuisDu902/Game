@@ -3,8 +3,10 @@
   height: max-content;
   width: fit-content;
   margin: 30px auto;
-  gap: 30px;
   font-size: 18px;
+  flex-wrap: wrap;
+  column-gap: 30px;
+  row-gap: 10px;
 }
 
 .search-bar .filter-condition,
@@ -212,25 +214,8 @@
   .user-info td:nth-child(4) {
     display: none;
   }
-  .search-bar .user-search {
-    width: 200px;
-  }
-  .search-bar .user-search input {
-    width: 150px;
-  }
 }
 
-@media (max-width: 830px) {
-  .search-bar {
-    width: 100%;
-  }
-  .search-bar .user-search {
-    width: 170px;
-  }
-  .search-bar .user-search input {
-    width: 80%;
-  }
-}
 
 @media (max-width: 680px) {
   .users-table th:nth-child(5),
@@ -240,12 +225,6 @@
 }
 
 @media (max-width: 550px) {
-  .search-bar {
-    flex-direction: column;
-  }
-  .search-bar .user-search {
-    width: 100%;
-  }
 
   .users-table th:nth-child(1),
   .user-info td:nth-child(1) {
@@ -258,12 +237,6 @@
 }
 
 @media (max-width: 450px) {
-  .search-bar {
-    flex-direction: column;
-  }
-  .search-bar .user-search {
-    width: 100%;
-  }
 
   .users-table th:nth-child(1),
   .user-info td:nth-child(1) {

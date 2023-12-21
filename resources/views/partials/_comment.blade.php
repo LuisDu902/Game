@@ -6,7 +6,7 @@
             <span> {{ $comment->lastModification() }} ago </span>
         </div>
         @auth
-            @if (Auth::user()->id === $comment->user_id || Auth::user()->is_admin)
+            @if (Auth::user()->id === $comment->user_id)
                 <div class="comment-dropdown">
                     <button class="drop-btn">
                         <ion-icon name="ellipsis-vertical" onclick="toggleCommentDropDown()"></ion-icon>

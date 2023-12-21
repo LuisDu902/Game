@@ -17,7 +17,9 @@
 .questions-sec .questions-actions .questions-sort,
 .admin-actions {
   display: flex;
-  gap: 30px;
+  column-gap: 30px;
+  row-gap: 10px;
+  flex-wrap: wrap;
 }
 
 .questions-actions,
@@ -628,5 +630,10 @@
   .edit-question-form select,
   .edit-question-form input {
     width: 100%;
+  }
+
+  .games-table th:nth-child(3),
+  .game-info td:nth-child(3) {
+    display: none;
   }
 }
