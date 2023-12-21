@@ -1,8 +1,8 @@
-<div class="manage-tags d-flex flex-row flex-wrap mx-auto border-end border-start rounded">
+<div class="manage-tags">
     @foreach($tags as $tag)
-        <div id="tag{{ $tag->id }}" class="tags-actions col-2 d-flex flex-row text-center" data-id="{{ $tag->id }}">
-            <ion-icon name="create" onclick="editChanges()"></ion-icon>
+        <div id="tag{{ $tag->id }}" class="tags-actions" data-id="{{ $tag->id }}">
             <span>{{ $tag->name }}</span>  
+            <ion-icon name="create" onclick="editChanges()"></ion-icon>
             <ion-icon name="trash" onclick="deleteTag()"> </ion-icon>    
         </div>
     @endforeach
@@ -19,8 +19,8 @@
             </div>
         </div>
         <div class="d-buttons">
-            <button id="ad-cancel">Cancel</button>
-            <button id="ad-confirm">Delete</button>
+            <button id="d-cancel">Cancel</button>
+            <button id="d-confirm">Delete</button>
         </div>
     </div>
 </div>

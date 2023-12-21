@@ -57,10 +57,6 @@
                             <ion-icon name="ellipsis-vertical" onclick="toggleAnswerDropDown()"></ion-icon>
                         </button>
                         <div class="q-drop-content">
-                            <div id="edit-answer" onclick="showEditAnswer()">
-                                <ion-icon name="create"></ion-icon>
-                                <span>Edit</span>
-                            </div>
                             <div onclick="showAnswerDelete()">
                                 <ion-icon name="trash"></ion-icon>
                                 <span>Delete</span>

@@ -75,9 +75,11 @@
 .answer-content > ul {
   font-size: 16px;
   display: flex;
-  gap: 70px;
+  column-gap: 70px;
+  row-gap: 20px;
   padding-bottom: 20px;
   border-bottom: 1px solid #e6e7f3;
+  flex-wrap: wrap;
 }
 
 .question-detail ul li::before,
@@ -126,8 +128,8 @@
 }
 
 .q-img img {
-  max-width: 800px;
-  max-height: 600px;
+  max-width: 90%;
+  max-height: 90%;
   margin-bottom: 20px;
 }
 
@@ -738,3 +740,5 @@ svg {
   padding: 10px 15px;
   border-radius: 10px;
 }
+
+

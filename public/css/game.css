@@ -29,12 +29,14 @@
 
 .game .g-stats {
   display: flex;
-  gap: 80px;
+  column-gap: 80px;
+  row-gap: 10px;
   margin-top: 20px;
   margin-bottom: 40px;
   padding-left: 10px;
   padding-bottom: 30px;
   border-bottom: 2px solid var(--light-purple);
+  flex-wrap: wrap;
 }
 
 .answer-stats {

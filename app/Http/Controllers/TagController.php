@@ -17,7 +17,7 @@ class TagController extends Controller
             $validatedData = $request->validate([
                 'name' => 'required|string|unique:tag|max:255',
             ]);
-    
+
             $tag = Tag::create([
                 'name' => $validatedData['name'],
             ]);
@@ -30,14 +30,15 @@ class TagController extends Controller
     }
 
     public function edit($id) {
+        $this->authorize('edit', Tag::class);
         $tag = Tag::findOrFail($id);
         return view('partials._editTag', compact('tag'))->render();
     }
 
     public function delete(Request $request, $id) {
+        $this->authorize('delete', Tag::class);
         $tag = Tag::findOrFail($id);
         $tag->delete();
-
         return response()->json(['id' => $tag->id ]); 
     }
 
