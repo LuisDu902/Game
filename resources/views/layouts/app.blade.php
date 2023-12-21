@@ -33,21 +33,18 @@
         <link href="{{ url('css/admin.css') }}" rel="stylesheet">
         <link href="{{ url('css/notifications.css') }}" rel="stylesheet">
 
-        <script type="text/javascript">
-            // Fix for Firefox autofocus CSS bug
-            // See: http://stackoverflow.com/questions/18943276/html-5-autofocus-messes-up-css-loading/18945951#18945951
-        </script>
-        <script type="text/javascript" src="{{ url('js/app.js') }}" defer></script>
-        <script type="text/javascript" src="{{ url('js/admin.js') }}" defer></script>
-        <script type="text/javascript" src="{{ url('js/editprofile.js') }}" defer></script>
-        <script type="text/javascript" src="{{ url('js/question.js') }}" defer></script>
-        <script type="text/javascript" src="{{ url('js/answer.js') }}" defer></script>
-        <script type="text/javascript" src="{{ url('js/comment.js') }}" defer></script>
-        <script type="text/javascript" src="{{ url('js/carousel.js') }}" defer></script>
-        <script type="text/javascript" src="{{ url('js/dropdown.js') }}" defer></script>
-        <script type="text/javascript" src="{{ url('js/faq.js') }}" defer></script>
-        <script type="text/javascript" src="{{ url('js/game.js') }}" defer></script>
-        <script type="text/javascript" src="{{ url('js/report.js') }}" defer></script>
+
+        <script src="{{ url('js/app.js') }}" defer></script>
+        <script src="{{ url('js/admin.js') }}" defer></script>
+        <script src="{{ url('js/editprofile.js') }}" defer></script>
+        <script src="{{ url('js/question.js') }}" defer></script>
+        <script src="{{ url('js/answer.js') }}" defer></script>
+        <script src="{{ url('js/comment.js') }}" defer></script>
+        <script src="{{ url('js/carousel.js') }}" defer></script>
+        <script src="{{ url('js/dropdown.js') }}" defer></script>
+        <script src="{{ url('js/faq.js') }}" defer></script>
+        <script src="{{ url('js/game.js') }}" defer></script>
+        <script src="{{ url('js/report.js') }}" defer></script>
     
         <script nomodule
             src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"

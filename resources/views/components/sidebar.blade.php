@@ -10,4 +10,4 @@
     </ul>
 </div>
 
-<section class="overlay"></section>
+<div class="overlay"></div>
