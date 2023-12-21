@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Game;
 use Illuminate\Http\Request;
 
 class StaticController extends Controller
 {
     public function home(){
-        return view('pages.home');
+        $games = Game::inRandomOrder()->limit(5)->get();
+        return view('pages.home', ['games' => $games]);
     }
     
     public function faq(){

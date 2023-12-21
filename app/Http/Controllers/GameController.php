@@ -78,7 +78,7 @@ class GameController extends Controller
     public function update(Request $request, $id) {
 
         $request->validate([
-            'name' => 'required|max:256|unique:game',
+            'name' => 'required|max:256',
             'description' => 'required'
         ]);
         
