@@ -13,6 +13,17 @@ GameOn is committed to revolutionizing the online gaming landscape by creating a
 
 * The artefacts checklist is available at: <docs.google.com/spreadsheets @ g.uporto>
 
+## Demo
+
+[Watch the demo](images/demo.mp4)
+
+![Home page](images/home.png)
+
+![Questions page](images/questionsPage.png)
+
+![Question page](images/questionPage.png)
+
+![Admin page](images/admin.png)
 ## Team
 
 * Ana Azevedo, up202108654@up.pt
