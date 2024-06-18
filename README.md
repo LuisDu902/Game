@@ -4,10 +4,10 @@ GameOn is committed to revolutionizing the online gaming landscape by creating a
 
 ## Project Components
 
-* [ER: Requirements Specification](../docs/er.md)
-* [EBD: Database Specification](../docs/edb.md)
-* [EAP: Architecture Specification and Prototype](../docs/eap.md)
-* [PA: Product and Presentation](../docs/pa.md)
+* [ER: Requirements Specification](/docs/er.md)
+* [EBD: Database Specification](/docs/edb.md)
+* [EAP: Architecture Specification and Prototype](/docs/eap.md)
+* [PA: Product and Presentation](/docs/pa.md)
 
 ## Artefacts Checklist
 
